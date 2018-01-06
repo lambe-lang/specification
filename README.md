@@ -1,6 +1,6 @@
 # Lambë 
 
-A Strong typed functional programming language
+Strong typed actor based and functional programming language
 
 # License
 
