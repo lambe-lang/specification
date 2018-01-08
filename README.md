@@ -14,15 +14,15 @@ TODO
 
 ``` 
 trait Functor[m:type->type][a:type] {
-  map [b:type] (a -> b) -> m b
+  val map [b:type] (a -> b) -> m b
 }
 
 trait Applicative[m:type->type][a:type] with Functor m a {
-  (<*>) [b:type] m (a -> b) -> m b
+  val (<*>) [b:type] m (a -> b) -> m b
 }
 
 trait Monad[m:type->type][a:type] with Applicative m a {
-  flatmap [b:type] (a -> m b) -> m b
+  val flatmap [b:type] (a -> m b) -> m b
 }
 ```
 
@@ -31,32 +31,34 @@ trait Monad[m:type->type][a:type] with Applicative m a {
 ```
 data Option[a:type] : type
 data None[a:type] : Option a
-data Some[a:type](v:a) : Option a
+data Some[a:type](a) : Option a
 ```
 
 ## Trait implementation
 
 ```
-define [a:type] Functor Option a for Option a when None {
-  map _ = None
-}
-
-define [a:type] Functor Option a for Option a when Some {
-  map f = Some (f v)
+define [a:type] Functor Option a for Option a {
+  let self(None) map _ = None
+  let self(Some v) map f = Some (f v)
 }
 
 define [a:type] Applicative Option a for Option a {
-  (<*>) None     = None
-  (<*>) (Some f) = self map f
+  let (<*>) None     = None
+  let (<*>) (Some f) = self map f
 }
 
-define [a:type] Monad Option a for Option a when None {
-  flatmap _ = None
+define [a:type] Monad Option a for Option a {
+  let self(None) flatmap _ = None
+  let self(Some v) flatmap f = f v
 }
+```
 
-define [a:type] Monad Option a for Option a when Some {
-  flatmap f = f v
-}
+## Usage
+
+```
+let a = Some 1 map $ 1 +                    // a = Option 2
+let b = Some 1 <*> $ Some $ 1 +             // b = Option 2
+let c = Some 1 flatmap $ i -> Some $ 1 + i  // c = Option 2
 ```
 
 # License
