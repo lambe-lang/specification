@@ -37,24 +37,24 @@ data Some[a:type](v:a) : Option a
 ## Trait implementation
 
 ```
-define Functor Option a for Option when None {
+define [a:type] Functor Option a for Option a when None {
   map _ = None
 }
 
-define Functor Option a for Option when Some {
+define [a:type] Functor Option a for Option a when Some {
   map f = Some (f v)
 }
 
-define Applicative Option a for Option a {
+define [a:type] Applicative Option a for Option a {
   (<*>) None     = None
   (<*>) (Some f) = self map f
 }
 
-define Monad Option a for Option a when None {
+define [a:type] Monad Option a for Option a when None {
   flatmap _ = None
 }
 
-define Monad Option a for Option a when Some {
+define [a:type] Monad Option a for Option a when Some {
   flatmap f = f v
 }
 ```
