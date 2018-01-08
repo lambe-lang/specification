@@ -38,7 +38,7 @@ data Some[a:type](a) : Option a
 
 ```
 define [a:type] Functor Option a for Option a {
-  let self(None) map _   = None
+  let self(None)   map _ = None
   let self(Some v) map f = Some (f v)
 }
 
@@ -48,7 +48,7 @@ define [a:type] Applicative Option a for Option a {
 }
 
 define [a:type] Monad Option a for Option a {
-  let self(None) flatmap _   = None
+  let self(None)   flatmap _ = None
   let self(Some v) flatmap f = f v
 }
 ```
