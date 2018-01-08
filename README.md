@@ -34,7 +34,7 @@ data None[a:type] : Option a
 data Some[a:type](a) : Option a
 ```
 
-## Trait implementation
+## Traits definition
 
 ```
 define [a:type] Functor Option a for Option a {
