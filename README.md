@@ -46,8 +46,8 @@ define Functor Option a for Option when Some {
 }
 
 define Applicative Option a for Option a {
-  <*> None     = None
-  <*> (Some f) = self map f
+  (<*>) None     = None
+  (<*>) (Some f) = self map f
 }
 
 define Monad Option a for Option a when None {
