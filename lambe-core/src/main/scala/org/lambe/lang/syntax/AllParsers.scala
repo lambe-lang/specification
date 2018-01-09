@@ -15,16 +15,54 @@ trait CoreParser extends RegexParsers with Parsers {
 
 }
 
-trait TypeParser extends CoreParser {
+trait KeyParser extends RegexParsers with Parsers {
 
-  def simpleTypeExpression : Parser[TypeAst] =
-    ("type" | identifier) ^^ TypeIdentifier | ("(" ~> typeExpression <~ ")")
+  def KWtype: Parser[String] = "type"
 
-  def appliedTypeExpression : Parser[TypeAst] =
-    simpleTypeExpression ~ opt(appliedTypeExpression) ^^ { r => r._2 map { TypeApplication(r._1, _) } orElse{ Some(r._1) } get}
-
-  def typeExpression : Parser[TypeAst] =
-    appliedTypeExpression ~ opt("->" ~> typeExpression) ^^ { r => r._2 map { TypeAbstraction(r._1, _) } orElse{ Some(r._1) } get}
+  def KWdata: Parser[String] = "data"
 
 }
 
+trait NameParser extends CoreParser {
+
+  def name: Parser[String] = identifier | ("(" ~> operator <~ ")")
+
+}
+
+trait TypeParser extends CoreParser with KeyParser {
+
+  def simpleTypeExpression: Parser[TypeAst] =
+    (KWtype | identifier) ^^ TypeIdentifier | ("(" ~> typeExpression <~ ")")
+
+  def appliedTypeExpression: Parser[TypeAst] =
+    simpleTypeExpression ~ opt(appliedTypeExpression) ^^ {
+      case leftTypeExpression ~ None => leftTypeExpression
+      case leftTypeExpression ~ Some(rightTypeExpression) => TypeApplication(leftTypeExpression, rightTypeExpression)
+    }
+
+  def typeExpression: Parser[TypeAst] =
+    appliedTypeExpression ~ opt("->" ~> typeExpression) ^^ {
+      case leftTypeExpression ~ None => leftTypeExpression
+      case leftTypeExpression ~ Some(rightTypeExpression) => TypeAbstraction(leftTypeExpression, rightTypeExpression)
+    }
+}
+
+trait ParameterParser extends TypeParser {
+
+  def generics: Parser[(String, TypeAst)] =
+    ("[" ~> identifier <~ ":") ~ (typeExpression <~ "]") ^^ {
+      case identifier ~ typeExpression => (identifier, typeExpression)
+    }
+
+  def parameter: Parser[TypeAst] =
+    "(" ~> typeExpression <~ ")"
+}
+
+trait EntityParser extends TypeParser with ParameterParser with  NameParser {
+
+  def dataExpression: Parser[DataEntity] =
+    (KWdata ~> name) ~ rep(generics) ~ rep(parameter) ~ (":" ~> typeExpression) ^^ {
+      case name ~ generics ~ parameters ~ typeExpression => DataEntity(name, generics, parameters, typeExpression)
+    }
+
+}
