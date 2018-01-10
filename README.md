@@ -14,24 +14,24 @@ TODO
 
 ``` 
 trait Functor[m:type->type][a:type] {
-  val map [b:type](a -> b) : m b
+  val map [b:type] (a -> b) -> m b
 }
 
 trait Applicative[m:type->type][a:type] with Functor m a {
-  val (<*>) [b:type](m (a -> b)) : m b
+  val (<*>) [b:type] m (a -> b) -> m b
 }
 
 trait Monad[m:type->type][a:type] with Applicative m a {
-  val flatmap [b:type](a -> m b) : m b
+  val flatmap [b:type] (a -> m b) -> m b
 }
 ```
 
 ## Data
 
 ```
-data Option[a:type] : type
-data None[a:type] : Option a
-data Some[a:type](a) : Option a
+data Option[a:type] -> type
+data None[a:type] -> Option a
+data Some[a:type] a -> Option a
 ```
 
 ## Traits definition
