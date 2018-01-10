@@ -8,7 +8,7 @@ trait ExpressionParser extends PatternParser with CoreParser with Coercions {
     })
 
   def simpleExpression: Parser[ExpressionAst] =
-    (Tokens.$self | operator | identifier) ^^ ExpressionIdentifier | ("(" ~> expression <~ ")") | letExpression | ("$" ~> expression)
+    positioned((Tokens.$self | operator | identifier) ^^ ExpressionIdentifier | ("(" ~> expression <~ ")") | letExpression | ("$" ~> expression))
 
   def appliedExpression: Parser[ExpressionAst] =
     positioned(simpleExpression ~ simpleExpression.* ^^ {

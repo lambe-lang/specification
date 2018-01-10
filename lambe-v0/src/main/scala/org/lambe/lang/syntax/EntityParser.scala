@@ -19,6 +19,6 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
     })
 
   def entities: Parser[List[EntityAst]] =
-    rep(dataExpression | traitExpression | defineExpression)
+    (dataExpression | traitExpression | defineExpression).*
 
 }
