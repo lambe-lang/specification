@@ -14,15 +14,15 @@ TODO
 
 ``` 
 trait Functor[m:type->type][a:type] {
-  val map [b:type] (a -> b) -> m b
+  def map [b:type] (a -> b) -> m b
 }
 
 trait Applicative[m:type->type][a:type] with Functor m a {
-  val (<*>) [b:type] m (a -> b) -> m b
+  def (<*>) [b:type] m (a -> b) -> m b
 }
 
 trait Monad[m:type->type][a:type] with Applicative m a {
-  val flatmap [b:type] (a -> m b) -> m b
+  def flatmap [b:type] (a -> m b) -> m b
 }
 ```
 
@@ -38,18 +38,18 @@ data Some[a:type] a -> Option a
 
 ```
 define [a:type] Functor Option a for Option a {
-  let self(None)   map _ = None
-  let self(Some v) map f = Some (f v)
+  def self(None)   map _ = None
+  def self(Some v) map f = Some (f v)
 }
 
 define [a:type] Applicative Option a for Option a {
-  let (<*>) None     = None
-  let (<*>) (Some f) = self map f
+  def (<*>) None     = None
+  def (<*>) (Some f) = self map f
 }
 
 define [a:type] Monad Option a for Option a {
-  let self(None)   flatmap _ = None
-  let self(Some v) flatmap f = f v
+  def self(None)   flatmap _ = None
+  def self(Some v) flatmap f = f v
 }
 ```
 
