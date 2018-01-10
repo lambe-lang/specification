@@ -31,7 +31,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
         "Boolean",
         List(),
         List(
-          ValueType("||", List(), List(), TypeIdentifier("Boolean"))
+          ValueType("||", List(), "Boolean")
         )
       )
   }
@@ -46,8 +46,8 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
         "Boolean",
         List(),
         List(
-          ValueType("||", List(), List(), TypeIdentifier("Boolean")),
-          ValueType("&&", List(), List(), TypeIdentifier("Boolean"))
+          ValueType("||", List(), "Boolean"),
+          ValueType("&&", List(), "Boolean")
         )
       )
   }

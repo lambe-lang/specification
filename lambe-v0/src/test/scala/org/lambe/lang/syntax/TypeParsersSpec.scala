@@ -9,7 +9,7 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
     parseAll(simpleTypeExpression, "type").successful shouldBe true
   }
 
-  "type" should "be parsed as a TypeIdentifier" in {
+  "type" should "be parsed as a " in {
     parseAll(simpleTypeExpression, "type").get shouldBe TypeIdentifier("type")
   }
 
@@ -17,7 +17,7 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
     parseAll(simpleTypeExpression, "type").successful shouldBe true
   }
 
-  "a" should "be parsed as a TypeIdentifier" in {
+  "a" should "be parsed as a " in {
     parseAll(simpleTypeExpression, "a").get shouldBe TypeIdentifier("a")
   }
 
@@ -25,7 +25,7 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
     parseAll(simpleTypeExpression, "type").successful shouldBe true
   }
 
-  "a'" should "be parsed as a TypeIdentifier" in {
+  "a'" should "be parsed as a " in {
     parseAll(simpleTypeExpression, "a'").get shouldBe TypeIdentifier("a'")
   }
 
@@ -34,7 +34,7 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
   }
 
   "a type" should "be parsed as a TypeApplication" in {
-    parseAll(appliedTypeExpression, "a type").get shouldBe TypeApplication(TypeIdentifier("a"), TypeIdentifier("type"))
+    parseAll(appliedTypeExpression, "a type").get shouldBe TypeApplication("a", "type")
   }
 
   "a -> b" should "be parsed" in {
@@ -42,7 +42,7 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
   }
 
   "a -> b" should "be parsed as a TypeAbstraction" in {
-    parseAll(typeExpression, "a -> b").get shouldBe TypeAbstraction(TypeIdentifier("a"), TypeIdentifier("b"))
+    parseAll(typeExpression, "a -> b").get shouldBe TypeAbstraction("a", "b")
   }
 
   "m a -> b" should "be parsed" in {
@@ -50,7 +50,7 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
   }
 
   "m a -> b" should "be parsed as a TypeAbstraction" in {
-    parseAll(typeExpression, "m a -> b").get shouldBe TypeAbstraction(TypeApplication(TypeIdentifier("m"), TypeIdentifier("a")), TypeIdentifier("b"))
+    parseAll(typeExpression, "m a -> b").get shouldBe TypeAbstraction(TypeApplication("m", "a"), "b")
   }
 
   "m (a -> b)" should "be parsed" in {
@@ -58,6 +58,6 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
   }
 
   "m (a -> b)" should "be parsed as a TypeApplication" in {
-    parseAll(typeExpression, "m (a -> b)").get shouldBe TypeApplication(TypeIdentifier("m"), TypeAbstraction(TypeIdentifier("a"), TypeIdentifier("b")))
+    parseAll(typeExpression, "m (a -> b)").get shouldBe TypeApplication("m", TypeAbstraction("a", "b"))
   }
 }

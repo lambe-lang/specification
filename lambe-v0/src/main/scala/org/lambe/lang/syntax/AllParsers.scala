@@ -32,7 +32,7 @@ trait NameParser extends CoreParser {
 
 }
 
-trait TypeParser extends CoreParser {
+trait TypeParser extends CoreParser with Coercions {
 
   def simpleTypeExpression: Parser[TypeAst] =
     (identifier ^^ TypeIdentifier) | ("(" ~> typeExpression <~ ")")
@@ -43,11 +43,13 @@ trait TypeParser extends CoreParser {
       case leftTypeExpression ~ Some(rightTypeExpression) => TypeApplication(leftTypeExpression, rightTypeExpression)
     }
 
-  def typeExpression: Parser[TypeAst] =
-    appliedTypeExpression ~ opt("->" ~> typeExpression) ^^ {
-      case leftTypeExpression ~ None => leftTypeExpression
-      case leftTypeExpression ~ Some(rightTypeExpression) => TypeAbstraction(leftTypeExpression, rightTypeExpression)
+  def funTypeExpression: Parser[TypeAst] =
+    appliedTypeExpression ~ ("->" ~> typeExpression) ^^ {
+      case leftTypeExpression ~ rightTypeExpression => TypeAbstraction(leftTypeExpression, rightTypeExpression)
     }
+
+  def typeExpression: Parser[TypeAst] =
+    funTypeExpression | appliedTypeExpression
 }
 
 trait ParameterParser extends TypeParser {
@@ -58,14 +60,17 @@ trait ParameterParser extends TypeParser {
     }
 
   def parameter: Parser[TypeAst] =
-    "(" ~> typeExpression <~ ")"
+    simpleTypeExpression
+
+  def profileType: Parser[TypeAst] =
+    funTypeExpression | ("->" ~> appliedTypeExpression)
 }
 
 trait BehaviorParser extends TypeParser with ParameterParser with NameParser {
 
   def valueType: Parser[ValueType] =
-    ("val" ~> name) ~ rep(generics) ~ rep(parameter) ~ ("->" ~> typeExpression) ^^ {
-      case name ~ generics ~ parameters ~ typeExpression => ValueType(name, generics, parameters, typeExpression)
+    ("val" ~> name) ~ rep(generics) ~ profileType ^^ {
+      case name ~ generics ~ typeExpression => ValueType(name, generics, typeExpression)
     }
 
   /*
@@ -79,8 +84,8 @@ trait BehaviorParser extends TypeParser with ParameterParser with NameParser {
 trait EntityParser extends TypeParser with ParameterParser with NameParser with BehaviorParser {
 
   def dataExpression: Parser[DataEntity] =
-    ("data" ~> name) ~ rep(generics) ~ rep(parameter) ~ (":" ~> typeExpression) ^^ {
-      case name ~ generics ~ parameters ~ typeExpression => DataEntity(name, generics, parameters, typeExpression)
+    ("data" ~> name) ~ rep(generics) ~ profileType ^^ {
+      case name ~ generics ~ typeExpression => DataEntity(name, generics, typeExpression)
     }
 
   def traitExpression: Parser[TraitEntity] =

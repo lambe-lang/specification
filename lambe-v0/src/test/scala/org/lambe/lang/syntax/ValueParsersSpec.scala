@@ -14,22 +14,20 @@ class ValueParsersSpec extends FlatSpec with BehaviorParser with Matchers {
       ValueType(
         "||",
         List(),
-        List(),
-        TypeIdentifier("Boolean")
+        "Boolean"
       )
   }
 
   "val (>>=) [b:type](a -> m b) -> m b" should "be parsed" in {
-    parseAll(valueType, "val (>>=) [b:type](a -> m b) -> m b").successful shouldBe true
+    parseAll(valueType, "val (>>=) [b:type] (a -> m b) -> m b").successful shouldBe true
   }
 
   "val (>>=) [b:type](a -> m b) -> m b" should "be a ValueType" in {
-    parseAll(valueType, "val (>>=) [b:type](a -> m b) -> m b").get shouldBe
+    parseAll(valueType, "val (>>=) [b:type] (a -> m b) -> m b").get shouldBe
       ValueType(
         ">>=",
         List(("b", TypeIdentifier("type"))),
-        List(TypeAbstraction(TypeIdentifier("a"), TypeApplication(TypeIdentifier("m"), TypeIdentifier("b")))),
-        TypeApplication(TypeIdentifier("m"), TypeIdentifier("b"))
+        TypeAbstraction(TypeAbstraction("a", TypeApplication("m", "b")), TypeApplication("m", "b"))
       )
   }
 
