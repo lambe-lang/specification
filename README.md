@@ -29,9 +29,9 @@ trait Monad[m:type->type][a:type] with Applicative m a {
 ## Data
 
 ```
-data Option[a:type] : type
-data None[a:type] : Option a
-data Some[a:type](a) : Option a
+data Option[a:type] -> type
+data None[a:type] -> Option a
+data Some[a:type] a -> Option a
 ```
 
 ## Traits definition
