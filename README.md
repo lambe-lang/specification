@@ -14,15 +14,15 @@ TODO
 
 ``` 
 trait Functor[m:type->type][a:type] {
-  val map [b:type] (a -> b) -> m b
+  val map [b:type](a -> b) : m b
 }
 
 trait Applicative[m:type->type][a:type] with Functor m a {
-  val (<*>) [b:type] m (a -> b) -> m b
+  val (<*>) [b:type](m (a -> b)) : m b
 }
 
 trait Monad[m:type->type][a:type] with Applicative m a {
-  val flatmap [b:type] (a -> m b) -> m b
+  val flatmap [b:type](a -> m b) : m b
 }
 ```
 
