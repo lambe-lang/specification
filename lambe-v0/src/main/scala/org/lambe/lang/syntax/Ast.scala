@@ -13,6 +13,12 @@ case class TypeApplication(left: TypeAst, right: TypeAst) extends TypeAst
 
 case class TypeAbstraction(left: TypeAst, right: TypeAst) extends TypeAst
 
+trait ValueAst
+
+case class ValueType(name: String, generics: TypeDef.Generics, parameters: TypeDef.Parameters, spec: TypeAst) extends ValueAst
+
 trait EntityAst
 
 case class DataEntity(name: String, generics: TypeDef.Generics, parameters: TypeDef.Parameters, spec: TypeAst) extends EntityAst
+
+case class TraitEntity(name: String, generics: TypeDef.Generics, spec: List[ValueType]) extends EntityAst

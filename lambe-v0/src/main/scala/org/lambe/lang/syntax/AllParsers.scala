@@ -3,23 +3,26 @@ package org.lambe.lang.syntax
 import scala.language.postfixOps
 import scala.util.parsing.combinator._
 
+object Tokens {
+  val keywords = List("trait", "val", "data")
+  val separators = List("[", "]", "(", ")", "->", ":")
+}
+
 trait CoreParser extends RegexParsers with Parsers {
 
   def numberLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
 
-  def identifier: Parser[String] = """[a-zA-Z][0-9a-zA-Z_$]*'?""".r
+  def identifier: Parser[String] =
+    """[a-zA-Z][0-9a-zA-Z_$]*'?""".r ^? {
+      case m if !Tokens.keywords.contains(m) => m
+    }
 
-  def operator: Parser[String] = """[#@&!_$*<>,;.:\/+=-]+""".r
+  def operator: Parser[String] =
+    """[#@&!_$*<>,;.:\/+=|-]+""".r ^? {
+      case m if !Tokens.separators.contains(m) => m
+    }
 
   def unit: Parser[Unit] = "()" ^^ { _ => () }
-
-}
-
-trait KeyParser extends RegexParsers with Parsers {
-
-  def KWtype: Parser[String] = "type"
-
-  def KWdata: Parser[String] = "data"
 
 }
 
@@ -29,10 +32,10 @@ trait NameParser extends CoreParser {
 
 }
 
-trait TypeParser extends CoreParser with KeyParser {
+trait TypeParser extends CoreParser {
 
   def simpleTypeExpression: Parser[TypeAst] =
-    (KWtype | identifier) ^^ TypeIdentifier | ("(" ~> typeExpression <~ ")")
+    (identifier ^^ TypeIdentifier) | ("(" ~> typeExpression <~ ")")
 
   def appliedTypeExpression: Parser[TypeAst] =
     simpleTypeExpression ~ opt(appliedTypeExpression) ^^ {
@@ -58,11 +61,32 @@ trait ParameterParser extends TypeParser {
     "(" ~> typeExpression <~ ")"
 }
 
-trait EntityParser extends TypeParser with ParameterParser with  NameParser {
+trait BehaviorParser extends TypeParser with ParameterParser with NameParser {
+
+  def valueType: Parser[ValueType] =
+    ("val" ~> name) ~ rep(generics) ~ rep(parameter) ~ ("->" ~> typeExpression) ^^ {
+      case name ~ generics ~ parameters ~ typeExpression => ValueType(name, generics, parameters, typeExpression)
+    }
+
+  /*
+    def valueDefinition: Parser[FunctionAst] =
+      ("def" ~> name) ~ rep(generics) ~ rep(parameter) ~ ("=" ~> behaviorExpression) ^^ {
+        case name ~ generics ~ parameters ~ typeExpression => FunctionAst(name, generics, parameters, typeExpression)
+      }
+  */
+}
+
+trait EntityParser extends TypeParser with ParameterParser with NameParser with BehaviorParser {
 
   def dataExpression: Parser[DataEntity] =
-    (KWdata ~> name) ~ rep(generics) ~ rep(parameter) ~ (":" ~> typeExpression) ^^ {
+    ("data" ~> name) ~ rep(generics) ~ rep(parameter) ~ (":" ~> typeExpression) ^^ {
       case name ~ generics ~ parameters ~ typeExpression => DataEntity(name, generics, parameters, typeExpression)
+    }
+
+  def traitExpression: Parser[TraitEntity] =
+    ("trait" ~> name) ~ rep(generics) ~ opt("{" ~> rep(valueType) <~ "}") ^^ {
+      case name ~ generics ~ None => TraitEntity(name, generics, List())
+      case name ~ generics ~ Some(specifications) => TraitEntity(name, generics, specifications)
     }
 
 }

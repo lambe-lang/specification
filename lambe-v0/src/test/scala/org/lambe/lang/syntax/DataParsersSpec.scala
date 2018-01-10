@@ -2,7 +2,7 @@ package org.lambe.lang.syntax
 
 import org.scalatest._
 
-class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
+class DataParsersSpec extends FlatSpec with EntityParser with Matchers {
   // entity parsing
 
   "data Bool:type" should "be parsed" in {

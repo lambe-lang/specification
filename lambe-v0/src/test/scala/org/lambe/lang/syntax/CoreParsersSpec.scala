@@ -31,6 +31,10 @@ class CoreParsersSpec extends FlatSpec with CoreParser with Matchers {
     parseAll(identifier, "a12'").get shouldBe "a12'"
   }
 
+  "trait" should "not be parsed'" in {
+    parseAll(identifier, "trait").successful shouldBe false
+  }
+
   // Operator Parsing
 
   ">>=" should "be parsed" in {
@@ -41,6 +45,9 @@ class CoreParsersSpec extends FlatSpec with CoreParser with Matchers {
     parseAll(operator, ">>=").get shouldBe ">>="
   }
 
+  "[" should "not be parsed" in {
+    parseAll(operator, "[").successful shouldBe false
+  }
 
   // Unit Parsing
 
