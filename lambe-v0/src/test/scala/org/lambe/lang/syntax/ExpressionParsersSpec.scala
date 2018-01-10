@@ -1,0 +1,129 @@
+package org.lambe.lang.syntax
+
+import org.scalatest._
+
+class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers {
+  // expression parsing
+
+  "a" should "be parsed" in {
+    parseAll(expression, "a").successful shouldBe true
+  }
+
+  "a" should "be ExpressionIdentifier" in {
+    parseAll(expression, "a").get shouldBe ExpressionIdentifier("a")
+  }
+
+  "(a)" should "be parsed" in {
+    parseAll(expression, "(a)").successful shouldBe true
+  }
+
+  "(a)" should "be ExpressionIdentifier" in {
+    parseAll(expression, "(a)").get shouldBe ExpressionIdentifier("a")
+  }
+
+  "a b" should "be parsed" in {
+    parseAll(expression, "a b").successful shouldBe true
+  }
+
+  "a b" should "be ExpressionApplication" in {
+    parseAll(expression, "a b").get shouldBe ExpressionApplication("a", "b")
+  }
+
+  "(a b)" should "be parsed" in {
+    parseAll(expression, "(a b)").successful shouldBe true
+  }
+
+  "(a b)" should "be ExpressionApplication" in {
+    parseAll(expression, "(a b)").get shouldBe ExpressionApplication("a", "b")
+  }
+
+  "$ a b" should "be parsed" in {
+    parseAll(expression, "$ a b").successful shouldBe true
+  }
+
+  "$ a b" should "be ExpressionApplication" in {
+    parseAll(expression, "$ a b").get shouldBe ExpressionApplication("a", "b")
+  }
+
+  "a b c" should "be parsed" in {
+    parseAll(expression, "a b c").successful shouldBe true
+  }
+
+  "a b c" should "be ExpressionApplication" in {
+    parseAll(expression, "a b c").get shouldBe ExpressionApplication(ExpressionApplication("a", "b"), "c")
+  }
+
+  "a + c" should "be parsed" in {
+    parseAll(expression, "a + c").successful shouldBe true
+  }
+
+  "a + c" should "be ExpressionApplication" in {
+    parseAll(expression, "a + c").get shouldBe ExpressionApplication(ExpressionApplication("a", "+"), "c")
+  }
+
+  "a (b c)" should "be parsed" in {
+    parseAll(expression, "a (b c)").successful shouldBe true
+  }
+
+  "a (b c)" should "be ExpressionApplication" in {
+    parseAll(expression, "a (b c)").get shouldBe ExpressionApplication("a", ExpressionApplication("b", "c"))
+  }
+
+  "a $ b c" should "be parsed" in {
+    parseAll(expression, "a $ b c").successful shouldBe true
+  }
+
+  "a $ b c" should "be ExpressionApplication" in {
+    parseAll(expression, "a $ b c").get shouldBe ExpressionApplication("a", ExpressionApplication("b", "c"))
+  }
+
+  "a -> b" should "be parsed" in {
+    parseAll(expression, "a -> b").successful shouldBe true
+  }
+
+  "a -> b" should "be ExpressionAbstraction" in {
+    parseAll(expression, "a -> b").get shouldBe ExpressionAbstraction("a", "b")
+  }
+
+  "(a b) -> c" should "be parsed" in {
+    parseAll(expression, "(a b) -> c").successful shouldBe true
+  }
+
+  "(a b) -> c" should "be ExpressionAbstraction" in {
+    parseAll(expression, "(a b) -> c").get shouldBe ExpressionAbstraction(PatternApplication("a", "b"), "c")
+  }
+
+  "a -> b -> c" should "be parsed" in {
+    parseAll(expression, "a -> b -> c").successful shouldBe true
+  }
+
+  "a -> b -> c" should "be ExpressionAbstraction" in {
+    parseAll(expression, "a -> b -> c").get shouldBe ExpressionAbstraction("a", ExpressionAbstraction("b", "c"))
+  }
+
+  "a b -> c" should "be parsed" in {
+    parseAll(expression, "a b -> c").successful shouldBe true
+  }
+
+  "a b -> c" should "be ExpressionAbstraction" in {
+    parseAll(expression, "a b -> c").get shouldBe ExpressionAbstraction("a", ExpressionAbstraction("b", "c"))
+  }
+
+  "a $ b -> c" should "be parsed" in {
+    parseAll(expression, "a b -> c").successful shouldBe true
+  }
+
+  "a $ b -> c" should "be ExpressionApplication" in {
+    parseAll(expression, "a $ b -> c").get shouldBe ExpressionApplication("a", ExpressionAbstraction("b", "c"))
+  }
+
+  "let a = b in c" should "be parsed" in {
+    parseAll(expression, "let a = b in c").successful shouldBe true
+  }
+
+  "let a = b in c" should "be ExpressionLet" in {
+    parseAll(expression, "let a = b in c").get shouldBe ExpressionLet("a", "b", "c")
+  }
+
+}
+
