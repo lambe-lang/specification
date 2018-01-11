@@ -1,4 +1,8 @@
 import Dependencies._
+import org.scoverage.coveralls.Imports.CoverallsKeys._
+
+// Waiting for 1.2.3 or upper
+// coverallsGitRepoLocation := "../"
 
 lazy val root = (project in file(".")).
   settings(

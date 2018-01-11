@@ -11,5 +11,7 @@ env:
 script:
   - cd $TEST_DIR && 
     sbt clean coverage test coverageReport &&
-    sbt coverageAggregate &&
+    sbt coverageAggregate
+
+post-script:
     sbt coveralls
