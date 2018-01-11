@@ -24,6 +24,31 @@ import org.scalatest._
 class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
   // entity parsing
 
+  "define Bool { def self(true) (||) = false def self(false) (||) = self }" should "be parsed" in {
+    parseAll(defineExpression, "define Bool { def self(true) (||) = false def self(false) (||) = self }").successful shouldBe true
+  }
+
+  "define Bool { def self(true) (||) _ = self def self(false) (||) a = a }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define Bool { def self(true) (||) _ = self def self(false) (||) a = a }").get shouldBe
+      DefineEntity(
+        List(),
+        "Bool",
+        "Bool",
+        List(
+          ValueExpression(
+            "||",
+            Option("true"),
+            ExpressionAbstraction("_", "self")
+          ),
+          ValueExpression(
+            "||",
+            Option("false"),
+            ExpressionAbstraction("a", "a")
+          )
+        )
+      )
+  }
+
   "define Boolean for Bool { def self(true) (||) = false def self(false) (||) = self }" should "be parsed" in {
     parseAll(defineExpression, "define Boolean for Bool { def self(true) (||) = false def self(false) (||) = self }").successful shouldBe true
   }

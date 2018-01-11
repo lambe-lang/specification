@@ -22,7 +22,7 @@ package org.lambe.lang.syntax
 trait PatternParser extends CoreParser with Coercions {
 
   def simplePattern: Parser[PatternAst] =
-    positioned(identifier ^^ PatternIdentifier)
+    positioned((operator | identifier) ^^ PatternIdentifier)
 
   def appliedPattern: Parser[PatternAst] =
     positioned("(" ~> simplePattern ~ pattern.* <~ ")" ^^ {

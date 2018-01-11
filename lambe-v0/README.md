@@ -10,9 +10,18 @@ This version is the first one used to bootstrap the whole system.
 
 ```
 s0 ::=
+    data
+    trait
+    define
+
+data ::=
    "data"  name generic* type? -> type
-   "trait" name generic* ("{" typeDef* "}")?
-   "define" generic* type for type ("{" expressionDef* "}")?
+
+trait ::=
+   "trait" name generic* ("{" (typeDef |data | trait)* "}")?
+
+define ::=
+   "define" generic* type (for type)? ("{" expressionDef* "}")?
 
 name ::=
     identifier
@@ -40,6 +49,7 @@ selfPattern ::=
 
 pattern ::=
     identifier
+    operator
     "(" pattern+ ")"
 
 expression ::=

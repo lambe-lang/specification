@@ -52,4 +52,25 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(entities, booleanCode).successful shouldBe true
   }
 
+  val listCode: String =
+    """
+      |data List[a:type] -> type
+      |data Nil[a:type] -> List a
+      |data (::)[a:type] a -> List a -> List a
+      |
+      |define [a:type] Functor (a -> List a) a for List a {
+      |  def self(Nil)  fmap b f = Nil
+      |  def self(h::t) fmap b f = (f h) :: (t.map b f)
+      |}
+      |
+      |define [a:type] Reducer a for List a when Nil {
+      |  def self(Nil)  reduce b _ = b
+      |  def self(h::t) reduce b f = t reduce (f b h) f
+      |}
+    """.stripMargin
+
+  "listCode" should "be parsed" in {
+    parseAll(entities, listCode).successful shouldBe true
+  }
+
 }

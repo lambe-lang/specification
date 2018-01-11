@@ -78,6 +78,6 @@ trait EntityAst extends Positional
 
 case class DataEntity(name: String, generics: TypeDef.Generics, spec: TypeAst) extends EntityAst
 
-case class TraitEntity(name: String, generics: TypeDef.Generics, spec: List[ValueType]) extends EntityAst
+case class TraitEntity(name: String, generics: TypeDef.Generics, spec: (List[ValueType], List[EntityAst])) extends EntityAst
 
 case class DefineEntity(generics: TypeDef.Generics, model: TypeAst, data: TypeAst, spec: List[ValueExpression]) extends EntityAst

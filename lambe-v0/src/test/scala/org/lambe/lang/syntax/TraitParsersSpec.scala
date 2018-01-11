@@ -29,7 +29,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
   }
 
   "trait Boolean" should "be a TraitEntity" in {
-    parseAll(traitExpression, "trait Boolean {}").get shouldBe TraitEntity("Boolean", List(), List())
+    parseAll(traitExpression, "trait Boolean {}").get shouldBe TraitEntity("Boolean", List(), (List(), List()))
   }
 
   "trait Boolean {}" should "be parsed" in {
@@ -37,7 +37,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
   }
 
   "trait Boolean {}" should "be a TraitEntity" in {
-    parseAll(traitExpression, "trait Boolean {}").get shouldBe TraitEntity("Boolean", List(), List())
+    parseAll(traitExpression, "trait Boolean {}").get shouldBe TraitEntity("Boolean", List(), (List(), List()))
   }
 
   "trait Boolean { def (||) -> Boolean }" should "be parsed" in {
@@ -49,8 +49,11 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
       TraitEntity(
         "Boolean",
         List(),
-        List(
-          ValueType("||", List(), "Boolean")
+        (
+          List(
+            ValueType("||", List(), "Boolean")
+          ),
+          List()
         )
       )
   }
@@ -64,11 +67,49 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
       TraitEntity(
         "Boolean",
         List(),
-        List(
-          ValueType("||", List(), "Boolean"),
-          ValueType("&&", List(), "Boolean")
+        (
+          List(
+            ValueType("||", List(), "Boolean"),
+            ValueType("&&", List(), "Boolean")
+          ),
+          List()
         )
       )
   }
 
+  "trait Boolean { data true -> Boolean }" should "be parsed" in {
+    parseAll(traitExpression, "trait Boolean { data true -> Boolean }").successful shouldBe true
+  }
+
+  "trait Boolean { data true -> Boolean }" should "be TraitEntity" in {
+    parseAll(traitExpression, "trait Boolean { data true -> Boolean }").get shouldBe
+      TraitEntity(
+        "Boolean",
+        List(),
+        (
+          List(),
+          List(
+            DataEntity("true", List(), "Boolean")
+          )
+        )
+      )
+  }
+
+  "trait Boolean { trait True {} }" should "be parsed" in {
+    parseAll(traitExpression, "trait Boolean { trait True {} }").successful shouldBe true
+  }
+
+  "trait Boolean { trait True {} }" should "be TraitEntity" in {
+    parseAll(traitExpression, "trait Boolean { trait True {} }").get shouldBe
+    TraitEntity(
+      "Boolean",
+      List(),
+      (
+        List(),
+        List(
+          TraitEntity("True", List(), (List(),List()))
+        )
+      )
+    )
+  }
 }
