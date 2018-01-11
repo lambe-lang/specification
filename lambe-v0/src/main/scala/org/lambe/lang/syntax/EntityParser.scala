@@ -33,8 +33,8 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
     })
 
   def defineExpression: Parser[DefineEntity] =
-    positioned((Tokens.$define ~> name) ~ generic.* ~ (Tokens.$for ~> typeExpression) ~ ("{" ~> definitionExpression.* <~ "}") ^^ {
-      case name ~ generics ~ typeExpression ~ definitions => DefineEntity(name, generics, typeExpression, definitions)
+    positioned((Tokens.$define ~> generic.*) ~ typeExpression ~ (Tokens.$for ~> typeExpression) ~ ("{" ~> definitionExpression.+ <~ "}") ^^ {
+      case generics ~ traitType ~ typeExpression ~ definitions => DefineEntity(generics, traitType, typeExpression, definitions)
     })
 
   def entities: Parser[List[EntityAst]] =

@@ -52,58 +52,54 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
 
   // definition expression parsing
 
-  "def (>>=) [b:type] a b = v" should "be parsed" in {
-    parseAll(definitionExpression, "def (>>=) [b:type] a b = v").successful shouldBe true
+  "def (>>=) a b = v" should "be parsed" in {
+    parseAll(definitionExpression, "def (>>=) a b = v").successful shouldBe true
   }
 
   "def (>>=) [b:type] a b = v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def (>>=) [b:type] a b = v").get shouldBe
+    parseAll(definitionExpression, "def (>>=) a b = v").get shouldBe
       ValueExpression(
         ">>=",
         Option.empty,
-        List(("b", TypeIdentifier("type"))),
         ExpressionAbstraction("a",ExpressionAbstraction("b", "v"))
       )
   }
 
   "def (>>=) [b:type] (a b) = v" should "be parsed" in {
-    parseAll(definitionExpression, "def (>>=) [b:type] (a b) = v").successful shouldBe true
+    parseAll(definitionExpression, "def (>>=) (a b) = v").successful shouldBe true
   }
 
   "def (>>=) [b:type] (a b) = v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def (>>=) [b:type] (a b) = v").get shouldBe
+    parseAll(definitionExpression, "def (>>=) (a b) = v").get shouldBe
       ValueExpression(
         ">>=",
         Option.empty,
-        List(("b", TypeIdentifier("type"))),
         ExpressionAbstraction(PatternApplication("a","b"), "v")
       )
   }
 
   "def (>>=) [b:type] = (a b) -> v" should "be parsed" in {
-    parseAll(definitionExpression, "def (>>=) [b:type] = (a b) -> v").successful shouldBe true
+    parseAll(definitionExpression, "def (>>=) = (a b) -> v").successful shouldBe true
   }
 
   "def (>>=) [b:type] = (a b) -> v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def (>>=) [b:type] = (a b) -> v").get shouldBe
+    parseAll(definitionExpression, "def (>>=) = (a b) -> v").get shouldBe
       ValueExpression(
         ">>=",
         Option.empty,
-        List(("b", TypeIdentifier("type"))),
         ExpressionAbstraction(PatternApplication("a","b"), "v")
       )
   }
 
-  "def self(c d) (>>=) [b:type] = (a b) -> v" should "be parsed" in {
-    parseAll(definitionExpression, "def self(c d) (>>=) [b:type] = (a b) -> v").successful shouldBe true
+  "def self(c d) (>>=) = (a b) -> v" should "be parsed" in {
+    parseAll(definitionExpression, "def self(c d) (>>=) = (a b) -> v").successful shouldBe true
   }
 
-  "def self(c d) (>>=) [b:type] = (a b) -> v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def self(c d) (>>=) [b:type] = (a b) -> v").get shouldBe
+  "def self(c d) (>>=) = (a b) -> v" should "be ValueExpression" in {
+    parseAll(definitionExpression, "def self(c d) (>>=) = (a b) -> v").get shouldBe
       ValueExpression(
         ">>=",
         Option(PatternApplication("c","d")),
-        List(("b", TypeIdentifier("type"))),
         ExpressionAbstraction(PatternApplication("a","b"), "v")
       )
   }

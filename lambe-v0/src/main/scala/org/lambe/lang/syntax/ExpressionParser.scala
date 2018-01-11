@@ -22,8 +22,8 @@ package org.lambe.lang.syntax
 trait ExpressionParser extends PatternParser with CoreParser with Coercions {
 
   def letExpression: Parser[ExpressionAst] =
-    positioned((Tokens.$let ~> identifier <~ "=") ~ expression ~ (Tokens.$in ~> expression) ^^ {
-      case identifier ~ value ~ body => ExpressionLet(identifier, value, body)
+    positioned((Tokens.$let ~> pattern <~ "=") ~ expression ~ (Tokens.$in ~> expression) ^^ {
+      case binding ~ value ~ body => ExpressionLet(binding, value, body)
     })
 
   def simpleExpression: Parser[ExpressionAst] =

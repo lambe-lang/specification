@@ -144,5 +144,13 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
     parseAll(expression, "let a = b in c").get shouldBe ExpressionLet("a", "b", "c")
   }
 
+  "let (a a') = b in c" should "be parsed" in {
+    parseAll(expression, "let (a a') = b in c").successful shouldBe true
+  }
+
+  "let (a a') = b in c" should "be ExpressionLet" in {
+    parseAll(expression, "let (a a') = b in c").get shouldBe ExpressionLet(PatternApplication("a", "a'"), "b", "c")
+  }
+
 }
 

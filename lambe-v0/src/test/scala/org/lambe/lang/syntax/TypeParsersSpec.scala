@@ -48,12 +48,20 @@ class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
     parseAll(simpleTypeExpression, "a'").get shouldBe TypeIdentifier("a'")
   }
 
-  "a type" should "be parsed" in {
-    parseAll(appliedTypeExpression, "a type").successful shouldBe true
+  "a b" should "be parsed" in {
+    parseAll(appliedTypeExpression, "a b").successful shouldBe true
   }
 
-  "a type" should "be parsed as a TypeApplication" in {
-    parseAll(appliedTypeExpression, "a type").get shouldBe TypeApplication("a", "type")
+  "a b" should "be parsed as a TypeApplication" in {
+    parseAll(appliedTypeExpression, "a b").get shouldBe TypeApplication("a", "b")
+  }
+
+  "a b c" should "be parsed" in {
+    parseAll(appliedTypeExpression, "a b c").get shouldBe TypeApplication(TypeApplication("a", "b"), "c")
+  }
+
+  "a b c" should "be parsed as a TypeApplication" in {
+    parseAll(appliedTypeExpression, "a b c").successful shouldBe true
   }
 
   "a -> b" should "be parsed" in {

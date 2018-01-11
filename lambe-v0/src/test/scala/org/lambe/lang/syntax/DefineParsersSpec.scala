@@ -31,21 +31,64 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
   "define Boolean for Bool { def self(true) (||) _ = self def self(false) (||) a = a }" should "be DefineEntity" in {
     parseAll(defineExpression, "define Boolean for Bool { def self(true) (||) _ = self def self(false) (||) a = a }").get shouldBe
       DefineEntity(
-        "Boolean",
         List(),
+        "Boolean",
         "Bool",
         List(
           ValueExpression(
             "||",
             Option("true"),
-            List(),
-            ExpressionAbstraction("_","self")
+            ExpressionAbstraction("_", "self")
           ),
           ValueExpression(
             "||",
             Option("false"),
-            List(),
-            ExpressionAbstraction("a","a")
+            ExpressionAbstraction("a", "a")
+          )
+        )
+      )
+  }
+
+  "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }" should "be parsed" in {
+    parseAll(defineExpression, "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }").successful shouldBe true
+  }
+
+  "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }").get shouldBe
+      DefineEntity(
+        List(),
+        TypeApplication("Arithmetic", "Peano"),
+        "Peano",
+        List(
+          ValueExpression(
+            "+",
+            Option("Zero"),
+            ExpressionAbstraction("p", "p")
+          )
+        )
+      )
+  }
+
+  "define [a:type] Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be parsed" in {
+    parseAll(defineExpression, "define [a:type] Functor Option a for Option a when None { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").successful shouldBe true
+  }
+
+  "define [a:type] Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define [a:type] Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").get shouldBe
+      DefineEntity(
+        List(("a", "type")),
+        TypeApplication(TypeApplication("Functor", "Option"), "a"),
+        TypeApplication("Option", "a"),
+        List(
+          ValueExpression(
+            "fmap",
+            Option("None"),
+            ExpressionAbstraction("_", "None")
+          ),
+          ValueExpression(
+            "fmap",
+            Option(PatternApplication("Some", "v")),
+            ExpressionAbstraction("f", ExpressionApplication("Some", ExpressionApplication("f" , "v")))
           )
         )
       )
