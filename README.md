@@ -54,9 +54,9 @@ define [a:type] Monad Option a for Option a {
 ## Usage
 
 ```
-let a : Option Int = Some 1 map $ 1 +                    // a = Some 2
-let b : Option Int = Some 1 <*> $ Some $ 1 +             // b = Some 2
-let c : Option Int = Some 1 flatmap $ i -> Some $ 1 + i  // c = Some 2
+let a = Some 1 map $ 1 +                    // a = Some 2, of type Option Int 
+let b = Some 1 <*> $ Some $ 1 +             // b = Some 2, of type Option Int 
+let c = Some 1 flatmap $ i -> Some $ 1 + i  // c = Some 2, of type Option Int 
 ```
 
 # License
