@@ -59,6 +59,10 @@ let b = Some 1 <*> $ Some $ 1 +             // b = Some 2, of type Option Int
 let c = Some 1 flatmap $ i -> Some $ 1 + i  // c = Some 2, of type Option Int 
 ```
 
+# Why Lambë
+
+See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition.
+
 # License
 
 Copyright 2018 D. Plaindoux.
