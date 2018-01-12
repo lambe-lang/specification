@@ -21,7 +21,7 @@ package org.lambe.lang.syntax
 
 import scala.util.parsing.combinator.{Parsers, RegexParsers}
 
-trait CoreParser extends RegexParsers with Parsers {
+trait TokenParser extends RegexParsers with Parsers {
 
   def numberLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
 
@@ -31,7 +31,7 @@ trait CoreParser extends RegexParsers with Parsers {
     }
 
   def operator: Parser[String] =
-    """[#@&!_$*<>,;.:\/+=|-]+""".r ^? {
+    """([#@&!_$*<>,;.:\/+=|-]|\]|\[)+""".r ^? {
       case m if !Tokens.separators.contains(m) => m
     }
 

@@ -19,7 +19,7 @@ under the License.
 
 package org.lambe.lang.syntax
 
-trait TypeParser extends CoreParser with Coercions {
+trait TypeParser extends TokenParser with Coercions {
 
   def simpleTypeExpression: Parser[TypeAst] =
     positioned((Tokens.$type | identifier) ^^ TypeIdentifier | ("(" ~> typeExpression <~ ")"))

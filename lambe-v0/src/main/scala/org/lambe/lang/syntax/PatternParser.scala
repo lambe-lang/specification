@@ -19,7 +19,7 @@ under the License.
 
 package org.lambe.lang.syntax
 
-trait PatternParser extends CoreParser with Coercions {
+trait PatternParser extends TokenParser with Coercions {
 
   def simplePattern: Parser[PatternAst] =
     positioned((operator | identifier) ^^ PatternIdentifier)

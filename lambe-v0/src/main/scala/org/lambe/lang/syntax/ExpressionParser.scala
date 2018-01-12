@@ -19,7 +19,7 @@ under the License.
 
 package org.lambe.lang.syntax
 
-trait ExpressionParser extends PatternParser with CoreParser with Coercions {
+trait ExpressionParser extends PatternParser with TokenParser with Coercions {
 
   def letExpression: Parser[ExpressionAst] =
     positioned((Tokens.$let ~> pattern <~ "=") ~ expression ~ (Tokens.$in ~> expression) ^^ {

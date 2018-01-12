@@ -21,7 +21,7 @@ package org.lambe.lang.syntax
 
 import org.scalatest._
 
-class CoreParsersSpec extends FlatSpec with CoreParser with Matchers {
+class TokenParsersSpec extends FlatSpec with TokenParser with Matchers {
   // Number parsing
 
   "-12" should "be parsed" in {
@@ -64,8 +64,8 @@ class CoreParsersSpec extends FlatSpec with CoreParser with Matchers {
     parseAll(operator, ">>=").get shouldBe ">>="
   }
 
-  "[" should "not be parsed" in {
-    parseAll(operator, "[").successful shouldBe false
+  "(" should "not be parsed" in {
+    parseAll(operator, "(").successful shouldBe false
   }
 
   // Unit Parsing

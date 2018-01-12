@@ -19,7 +19,7 @@ under the License.
 
 package org.lambe.lang.syntax
 
-trait NameParser extends CoreParser {
+trait NameParser extends TokenParser {
 
   def name: Parser[String] = identifier | ("(" ~> operator <~ ")")
 

@@ -31,5 +31,5 @@ object Tokens {
   val $self = "self"
 
   val keywords = List($trait, $data, $define, $def, $let, $in, $for, $type, $self)
-  val separators = List("[", "]", "(", ")", "->", "=", "$")
+  val separators = List("(", ")", "->", "=", "$")
 }

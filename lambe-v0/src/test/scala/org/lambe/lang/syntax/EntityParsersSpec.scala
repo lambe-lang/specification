@@ -73,4 +73,28 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(entities, listCode).successful shouldBe true
   }
 
+  val listTrait : String =
+    """
+      |trait List[a:type] {
+      |  def ([) -> Parameter a
+      |
+      |  data Parameter[a:type] (List a -> List a) -> type
+      |
+      |  trait Parameter {
+      |    def apply (a) -> NextParameter a
+      |    def (]) -> List a i
+      |  }
+      |  data NextParameter[a:type] (List a -> List a) -> type
+      |
+      |  trait NextParameter {
+      |    def (,) a -> Parameter a
+      |    def (]) -> List a
+      |  }
+      |}
+    """.stripMargin
+
+  "listTrait" should "be parsed" in {
+    parseAll(entities, listTrait).successful shouldBe true
+  }
+
 }
