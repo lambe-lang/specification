@@ -26,9 +26,6 @@ trait ParameterParser extends TypeParser {
       case identifier ~ typeExpression => (identifier, typeExpression)
     }
 
-  def parameter: Parser[TypeAst] =
-    positioned(simpleTypeExpression)
-
   def profileType: Parser[TypeAst] =
     positioned(funTypeExpression | ("->" ~> appliedTypeExpression))
 }
