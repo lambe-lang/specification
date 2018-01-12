@@ -34,17 +34,20 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "Bool",
         "Bool",
-        List(
-          ValueExpression(
-            "||",
-            Option("true"),
-            ExpressionAbstraction("_", "self")
+        (
+          List(
+            ValueExpression(
+              "||",
+              Option("true"),
+              ExpressionAbstraction("_", "self")
+            ),
+            ValueExpression(
+              "||",
+              Option("false"),
+              ExpressionAbstraction("a", "a")
+            )
           ),
-          ValueExpression(
-            "||",
-            Option("false"),
-            ExpressionAbstraction("a", "a")
-          )
+          List()
         )
       )
   }
@@ -59,17 +62,20 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "Boolean",
         "Bool",
-        List(
-          ValueExpression(
-            "||",
-            Option("true"),
-            ExpressionAbstraction("_", "self")
+        (
+          List(
+            ValueExpression(
+              "||",
+              Option("true"),
+              ExpressionAbstraction("_", "self")
+            ),
+            ValueExpression(
+              "||",
+              Option("false"),
+              ExpressionAbstraction("a", "a")
+            )
           ),
-          ValueExpression(
-            "||",
-            Option("false"),
-            ExpressionAbstraction("a", "a")
-          )
+          List()
         )
       )
   }
@@ -84,12 +90,15 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         TypeApplication("Arithmetic", "Peano"),
         "Peano",
-        List(
-          ValueExpression(
-            "+",
-            Option("Zero"),
-            ExpressionAbstraction("p", "p")
-          )
+        (
+          List(
+            ValueExpression(
+              "+",
+              Option("Zero"),
+              ExpressionAbstraction("p", "p")
+            )
+          ),
+          List(),
         )
       )
   }
@@ -104,17 +113,85 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(("a", "type")),
         TypeApplication(TypeApplication("Functor", "Option"), "a"),
         TypeApplication("Option", "a"),
-        List(
-          ValueExpression(
-            "fmap",
-            Option("None"),
-            ExpressionAbstraction("_", "None")
+        (
+          List(
+            ValueExpression(
+              "fmap",
+              Option("None"),
+              ExpressionAbstraction("_", "None")
+            ),
+            ValueExpression(
+              "fmap",
+              Option(PatternApplication("Some", "v")),
+              ExpressionAbstraction("f", ExpressionApplication("Some", ExpressionApplication("f", "v")))
+            )
           ),
-          ValueExpression(
-            "fmap",
-            Option(PatternApplication("Some", "v")),
-            ExpressionAbstraction("f", ExpressionApplication("Some", ExpressionApplication("f" , "v")))
-          )
+          List()
+        )
+      )
+  }
+
+  "define A { data  B -> type }" should "be parsed" in {
+    parseAll(defineExpression, "define A { data B -> type }").successful shouldBe true
+  }
+
+  "define A { data  B -> type }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define A { data B -> type }").get shouldBe
+      DefineEntity(
+        List(),
+        "A",
+        "A",
+        (
+          List(),
+          List(DataEntity("B", List(), "type"))
+        )
+      )
+  }
+
+  "define A { data  B -> type data C -> type }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define A { data B -> type data C -> type }").get shouldBe
+      DefineEntity(
+        List(),
+        "A",
+        "A",
+        (
+          List(),
+          List(DataEntity("B", List(), "type"), DataEntity("C", List(), "type"))
+        )
+      )
+  }
+
+  "define A { trait B }" should "be parsed" in {
+    parseAll(defineExpression, "define A { trait B }").successful shouldBe true
+  }
+
+  "define A { trait B }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define A { trait B }").get shouldBe
+      DefineEntity(
+        List(),
+        "A",
+        "A",
+        (
+          List(),
+          List(TraitEntity("B", List(), (List(), List())))
+        )
+      )
+  }
+
+
+  "define A { define B {} }" should "be parsed" in {
+    parseAll(defineExpression, "define A { define B {} }").successful shouldBe true
+  }
+
+  "define A { define B {} }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define A { define B {} }").get shouldBe
+      DefineEntity(
+        List(),
+        "A",
+        "A",
+        (
+          List(),
+          List(DefineEntity(List(), "B", "B", (List(), List())))
         )
       )
   }

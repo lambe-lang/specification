@@ -18,10 +18,10 @@ data ::=
    "data"  name generic* type? -> type
 
 trait ::=
-   "trait" name generic* ("{" (typeDef |data | trait)* "}")?
+   "trait" name generic* ("{" (typeDef | data | trait)* "}")?
 
 define ::=
-   "define" generic* type (for type)? ("{" expressionDef* "}")?
+   "define" generic* type (for type)? ("{" (expressionDef | data | trait | define)* "}")?
 
 name ::=
     identifier
