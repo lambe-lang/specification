@@ -11,41 +11,41 @@ TODO
 ## Traits
 
 ``` 
-trait Functor[m:type->type][a:type] {
-  def map [b:type] (a -> b) -> m b
+trait Functor (m:type->type) (a:type) for self:m a {
+  def (b:type) map : (a -> b) -> m b
 }
 
 trait Applicative[m:type->type][a:type] with Functor m a {
-  def (<*>) [b:type] m (a -> b) -> m b
+  def (b:type) (<*>) : m (a -> b) -> m b
 }
 
 trait Monad[m:type->type][a:type] with Applicative m a {
-  def flatmap [b:type] (a -> m b) -> m b
+  def (b:type) flatmap : (a -> m b) -> m b
 }
 ```
 
 ## Data
 
 ```
-data Option[a:type] -> type
-data None[a:type] -> Option a
-data Some[a:type] a -> Option a
+data Option : type -> type
+data (a:type) None : Option a
+data (a:type) Some : a -> Option a
 ```
 
 ## Traits definition
 
 ```
-define [a:type] Functor Option a for Option a {
+define (a:type) Functor Option a {
   def self(None)   map _ = None
   def self(Some v) map f = Some (f v)
 }
 
-define [a:type] Applicative Option a for Option a {
+define (a:type) Applicative Option a {
   def (<*>) None     = None
   def (<*>) (Some f) = self map f
 }
 
-define [a:type] Monad Option a for Option a {
+define (a:type) Monad Option a {
   def self(None)   flatmap _ = None
   def self(Some v) flatmap f = f v
 }
