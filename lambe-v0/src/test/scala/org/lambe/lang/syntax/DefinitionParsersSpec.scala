@@ -24,12 +24,14 @@ import org.scalatest._
 class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers {
   // definition type parsing
 
-  "def (||) -> Boolean" should "be parsed" in {
-    parseAll(definitionType, "def (||) -> Boolean").successful shouldBe true
+  private val value0 = "def (||) : Boolean"
+
+  value0 should "be parsed" in {
+    parseAll(definitionType, value0).successful shouldBe true
   }
 
-  "def (||) -> Boolean" should "be a ValueType" in {
-    parseAll(definitionType, "def (||) -> Boolean").get shouldBe
+  value0 should "be a ValueType" in {
+    parseAll(definitionType, value0).get shouldBe
       ValueType(
         "||",
         List(),
@@ -37,12 +39,14 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       )
   }
 
-  "def (>>=) [b:type] (a -> m b) -> m b" should "be parsed" in {
-    parseAll(definitionType, "def (>>=) [b:type] (a -> m b) -> m b").successful shouldBe true
+  private val value1 = "def (b:type) (>>=) : (a -> m b) -> m b"
+
+  value1 should "be parsed" in {
+    parseAll(definitionType, value1).successful shouldBe true
   }
 
-  "def (>>=) [b:type] (a -> m b) -> m b" should "be a ValueType" in {
-    parseAll(definitionType, "def (>>=) [b:type] (a -> m b) -> m b").get shouldBe
+  value1 should "be a ValueType" in {
+    parseAll(definitionType, value1).get shouldBe
       ValueType(
         ">>=",
         List(("b", TypeIdentifier("type"))),
@@ -52,12 +56,14 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
 
   // definition expression parsing
 
-  "def (>>=) a b = v" should "be parsed" in {
-    parseAll(definitionExpression, "def (>>=) a b = v").successful shouldBe true
+  private val value2 = "def (>>=) a b = v"
+
+  value2 should "be parsed" in {
+    parseAll(definitionExpression, value2).successful shouldBe true
   }
 
-  "def (>>=) [b:type] a b = v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def (>>=) a b = v").get shouldBe
+  value2 should "be ValueExpression" in {
+    parseAll(definitionExpression, value2).get shouldBe
       ValueExpression(
         ">>=",
         Option.empty,
@@ -65,12 +71,14 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       )
   }
 
-  "def (>>=) [b:type] (a b) = v" should "be parsed" in {
-    parseAll(definitionExpression, "def (>>=) (a b) = v").successful shouldBe true
+  private val value3 = "def (>>=) (a b) = v"
+
+  value3 should "be parsed" in {
+    parseAll(definitionExpression, value3).successful shouldBe true
   }
 
-  "def (>>=) [b:type] (a b) = v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def (>>=) (a b) = v").get shouldBe
+  value3 should "be ValueExpression" in {
+    parseAll(definitionExpression, value3).get shouldBe
       ValueExpression(
         ">>=",
         Option.empty,
@@ -78,12 +86,14 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       )
   }
 
-  "def (>>=) [b:type] = (a b) -> v" should "be parsed" in {
-    parseAll(definitionExpression, "def (>>=) = (a b) -> v").successful shouldBe true
+  private val value4 = "def (>>=) = (a b) -> v"
+
+  value4 should "be parsed" in {
+    parseAll(definitionExpression, value4).successful shouldBe true
   }
 
-  "def (>>=) [b:type] = (a b) -> v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def (>>=) = (a b) -> v").get shouldBe
+  value4 should "be ValueExpression" in {
+    parseAll(definitionExpression, value4).get shouldBe
       ValueExpression(
         ">>=",
         Option.empty,
@@ -91,12 +101,14 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       )
   }
 
-  "def self(c d) (>>=) = (a b) -> v" should "be parsed" in {
-    parseAll(definitionExpression, "def self(c d) (>>=) = (a b) -> v").successful shouldBe true
+  private val value5 = "def self(c d) (>>=) = (a b) -> v"
+
+  value5 should "be parsed" in {
+    parseAll(definitionExpression, value5).successful shouldBe true
   }
 
-  "def self(c d) (>>=) = (a b) -> v" should "be ValueExpression" in {
-    parseAll(definitionExpression, "def self(c d) (>>=) = (a b) -> v").get shouldBe
+  value5 should "be ValueExpression" in {
+    parseAll(definitionExpression, value5).get shouldBe
       ValueExpression(
         ">>=",
         Option(PatternApplication("c","d")),

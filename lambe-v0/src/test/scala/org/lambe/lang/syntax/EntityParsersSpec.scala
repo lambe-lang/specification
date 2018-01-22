@@ -26,14 +26,14 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val booleanCode: String =
     """
-      |data Bool -> type
-      |data true -> Bool
-      |data false -> Bool
+      |data Bool : type
+      |data true : Bool
+      |data false : Bool
       |
       |trait Predicate {
-      |  def (||) Bool -> Bool
-      |  def (&&) Bool -> Bool
-      |  def not  -> Bool
+      |  def (||) : Bool -> Bool
+      |  def (&&) : Bool -> Bool
+      |  def not : Bool
       |}
       |
       |define Predicate for Bool {
@@ -54,16 +54,16 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val listCode: String =
     """
-      |data List[a:type] -> type
-      |data Nil[a:type] -> List a
-      |data (::)[a:type] a -> List a -> List a
+      |data List : type -> type
+      |data (a:type) Nil : List a
+      |data (a:type) (::) : a -> List a -> List a
       |
-      |define [a:type] Functor (a -> List a) a for List a {
+      |define (a:type) Functor (a -> List a) a for List a {
       |  def self(Nil)  fmap b f = Nil
       |  def self(h::t) fmap b f = (f h) :: (t.map b f)
       |}
       |
-      |define [a:type] Reducer a for List a when Nil {
+      |define (a:type) Reducer a for List a when Nil {
       |  def self(Nil)  reduce b _ = b
       |  def self(h::t) reduce b f = t reduce (f b h) f
       |}
@@ -75,20 +75,21 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val listTrait: String =
     """
-      |trait List[a:type] {
-      |  def ([) -> Parameter a
+      |trait List (a:type) {
+      |  def ([) : Parameter a
       |
-      |  data Parameter[a:type] (List a -> List a) -> type
+      |  data (a:type) Parameter : (List a -> List a) -> type
       |
       |  trait Parameter {
-      |    def apply (a) -> NextParameter a
-      |    def (]) -> List a i
+      |    def apply : (a) -> NextParameter a
+      |    def (]) : List a
       |  }
-      |  data NextParameter[a:type] (List a -> List a) -> type
+      |
+      |  data (a:type) NextParameter : (List a -> List a) -> type
       |
       |  trait NextParameter {
-      |    def (,) a -> Parameter a
-      |    def (]) -> List a
+      |    def (,) : a -> Parameter a
+      |    def (]) : List a
       |  }
       |}
     """.stripMargin
@@ -99,20 +100,21 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val listDefine: String =
     """
-      |define [a:type] List a {
+      |define (a:type) List a {
       |  def ([) = Parameter (l -> l)
       |
-      |  data Parameter[a:type] (List a -> List a) -> type
+      |  data (a:type) Parameter : (List a -> List a) -> type
       |
       |  trait Parameter {
-      |    def apply (a) -> NextParameter a
-      |    def (]) -> List a i
+      |    def apply : (a) -> NextParameter a
+      |    def (]) : List a i
       |  }
-      |  data NextParameter[a:type] (List a -> List a) -> type
+      |
+      |  data (a:type) NextParameter : (List a -> List a) -> type
       |
       |  trait NextParameter {
-      |    def (,) a -> Parameter a
-      |    def (]) -> List a
+      |    def (,) : a -> Parameter a
+      |    def (]) : List a
       |  }
       |
       |  define Parameter {

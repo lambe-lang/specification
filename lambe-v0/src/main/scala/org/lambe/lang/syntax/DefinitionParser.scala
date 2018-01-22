@@ -22,8 +22,8 @@ package org.lambe.lang.syntax
 trait DefinitionParser extends ExpressionParser with TypeParser with ParameterParser with NameParser {
 
   def definitionType: Parser[ValueType] =
-    positioned((Tokens.$def ~> name) ~ generic.* ~ profileType ^^ {
-      case name ~ generics ~ typeExpression => ValueType(name, generics, typeExpression)
+    positioned((Tokens.$def ~> generic.*)  ~ name ~ profileType ^^ {
+      case generics ~ name ~ typeExpression => ValueType(name, generics, typeExpression)
     })
 
   def definitionExpression: Parser[ValueExpression] =

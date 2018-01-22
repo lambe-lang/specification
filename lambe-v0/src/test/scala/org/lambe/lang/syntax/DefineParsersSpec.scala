@@ -24,12 +24,14 @@ import org.scalatest._
 class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
   // entity parsing
 
-  "define Bool { def self(true) (||) = false def self(false) (||) = self }" should "be parsed" in {
-    parseAll(defineExpression, "define Bool { def self(true) (||) = false def self(false) (||) = self }").successful shouldBe true
+  private val value0 = "define Bool { def self(true) (||) _ = self def self(false) (||) a = a }"
+
+  value0 should "be parsed" in {
+    parseAll(defineExpression, value0).successful shouldBe true
   }
 
-  "define Bool { def self(true) (||) _ = self def self(false) (||) a = a }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define Bool { def self(true) (||) _ = self def self(false) (||) a = a }").get shouldBe
+  value0 should "be DefineEntity" in {
+    parseAll(defineExpression, value0).get shouldBe
       DefineEntity(
         List(),
         "Bool",
@@ -103,12 +105,12 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define [a:type] Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be parsed" in {
-    parseAll(defineExpression, "define [a:type] Functor Option a for Option a when None { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").successful shouldBe true
+  "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be parsed" in {
+    parseAll(defineExpression, "define (a:type) Functor Option a for Option a when None { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").successful shouldBe true
   }
 
-  "define [a:type] Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define [a:type] Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").get shouldBe
+  "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").get shouldBe
       DefineEntity(
         List(("a", "type")),
         TypeApplication(TypeApplication("Functor", "Option"), "a"),
@@ -131,12 +133,12 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define A { data  B -> type }" should "be parsed" in {
-    parseAll(defineExpression, "define A { data B -> type }").successful shouldBe true
+  "define A { data  B : type }" should "be parsed" in {
+    parseAll(defineExpression, "define A { data B : type }").successful shouldBe true
   }
 
-  "define A { data  B -> type }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define A { data B -> type }").get shouldBe
+  "define A { data  B : type }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define A { data B : type }").get shouldBe
       DefineEntity(
         List(),
         "A",
@@ -148,8 +150,8 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define A { data  B -> type data C -> type }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define A { data B -> type data C -> type }").get shouldBe
+  "define A { data  B : type data C : type }" should "be DefineEntity" in {
+    parseAll(defineExpression, "define A { data B : type data C : type }").get shouldBe
       DefineEntity(
         List(),
         "A",

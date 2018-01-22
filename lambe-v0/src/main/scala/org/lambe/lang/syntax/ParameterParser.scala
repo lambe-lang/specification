@@ -22,10 +22,10 @@ package org.lambe.lang.syntax
 trait ParameterParser extends TypeParser {
 
   def generic: Parser[(String, TypeAst)] =
-    ("[" ~> identifier <~ ":") ~ (positioned(typeExpression) <~ "]") ^^ {
+    ("(" ~> identifier <~ ":") ~ (positioned(typeExpression) <~ ")") ^^ {
       case identifier ~ typeExpression => (identifier, typeExpression)
     }
 
   def profileType: Parser[TypeAst] =
-    positioned(funTypeExpression | ("->" ~> appliedTypeExpression))
+    positioned(":" ~> typeExpression)
 }

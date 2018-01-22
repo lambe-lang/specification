@@ -15,7 +15,7 @@ s0 ::=
     define
 
 data ::=
-   "data"  name generic* type? -> type
+   "data" generic* name ":" type
 
 trait ::=
    "trait" name generic* ("{" (typeDef | data | trait)* "}")?
@@ -28,18 +28,17 @@ name ::=
     "(" operator ")"
 
 generic ::=
-    "[" identifier ":" type "]"
+    "(" identifier ":" type ")"
 
 type ::=
     "type"
     identifier
     "(" type ")"
-    "$" type
     type type
     type -> type
 
 typeDef ::=
-    "def" name generic* type? "->" type
+    "def" generic* name ":" type
 
 expressionDef ::=
     "def" selfPattern? name generic* pattern* "=" expression
@@ -59,4 +58,5 @@ expression ::=
     expression expression
     pattern+ "->" expression
     "(" expression ")"
+    "$" type
 ```

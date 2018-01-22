@@ -22,8 +22,8 @@ package org.lambe.lang.syntax
 trait EntityParser extends TypeParser with ParameterParser with NameParser with DefinitionParser {
 
   def dataExpression: Parser[DataEntity] =
-    positioned((Tokens.$data ~> name) ~ generic.* ~ profileType ^^ {
-      case name ~ generics ~ typeExpression => DataEntity(name, generics, typeExpression)
+    positioned((Tokens.$data ~> generic.*) ~ name ~ profileType ^^ {
+      case generics ~ name ~ typeExpression => DataEntity(name, generics, typeExpression)
     })
 
   private def traitDefinitions: Parser[(List[ValueType], List[EntityAst])] =
@@ -31,20 +31,20 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
       case definition ~ ((definitionTypes, entityTypes)) => (List(definition) ++ definitionTypes, entityTypes)
     } | (dataExpression | traitExpression) ~ traitDefinitions ^^ {
       case expression ~ ((definitionTypes, entityTypes)) => (definitionTypes, List(expression) ++ entityTypes)
-    } | success(List(),List())
+    } | success(List(), List())
 
   def traitExpression: Parser[TraitEntity] =
     positioned((Tokens.$trait ~> name) ~ generic.* ~ ("{" ~> traitDefinitions <~ "}").? ^^ {
-      case name ~ generics ~ None => TraitEntity(name, generics, (List(),List()))
+      case name ~ generics ~ None => TraitEntity(name, generics, (List(), List()))
       case name ~ generics ~ Some(definitions) => TraitEntity(name, generics, definitions)
     })
 
-  private def defineDefinitions : Parser[(List[ValueExpression], List[EntityAst])] =
+  private def defineDefinitions: Parser[(List[ValueExpression], List[EntityAst])] =
     definitionExpression ~ defineDefinitions ^^ {
       case definition ~ ((definitionExpressions, defineDefinitions)) => (List(definition) ++ definitionExpressions, defineDefinitions)
-    } | (defineExpression  | dataExpression | traitExpression) ~ defineDefinitions ^^ {
+    } | (defineExpression | dataExpression | traitExpression) ~ defineDefinitions ^^ {
       case expression ~ ((definitionExpressions, defineDefinitions)) => (definitionExpressions, List(expression) ++ defineDefinitions)
-    } | success(List(),List())
+    } | success(List(), List())
 
   def defineExpression: Parser[DefineEntity] =
     positioned((Tokens.$define ~> generic.*) ~ typeExpression ~ (Tokens.$for ~> typeExpression).? ~ ("{" ~> defineDefinitions <~ "}") ^^ {
