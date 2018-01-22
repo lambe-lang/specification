@@ -15,11 +15,11 @@ trait Functor (m:type->type) (a:type) where self:m a {
   def (b:type) map : (a -> b) -> m b
 }
 
-trait Applicative[m:type->type][a:type] with Functor m a {
+trait Applicative (m:type->type) (a:type) with Functor m a {
   def (b:type) (<*>) : m (a -> b) -> m b
 }
 
-trait Monad[m:type->type][a:type] with Applicative m a {
+trait Monad (m:type->type) (a:type) with Applicative m a {
   def (b:type) flatmap : (a -> m b) -> m b
 }
 ```
