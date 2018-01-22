@@ -20,7 +20,7 @@ trait Applicative (m:type->type) (a:type) with Functor m a {
 }
 
 trait Monad (m:type->type) (a:type) with Applicative m a {
-  def (b:type) flatmap : (a -> m b) -> m b
+  def (b:type) (>>=) : (a -> m b) -> m b
 }
 ```
 
@@ -46,8 +46,8 @@ define (a:type) Applicative Option a for Option a {
 }
 
 define (a:type) Monad Option a for Option a {
-  def self(None)   flatmap _ = None
-  def self(Some v) flatmap f = f v
+  def self(None)   (>>=) _ = None
+  def self(Some v) (>>=) f = f v
 }
 ```
 
@@ -56,7 +56,7 @@ define (a:type) Monad Option a for Option a {
 ```
 let a = Some 1 map $ 1 +                    // a = Some 2, of type Option Int 
 let b = Some 1 <*> $ Some $ 1 +             // b = Some 2, of type Option Int 
-let c = Some 1 flatmap $ i -> Some $ 1 + i  // c = Some 2, of type Option Int 
+let c = Some 1 >>= $ i -> Some $ 1 + i  // c = Some 2, of type Option Int 
 ```
 
 # Why Lambë
