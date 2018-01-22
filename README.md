@@ -11,7 +11,7 @@ TODO
 ## Traits
 
 ``` 
-trait Functor (m:type->type) (a:type) for self:m a {
+trait Functor (m:type->type) (a:type) where self:m a {
   def (b:type) map : (a -> b) -> m b
 }
 
@@ -35,17 +35,17 @@ data (a:type) Some : a -> Option a
 ## Traits definition
 
 ```
-define (a:type) Functor Option a {
+define (a:type) Functor Option a for Option a {
   def self(None)   map _ = None
   def self(Some v) map f = Some (f v)
 }
 
-define (a:type) Applicative Option a {
+define (a:type) Applicative Option a for Option a {
   def (<*>) None     = None
   def (<*>) (Some f) = self map f
 }
 
-define (a:type) Monad Option a {
+define (a:type) Monad Option a for Option a {
   def self(None)   flatmap _ = None
   def self(Some v) flatmap f = f v
 }
