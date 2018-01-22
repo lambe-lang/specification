@@ -175,7 +175,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         "A",
         (
           List(),
-          List(TraitEntity("B", List(), (List(), List())))
+          List(TraitEntity("B", List(), Option.empty, (List(), List())))
         )
       )
   }

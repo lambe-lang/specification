@@ -18,7 +18,7 @@ data ::=
    "data" generic* name ":" type
 
 trait ::=
-   "trait" name generic* ("{" (typeDef | data | trait)* "}")?
+   "trait" name generic* ("where" "self" ":" type)? ("{" (typeDef | data | trait)* "}")?
 
 define ::=
    "define" generic* type (for type)? ("{" (expressionDef | data | trait | define)* "}")?
