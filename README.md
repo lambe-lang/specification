@@ -11,7 +11,7 @@ TODO
 ## Traits
 
 ``` 
-trait Functor (m:type->type) (a:type) where self:m a {
+trait Functor (m:type->type) (a:type) for m a {
   def (b:type) map : (a -> b) -> m b
 }
 
