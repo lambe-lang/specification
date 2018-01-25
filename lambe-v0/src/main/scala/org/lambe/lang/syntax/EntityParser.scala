@@ -34,9 +34,9 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
     } | success(List(), List())
 
   def traitExpression: Parser[TraitEntity] =
-    positioned((Tokens.$trait ~> name) ~ generic.* ~ ("where" ~> "self" ~> ":" ~> typeExpression).? ~ ("{" ~> traitDefinitions <~ "}").? ^^ {
-      case name ~ generics ~ self ~ None => TraitEntity(name, generics, self, (List(), List()))
-      case name ~ generics ~ self ~ Some(definitions) => TraitEntity(name, generics, self, definitions)
+    positioned((Tokens.$trait ~> name) ~ generic.* ~ (Tokens.$with ~> typeExpression).* ~ (Tokens.$for ~> typeExpression).? ~ ("{" ~> traitDefinitions <~ "}").? ^^ {
+      case name ~ generics ~ extensions ~ self ~ None => TraitEntity(name, generics, extensions, self, (List(), List()))
+      case name ~ generics ~ extensions ~ self ~ Some(definitions) => TraitEntity(name, generics, extensions, self, definitions)
     })
 
   private def defineDefinitions: Parser[(List[ValueExpression], List[EntityAst])] =
@@ -48,7 +48,7 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
 
   def defineExpression: Parser[DefineEntity] =
     positioned((Tokens.$define ~> generic.*) ~ typeExpression ~ (Tokens.$for ~> typeExpression).? ~ ("{" ~> defineDefinitions <~ "}") ^^ {
-      case generics ~ traitType ~ typeExpression ~ definitions => DefineEntity(generics, traitType, typeExpression.fold(traitType)(identity), definitions)
+      case generics ~ traitType ~ self ~ definitions => DefineEntity(generics, traitType, self, definitions)
     })
 
   def entities: Parser[List[EntityAst]] =

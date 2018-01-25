@@ -35,7 +35,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "Bool",
-        "Bool",
+        Option.empty,
         (
           List(
             ValueExpression(
@@ -63,7 +63,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "Boolean",
-        "Bool",
+        Option("Bool"),
         (
           List(
             ValueExpression(
@@ -91,7 +91,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         TypeApplication("Arithmetic", "Peano"),
-        "Peano",
+        Option("Peano"),
         (
           List(
             ValueExpression(
@@ -114,7 +114,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(("a", "type")),
         TypeApplication(TypeApplication("Functor", "Option"), "a"),
-        TypeApplication("Option", "a"),
+        Option(TypeApplication("Option", "a")),
         (
           List(
             ValueExpression(
@@ -142,7 +142,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "A",
-        "A",
+        Option.empty,
         (
           List(),
           List(DataEntity("B", List(), "type"))
@@ -155,7 +155,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "A",
-        "A",
+        Option.empty,
         (
           List(),
           List(DataEntity("B", List(), "type"), DataEntity("C", List(), "type"))
@@ -172,10 +172,10 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "A",
-        "A",
+        Option.empty,
         (
           List(),
-          List(TraitEntity("B", List(), Option.empty, (List(), List())))
+          List(TraitEntity("B", List(), List(), Option.empty, (List(), List())))
         )
       )
   }
@@ -190,10 +190,10 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "A",
-        "A",
+        Option.empty,
         (
           List(),
-          List(DefineEntity(List(), "B", "B", (List(), List())))
+          List(DefineEntity(List(), "B", Option.empty, (List(), List())))
         )
       )
   }

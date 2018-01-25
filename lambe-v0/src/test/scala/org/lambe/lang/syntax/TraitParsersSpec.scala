@@ -29,7 +29,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
   }
 
   "trait Boolean" should "be a TraitEntity" in {
-    parseAll(traitExpression, "trait Boolean").get shouldBe TraitEntity("Boolean", List(), Option.empty, (List(), List()))
+    parseAll(traitExpression, "trait Boolean").get shouldBe TraitEntity("Boolean", List(), List(), Option.empty, (List(), List()))
   }
 
   "trait Boolean {}" should "be parsed" in {
@@ -37,7 +37,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
   }
 
   "trait Boolean {}" should "be a TraitEntity" in {
-    parseAll(traitExpression, "trait Boolean {}").get shouldBe TraitEntity("Boolean", List(), Option.empty, (List(), List()))
+    parseAll(traitExpression, "trait Boolean {}").get shouldBe TraitEntity("Boolean", List(), List(), Option.empty, (List(), List()))
   }
 
   "trait Boolean { def (||) : Boolean }" should "be parsed" in {
@@ -48,6 +48,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(traitExpression, "trait Boolean { def (||) : Boolean }").get shouldBe
       TraitEntity(
         "Boolean",
+        List(),
         List(),
         Option.empty,
         (
@@ -67,6 +68,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(traitExpression, "trait Boolean { def (||) : Boolean def (&&) : Boolean }").get shouldBe
       TraitEntity(
         "Boolean",
+        List(),
         List(),
         Option.empty,
         (
@@ -88,6 +90,7 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
       TraitEntity(
         "Boolean",
         List(),
+        List(),
         Option.empty,
         (
           List(),
@@ -98,14 +101,15 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "trait Boolean where self:Boolean { data true : Boolean }" should "be parsed" in {
-    parseAll(traitExpression, "trait Boolean where self:Boolean { data true : Boolean }").successful shouldBe true
+  "trait Boolean for Boolean { data true : Boolean }" should "be parsed" in {
+    parseAll(traitExpression, "trait Boolean for Boolean { data true : Boolean }").successful shouldBe true
   }
 
-  "trait Boolean where self:Boolean { data true : Boolean }" should "be TraitEntity" in {
-    parseAll(traitExpression, "trait Boolean where self:Boolean { data true : Boolean }").get shouldBe
+  "trait Boolean for Boolean { data true : Boolean }" should "be TraitEntity" in {
+    parseAll(traitExpression, "trait Boolean for Boolean { data true : Boolean }").get shouldBe
       TraitEntity(
         "Boolean",
+        List(),
         List(),
         Option("Boolean"),
         (
@@ -126,11 +130,12 @@ class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
     TraitEntity(
       "Boolean",
       List(),
+      List(),
       Option.empty,
       (
         List(),
         List(
-          TraitEntity("True", List(), Option.empty, (List(),List()))
+          TraitEntity("True", List(), List(), Option.empty, (List(),List()))
         )
       )
     )
