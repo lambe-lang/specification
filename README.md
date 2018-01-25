@@ -35,17 +35,17 @@ data (a:type) Some : a -> Option a
 ## Traits definition
 
 ```
-define (a:type) Functor Option a for Option a {
+define (a:type) Functor Option a {
   def self(None)   map _ = None
   def self(Some v) map f = Some (f v)
 }
 
-define (a:type) Applicative Option a for Option a {
+define (a:type) Applicative Option a {
   def (<*>) None     = None
   def (<*>) (Some f) = self map f
 }
 
-define (a:type) Monad Option a for Option a {
+define (a:type) Monad Option a {
   def self(None)   (>>=) _ = None
   def self(Some v) (>>=) f = f v
 }
