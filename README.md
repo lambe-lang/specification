@@ -54,9 +54,9 @@ define (a:type) Monad Option a {
 ## Usage
 
 ```
-let a = Some 1 map $ 1 +                    // a = Some 2, of type Option Int 
-let b = Some 1 <*> $ Some $ 1 +             // b = Some 2, of type Option Int 
-let c = Some 1 >>= $ i -> Some $ 1 + i      // c = Some 2, of type Option Int 
+Some 1 map $ 1 +                    // Some 2, of type Option Int 
+Some 1 <*> $ Some $ 1 +             // Some 2, of type Option Int 
+Some 1 >>= $ i -> Some $ 1 + i      // Some 2, of type Option Int 
 ```
 
 # Why Lambë
