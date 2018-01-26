@@ -13,6 +13,8 @@ s0 ::=
     data
     trait
     define
+    typeDef
+    expressionDef
 
 data ::=
    "data" generic* name ":" type
@@ -47,11 +49,16 @@ selfPattern ::=
     "self" pattern
 
 pattern ::=
+    pattern "as" identifier
+    INTEGER
+    STRING
     identifier
     operator
     "(" pattern+ ")"
 
 expression ::=
+    INTEGER
+    STRING
     "self"
     identifier
     "let" pattern "=" expression "in" expression

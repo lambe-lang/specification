@@ -51,7 +51,10 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
       case generics ~ traitType ~ self ~ definitions => DefineEntity(generics, traitType, self, definitions)
     })
 
+  def definition: Parser[EntityAst] =
+    (definitionExpression | definitionType).map{DefinitionEntity}
+
   def entities: Parser[List[EntityAst]] =
-    (dataExpression | traitExpression | defineExpression).*
+    (dataExpression | traitExpression | defineExpression | definition).*
 
 }

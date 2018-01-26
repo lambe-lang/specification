@@ -22,7 +22,11 @@ package org.lambe.lang.syntax
 trait PatternParser extends TokenParser with Coercions {
 
   def simplePattern: Parser[PatternAst] =
-    positioned((operator | identifier) ^^ PatternIdentifier)
+    positioned(
+      (integerLiteral ^^ PatternInteger)
+        | (stringLiteral ^^ PatternString)
+        | (operator | identifier) ^^ PatternIdentifier
+    )
 
   def appliedPattern: Parser[PatternAst] =
     positioned("(" ~> simplePattern ~ pattern.* <~ ")" ^^ {
@@ -30,7 +34,10 @@ trait PatternParser extends TokenParser with Coercions {
     })
 
   def pattern: Parser[PatternAst] =
-    simplePattern | appliedPattern
+    (simplePattern | appliedPattern) ~ ("as" ~> identifier).? ^^ {
+      case pattern ~ None => pattern
+      case pattern ~ Some(identifier) => PatternAlias(pattern, identifier)
+    }
 
   def selfPattern: Parser[PatternAst] =
     positioned(Tokens.$self ~> appliedPattern)

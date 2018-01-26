@@ -23,7 +23,9 @@ import scala.util.parsing.combinator.{Parsers, RegexParsers}
 
 trait TokenParser extends RegexParsers with Parsers {
 
-  def numberLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
+  def integerLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
+
+  def stringLiteral: Parser[String] = '\"' ~> """([^"]|(\\"))+""".r <~ '\"'
 
   def identifier: Parser[String] =
     """[_a-zA-Z][_0-9a-zA-Z_$]*'?""".r ^? {

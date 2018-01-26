@@ -27,7 +27,12 @@ trait ExpressionParser extends PatternParser with TokenParser with Coercions {
     })
 
   def simpleExpression: Parser[ExpressionAst] =
-    positioned((Tokens.$self | operator | identifier) ^^ ExpressionIdentifier | ("(" ~> expression <~ ")") | letExpression | ("$" ~> expression))
+    positioned(
+      (integerLiteral ^^ ExpressionInteger)
+        | (stringLiteral ^^ ExpressionString)
+        | (Tokens.$self | operator | identifier) ^^ ExpressionIdentifier
+        | ("(" ~> expression <~ ")") | letExpression | ("$" ~> expression)
+    )
 
   def appliedExpression: Parser[ExpressionAst] =
     positioned(simpleExpression ~ simpleExpression.* ^^ {

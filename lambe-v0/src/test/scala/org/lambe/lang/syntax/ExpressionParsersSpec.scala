@@ -24,6 +24,31 @@ import org.scalatest._
 class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers {
   // expression parsing
 
+  "-12" should "be parsed" in {
+    parseAll(expression, "-12").successful shouldBe true
+  }
+
+  "-12" should "be ExpressionInteger" in {
+    parseAll(expression, "-12").get shouldBe ExpressionInteger(-12)
+  }
+
+  "42" should "be parsed" in {
+    parseAll(expression, "42").successful shouldBe true
+  }
+
+  "42" should "be ExpressionInteger" in {
+    parseAll(expression, "42").get shouldBe ExpressionInteger(42)
+  }
+
+
+  "\"-12\"" should "be parsed" in {
+    parseAll(expression, "\"-12\"").successful shouldBe true
+  }
+
+  "\"-12\"" should "be ExpressionString" in {
+    parseAll(expression, "\"-12\"").get shouldBe ExpressionString("-12")
+  }
+
   "a" should "be parsed" in {
     parseAll(expression, "a").successful shouldBe true
   }

@@ -1,0 +1,6 @@
+def factorial : Int -> Int
+
+def factorial 0 = 1
+def factorial n = n * $ factorial $ n - 1
+
+

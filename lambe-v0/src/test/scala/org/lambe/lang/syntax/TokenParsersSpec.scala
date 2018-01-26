@@ -25,15 +25,25 @@ class TokenParsersSpec extends FlatSpec with TokenParser with Matchers {
   // Number parsing
 
   "-12" should "be parsed" in {
-    parseAll(numberLiteral, "-12").successful shouldBe true
+    parseAll(integerLiteral, "-12").successful shouldBe true
   }
 
   "-12" should "be number -12" in {
-    parseAll(numberLiteral, "-12").get shouldBe -12
+    parseAll(integerLiteral, "-12").get shouldBe -12
   }
 
   "-1a2" should "not be parsed" in {
-    parseAll(numberLiteral, "-1a2").successful shouldBe false
+    parseAll(integerLiteral, "-1a2").successful shouldBe false
+  }
+
+  // String parsing
+
+  "\"-12\"" should "be parsed" in {
+    parseAll(stringLiteral, "\"-12\"").successful shouldBe true
+  }
+
+  "\"-12\"" should "be string -12" in {
+    parseAll(stringLiteral, "\"-12\"").get shouldBe "-12"
   }
 
   // Identifier Parsing

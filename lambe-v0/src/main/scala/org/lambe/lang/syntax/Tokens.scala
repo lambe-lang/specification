@@ -30,7 +30,8 @@ object Tokens {
   val $for = "for"
   val $type = "type"
   val $self = "self"
+  val $as = "as"
 
-  val keywords = List($trait, $data, $define, $def, $let, $in, $with, $for, $type, $self)
+  val keywords = List($trait, $data, $define, $def, $let, $in, $with, $for, $type, $self, $as)
   val separators = List("(", ")", "->", ":", "=", "$")
 }

@@ -1,0 +1,21 @@
+data Bool  : type
+data true  : Bool
+data false : Bool
+
+trait Boolean for Bool {
+    def (||) : Bool -> Bool
+    def (&&) : Bool -> Bool
+    def not : Bool
+}
+
+define Boolean {
+    def self(true) (||) _ = self
+    def            (||) b = b
+
+    def self(false) (&&) _ = self
+    def             (&&) b = b
+
+    def self(true)  not = false
+    def self(false) not = true
+}
+

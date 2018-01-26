@@ -48,6 +48,12 @@ case class TypeAbstraction(left: TypeAst, right: TypeAst) extends TypeAst
 
 trait PatternAst extends Positional
 
+case class PatternInteger(value: Int) extends PatternAst
+
+case class PatternString(value: String) extends PatternAst
+
+case class PatternAlias(valuer: PatternAst, name: String) extends PatternAst
+
 case class PatternIdentifier(name: String) extends PatternAst
 
 case class PatternApplication(left: PatternAst, right: PatternAst) extends PatternAst
@@ -55,6 +61,10 @@ case class PatternApplication(left: PatternAst, right: PatternAst) extends Patte
 // ---------------------------------------------------------------------------------------------------------------------
 
 trait ExpressionAst extends Positional
+
+case class ExpressionInteger(value: Int) extends ExpressionAst
+
+case class ExpressionString(value: String) extends ExpressionAst
 
 case class ExpressionIdentifier(name: String) extends ExpressionAst
 
@@ -75,6 +85,8 @@ case class ValueExpression(name: String, selfPattern: Option[PatternAst], spec: 
 // ---------------------------------------------------------------------------------------------------------------------
 
 trait EntityAst extends Positional
+
+case class DefinitionEntity(spec: ValueAst) extends EntityAst
 
 case class DataEntity(name: String, generics: TypeDef.Generics, spec: TypeAst) extends EntityAst
 
