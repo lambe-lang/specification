@@ -17,21 +17,26 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
-object Tokens {
-  val $trait = "trait"
-  val $data = "data"
-  val $define = "define"
-  val $def = "def"
-  val $let = "let"
-  val $in = "in"
-  val $with = "with"
-  val $for = "for"
-  val $type = "type"
-  val $self = "self"
-  val $as = "as"
+import scala.util.parsing.combinator.{Parsers, RegexParsers}
 
-  val keywords = List($trait, $data, $define, $def, $let, $in, $with, $for, $type, $self, $as)
-  val separators = List("(", ")", "->", ":", "=", "$")
+trait TokenParser extends RegexParsers with Parsers {
+
+  def integerLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
+
+  def stringLiteral: Parser[String] = '\"' ~> """([^"]|(\\"))+""".r <~ '\"'
+
+  def identifier: Parser[String] =
+    """[_a-zA-Z][_0-9a-zA-Z_$]*'?""".r ^? {
+      case m if !Tokens.keywords.contains(m) => m
+    }
+
+  def operator: Parser[String] =
+    """([#@&!_$*<>,;.:\/+=|-]|\]|\[)+""".r ^? {
+      case m if !Tokens.separators.contains(m) => m
+    }
+
+  def unit: Parser[Unit] = "()" ^^ { _ => () }
+
 }

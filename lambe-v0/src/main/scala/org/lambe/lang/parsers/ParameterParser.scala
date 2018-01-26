@@ -17,18 +17,18 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
-trait DefinitionParser extends ExpressionParser with TypeParser with ParameterParser with NameParser {
+import org.lambe.lang.syntax._
 
-  def definitionType: Parser[ValueType] =
-    positioned((Tokens.$def ~> generic.*)  ~ name ~ profileType ^^ {
-      case generics ~ name ~ typeExpression => ValueType(name, generics, typeExpression)
-    })
+trait ParameterParser extends TypeParser {
 
-  def definitionExpression: Parser[ValueExpression] =
-    positioned((Tokens.$def ~> selfPattern.?) ~ name ~ pattern.* ~ ("=" ~> expression) ^^ {
-      case selfPattern ~ name ~ parameters ~ expression => ValueExpression(name, selfPattern, parameters.foldRight(expression)(ExpressionAbstraction))
-    })
+  def generic: Parser[(String, TypeAst)] =
+    ("(" ~> identifier) ~ (":" ~> positioned(typeExpression)).? <~ ")" ^^ {
+      case identifier ~ None => (identifier, "type")
+      case identifier ~ Some(typeExpression) => (identifier, typeExpression)
+    }
 
+  def profileType: Parser[TypeAst] =
+    positioned(":" ~> typeExpression)
 }

@@ -17,23 +17,20 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
-trait TypeParser extends TokenParser with Coercions {
+import org.lambe.lang.syntax._
 
-  def simpleTypeExpression: Parser[TypeAst] =
-    positioned((Tokens.$type | identifier) ^^ TypeIdentifier | ("(" ~> typeExpression <~ ")"))
+trait DefinitionParser extends ExpressionParser with TypeParser with ParameterParser with NameParser {
 
-  def appliedTypeExpression: Parser[TypeAst] =
-    positioned(simpleTypeExpression ~ simpleTypeExpression.* ^^ {
-      case application ~ arguments => arguments.foldLeft(application)(TypeApplication)
+  def definitionType: Parser[ValueType] =
+    positioned((Tokens.$def ~> generic.*)  ~ name ~ profileType ^^ {
+      case generics ~ name ~ typeExpression => ValueType(name, generics, typeExpression)
     })
 
-  def funTypeExpression: Parser[TypeAst] =
-    positioned(appliedTypeExpression ~ ("->" ~> typeExpression) ^^ {
-      case leftTypeExpression ~ rightTypeExpression => TypeAbstraction(leftTypeExpression, rightTypeExpression)
+  def definitionExpression: Parser[ValueExpression] =
+    positioned((Tokens.$def ~> selfPattern.?) ~ name ~ pattern.* ~ ("=" ~> expression) ^^ {
+      case selfPattern ~ name ~ parameters ~ expression => ValueExpression(name, selfPattern, parameters.foldRight(expression)(ExpressionAbstraction))
     })
 
-  def typeExpression: Parser[TypeAst] =
-    funTypeExpression | appliedTypeExpression
 }

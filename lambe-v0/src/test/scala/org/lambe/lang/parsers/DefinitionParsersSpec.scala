@@ -17,8 +17,9 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
+import org.lambe.lang.syntax._
 import org.scalatest._
 
 class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers {
@@ -67,7 +68,7 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       ValueExpression(
         ">>=",
         Option.empty,
-        ExpressionAbstraction("a",ExpressionAbstraction("b", "v"))
+        ExpressionAbstraction("a", ExpressionAbstraction("b", "v"))
       )
   }
 
@@ -82,7 +83,7 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       ValueExpression(
         ">>=",
         Option.empty,
-        ExpressionAbstraction(PatternApplication("a","b"), "v")
+        ExpressionAbstraction(PatternApplication("a", "b"), "v")
       )
   }
 
@@ -97,7 +98,7 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       ValueExpression(
         ">>=",
         Option.empty,
-        ExpressionAbstraction(PatternApplication("a","b"), "v")
+        ExpressionAbstraction(PatternApplication("a", "b"), "v")
       )
   }
 
@@ -111,8 +112,8 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
     parseAll(definitionExpression, value5).get shouldBe
       ValueExpression(
         ">>=",
-        Option(PatternApplication("c","d")),
-        ExpressionAbstraction(PatternApplication("a","b"), "v")
+        Option(PatternApplication("c", "d")),
+        ExpressionAbstraction(PatternApplication("a", "b"), "v")
       )
   }
 }

@@ -17,7 +17,9 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
+
+import org.lambe.lang.syntax._
 
 trait PatternParser extends TokenParser with Coercions {
 

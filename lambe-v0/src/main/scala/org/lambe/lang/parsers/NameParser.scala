@@ -17,26 +17,10 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
-import scala.util.parsing.combinator.{Parsers, RegexParsers}
+trait NameParser extends TokenParser {
 
-trait TokenParser extends RegexParsers with Parsers {
-
-  def integerLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
-
-  def stringLiteral: Parser[String] = '\"' ~> """([^"]|(\\"))+""".r <~ '\"'
-
-  def identifier: Parser[String] =
-    """[_a-zA-Z][_0-9a-zA-Z_$]*'?""".r ^? {
-      case m if !Tokens.keywords.contains(m) => m
-    }
-
-  def operator: Parser[String] =
-    """([#@&!_$*<>,;.:\/+=|-]|\]|\[)+""".r ^? {
-      case m if !Tokens.separators.contains(m) => m
-    }
-
-  def unit: Parser[Unit] = "()" ^^ { _ => () }
+  def name: Parser[String] = identifier | ("(" ~> operator <~ ")")
 
 }

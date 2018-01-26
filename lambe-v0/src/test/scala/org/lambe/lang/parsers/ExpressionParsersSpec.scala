@@ -17,8 +17,9 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
+import org.lambe.lang.syntax._
 import org.scalatest._
 
 class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers {

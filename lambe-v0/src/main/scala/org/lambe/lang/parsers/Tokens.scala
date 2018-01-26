@@ -17,16 +17,21 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.syntax
+package org.lambe.lang.parsers
 
-trait ParameterParser extends TypeParser {
+object Tokens {
+  val $trait = "trait"
+  val $data = "data"
+  val $define = "define"
+  val $def = "def"
+  val $let = "let"
+  val $in = "in"
+  val $with = "with"
+  val $for = "for"
+  val $type = "type"
+  val $self = "self"
+  val $as = "as"
 
-  def generic: Parser[(String, TypeAst)] =
-    ("(" ~> identifier) ~ (":" ~> positioned(typeExpression)).? <~ ")" ^^ {
-      case identifier ~ None => (identifier, "type")
-      case identifier ~ Some(typeExpression) => (identifier, typeExpression)
-    }
-
-  def profileType: Parser[TypeAst] =
-    positioned(":" ~> typeExpression)
+  val keywords = List($trait, $data, $define, $def, $let, $in, $with, $for, $type, $self, $as)
+  val separators = List("(", ")", "->", ":", "=", "$")
 }
