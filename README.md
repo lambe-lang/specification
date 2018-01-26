@@ -6,7 +6,7 @@ Strong typed actor based and functional programming language
 
 TODO
 
-# Basic Concepts
+# FP Basic Concepts
 
 ## Traits
 
