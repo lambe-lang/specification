@@ -16,7 +16,7 @@ def compose f g = x -> g $ f x
 ```
 data Trampoline : type -> type
 data (a) Done : a -> Trampoline a
-data (a) Next : Unit -> Trampoline a -> Trampoline a
+data (a) Next : (Unit -> Trampoline a) -> Trampoline a
 ```
 ## Runnable definition
 
