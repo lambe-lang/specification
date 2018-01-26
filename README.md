@@ -2,11 +2,52 @@
 
 Strong typed actor based and functional programming language
 
-# Introduction
+# Basic FP Concepts
 
-TODO
+## Function composition
 
-# FP Basic Concepts
+```
+def (a) (b) (c) compose : (a -> b) -> (b -> c) -> a -> c
+def compose f g = x -> g $ f x
+```
+
+## Trampoline definition
+
+```
+data Trampoline : type -> type
+data (a) Done : a -> Trampoline a
+data (a) Next : Unit -> Trampoline a -> Trampoline a
+```
+## Runnable definition
+
+```
+trait Runnable (a) {
+    def run : a
+}
+```
+## Runnable Trampoline implementation
+
+```
+define (a)(b) Runnable a for Trampoline a {
+    def self(Done a) run = a
+    def self(Next f) run = f unit run
+}
+```
+
+## Usage
+
+```
+def fact : Int -> Int
+
+def fact i = factTrampoline i 1 run
+
+def factTrampoline : Int -> Int -> Trampoline Int
+
+def factTrampoline 0 acc = Done acc
+def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
+```
+
+# Advanced FP Concepts
 
 ## Traits
 
