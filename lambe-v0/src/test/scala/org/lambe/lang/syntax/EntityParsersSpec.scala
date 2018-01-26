@@ -79,15 +79,15 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
   val listCode: String =
     """
       |data List : type -> type
-      |data (a:type) Nil : List a
-      |data (a:type) (::) : a -> List a -> List a
+      |data (a) Nil : List a
+      |data (a) (::) : a -> List a -> List a
       |
-      |define (a:type) Functor (a -> List a) a for List a {
+      |define (a) Functor (a -> List a) a for List a {
       |  def self(Nil)  fmap b f = Nil
       |  def self(h::t) fmap b f = (f h) :: (t.map b f)
       |}
       |
-      |define (a:type) Reducer a for List a when Nil {
+      |define (a) Reducer a for List a when Nil {
       |  def self(Nil)  reduce b _ = b
       |  def self(h::t) reduce b f = t reduce (f b h) f
       |}
@@ -99,17 +99,17 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val listTrait: String =
     """
-      |trait List (a:type) {
+      |trait List (a) {
       |  def ([) : Parameter a
       |
-      |  data (a:type) Parameter : (List a -> List a) -> type
+      |  data (a) Parameter : (List a -> List a) -> type
       |
       |  trait Parameter {
       |    def apply : (a) -> NextParameter a
       |    def (]) : List a
       |  }
       |
-      |  data (a:type) NextParameter : (List a -> List a) -> type
+      |  data (a) NextParameter : (List a -> List a) -> type
       |
       |  trait NextParameter {
       |    def (,) : a -> Parameter a
@@ -124,17 +124,17 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val listDefine: String =
     """
-      |define (a:type) List a {
+      |define (a) List a {
       |  def ([) = Parameter (l -> l)
       |
-      |  data (a:type) Parameter : (List a -> List a) -> type
+      |  data (a) Parameter : (List a -> List a) -> type
       |
       |  trait Parameter {
       |    def apply : (a) -> NextParameter a
       |    def (]) : List a i
       |  }
       |
-      |  data (a:type) NextParameter : (List a -> List a) -> type
+      |  data (a) NextParameter : (List a -> List a) -> type
       |
       |  trait NextParameter {
       |    def (,) : a -> Parameter a

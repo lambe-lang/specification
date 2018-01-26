@@ -30,7 +30,7 @@ name ::=
     "(" operator ")"
 
 generic ::=
-    "(" identifier ":" type ")"
+    "(" identifier (":" type)? ")"
 
 type ::=
     "type"
@@ -66,4 +66,38 @@ expression ::=
     pattern+ "->" expression
     "(" expression ")"
     "$" type
+```
+
+## Some Examples
+
+### Function composition
+
+```
+def (a) (b) (c) compose : (a -> b) -> (b -> c) -> a -> c
+def compose f g = x -> g $ f x
+```
+
+### Trampoline definition
+
+```
+data Trampoline : type -> type
+data (a) Done : a -> Trampoline a
+data (a) Next : Unit -> Trampoline a -> Trampoline a
+```
+
+### Runnable definition
+
+```
+trait Runnable (a) {
+    def run : a
+}
+```
+
+### Runnable Trampoline implementation
+
+```
+define (a) Runnable a for Trampoline a {
+    def self(Done a) run = a
+    def self(Next f) run = f unit run
+}
 ```
