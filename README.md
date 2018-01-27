@@ -7,7 +7,7 @@ Strong typed actor based and functional programming language
 ## Function composition
 
 ```
-def (a) (b) (c) compose : (a -> b) -> (b -> c) -> a -> c
+def (a)(b)(c) compose : (a -> b) -> (b -> c) -> a -> c
 def compose f g = x -> g $ f x
 ```
 
