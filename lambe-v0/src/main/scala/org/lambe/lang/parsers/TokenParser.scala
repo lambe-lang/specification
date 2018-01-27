@@ -23,6 +23,8 @@ import scala.util.parsing.combinator.{Parsers, RegexParsers}
 
 trait TokenParser extends RegexParsers with Parsers {
 
+  override protected val whiteSpace = """(\s+|(//.*\n))+""".r
+
   def integerLiteral: Parser[Int] = """[+-]?\d+""".r ^^ { s => s.toInt }
 
   def stringLiteral: Parser[String] = '\"' ~> """([^"]|(\\"))+""".r <~ '\"'

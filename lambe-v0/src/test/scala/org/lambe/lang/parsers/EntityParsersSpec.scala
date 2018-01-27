@@ -26,10 +26,12 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val helloCode: String =
     """
+      |// Simple Hello function
+      |
       |def hello : String -> String
       |
       |def hello "world" as w = "Hello " + w + "!"
-      |def hello name    = "Hello " + name
+      |def hello name = "Hello " + name
     """.stripMargin
 
   "helloCode" should "be parsed" in {
@@ -38,6 +40,8 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val factorialCode: String =
     """
+      |// Recursive factorial definition
+      |
       |def factorial : Int -> Int
       |
       |def factorial 0 = 1
