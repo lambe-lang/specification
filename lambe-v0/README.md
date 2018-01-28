@@ -10,6 +10,13 @@ This version is the first one used to bootstrap the whole system.
 
 ```
 s0 ::=
+    "module" identifier import* entity*
+
+import ::=
+    "from" identifier "import" "*"
+    "from" identifier "import" "(" identifier+ ")"
+
+entity ::=
     data
     trait
     define

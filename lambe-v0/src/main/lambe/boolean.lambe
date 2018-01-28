@@ -1,3 +1,5 @@
+module Boolean
+
 data Bool  : type
 data true  : Bool
 data false : Bool
@@ -18,4 +20,3 @@ define Boolean {
     def self(true)  not = false
     def self(false) not = true
 }
-

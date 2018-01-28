@@ -19,22 +19,20 @@ under the License.
 
 package org.lambe.lang.parsers
 
-object Tokens {
-  val $module = "module"
-  val $from = "from"
-  val $import = "import"
-  val $trait = "trait"
-  val $data = "data"
-  val $define = "define"
-  val $def = "def"
-  val $let = "let"
-  val $in = "in"
-  val $with = "with"
-  val $for = "for"
-  val $type = "type"
-  val $self = "self"
-  val $as = "as"
+import org.lambe.lang.syntax._
 
-  val keywords = List($module, $trait, $data, $define, $def, $let, $in, $with, $for, $type, $self, $as)
-  val separators = List("(", ")", "->", ":", "=", "$")
+trait ModuleParser extends EntityParser with TypeParser with ParameterParser with NameParser with DefinitionParser {
+
+  def imports: Parser[(String, List[String])] =
+    (Tokens.$from ~> identifier <~ Tokens.$import) <~ "*" ^^ {
+      case name => (name, List())
+    } | (Tokens.$from ~> identifier <~ Tokens.$import) ~ ("(" ~> identifier.+ <~ ")")  ^^ {
+      case name ~ imports => (name, imports)
+    }
+
+  def module: Parser[ModuleAst] =
+    (Tokens.$module ~> identifier) ~ imports.* ~ entities ^^ {
+      case name ~ imports ~ exports => ModuleAst(name, imports, exports)
+    }
+
 }

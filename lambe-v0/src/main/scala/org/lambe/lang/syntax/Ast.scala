@@ -93,3 +93,7 @@ case class DataEntity(name: String, generics: TypeDef.Generics, spec: TypeAst) e
 case class TraitEntity(name: String, generics: TypeDef.Generics, extensions: List[TypeAst], self: Option[TypeAst], spec: (List[ValueType], List[EntityAst])) extends EntityAst
 
 case class DefineEntity(generics: TypeDef.Generics, model: TypeAst, self: Option[TypeAst], spec: (List[ValueExpression], List[EntityAst])) extends EntityAst
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+case class ModuleAst(name: String, imports: List[(String, List[String])], exports: List[EntityAst]) extends Positional

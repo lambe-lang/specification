@@ -1,3 +1,7 @@
+module Option
+
+from Control import *
+
 data Option : type -> type
 data (a:type) None : Option a
 data (a:type) Some : a -> Option a
@@ -16,4 +20,3 @@ define (a:type) Monad Option a {
   def self(None)   (>>=) _ = None
   def self(Some v) (>>=) f = f v
 }
-
