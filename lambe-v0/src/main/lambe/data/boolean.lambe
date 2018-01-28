@@ -1,4 +1,4 @@
-module Boolean
+module data.Boolean
 
 data Bool  : type
 data true  : Bool

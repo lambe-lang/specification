@@ -1,0 +1,5 @@
+module data.Option
+
+data Option : type -> type
+data (a:type) None : Option a
+data (a:type) Some : a -> Option a

@@ -1,6 +1,7 @@
-module Option
+module data.option.Control
 
-from Control import *
+from control.Control import *
+from data.Option import *
 
 data Option : type -> type
 data (a:type) None : Option a

@@ -19,7 +19,7 @@ under the License.
 
 package org.lambe.lang.parsers
 
-import org.lambe.lang.syntax.ModuleAst
+import org.lambe.lang.syntax._
 import org.scalatest._
 
 class ModuleParsersSpec extends FlatSpec with ModuleParser with Matchers {
@@ -31,7 +31,7 @@ class ModuleParsersSpec extends FlatSpec with ModuleParser with Matchers {
   }
 
   value0 should "be ModuleAst" in {
-    parseAll(module, value0).get shouldBe ModuleAst("T", List(), List())
+    parseAll(module, value0).get shouldBe ModuleAst(ModuleNameAst(List("T")), List(), List())
   }
 
   private val value1 = "module T from A import *"
@@ -41,7 +41,8 @@ class ModuleParsersSpec extends FlatSpec with ModuleParser with Matchers {
   }
 
   value1 should "be ModuleAst" in {
-    parseAll(module, value1).get shouldBe ModuleAst("T", List(("A", List())), List())
+    parseAll(module, value1).get shouldBe
+      ModuleAst(ModuleNameAst(List("T")), List((ModuleNameAst(List("A")), List())), List())
   }
 
   private val value2 = "module T from A import (a b)"
@@ -51,7 +52,8 @@ class ModuleParsersSpec extends FlatSpec with ModuleParser with Matchers {
   }
 
   value2 should "be ModuleAst" in {
-    parseAll(module, value2).get shouldBe ModuleAst("T", List(("A", List("a", "b"))), List())
+    parseAll(module, value2).get shouldBe
+      ModuleAst(ModuleNameAst(List("T")), List((ModuleNameAst(List("A")), List("a", "b"))), List())
   }
 
   private val value3 = "module T from A import (a b) from B import *"
@@ -61,6 +63,13 @@ class ModuleParsersSpec extends FlatSpec with ModuleParser with Matchers {
   }
 
   value3 should "be ModuleAst" in {
-    parseAll(module, value3).get shouldBe ModuleAst("T", List(("A", List("a", "b")), ("B", List())), List())
+    parseAll(module, value3).get shouldBe
+      ModuleAst(ModuleNameAst(List("T")), List((ModuleNameAst(List("A")), List("a", "b")), (ModuleNameAst(List("B")), List())), List())
+  }
+
+  private val value4 = "module A.T"
+
+  value4 should "be parsed" in {
+    parseAll(module, value4).successful shouldBe true
   }
 }

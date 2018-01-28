@@ -96,4 +96,6 @@ case class DefineEntity(generics: TypeDef.Generics, model: TypeAst, self: Option
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-case class ModuleAst(name: String, imports: List[(String, List[String])], exports: List[EntityAst]) extends Positional
+case class ModuleNameAst(value: List[String])
+
+case class ModuleAst(name: ModuleNameAst, imports: List[(ModuleNameAst, List[String])], exports: List[EntityAst]) extends Positional

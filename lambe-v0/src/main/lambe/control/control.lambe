@@ -1,4 +1,4 @@
-module Control
+module control.Control
 
 trait Functor (m:type->type) (a:type) for m a {
   def (b:type) map : (a -> b) -> m b
