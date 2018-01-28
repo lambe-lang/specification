@@ -7,7 +7,7 @@ data false : Bool
 trait Boolean for Bool {
     def (||) : Bool -> Bool
     def (&&) : Bool -> Bool
-    def not : Bool
+    
 }
 
 define Boolean {
@@ -16,7 +16,8 @@ define Boolean {
 
     def self(false) (&&) _ = self
     def             (&&) b = b
-
-    def self(true)  not = false
-    def self(false) not = true
 }
+
+def not : Bool -> Bool
+def not true  = false
+def not false = true
