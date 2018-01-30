@@ -1,0 +1,19 @@
+module data.list.control
+
+from data.list import *
+from control.control import *
+
+define (a) Functor List a {
+  def self(h::t) map f = (f v)::(t map f)
+  def self(Nil)  map f = Nil
+}
+
+define (a)(b) Applicative List (a -> b) {
+  def self(f::t) (<*>) l = l map f + $ t <*> l
+  def self(Nil)  (<*>) _ = Nil
+}
+
+define (a) Monad List a {
+  def self(h::t) (>>=) f = f h + $ t >>= f
+  def self(Nil)  (>>=) _ = Nil
+}

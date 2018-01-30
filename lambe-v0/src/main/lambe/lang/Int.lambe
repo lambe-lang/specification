@@ -1,0 +1,13 @@
+module lang.data.int
+
+from lang.data.core import (Arithmetic)
+
+data Int : type
+
+define Arithmetic Int for Int {
+    def (+) i = native 2 "Int.add" self i
+    def (-) i = native 2 "Int.minus" self i
+    def (*) i = native 2 "Int.multiply" self i
+    def (/) i = native 2 "Int.divide" self i
+}
+

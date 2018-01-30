@@ -1,23 +1,19 @@
-module data.option.Control
+module data.option.control
 
-from control.Control import *
-from data.Option import *
+from data.option import *
+from control.control import *
 
-data Option : type -> type
-data (a:type) None : Option a
-data (a:type) Some : a -> Option a
-
-define (a:type) Functor Option a {
+define (a) Functor Option a {
   def self(None)   map _ = None
   def self(Some v) map f = Some (f v)
 }
 
-define (a:type) Applicative Option a {
-  def (<*>) None     = None
-  def (<*>) (Some f) = self map f
+define (a)(b) Applicative Option (a -> b) {
+  def self(None)   (<*>) _ = None
+  def self(Some f) (<*>) v = v map f
 }
 
-define (a:type) Monad Option a {
+define (a) Monad Option a {
   def self(None)   (>>=) _ = None
   def self(Some v) (>>=) f = f v
 }

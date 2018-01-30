@@ -1,13 +1,14 @@
-module control.Control
+module control.control
 
-trait Functor (m:type->type) (a:type) for m a {
-  def (b:type) map : (a -> b) -> m b
+trait Functor (m:type->type) (a) for m a {
+  def (b) map : (a -> b) -> m b
 }
 
-trait Applicative (m:type->type) (a:type) with Functor m a {
-  def (b:type) (<*>) : m (a -> b) -> m b
+trait Applicative (m:type->type) (a) (b) for m (a -> b) {
+  def (<*>) : m a -> m b
 }
 
-trait Monad (m:type->type) (a:type) with Applicative m a {
-  def (b:type) (>>=) : (a -> m b) -> m b
+trait Monad (m:type->type) (a) for m a {
+  def (b) (>>=) : (a -> m b) -> m b
 }
+

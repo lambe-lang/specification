@@ -1,0 +1,10 @@
+module data.list
+
+data List : type -> type
+data (a) Nil : List a
+data (a) (::) : a -> List a -> List a
+
+define (a) Adder (List a) {
+    def self(Nil)  (+) l = l
+    def self(h::t) (+) l = h :: (t + l)
+}

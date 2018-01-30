@@ -53,7 +53,7 @@ expressionDef ::=
     "def" selfPattern? name generic* pattern* "=" expression
 
 selfPattern ::=
-    "self" pattern
+    "self" "(" pattern+ ")"
 
 pattern ::=
     pattern "as" identifier

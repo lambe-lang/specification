@@ -1,4 +1,4 @@
-module examples.Factorial
+module examples.factorial
 
 from core.Int import *
 

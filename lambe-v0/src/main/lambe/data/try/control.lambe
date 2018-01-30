@@ -1,0 +1,19 @@
+module data.try.control
+
+from data.try import *
+from control.control import *
+
+define (a) Functor Try a {
+  def self(Success v) map f = Success (f v)
+  def self(Failure s) map f = Failure s
+}
+
+define (a)(b) Applicative Option (a -> b) {
+  def self(Success f) (<*>) v = self map f
+  def self(Failure s) (<*>) _ = Failure s
+}
+
+define (a) Monad Option a {
+  def self(Success v) (>>=) f = f v
+  def self(Failure s) (>>=) _ = Failure s
+}

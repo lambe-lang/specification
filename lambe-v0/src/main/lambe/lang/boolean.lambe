@@ -1,0 +1,32 @@
+module lang.data.boolean
+
+from lang.data.core import (Equatable)
+
+data Bool  : type
+data true  : Bool
+data false : Bool
+
+trait Boolean for Bool {
+    def (||) : Bool -> Bool
+    def (&&) : Bool -> Bool
+}
+
+define Equatable Boolean {
+    def self(true)  (==) true  = true
+    def self(false) (==) false = true
+    def (==) _ = false
+}
+
+define Boolean {
+    def self(true)  (||) _ = self
+    def self(false) (||) b = b
+
+    def self(true)  (&&) b = b
+    def self(false) (&&) _ = self
+}
+
+def not : Bool -> Bool
+def not true  = false
+def not false = true
+
+
