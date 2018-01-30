@@ -56,11 +56,11 @@ trait Functor (m:type->type) (a:type) for m a {
   def (b:type) map : (a -> b) -> m b
 }
 
-trait Applicative (m:type->type) (a:type) with Functor m a {
-  def (b:type) (<*>) : m (a -> b) -> m b
+trait Applicative (m:type->type) (a:type) (b:type) for m (a -> b) {
+  def (b:type) (<*>) : m a -> m b
 }
 
-trait Monad (m:type->type) (a:type) with Applicative m a {
+trait Monad (m:type->type) (a:type) for m a {
   def (b:type) (>>=) : (a -> m b) -> m b
 }
 ```
@@ -81,9 +81,9 @@ define (a:type) Functor Option a {
   def self(Some v) map f = Some (f v)
 }
 
-define (a:type) Applicative Option a {
-  def (<*>) None     = None
-  def (<*>) (Some f) = self map f
+define (a:type)(b:type) Applicative Option (a -> b) {
+  def self(None)   (<*>) _ = None
+  def self(Some f) (<*>) v = v map f
 }
 
 define (a:type) Monad Option a {
@@ -96,7 +96,7 @@ define (a:type) Monad Option a {
 
 ```
 Some 1 map $ 1 +                    // Some 2, of type Option Int 
-Some 1 <*> $ Some $ 1 +             // Some 2, of type Option Int 
+Some (1 +) <*> $ Some 1             // Some 2, of type Option Int 
 Some 1 >>= $ i -> Some $ 1 + i      // Some 2, of type Option Int 
 ```
 
