@@ -69,8 +69,8 @@ trait Monad (m:type->type) (a) for m a {
 
 ```
 data Option : type -> type
-data (a:type) None : Option a
-data (a:type) Some : a -> Option a
+data (a) None : Option a
+data (a) Some : a -> Option a
 ```
 
 ## Traits definition
