@@ -52,15 +52,15 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 ## Traits
 
 ``` 
-trait Functor (m:type->type) (a:type) for m a {
+trait Functor (m:type->type) (a) for m a {
   def (b:type) map : (a -> b) -> m b
 }
 
-trait Applicative (m:type->type) (a:type) (b:type) for m (a -> b) {
+trait Applicative (m:type->type) (a) (b) for m (a -> b) {
   def (b:type) (<*>) : m a -> m b
 }
 
-trait Monad (m:type->type) (a:type) for m a {
+trait Monad (m:type->type) (a) for m a {
   def (b:type) (>>=) : (a -> m b) -> m b
 }
 ```
@@ -76,17 +76,17 @@ data (a:type) Some : a -> Option a
 ## Traits definition
 
 ```
-define (a:type) Functor Option a {
+define (a) Functor Option a {
   def self(None)   map _ = None
   def self(Some v) map f = Some (f v)
 }
 
-define (a:type)(b:type) Applicative Option (a -> b) {
+define (a)(b) Applicative Option (a -> b) {
   def self(None)   (<*>) _ = None
   def self(Some f) (<*>) v = v map f
 }
 
-define (a:type) Monad Option a {
+define (a) Monad Option a {
   def self(None)   (>>=) _ = None
   def self(Some v) (>>=) f = f v
 }
