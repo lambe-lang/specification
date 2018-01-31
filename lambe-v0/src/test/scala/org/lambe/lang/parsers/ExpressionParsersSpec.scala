@@ -41,7 +41,6 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
     parseAll(expression, "42").get shouldBe ExpressionInteger(42)
   }
 
-
   "\"-12\"" should "be parsed" in {
     parseAll(expression, "\"-12\"").successful shouldBe true
   }
@@ -55,7 +54,31 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
   }
 
   "a" should "be ExpressionIdentifier" in {
-    parseAll(expression, "a").get shouldBe ExpressionIdentifier("a")
+    parseAll(expression, "a").get shouldBe ExpressionIdentifier("a", Option.empty)
+  }
+
+  "a from c1.c2" should "be parsed" in {
+    parseAll(expression, "a from c1.c2").successful shouldBe true
+  }
+
+  "a from c1.c2" should "be ExpressionIdentifier" in {
+    parseAll(expression, "a from c1.c2").get shouldBe ExpressionIdentifier("a", Option(List("c1","c2")))
+  }
+
+  "++" should "be parsed" in {
+    parseAll(expression, "++").successful shouldBe true
+  }
+
+  "++" should "be ExpressionIdentifier" in {
+    parseAll(expression, "++").get shouldBe ExpressionIdentifier("++", Option.empty)
+  }
+
+  "++ from c1.c2" should "be parsed" in {
+    parseAll(expression, "++ from c1.c2").successful shouldBe true
+  }
+
+  "++ from c1.c2" should "be ExpressionIdentifier" in {
+    parseAll(expression, "++ from c1.c2").get shouldBe ExpressionIdentifier("++", Option(List("c1","c2")))
   }
 
   "(a)" should "be parsed" in {
@@ -63,7 +86,7 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
   }
 
   "(a)" should "be ExpressionIdentifier" in {
-    parseAll(expression, "(a)").get shouldBe ExpressionIdentifier("a")
+    parseAll(expression, "(a)").get shouldBe ExpressionIdentifier("a", Option.empty)
   }
 
   "a b" should "be parsed" in {

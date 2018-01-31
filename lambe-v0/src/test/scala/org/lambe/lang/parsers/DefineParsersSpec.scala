@@ -42,7 +42,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
             ValueExpression(
               "||",
               Option("true"),
-              ExpressionAbstraction("_", "self")
+              ExpressionAbstraction("_", ExpressionSelf)
             ),
             ValueExpression(
               "||",
@@ -70,7 +70,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
             ValueExpression(
               "||",
               Option("true"),
-              ExpressionAbstraction("_", "self")
+              ExpressionAbstraction("_", ExpressionSelf)
             ),
             ValueExpression(
               "||",

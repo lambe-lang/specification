@@ -24,7 +24,7 @@ import scala.util.parsing.input.Positional
 trait Coercions {
   implicit def toType(a: String): TypeAst = TypeIdentifier(a)
 
-  implicit def toExpression(a: String): ExpressionAst = ExpressionIdentifier(a)
+  implicit def toExpression(a: String): ExpressionAst = ExpressionIdentifier(a, Option.empty)
 
   implicit def toPattern(a: String): PatternAst = PatternIdentifier(a)
 }
@@ -62,11 +62,13 @@ case class PatternApplication(left: PatternAst, right: PatternAst) extends Patte
 
 trait ExpressionAst extends Positional
 
+case object ExpressionSelf extends ExpressionAst
+
 case class ExpressionInteger(value: Int) extends ExpressionAst
 
 case class ExpressionString(value: String) extends ExpressionAst
 
-case class ExpressionIdentifier(name: String) extends ExpressionAst
+case class ExpressionIdentifier(name: String, module: Option[List[String]]) extends ExpressionAst
 
 case class ExpressionApplication(left: ExpressionAst, right: ExpressionAst) extends ExpressionAst
 

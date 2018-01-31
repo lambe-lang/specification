@@ -23,11 +23,6 @@ import org.lambe.lang.syntax._
 
 trait ModuleParser extends EntityParser with TypeParser with ParameterParser with NameParser with DefinitionParser {
 
-  def moduleName: Parser[List[String]] =
-    identifier ~ ("." ~> identifier).* ^^ {
-      case a ~ l => l :+ a
-    }
-
   def imports: Parser[(ModuleNameAst, List[String])] =
     (Tokens.$from ~> moduleName <~ Tokens.$import) <~ "*" ^^ {
       case name => (ModuleNameAst(name), List())

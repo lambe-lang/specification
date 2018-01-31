@@ -14,7 +14,7 @@ trait Boolean for Bool {
 define Equatable Boolean {
     def self(true)  (==) true  = true
     def self(false) (==) false = true
-    def (==) _ = false
+    def             (==) _     = false
 }
 
 define Boolean {

@@ -21,7 +21,7 @@ package org.lambe.lang.parsers
 
 import org.lambe.lang.syntax._
 
-trait ExpressionParser extends PatternParser with TokenParser with Coercions {
+trait ExpressionParser extends PatternParser with TokenParser with NameParser with Coercions {
 
   def letExpression: Parser[ExpressionAst] =
     positioned((Tokens.$let ~> pattern <~ "=") ~ expression ~ (Tokens.$in ~> expression) ^^ {
@@ -30,10 +30,13 @@ trait ExpressionParser extends PatternParser with TokenParser with Coercions {
 
   def simpleExpression: Parser[ExpressionAst] =
     positioned(
-      (integerLiteral ^^ ExpressionInteger)
-        | (stringLiteral ^^ ExpressionString)
-        | (Tokens.$self | operator | identifier) ^^ ExpressionIdentifier
-        | ("(" ~> expression <~ ")") | letExpression | ("$" ~> expression)
+      integerLiteral ^^ ExpressionInteger
+        | stringLiteral ^^ ExpressionString
+        | Tokens.$self ^^ { _ => ExpressionSelf }
+        | (operator | identifier) ~ (Tokens.$from ~> moduleName).? ^^ { case o ~ m => ExpressionIdentifier(o, m) }
+        | ("(" ~> expression <~ ")")
+        | letExpression
+        | ("$" ~> expression)
     )
 
   def appliedExpression: Parser[ExpressionAst] =

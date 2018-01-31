@@ -10,11 +10,14 @@ This version is the first one used to bootstrap the whole system.
 
 ```
 s0 ::=
-    "module" identifier import* entity*
+    "module" moduleName import* entity*
 
 import ::=
-    "from" identifier "import" "*"
-    "from" identifier "import" "(" identifier+ ")"
+    "from" moduleName "import" "*"
+    "from" moduleName "import" "(" identifier+ ")"
+
+moduleName ::=
+    identifier ("." identifier)*
 
 entity ::=
     data
@@ -67,7 +70,8 @@ expression ::=
     INTEGER
     STRING
     "self"
-    identifier
+    identifier ("from" moduleName)?
+    operator ("from" moduleName)?
     "let" pattern "=" expression "in" expression
     expression expression
     pattern+ "->" expression
