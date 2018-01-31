@@ -2,30 +2,32 @@
 
 Strong typed actor based and functional programming language
 
-# Basic FP Concepts
+# Functional Programming Paradigm
 
-## Function composition
+## Basic FP Concepts
+
+### Function composition
 
 ```
 def (a)(b)(c) compose : (a -> b) -> (b -> c) -> a -> c
 def compose f g = x -> g $ f x
 ```
 
-## Trampoline definition
+### Trampoline definition
 
 ```
 data Trampoline : type -> type
 data (a) Done : a -> Trampoline a
 data (a) Next : (Unit -> Trampoline a) -> Trampoline a
 ```
-## Runnable definition
+### Runnable definition
 
 ```
 trait Runnable (a) {
     def run : a
 }
 ```
-## Runnable Trampoline implementation
+### Runnable Trampoline implementation
 
 ```
 define (a)(b) Runnable a for Trampoline a {
@@ -34,7 +36,7 @@ define (a)(b) Runnable a for Trampoline a {
 }
 ```
 
-## Usage
+### Usage
 
 ```
 def fact : Int -> Int
@@ -47,9 +49,9 @@ def factTrampoline 0 acc = Done acc
 def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 ```
 
-# Advanced FP Concepts
+## Advanced FP Concepts
 
-## Traits
+### Traits
 
 ``` 
 trait Functor (m:type->type) (a) for m a {
@@ -65,7 +67,7 @@ trait Monad (m:type->type) (a) for m a {
 }
 ```
 
-## Data
+### Data
 
 ```
 data Option : type -> type
@@ -73,7 +75,7 @@ data (a) None : Option a
 data (a) Some : a -> Option a
 ```
 
-## Traits definition
+### Traits definition
 
 ```
 define (a) Functor Option a {
@@ -92,13 +94,17 @@ define (a) Monad Option a {
 }
 ```
 
-## Usage
+### Usage
 
 ```
 Some 1 map $ 1 +                    // Some 2, of type Option Int 
 Some (1 +) <*> $ Some 1             // Some 2, of type Option Int 
 Some 1 >>= $ i -> Some $ 1 + i      // Some 2, of type Option Int 
 ```
+
+# Actor Paradigm
+
+TODO
 
 # Why Lambë
 
