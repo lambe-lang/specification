@@ -1,0 +1,26 @@
+module lang.data.string
+
+from lang.core.comparable import (Equatable)
+from lang.core.numerical import (Adder)
+
+data String : type
+
+define Equatable String {
+    def (==) s = native 2 "String.equals" self i
+}
+
+// (+) Stringify -> String -> String
+
+define Adder String String for Stringify {
+    def (+) i = native 2 "String.concat" self i
+}
+
+// (+) String -> Stringify -> String
+
+define Adder Stringify String for String {
+    def (+) i = native 2 "String.concat" self i
+}
+
+// What about String -> String -> String?
+// Priority based on left to right pattern selection
+// Mainly because partial functions can be used!

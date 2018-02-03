@@ -1,0 +1,19 @@
+module data.maybe.control
+
+from data.maybe import *
+from control.control import *
+
+define (a) Functor MayBe a {
+  def self(Some v) map f = Some (f v)
+  def self(None)   map _ = None
+}
+
+define (a)(b) Applicative MayBe (a -> b) {
+  def self(Some f) (<*>) v = v map f
+  def self(None)   (<*>) _ = None
+}
+
+define (a) Monad MayBe a {
+  def self(Some v) (>>=) f = f v
+  def self(None)   (>>=) _ = None
+}

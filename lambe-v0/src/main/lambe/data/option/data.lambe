@@ -1,5 +1,0 @@
-module data.option
-
-data Option : type -> type
-data (a) None : Option a
-data (a) Some : a -> Option a

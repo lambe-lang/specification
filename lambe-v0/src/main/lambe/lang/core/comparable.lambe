@@ -1,0 +1,8 @@
+module lang.core.comparable
+
+from lang.data.boolean import (Bool)
+
+trait Equatable (a) for a {
+    def (==) : a -> Bool
+}
+

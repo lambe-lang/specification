@@ -8,12 +8,12 @@ define (a) Functor Try a {
   def self(Failure s) map f = Failure s
 }
 
-define (a)(b) Applicative Option (a -> b) {
-  def self(Success f) (<*>) v = self map f
+define (a)(b) Applicative MayBe (a -> b) {
+  def self(Success f) (<*>) v = v map f
   def self(Failure s) (<*>) _ = Failure s
 }
 
-define (a) Monad Option a {
+define (a) Monad MayBe a {
   def self(Success v) (>>=) f = f v
   def self(Failure s) (>>=) _ = Failure s
 }
