@@ -30,7 +30,7 @@ trait Runnable (a) {
 ### Runnable Trampoline implementation
 
 ```
-define (a)(b) Runnable a for Trampoline a {
+define (a) Runnable a for Trampoline a {
     def self(Done a) run = a
     def self(Next f) run = f unit run
 }
