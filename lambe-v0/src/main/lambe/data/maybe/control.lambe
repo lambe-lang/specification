@@ -15,5 +15,5 @@ define (a)(b) Applicative MayBe a b {
 
 define (a) Monad MayBe a {
   def self(Some v) (>>=) f = f v
-  def self(None)   (>>=) _ = None
+  def self(None) (>>=) _ = None
 }

@@ -19,7 +19,6 @@ under the License.
 
 package org.lambe.lang.parsers
 
-import org.lambe.lang.syntax._
 import org.scalatest._
 
 class TokenParsersSpec extends FlatSpec with TokenParser with Matchers {

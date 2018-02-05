@@ -9,7 +9,7 @@ define (a) Functor List a {
 }
 
 define (a)(b) Applicative List a b {
-  def self(f::t) (<*>) l = l map f + $ t <*> l
+  def self(h::t) (<*>) l = l map h + $ t <*> l
   def self(Nil)  (<*>) _ = Nil
 }
 

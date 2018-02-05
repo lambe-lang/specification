@@ -36,6 +36,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       DefineEntity(
         List(),
         "Bool",
+        List(),
         Option.empty,
         (
           List(
@@ -55,15 +56,18 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define Boolean for Bool { def self(true) (||) = false def self(false) (||) = self }" should "be parsed" in {
-    parseAll(defineExpression, "define Boolean for Bool { def self(true) (||) = false def self(false) (||) = self }").successful shouldBe true
+  private val value1 = "define Boolean for Bool { def self(true) (||) _ = self def self(false) (||) a = a }"
+
+  value1 should "be parsed" in {
+    parseAll(defineExpression, value1).successful shouldBe true
   }
 
-  "define Boolean for Bool { def self(true) (||) _ = self def self(false) (||) a = a }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define Boolean for Bool { def self(true) (||) _ = self def self(false) (||) a = a }").get shouldBe
+  value1 should "be DefineEntity" in {
+    parseAll(defineExpression, value1).get shouldBe
       DefineEntity(
         List(),
         "Boolean",
+        List(),
         Option("Bool"),
         (
           List(
@@ -83,15 +87,18 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }" should "be parsed" in {
-    parseAll(defineExpression, "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }").successful shouldBe true
+  private val value2 = "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }"
+
+  value2 should "be parsed" in {
+    parseAll(defineExpression, value2).successful shouldBe true
   }
 
-  "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }").get shouldBe
+  value2 should "be DefineEntity" in {
+    parseAll(defineExpression, value2).get shouldBe
       DefineEntity(
         List(),
         TypeApplication("Arithmetic", "Peano"),
+        List(),
         Option("Peano"),
         (
           List(
@@ -106,15 +113,18 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be parsed" in {
-    parseAll(defineExpression, "define (a:type) Functor Option a for Option a when None { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").successful shouldBe true
+  private val value3 = "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }"
+
+  value3 should "be parsed" in {
+    parseAll(defineExpression, value3).successful shouldBe true
   }
 
-  "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }").get shouldBe
+  value3 should "be DefineEntity" in {
+    parseAll(defineExpression, value3).get shouldBe
       DefineEntity(
         List(("a", "type")),
         TypeApplication(TypeApplication("Functor", "Option"), "a"),
+        List(),
         Option(TypeApplication("Option", "a")),
         (
           List(
@@ -134,15 +144,18 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define A { data  B : type }" should "be parsed" in {
-    parseAll(defineExpression, "define A { data B : type }").successful shouldBe true
+  private val value4 = "define A { data B : type }"
+
+  value4 should "be parsed" in {
+    parseAll(defineExpression, value4).successful shouldBe true
   }
 
-  "define A { data  B : type }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define A { data B : type }").get shouldBe
+  value4 should "be DefineEntity" in {
+    parseAll(defineExpression, value4).get shouldBe
       DefineEntity(
         List(),
         "A",
+        List(),
         Option.empty,
         (
           List(),
@@ -151,11 +164,18 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define A { data  B : type data C : type }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define A { data B : type data C : type }").get shouldBe
+  private val value5 = "define A { data B : type data C : type }"
+
+  value5 should "be parsed" in {
+    parseAll(defineExpression, value5).successful shouldBe true
+  }
+
+  value5 should "be DefineEntity" in {
+    parseAll(defineExpression, value5).get shouldBe
       DefineEntity(
         List(),
         "A",
+        List(),
         Option.empty,
         (
           List(),
@@ -164,15 +184,18 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  "define A { trait B }" should "be parsed" in {
-    parseAll(defineExpression, "define A { trait B }").successful shouldBe true
+  private val value6 = "define A { trait B }"
+
+  value6 should "be parsed" in {
+    parseAll(defineExpression, value6).successful shouldBe true
   }
 
-  "define A { trait B }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define A { trait B }").get shouldBe
+  value6 should "be DefineEntity" in {
+    parseAll(defineExpression, value6).get shouldBe
       DefineEntity(
         List(),
         "A",
+        List(),
         Option.empty,
         (
           List(),
@@ -182,21 +205,43 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
   }
 
 
-  "define A { define B {} }" should "be parsed" in {
-    parseAll(defineExpression, "define A { define B {} }").successful shouldBe true
+  private val value7 = "define A { define B {} }"
+
+  value7 should "be parsed" in {
+    parseAll(defineExpression, value7).successful shouldBe true
   }
 
-  "define A { define B {} }" should "be DefineEntity" in {
-    parseAll(defineExpression, "define A { define B {} }").get shouldBe
+  value7 should "be DefineEntity" in {
+    parseAll(defineExpression, value7).get shouldBe
       DefineEntity(
         List(),
         "A",
+        List(),
         Option.empty,
         (
           List(),
-          List(DefineEntity(List(), "B", Option.empty, (List(), List())))
+          List(DefineEntity(List(), "B", List(), Option.empty, (List(), List())))
         )
       )
   }
 
+  private val value8 = "define A with C {}"
+
+  value8 should "be parsed" in {
+    parseAll(defineExpression, value8).successful shouldBe true
+  }
+
+  value8 should "be DefineEntity" in {
+    parseAll(defineExpression, value8).get shouldBe
+      DefineEntity(
+        List(),
+        "A",
+        List("C"),
+        Option.empty,
+        (
+          List(),
+          List()
+        )
+      )
+  }
 }

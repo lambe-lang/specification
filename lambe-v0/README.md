@@ -33,7 +33,7 @@ trait ::=
    "trait" name generic* ("with" type)* ("for" type)? ("{" (typeDef | data | trait)* "}")?
 
 define ::=
-   "define" generic* type ("for" type)? ("{" (expressionDef | data | trait | define)* "}")?
+   "define" generic* type ("with" type)* ("for" type)? ("{" (expressionDef | data | trait | define)* "}")?
 
 name ::=
     identifier

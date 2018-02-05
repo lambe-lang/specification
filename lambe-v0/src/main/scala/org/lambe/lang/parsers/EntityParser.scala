@@ -49,12 +49,14 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
     } | success(List(), List())
 
   def defineExpression: Parser[DefineEntity] =
-    positioned((Tokens.$define ~> generic.*) ~ typeExpression ~ (Tokens.$for ~> typeExpression).? ~ ("{" ~> defineDefinitions <~ "}") ^^ {
-      case generics ~ traitType ~ self ~ definitions => DefineEntity(generics, traitType, self, definitions)
+    positioned((Tokens.$define ~> generic.*) ~ typeExpression ~ (Tokens.$with ~> typeExpression).* ~ (Tokens.$for ~> typeExpression).? ~ ("{" ~> defineDefinitions <~ "}") ^^ {
+      case generics ~ traitType ~ extensions ~ self ~ definitions => DefineEntity(generics, traitType, extensions, self, definitions)
     })
 
   def definition: Parser[EntityAst] =
-    (definitionExpression | definitionType).map{DefinitionEntity}
+    (definitionExpression | definitionType).map {
+      DefinitionEntity
+    }
 
   def entities: Parser[List[EntityAst]] =
     (dataExpression | traitExpression | defineExpression | definition).*
