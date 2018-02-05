@@ -12,17 +12,17 @@ trait Boolean for Bool {
 }
 
 define Equatable Boolean {
-    def self(true)  (==) true  = true
-    def self(false) (==) false = true
-    def             (==) _     = false
+    def true  == true  = true
+    def false == false = true
+    def _     ==  _    = false
 }
 
 define Boolean {
-    def self(true)  (||) _ = self
-    def self(false) (||) b = b
+    def (||) false = self
+    def (||) true  = true
 
-    def self(true)  (&&) b = b
-    def self(false) (&&) _ = self
+    def (&&) false = false
+    def (&&) true  = self
 }
 
 def not : Bool -> Bool

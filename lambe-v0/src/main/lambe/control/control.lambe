@@ -1,14 +1,22 @@
 module control.control
 
 trait Functor (m:type->type) (a) for m a {
-  def (b) map : (a -> b) -> m b
+  def (a)(b) map : (a -> b) -> m b
 }
 
-trait Applicative (m:type->type) (a) (b) for m (a -> b) {
+trait Applicative (m:type->type) (a)(b) for m (a -> b) {
   def (<*>) : m a -> m b
+
+trait Lifter (m:type -> type) (a)(b)(c) for a -> b -> c {
+  def lift2 : m a -> m b -> m c
 }
 
-trait Monad (m:type->type) (a) for m a {
+trait Discards (m:type->type) (a) for m a {
+  def (b) (*>) : m a -> m b -> m b
+  def (b) (<*) : m a -> m b -> m a
+}
+
+trait Monad (m:type->type) for m a {
   def (b) (>>=) : (a -> m b) -> m b
 }
 

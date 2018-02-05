@@ -8,7 +8,7 @@ define (a) Functor MayBe a {
   def self(None)   map _ = None
 }
 
-define (a)(b) Applicative MayBe (a -> b) {
+define (a)(b) Applicative MayBe a b {
   def self(Some f) (<*>) v = v map f
   def self(None)   (<*>) _ = None
 }

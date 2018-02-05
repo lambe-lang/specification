@@ -8,7 +8,7 @@ define (a) Functor Try a {
   def self(Failure s) map f = Failure s
 }
 
-define (a)(b) Applicative MayBe (a -> b) {
+define (a)(b) Applicative MayBe a b {
   def self(Success f) (<*>) v = v map f
   def self(Failure s) (<*>) _ = Failure s
 }

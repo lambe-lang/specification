@@ -8,7 +8,7 @@ define (a) Functor List a {
   def self(Nil)  map f = Nil
 }
 
-define (a)(b) Applicative List (a -> b) {
+define (a)(b) Applicative List a b {
   def self(f::t) (<*>) l = l map f + $ t <*> l
   def self(Nil)  (<*>) _ = Nil
 }
