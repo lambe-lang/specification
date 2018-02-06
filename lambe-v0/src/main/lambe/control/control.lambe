@@ -20,7 +20,7 @@ define (m:type->type)(a) Applicative m a with Functor m a {
 }
 
 define (m:type->type)(a) Applicative m a with Monad m a {
-  def (*>) b = self >>= (a -> b)
-  def (<*) b = b >>= (b -> self)
+  def (*>) b = self >>= (_ -> b)
+  def (<*) b = b >>= (_ -> self)
 }
 
