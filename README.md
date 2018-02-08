@@ -32,7 +32,7 @@ trait Runnable (m:type->type) {
 ```
 define Runnable Trampoline {
     def run (Done a) = a
-    def run (Next f) = f () run
+    def run (Next f) = f unit run
 }
 ```
 
