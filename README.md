@@ -55,7 +55,7 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 
 ``` 
 trait Functor (m:type->type) {
-  def map : m a -> (a -> b) -> m b
+  def fmap : m a -> (a -> b) -> m b
 }
 
 trait Applicative (m:type->type) {
@@ -79,13 +79,13 @@ data Some : a -> Option a
 
 ```
 define Functor Option {
-  def map None     _ = None
-  def map (Some v) f = Some (f v)
+  def fmap None     _ = None
+  def fmap (Some v) f = Some (f v)
 }
 
 define Applicative Option {
   def (<*>) None     _ = None
-  def (<*>) (Some f) v = v map f
+  def (<*>) (Some f) v = v fmap f
 }
 
 define Monad Option {
@@ -97,7 +97,7 @@ define Monad Option {
 ### Usage
 
 ```
-Some 1 map $ 1 +                    // Some 2, of type Option Int 
+Some 1 fmap $ 1 +                    // Some 2, of type Option Int 
 Some (1 +) <*> $ Some 1             // Some 2, of type Option Int 
 Some 1 >>= $ i -> Some $ 1 + i      // Some 2, of type Option Int 
 ```
