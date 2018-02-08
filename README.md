@@ -13,6 +13,48 @@ def compose : (a -> b) -> (b -> c) -> a -> c
 def compose f g = x -> g $ f x
 ```
 
+### Monoïd
+
+#### Definition
+
+```
+trait Monoid (a) {
+    def mempty  : a
+    def mappend : a -> a -> a 
+}
+```
+
+#### Integers
+
+```
+def Monoid Int {
+    def mempty = 0
+    def mappend = (+)
+}
+```
+
+#### Peano data type
+
+```
+def Peano : type
+def Zero : Peano
+def Succ : Peano -> Peano
+
+trait Add (a) {
+    def (+) : a -> a -> a
+}
+
+def Add Peano {
+    def (+) Zero     p = p
+    def (+) (Succ s) p = Succ (s + p)
+}
+
+def Monoid Peano with Add Peano {
+    def mempty = Zero
+    def mappend = (+)
+}
+```
+
 ### Trampoline definition
 
 ```
@@ -20,14 +62,14 @@ data Trampoline : type -> type
 data Done : a -> Trampoline a
 data Next : (Unit -> Trampoline a) -> Trampoline a
 ```
-### Runnable definition
+#### Runnable definition
 
 ```
 trait Runnable (m:type->type) {
     def run : m a -> a
 }
 ```
-### Runnable Trampoline implementation
+#### Runnable Trampoline implementation
 
 ```
 define Runnable Trampoline {
@@ -36,7 +78,7 @@ define Runnable Trampoline {
 }
 ```
 
-### Usage
+#### Usage
 
 ```
 def fact : Int -> Int
