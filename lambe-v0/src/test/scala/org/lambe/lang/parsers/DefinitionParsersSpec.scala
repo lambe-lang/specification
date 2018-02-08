@@ -67,7 +67,6 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
     parseAll(definitionExpression, value2).get shouldBe
       ValueExpression(
         ">>=",
-        Option.empty,
         ExpressionAbstraction("a", ExpressionAbstraction("b", "v"))
       )
   }
@@ -82,7 +81,6 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
     parseAll(definitionExpression, value3).get shouldBe
       ValueExpression(
         ">>=",
-        Option.empty,
         ExpressionAbstraction(PatternApplication("a", "b"), "v")
       )
   }
@@ -97,23 +95,8 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
     parseAll(definitionExpression, value4).get shouldBe
       ValueExpression(
         ">>=",
-        Option.empty,
         ExpressionAbstraction(PatternApplication("a", "b"), "v")
       )
   }
 
-  private val value5 = "def self(c d) (>>=) = (a b) -> v"
-
-  value5 should "be parsed" in {
-    parseAll(definitionExpression, value5).successful shouldBe true
-  }
-
-  value5 should "be ValueExpression" in {
-    parseAll(definitionExpression, value5).get shouldBe
-      ValueExpression(
-        ">>=",
-        Option(PatternApplication("c", "d")),
-        ExpressionAbstraction(PatternApplication("a", "b"), "v")
-      )
-  }
 }

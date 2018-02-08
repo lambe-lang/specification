@@ -41,6 +41,4 @@ trait PatternParser extends TokenParser with Coercions {
       case pattern ~ Some(identifier) => PatternAlias(pattern, identifier)
     }
 
-  def selfPattern: Parser[PatternAst] =
-    positioned(Tokens.$self ~> appliedPattern)
 }

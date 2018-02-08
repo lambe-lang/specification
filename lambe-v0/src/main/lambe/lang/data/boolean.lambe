@@ -6,23 +6,23 @@ data Bool  : type
 data true  : Bool
 data false : Bool
 
-trait Boolean for Bool {
-    def (||) : Bool -> Bool
-    def (&&) : Bool -> Bool
+trait Boolean {
+    def (||) : Bool -> Bool -> Bool
+    def (&&) : Bool -> Bool -> Bool
 }
 
-define Equatable Boolean {
-    def true  == true  = true
-    def false == false = true
-    def _     ==  _    = false
+define Equatable Bool {
+    def (==) true  true  = true
+    def (==) false false = true
+    def (==) _     _     = false
 }
 
 define Boolean {
-    def (||) false = self
-    def (||) true  = true
+    def (||) false b = b
+    def (||) true  _ = true
 
-    def (&&) false = false
-    def (&&) true  = self
+    def (&&) false _ = false
+    def (&&) true  b = b
 }
 
 def not : Bool -> Bool

@@ -61,18 +61,18 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
       |trait Predicate {
       |  def (||) : Bool -> Bool
       |  def (&&) : Bool -> Bool
-      |  def not : Bool
+      |  def not  : Bool
       |}
       |
-      |define Predicate for Bool {
-      |  def self(true)  (||) _ = self
-      |  def self(false) (||) b = b
+      |define Predicate {
+      |  def (||) true  _ = true
+      |  def (||) false b = b
       |
-      |  def self(false) (&&) _ = self
-      |  def self(true)  (&&) b = b
+      |  def (&&) false _ = false
+      |  def (&&) true  b = b
       |
-      |  def self(true)  not    = false
-      |  def self(false) not    = true
+      |  def not true  = false
+      |  def not false = true
       |}
     """.stripMargin
 
@@ -86,14 +86,14 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
       |data (a) Nil : List a
       |data (a) (::) : a -> List a -> List a
       |
-      |define (a) Functor (a -> List a) a for List a {
-      |  def self(Nil)  fmap b f = Nil
-      |  def self(h::t) fmap b f = (f h) :: (t.map b f)
+      |define Functor List {
+      |  def fmap Nil    b f = Nil
+      |  def fmap (h::t) b f = (f h) :: (t.map b f)
       |}
       |
-      |define (a) Reducer a for List a when Nil {
-      |  def self(Nil)  reduce b _ = b
-      |  def self(h::t) reduce b f = t reduce (f b h) f
+      |define Reducer List {
+      |  def reduce Nil    b _ = b
+      |  def reduce (h::t) b f = t reduce (f b h) f
       |}
     """.stripMargin
 

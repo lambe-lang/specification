@@ -30,10 +30,10 @@ data ::=
    "data" generic* name ":" type
 
 trait ::=
-   "trait" name generic* ("with" type)* ("for" type)? ("{" (typeDef | data | trait)* "}")?
+   "trait" name generic* ("with" type)* ("{" (typeDef | data | trait)* "}")?
 
 define ::=
-   "define" generic* type ("with" type)* ("for" type)? ("{" (expressionDef | data | trait | define)* "}")?
+   "define" generic* type ("with" type)* ("{" (expressionDef | data | trait | define)* "}")?
 
 name ::=
     identifier
@@ -53,7 +53,7 @@ typeDef ::=
     "def" generic* name ":" type
 
 expressionDef ::=
-    "def" selfPattern? name generic* pattern* "=" expression
+    "def" name pattern* "=" expression
 
 selfPattern ::=
     "self" "(" pattern+ ")"
@@ -69,7 +69,6 @@ pattern ::=
 expression ::=
     INTEGER
     STRING
-    "self"
     identifier ("from" moduleName)?
     operator ("from" moduleName)?
     "let" pattern "=" expression "in" expression

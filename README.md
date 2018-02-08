@@ -9,7 +9,7 @@ Strong typed actor based and functional programming language
 ### Function composition
 
 ```
-def (a)(b)(c) compose : (a -> b) -> (b -> c) -> a -> c
+def compose : (a -> b) -> (b -> c) -> a -> c
 def compose f g = x -> g $ f x
 ```
 
@@ -17,22 +17,22 @@ def compose f g = x -> g $ f x
 
 ```
 data Trampoline : type -> type
-data (a) Done : a -> Trampoline a
-data (a) Next : (Unit -> Trampoline a) -> Trampoline a
+data Done : a -> Trampoline a
+data Next : (Unit -> Trampoline a) -> Trampoline a
 ```
 ### Runnable definition
 
 ```
-trait Runnable (a) {
-    def run : a
+trait Runnable (m:type->type) {
+    def run : m a -> a
 }
 ```
 ### Runnable Trampoline implementation
 
 ```
-define (a) Runnable a for Trampoline a {
-    def self(Done a) run = a
-    def self(Next f) run = f unit run
+define Runnable Trampoline {
+    def run (Done a) = a
+    def run (Next f) = f () run
 }
 ```
 
@@ -54,16 +54,16 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 ### Traits
 
 ``` 
-trait Functor (m:type->type) (a) for m a {
-  def (b) map : (a -> b) -> m b
+trait Functor (m:type->type) {
+  def map : m a -> (a -> b) -> m b
 }
 
-trait Applicative (m:type->type) (a) (b) for m (a -> b) {
-  def (<*>) : m a -> m b
+trait Applicative (m:type->type) {
+  def (<*>) : m (a -> b) -> m a -> m b
 }
 
-trait Monad (m:type->type) (a) for m a {
-  def (b) (>>=) : (a -> m b) -> m b
+trait Monad (m:type->type) {
+  def (>>=) : m a -> (a -> m b) -> m b
 }
 ```
 
@@ -71,26 +71,26 @@ trait Monad (m:type->type) (a) for m a {
 
 ```
 data Option : type -> type
-data (a) None : Option a
-data (a) Some : a -> Option a
+data None : Option a
+data Some : a -> Option a
 ```
 
 ### Traits definition
 
 ```
-define (a) Functor Option a {
-  def self(None)   map _ = None
-  def self(Some v) map f = Some (f v)
+define Functor Option {
+  def map None     _ = None
+  def map (Some v) f = Some (f v)
 }
 
-define (a)(b) Applicative Option (a -> b) {
-  def self(None)   (<*>) _ = None
-  def self(Some f) (<*>) v = v map f
+define Applicative Option {
+  def (<*>) None     _ = None
+  def (<*>) (Some f) v = v map f
 }
 
-define (a) Monad Option a {
-  def self(None)   (>>=) _ = None
-  def self(Some v) (>>=) f = f v
+define Monad Option {
+  def (>>=) None     _ = None
+  def (>>=) (Some v) f = f v
 }
 ```
 

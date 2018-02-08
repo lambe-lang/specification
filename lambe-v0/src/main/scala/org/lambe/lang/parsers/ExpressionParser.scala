@@ -32,7 +32,6 @@ trait ExpressionParser extends PatternParser with TokenParser with NameParser wi
     positioned(
       integerLiteral ^^ ExpressionInteger
         | stringLiteral ^^ ExpressionString
-        | Tokens.$self ^^ { _ => ExpressionSelf }
         | (operator | identifier) ~ (Tokens.$from ~> moduleName).? ^^ { case o ~ m => ExpressionIdentifier(o, m) }
         | ("(" ~> expression <~ ")")
         | letExpression

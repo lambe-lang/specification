@@ -3,17 +3,17 @@ module data.try.control
 from data.try import *
 from control.control import *
 
-define (a) Functor Try a {
-  def self(Success v) map f = Success (f v)
-  def self(Failure s) map f = Failure s
+define Functor Try {
+  def map (Success v) f = Success (f v)
+  def map (Failure s) f = Failure s
 }
 
-define (a)(b) Applicative MayBe a b {
-  def self(Success f) (<*>) v = v map f
-  def self(Failure s) (<*>) _ = Failure s
+define Applicative Try {
+  def (<*>) (Success f) v = v map f
+  def (<*>) (Failure s) _ = Failure s
 }
 
-define (a) Monad MayBe a {
-  def self(Success v) (>>=) f = f v
-  def self(Failure s) (>>=) _ = Failure s
+define Monad Try {
+  def (>>=) (Success v) f = f v
+  def (>>=) (Failure s) _ = Failure s
 }

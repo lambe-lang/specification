@@ -6,19 +6,15 @@ from lang.core.numerical import (Adder)
 data String : type
 
 define Equatable String {
-    def (==) s = native 2 "String.equals" self i
+    def (==) i j = native 2 "String.equals" i j
 }
 
-// (+) Stringify -> String -> String
-
-define Adder String String for Stringify {
-    def (+) i = native 2 "String.concat" self i
+define Adder Stringify String String {
+    def (+) i j = native 2 "String.concat" (i toString) j
 }
 
-// (+) String -> Stringify -> String
-
-define Adder Stringify String for String {
-    def (+) i = native 2 "String.concat" self i
+define Adder String Stringify String {
+    def (+) i j = native 2 "String.concat" i (j toString)
 }
 
 // What about String -> String -> String?

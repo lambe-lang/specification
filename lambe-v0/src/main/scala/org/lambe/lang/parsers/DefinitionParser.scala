@@ -29,8 +29,8 @@ trait DefinitionParser extends ExpressionParser with TypeParser with ParameterPa
     })
 
   def definitionExpression: Parser[ValueExpression] =
-    positioned((Tokens.$def ~> selfPattern.?) ~ name ~ pattern.* ~ ("=" ~> expression) ^^ {
-      case selfPattern ~ name ~ parameters ~ expression => ValueExpression(name, selfPattern, parameters.foldRight(expression)(ExpressionAbstraction))
+    positioned((Tokens.$def ~> name) ~ pattern.* ~ ("=" ~> expression) ^^ {
+      case name ~ parameters ~ expression => ValueExpression(name, parameters.foldRight(expression)(ExpressionAbstraction))
     })
 
 }

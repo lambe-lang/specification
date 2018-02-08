@@ -2,7 +2,7 @@ module lang.core.comparable
 
 from lang.data.boolean import (Bool)
 
-trait Equatable (a) for a {
+trait Equatable (a) {
     def (==) : a -> Bool
 }
 

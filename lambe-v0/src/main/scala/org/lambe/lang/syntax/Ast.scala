@@ -62,8 +62,6 @@ case class PatternApplication(left: PatternAst, right: PatternAst) extends Patte
 
 trait ExpressionAst extends Positional
 
-case object ExpressionSelf extends ExpressionAst
-
 case class ExpressionInteger(value: Int) extends ExpressionAst
 
 case class ExpressionString(value: String) extends ExpressionAst
@@ -82,7 +80,7 @@ trait ValueAst extends Positional
 
 case class ValueType(name: String, generics: TypeDef.Generics, spec: TypeAst) extends ValueAst
 
-case class ValueExpression(name: String, selfPattern: Option[PatternAst], spec: ExpressionAst) extends ValueAst
+case class ValueExpression(name: String, spec: ExpressionAst) extends ValueAst
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -92,9 +90,9 @@ case class DefinitionEntity(spec: ValueAst) extends EntityAst
 
 case class DataEntity(name: String, generics: TypeDef.Generics, spec: TypeAst) extends EntityAst
 
-case class TraitEntity(name: String, generics: TypeDef.Generics, extensions: List[TypeAst], self: Option[TypeAst], spec: (List[ValueType], List[EntityAst])) extends EntityAst
+case class TraitEntity(name: String, generics: TypeDef.Generics, extensions: List[TypeAst], spec: (List[ValueType], List[EntityAst])) extends EntityAst
 
-case class DefineEntity(generics: TypeDef.Generics, model: TypeAst, extensions: List[TypeAst], self: Option[TypeAst], spec: (List[ValueExpression], List[EntityAst])) extends EntityAst
+case class DefineEntity(generics: TypeDef.Generics, model: TypeAst, extensions: List[TypeAst], spec: (List[ValueExpression], List[EntityAst])) extends EntityAst
 
 // ---------------------------------------------------------------------------------------------------------------------
 

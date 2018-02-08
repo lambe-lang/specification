@@ -25,7 +25,7 @@ import org.scalatest._
 class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
   // entity parsing
 
-  private val value0 = "define Bool { def self(true) (||) _ = self def self(false) (||) a = a }"
+  private val value0 = "define Bool { def (||) true _ = true def (||) false a = a }"
 
   value0 should "be parsed" in {
     parseAll(defineExpression, value0).successful shouldBe true
@@ -37,18 +37,15 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "Bool",
         List(),
-        Option.empty,
         (
           List(
             ValueExpression(
               "||",
-              Option("true"),
-              ExpressionAbstraction("_", ExpressionSelf)
+              ExpressionAbstraction("true", ExpressionAbstraction("_", "true"))
             ),
             ValueExpression(
               "||",
-              Option("false"),
-              ExpressionAbstraction("a", "a")
+              ExpressionAbstraction("false", ExpressionAbstraction("a", "a"))
             )
           ),
           List()
@@ -56,38 +53,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  private val value1 = "define Boolean for Bool { def self(true) (||) _ = self def self(false) (||) a = a }"
-
-  value1 should "be parsed" in {
-    parseAll(defineExpression, value1).successful shouldBe true
-  }
-
-  value1 should "be DefineEntity" in {
-    parseAll(defineExpression, value1).get shouldBe
-      DefineEntity(
-        List(),
-        "Boolean",
-        List(),
-        Option("Bool"),
-        (
-          List(
-            ValueExpression(
-              "||",
-              Option("true"),
-              ExpressionAbstraction("_", ExpressionSelf)
-            ),
-            ValueExpression(
-              "||",
-              Option("false"),
-              ExpressionAbstraction("a", "a")
-            )
-          ),
-          List()
-        )
-      )
-  }
-
-  private val value2 = "define Arithmetic Peano for Peano { def self(Zero) (+) p = p }"
+  private val value2 = "define Arithmetic Peano { def (+) Zero p = p }"
 
   value2 should "be parsed" in {
     parseAll(defineExpression, value2).successful shouldBe true
@@ -99,13 +65,11 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         TypeApplication("Arithmetic", "Peano"),
         List(),
-        Option("Peano"),
         (
           List(
             ValueExpression(
               "+",
-              Option("Zero"),
-              ExpressionAbstraction("p", "p")
+              ExpressionAbstraction("Zero",ExpressionAbstraction("p", "p"))
             )
           ),
           List(),
@@ -113,7 +77,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  private val value3 = "define (a:type) Functor Option a for Option a { def self(None) fmap _ = None def self(Some v) fmap f = Some (f v) }"
+  private val value3 = "define (a) Functor (Option a) { def fmap None _ = None def fmap (Some v) f = Some (f v) }"
 
   value3 should "be parsed" in {
     parseAll(defineExpression, value3).successful shouldBe true
@@ -123,20 +87,17 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(defineExpression, value3).get shouldBe
       DefineEntity(
         List(("a", "type")),
-        TypeApplication(TypeApplication("Functor", "Option"), "a"),
+        TypeApplication("Functor", TypeApplication("Option", "a")),
         List(),
-        Option(TypeApplication("Option", "a")),
         (
           List(
             ValueExpression(
               "fmap",
-              Option("None"),
-              ExpressionAbstraction("_", "None")
+              ExpressionAbstraction("None",ExpressionAbstraction("_", "None"))
             ),
             ValueExpression(
               "fmap",
-              Option(PatternApplication("Some", "v")),
-              ExpressionAbstraction("f", ExpressionApplication("Some", ExpressionApplication("f", "v")))
+              ExpressionAbstraction(PatternApplication("Some", "v"),ExpressionAbstraction("f", ExpressionApplication("Some", ExpressionApplication("f", "v"))))
             )
           ),
           List()
@@ -156,7 +117,6 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "A",
         List(),
-        Option.empty,
         (
           List(),
           List(DataEntity("B", List(), "type"))
@@ -176,7 +136,6 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "A",
         List(),
-        Option.empty,
         (
           List(),
           List(DataEntity("B", List(), "type"), DataEntity("C", List(), "type"))
@@ -196,10 +155,9 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "A",
         List(),
-        Option.empty,
         (
           List(),
-          List(TraitEntity("B", List(), List(), Option.empty, (List(), List())))
+          List(TraitEntity("B", List(), List(), (List(), List())))
         )
       )
   }
@@ -217,10 +175,9 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "A",
         List(),
-        Option.empty,
         (
           List(),
-          List(DefineEntity(List(), "B", List(), Option.empty, (List(), List())))
+          List(DefineEntity(List(), "B", List(), (List(), List())))
         )
       )
   }
@@ -237,7 +194,6 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
         List(),
         "A",
         List("C"),
-        Option.empty,
         (
           List(),
           List()
