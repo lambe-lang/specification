@@ -16,7 +16,7 @@ trait Monad (m:type->type)  {
 }
 
 define (m:type->type) Applicative m when Functor m {
-  def lift2 f a b = b <*> (a map f)
+  def lift2 f a b = (a map f) <*> b
 }
 
 define (m:type->type) Applicative m when Monad m {
