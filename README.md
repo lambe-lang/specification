@@ -97,6 +97,7 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 
 ``` 
 trait Functor (m:type->type) {
+  def pure : a -> m a
   def fmap : m a -> (a -> b) -> m b
 }
 
@@ -126,6 +127,7 @@ data Some : a -> Option a
 
 ```
 define Functor Option {
+  def pure = Some
   def fmap None     _ = None
   def fmap (Some v) f = Some (f v)
 }
@@ -144,9 +146,9 @@ define Monad Option {
 ### Usage
 
 ```
-Some 1 fmap $ 1 +                    // Some 2, of type Option Int 
-Some (1 +) <*> $ Some 1             // Some 2, of type Option Int 
-Some 1 >>= $ i -> Some $ 1 + i      // Some 2, of type Option Int 
+pure 1 fmap $ 1 +                   // Some 2, of type Option Int 
+pure (1 +) <*> $ pure 1             // Some 2, of type Option Int 
+pure 1 >>= $ i -> pure $ 1 + i      // Some 2, of type Option Int 
 ```
 
 # Actor Paradigm
