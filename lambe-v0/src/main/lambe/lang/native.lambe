@@ -1,0 +1,5 @@
+def native0 : String -> a
+def native1 : String -> a -> b
+def native2 : String -> a -> b -> c
+def native3 : String -> a -> b -> c -> d
+def native4 : String -> a -> b -> c -> d -> e

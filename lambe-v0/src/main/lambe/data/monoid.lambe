@@ -1,0 +1,6 @@
+module data.monoid
+
+trait Monoid (a) {
+    def mempty  : a
+    def mappend : a -> a -> a
+}

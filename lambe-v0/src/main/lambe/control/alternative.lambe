@@ -1,0 +1,14 @@
+module control.alternative
+
+from control.applicative import *
+from data.monoid import *
+
+trait (m:type -> type) Alternative m with Applicative m {
+    def empty : m a
+    def (<|>) : m a -> m a -> m a
+}
+
+define (m:type -> type)(a) Alternative m with Monoid (m a) { // ??
+    def empty = mempty
+    def (<|>) = mappend
+}

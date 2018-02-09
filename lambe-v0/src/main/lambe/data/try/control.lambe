@@ -1,7 +1,10 @@
 module data.try.control
 
 from data.try import *
-from control.control import *
+
+from control.functor import *
+from control.applicative import *
+from control.monad import *
 
 define Functor Try {
   def pure = Some

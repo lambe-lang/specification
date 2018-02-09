@@ -1,28 +1,24 @@
-module control.control
+module control.applicative
 
-trait Functor (m:type->type) {
-  def pure : a -> m a
-  def fmap : m a -> (a -> b) -> m b
-}
+from control.functor import *
+from control.monad import *
 
-trait Applicative (m:type->type) {
+trait Applicative (m:type->type) with Functor m {
   def (<*>) : m (a -> b) -> m a -> m b
   def (<$>) : (a -> b) -> m a -> m b
+
   def lift2 : (a -> b -> c ) -> m a -> m b -> m c
+
   def (*>)  : m a -> m b -> m b
   def (<*)  : m a -> m b -> m a
 }
 
-trait Monad (m:type->type)  {
-  def (>>=) : (a -> m b) -> m b
-}
-
-define (m:type->type) Applicative m when Functor m {
+define (m:type->type) Applicative m {
   def lift2 f a = a fmap f <*>
   def <$> f a = a fmap f
 }
 
-define (m:type->type) Applicative m when Monad m {
+define (m:type->type) Applicative m with Monad m {
   def (*>) a b = a >>= (_ -> b)
   def (<*) a b = b >>= (_ -> a)
 }

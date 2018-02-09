@@ -1,6 +1,6 @@
 module examples.factorial
 
-from core.Int import *
+from lang.data.int import *
 
 def factorial : Int -> Int
 

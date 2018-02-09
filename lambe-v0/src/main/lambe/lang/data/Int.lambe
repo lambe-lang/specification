@@ -5,9 +5,8 @@ from lang.core.numerical import (Arithmetic)
 data Int : type
 
 define Arithmetic Int {
-    def (+) i j = native 2 "Int.add" i j
-    def (-) i j = native 2 "Int.minus" i j
-    def (*) i j = native 2 "Int.multiply" i j
-    def (/) i j = native 2 "Int.divide" i j
+    def (+) i j = native2 "Int.add" i j
+    def (-) i j = native2 "Int.minus" i j
+    def (*) i j = native2 "Int.multiply" i j
+    def (/) i j = native2 "Int.divide" i j
 }
-

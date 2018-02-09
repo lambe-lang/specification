@@ -1,0 +1,7 @@
+module control.monad
+
+from control.applicative import *
+
+trait Monad (m:type->type) with Applicative m {
+  def (>>=) : (a -> m b) -> m b
+}

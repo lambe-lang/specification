@@ -1,18 +1,19 @@
 module lang.data.string
 
 from lang.core.comparable import (Equatable)
-from lang.core.numerical import (Adder)
+from lang.core.numerical import (Concat)
 
 data String : type
 
 define Equatable String {
-    def (==) i j = native 2 "String.equals" i j
+    def (==) i j = native2 "String.equals" i j
 }
 
 define Concat Stringify Stringify String {
-    def (+) i j = native 2 "String.concat" (i toString) (j toString)
+    def (+) i j = native2 "String.concat" (i toString) (j toString)
 }
 
-// What about String -> String -> String?
-// Priority based on left to right pattern selection
-// Mainly because partial functions can be used!
+define Monoid String {
+    def mempty = ""
+    def mappend = (+)
+}

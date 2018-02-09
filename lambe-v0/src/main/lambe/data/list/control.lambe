@@ -1,7 +1,10 @@
 module data.list.control
 
 from data.list import *
-from control.control import *
+
+from control.functor import *
+from control.applicative import *
+from control.monad import *
 
 define Functor List {
   def pure a = (a :: Nil)
@@ -9,7 +12,7 @@ define Functor List {
   def fmap Nil    f = Nil
 }
 
-define Applicative List with Adder List {
+define Applicative List {
   def (<*>) (h::t) l = l fmap h + $ t <*> l
   def (<*>) Nil    _ = Nil
 }

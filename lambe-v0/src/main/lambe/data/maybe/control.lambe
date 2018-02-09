@@ -1,7 +1,10 @@
 module data.maybe.control
 
 from data.maybe import *
-from control.control import *
+
+from control.functor import *
+from control.applicative import *
+from control.monad import *
 
 define Functor MayBe {
   def pure = Some
