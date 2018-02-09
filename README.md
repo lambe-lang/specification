@@ -107,7 +107,7 @@ trait Applicative (m:type->type) {
   def (a)(b) (<$>) : (a -> b) -> m a -> m b
 }
 
-define (m:type->type) Applicative m when Functor m {
+define (m:type->type) Applicative m with Functor m {
   def lift2 f = pure f <*>
   def (<$>) f = pure f <*>
 }
