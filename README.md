@@ -9,7 +9,7 @@ Strong typed actor based and functional programming language
 ### Function composition
 
 ```
-def compose : (a -> b) -> (b -> c) -> a -> c
+def (a)(b)(c) compose : (a -> b) -> (b -> c) -> a -> c
 def compose f g = x -> g $ f x
 ```
 
@@ -59,14 +59,14 @@ def Monoid Peano with Add Peano {
 
 ```
 data Trampoline : type -> type
-data Done : a -> Trampoline a
-data Next : (Unit -> Trampoline a) -> Trampoline a
+data (a) Done : a -> Trampoline a
+data (a) Next : (Unit -> Trampoline a) -> Trampoline a
 ```
 #### Runnable definition
 
 ```
 trait Runnable (m:type->type) {
-    def run : m a -> a
+    def (a) run : m a -> a
 }
 ```
 #### Runnable Trampoline implementation
@@ -97,14 +97,14 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 
 ``` 
 trait Functor (m:type->type) {
-  def pure : a -> m a
-  def fmap : m a -> (a -> b) -> m b
+  def (a) pure : a -> m a
+  def (a)(b) fmap : m a -> (a -> b) -> m b
 }
 
 trait Applicative (m:type->type) {
-  def (<*>) : m (a -> b) -> m a -> m b
-  def lift2 : (a -> b -> c) -> m a -> m b -> m c
-  def (<$>) : (a -> b) -> m a -> m b
+  def (a)(b) (<*>) : m (a -> b) -> m a -> m b
+  def (a)(b)(c) lift2 : (a -> b -> c) -> m a -> m b -> m c
+  def (a)(b) (<$>) : (a -> b) -> m a -> m b
 }
 
 define (m:type->type) Applicative m when Functor m {
@@ -113,7 +113,7 @@ define (m:type->type) Applicative m when Functor m {
 }
 
 trait Monad (m:type->type) {
-  def (>>=) : m a -> (a -> m b) -> m b
+  def (a)(b) (>>=) : m a -> (a -> m b) -> m b
 }
 ```
 
@@ -121,8 +121,8 @@ trait Monad (m:type->type) {
 
 ```
 data Option : type -> type
-data None : Option a
-data Some : a -> Option a
+data (a) None : Option a
+data (a) Some : a -> Option a
 ```
 
 ### Traits definition
