@@ -1,6 +1,6 @@
 # Lambë 
 
-Strong typed actor based and functional programming language
+Strong typed functional programming and actor based language
 
 # Functional Programming Paradigm
 
