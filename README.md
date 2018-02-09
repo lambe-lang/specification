@@ -104,10 +104,12 @@ trait Functor (m:type->type) {
 trait Applicative (m:type->type) {
   def (<*>) : m (a -> b) -> m a -> m b
   def lift2 : (a -> b -> c) -> m a -> m b -> m c
+  def (<$>) : (a -> b) -> m a -> m b
 }
 
 define (m:type->type) Applicative m when Functor m {
-  def lift2 f a = a fmap f <*> 
+  def lift2 f = pure f <*>
+  def (<$>) f = pure f <*>
 }
 
 trait Monad (m:type->type) {
