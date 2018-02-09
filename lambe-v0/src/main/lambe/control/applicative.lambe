@@ -14,8 +14,9 @@ trait Applicative (m:type->type) with Functor m {
 }
 
 define (m:type->type) Applicative m {
-  def lift2 f a = a fmap f <*>
-  def <$> f a = a fmap f
+  def fmap a f = pure f <*> a
+  def lift2 f a = f <$> a
+  def <$> f a = pure f <*> a
 }
 
 define (m:type->type) Applicative m with Monad m {
