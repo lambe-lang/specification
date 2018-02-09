@@ -4,12 +4,13 @@ from data.try import *
 from control.control import *
 
 define Functor Try {
-  def map (Success v) f = Success (f v)
-  def map (Failure s) f = Failure s
+  def pure = Some
+  def fmap (Success v) f = Success (f v)
+  def fmap (Failure s) f = Failure s
 }
 
 define Applicative Try {
-  def (<*>) (Success f) v = v map f
+  def (<*>) (Success f) v = v fmap f
   def (<*>) (Failure s) _ = Failure s
 }
 

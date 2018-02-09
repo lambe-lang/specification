@@ -9,12 +9,8 @@ define Equatable String {
     def (==) i j = native 2 "String.equals" i j
 }
 
-define Adder Stringify String String {
-    def (+) i j = native 2 "String.concat" (i toString) j
-}
-
-define Adder String Stringify String {
-    def (+) i j = native 2 "String.concat" i (j toString)
+define Concat Stringify Stringify String {
+    def (+) i j = native 2 "String.concat" (i toString) (j toString)
 }
 
 // What about String -> String -> String?

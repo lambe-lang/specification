@@ -1,10 +1,12 @@
 module lang.core.numerical
 
-trait Adder (a) (b) (c) {
+trait Concat (a) (b) (c) {
     def (+) : a -> b -> c
 }
 
-trait Arithmetic (a) with Adder a a a {
+trait Adder (a) with Concat a a a
+
+trait Arithmetic (a) with Adder a {
     def (-) : a -> a -> a
     def (*) : a -> a -> a
     def (/) : a -> a -> a

@@ -1,11 +1,13 @@
 module control.control
 
 trait Functor (m:type->type) {
-  def map : m a -> (a -> b) -> m b
+  def pure : a -> m a
+  def fmap : m a -> (a -> b) -> m b
 }
 
 trait Applicative (m:type->type) {
   def (<*>) : m (a -> b) -> m a -> m b
+  def (<$>) : (a -> b) -> m a -> m b
   def lift2 : (a -> b -> c ) -> m a -> m b -> m c
   def (*>)  : m a -> m b -> m b
   def (<*)  : m a -> m b -> m a
@@ -16,7 +18,8 @@ trait Monad (m:type->type)  {
 }
 
 define (m:type->type) Applicative m when Functor m {
-  def lift2 f a = a map f <*>
+  def lift2 f a = a fmap f <*>
+  def <$> f a = a fmap f
 }
 
 define (m:type->type) Applicative m when Monad m {

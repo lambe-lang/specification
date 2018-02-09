@@ -4,12 +4,13 @@ from data.maybe import *
 from control.control import *
 
 define Functor MayBe {
-  def map (Some v) f = Some (f v)
-  def map None     _ = None
+  def pure = Some
+  def fmap (Some v) f = Some (f v)
+  def fmap None     _ = None
 }
 
 define Applicative MayBe {
-  def (<*>) (Some f) v = v map f
+  def (<*>) (Some f) v = v fmap f
   def (<*>) None     _ = None
 }
 
