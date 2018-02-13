@@ -9,7 +9,7 @@ Strong typed functional programming and actor based language
 ### Function composition
 
 ```
-def (a)(b)(c) compose : (a -> b) -> (b -> c) -> a -> c
+def (a,b,c) compose : (a -> b) -> (b -> c) -> a -> c
 def compose f g = x -> g $ f x
 ```
 
@@ -98,13 +98,13 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 ``` 
 trait Functor (m:type->type) {
   def (a) pure : a -> m a
-  def (a)(b) fmap : m a -> (a -> b) -> m b
+  def (a,b) fmap : m a -> (a -> b) -> m b
 }
 
 trait Applicative (m:type->type) {
-  def (a)(b) (<*>) : m (a -> b) -> m a -> m b
-  def (a)(b)(c) lift2 : (a -> b -> c) -> m a -> m b -> m c
-  def (a)(b) (<$>) : (a -> b) -> m a -> m b
+  def (a,b) (<*>) : m (a -> b) -> m a -> m b
+  def (a,b,c) lift2 : (a -> b -> c) -> m a -> m b -> m c
+  def (a,b) (<$>) : (a -> b) -> m a -> m b
 }
 
 define (m:type->type) Applicative m with Functor m {
@@ -113,7 +113,7 @@ define (m:type->type) Applicative m with Functor m {
 }
 
 trait Monad (m:type->type) {
-  def (a)(b) (>>=) : m a -> (a -> m b) -> m b
+  def (a,b) (>>=) : m a -> (a -> m b) -> m b
 }
 ```
 
