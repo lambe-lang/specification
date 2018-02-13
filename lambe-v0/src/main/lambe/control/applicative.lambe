@@ -4,13 +4,13 @@ from control.functor import *
 from control.monad import *
 
 trait Applicative (m:type->type) with Functor m {
-  def (<*>) : m (a -> b) -> m a -> m b
-  def (<$>) : (a -> b) -> m a -> m b
+  def (a,b) (<*>)   : m (a -> b) -> m a -> m b
+  def (a,b) (<$>)   : (a -> b) -> m a -> m b
 
-  def lift2 : (a -> b -> c ) -> m a -> m b -> m c
+  def (a,b,c) lift2 : (a -> b -> c ) -> m a -> m b -> m c
 
-  def (*>)  : m a -> m b -> m b
-  def (<*)  : m a -> m b -> m a
+  def (a,b) (*>)    : m a -> m b -> m b
+  def (a,b) (<*)    : m a -> m b -> m a
 }
 
 define (m:type->type) Applicative m {

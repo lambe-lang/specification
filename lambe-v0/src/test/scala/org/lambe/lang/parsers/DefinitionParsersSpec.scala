@@ -40,7 +40,7 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       )
   }
 
-  private val value1 = "def (b:type) (>>=) : (a -> m b) -> m b"
+  private val value1 = "def (a:type,b:type) (>>=) : (a -> m b) -> m b"
 
   value1 should "be parsed" in {
     parseAll(definitionType, value1).successful shouldBe true
@@ -50,7 +50,22 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
     parseAll(definitionType, value1).get shouldBe
       ValueType(
         ">>=",
-        List(("b", TypeIdentifier("type"))),
+        List(("a", TypeIdentifier("type")), ("b", TypeIdentifier("type"))),
+        TypeAbstraction(TypeAbstraction("a", TypeApplication("m", "b")), TypeApplication("m", "b"))
+      )
+  }
+
+  private val value11 = "def (a,b) (>>=) : (a -> m b) -> m b"
+
+  value11 should "be parsed" in {
+    parseAll(definitionType, value11).successful shouldBe true
+  }
+
+  value11 should "be a ValueType" in {
+    parseAll(definitionType, value11).get shouldBe
+      ValueType(
+        ">>=",
+        List(("a", TypeIdentifier("type")), ("b", TypeIdentifier("type"))),
         TypeAbstraction(TypeAbstraction("a", TypeApplication("m", "b")), TypeApplication("m", "b"))
       )
   }

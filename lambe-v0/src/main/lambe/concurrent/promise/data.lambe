@@ -1,0 +1,9 @@
+module concurrent.promise.data
+
+data Future : type -> type
+
+trait AsyncRunner {
+    def (a) async : (unit -> a) -> Future a
+}
+
+trait Promise with Monad Future

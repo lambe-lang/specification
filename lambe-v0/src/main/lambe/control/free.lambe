@@ -1,6 +1,6 @@
 module control.free
 
-data Free  : (type -> type) -> type -> type
-data Point : a -> Free f a
-data Join  : f (Free f a) -> Free f a
+data     Free  : (type -> type) -> type -> type
+data (a) Point : a -> Free f a
+data (a) Join  : f (Free f a) -> Free f a
 

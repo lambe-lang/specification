@@ -24,7 +24,7 @@ import org.lambe.lang.syntax._
 trait EntityParser extends TypeParser with ParameterParser with NameParser with DefinitionParser {
 
   def dataExpression: Parser[DataEntity] =
-    positioned((Tokens.$data ~> generic.*) ~ name ~ profileType ^^ {
+    positioned((Tokens.$data ~> generics) ~ name ~ profileType ^^ {
       case generics ~ name ~ typeExpression => DataEntity(name, generics, typeExpression)
     })
 
@@ -36,7 +36,7 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
     } | success(List(), List())
 
   def traitExpression: Parser[TraitEntity] =
-    positioned((Tokens.$trait ~> name) ~ generic.* ~ (Tokens.$with ~> typeExpression).* ~ ("{" ~> traitDefinitions <~ "}").? ^^ {
+    positioned((Tokens.$trait ~> name) ~ generics ~ (Tokens.$with ~> typeExpression).* ~ ("{" ~> traitDefinitions <~ "}").? ^^ {
       case name ~ generics ~ extensions ~ None => TraitEntity(name, generics, extensions, (List(), List()))
       case name ~ generics ~ extensions ~ Some(definitions) => TraitEntity(name, generics, extensions, definitions)
     })
@@ -49,7 +49,7 @@ trait EntityParser extends TypeParser with ParameterParser with NameParser with 
     } | success(List(), List())
 
   def defineExpression: Parser[DefineEntity] =
-    positioned((Tokens.$define ~> generic.*) ~ typeExpression ~ (Tokens.$with ~> typeExpression).* ~ ("{" ~> defineDefinitions <~ "}") ^^ {
+    positioned((Tokens.$define ~> generics) ~ typeExpression ~ (Tokens.$with ~> typeExpression).* ~ ("{" ~> defineDefinitions <~ "}") ^^ {
       case generics ~ traitType ~ extensions ~ definitions => DefineEntity(generics, traitType, extensions, definitions)
     })
 

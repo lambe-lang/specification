@@ -1,6 +1,6 @@
 module control.functor
 
 trait Functor (m:type->type) {
-  def pure : a -> m a
-  def fmap : m a -> (a -> b) -> m b
+  def (a) pure : a -> m a
+  def (a,b) fmap : m a -> (a -> b) -> m b
 }

@@ -1,0 +1,4 @@
+// Using Free m a
+
+Actor : A -> Future[B] + Actor
+Actor : A -> State Actor (Future B)
