@@ -1,0 +1,10 @@
+module control.kleisli
+
+trait Kleisli (m:type->type) with Monad m {
+    def (a,b,c) (>=>)   : (a -> m b) -> (b -> m c) -> m c
+    def (a,b,c) andThen : (a -> m b) -> (b -> m c) -> m c
+}
+
+define (m:type->>type) Kleisli m {
+    def andThen f g = f >=> g
+}
