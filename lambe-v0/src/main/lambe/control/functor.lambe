@@ -2,5 +2,5 @@ module control.functor
 
 trait Functor (m:type->type) {
   def (a) pure : a -> m a
-  def (a,b) fmap : m a -> (a -> b) -> m b
+  def (a,b) fmap : (a -> b) -> m a ->  m b
 }

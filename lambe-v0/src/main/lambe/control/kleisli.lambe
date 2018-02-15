@@ -7,5 +7,5 @@ trait Kleisli (m:type->type) with Monad m {
 
 define (m:type->>type) Kleisli m {
     def andThen = (>=>)
-    def (>=>) f g a = pure a >>= f >>= g
+    def (>=>) f g a = g >>= (f a)
 }

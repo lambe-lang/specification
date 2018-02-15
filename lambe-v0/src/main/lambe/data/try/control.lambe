@@ -5,8 +5,8 @@ from control.control import *
 
 define Functor Try {
   def pure = Some
-  def fmap (Success v) f = Success (f v)
-  def fmap (Failure s) f = Failure s
+  def fmap f (Success v) = Success (f v)
+  def fmap _ (Failure s) = Failure s
 }
 
 define Applicative Try {
@@ -15,6 +15,6 @@ define Applicative Try {
 }
 
 define Monad Try {
-  def (>>=) (Success v) f = f v
-  def (>>=) (Failure s) _ = Failure s
+  def (>>=) f (Success v) = f v
+  def (>>=) _ (Failure s) = Failure s
 }

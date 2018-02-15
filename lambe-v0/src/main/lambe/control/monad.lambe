@@ -3,5 +3,5 @@ module control.monad
 from control.applicative import *
 
 trait Monad (m:type->type) with Applicative m {
-  def (a,b) (>>=) : m a -> (a -> m b) -> m b
+  def (a,b) (>>=) : (a -> m b) -> m a -> m b
 }
