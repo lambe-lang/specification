@@ -10,7 +10,7 @@ define Functor Try {
 }
 
 define Applicative Try {
-  def (<*>) (Success f) v = v fmap f
+  def (<*>) (Success f) v = f fmap v
   def (<*>) (Failure s) _ = Failure s
 }
 

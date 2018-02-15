@@ -1,11 +1,11 @@
 module control.kleisli
 
 trait Kleisli (m:type->type) with Monad m {
-    def (a,b,c) (>=>)   : (a -> m b) -> (b -> m c) -> (a -> m c)
     def (a,b,c) andThen : (a -> m b) -> (b -> m c) -> (a -> m c)
+    def (a,b,c) (>=>)   : (a -> m b) -> (b -> m c) -> (a -> m c)
 }
 
 define (m:type->>type) Kleisli m {
     def andThen = (>=>)
-    def (>=>) f g a = g >>= (f a)
+    def (>=>) f g = a -> g >>= $ f a
 }
