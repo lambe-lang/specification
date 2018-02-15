@@ -3,12 +3,8 @@ module control.function
 def (a,b,c) flip : (a -> b -> c) -> (b -> a -> c)
 def flip f = b a -> f a b
 
-trait Function {
-    def (.)  : (b -> c) -> (a -> b) -> c
-    def (|>) : (a -> b) -> (b -> c) -> c
-}
+def (a,b,c) (.) : (b -> c) -> (a -> b) -> c
+def (.) f g = x -> f $ g x
 
-define Function {
-    def (.) f g = x -> f $ g x
-    def (|>) = flip (.)
-}
+def (a,b,c) (|>) : (a -> b) -> (b -> c) -> c
+def (|>) = flip (.)
