@@ -1,6 +1,10 @@
 module control.free
 
-data     Free  : (type -> type) -> type -> type
-data (a) Point : a -> Free f a
-data (a) Join  : f (Free f a) -> Free f a
+data                  Free : (type -> type) -> type -> type
+data (a)              Pure : a -> Free f a
+data (a,f:type->type) Roll : f (Free f a) -> Free f a
 
+define (f:type->type) Functor (Free f) with Functor f {
+    def fmap (Pure a) f = Pure (f a)
+    def fmap (Roll x) f = Roll (x fmap (f fmap)
+}

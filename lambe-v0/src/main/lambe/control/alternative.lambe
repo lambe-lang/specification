@@ -2,7 +2,7 @@ module control.alternative
 
 from control.applicative import *
 
-trait (m:type -> type) Alternative m with Applicative m {
+trait Alternative (m:type -> type)  with Applicative m {
     def (a) empty : m a
     def (a) (<|>) : m a -> m a -> m a
 }
