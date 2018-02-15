@@ -9,8 +9,11 @@ Strong typed functional programming and actor based language
 ### Function composition
 
 ```
-def (a,b,c) compose : (a -> b) -> (b -> c) -> a -> c
-def compose f g = x -> g $ f x
+def (a,b,c) (.) : (b -> c) -> (a -> b) -> a -> c
+def (.) f g = x -> f $ g x
+
+def (a,b,c) (|>) : (a -> b) -> (b -> c) -> a -> c
+def (|>) f g = g . f
 ```
 
 ### Monoïd
