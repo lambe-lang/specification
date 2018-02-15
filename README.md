@@ -101,7 +101,7 @@ def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
 ``` 
 trait Functor (m:type->type) {
   def (a) pure : a -> m a
-  def (a,b) fmap : m a -> (a -> b) -> m b
+  def (a,b) fmap : (a -> b) -> m a -> m b
 }
 
 trait Applicative (m:type->type) {
@@ -116,7 +116,7 @@ define (m:type->type) Applicative m with Functor m {
 }
 
 trait Monad (m:type->type) {
-  def (a,b) (>>=) : m a -> (a -> m b) -> m b
+  def (a,b) (>>=) : (a -> m b) -> m a -> m b
 }
 ```
 
@@ -133,8 +133,8 @@ data (a) Some : a -> Option a
 ```
 define Functor Option {
   def pure = Some
-  def fmap None     _ = None
-  def fmap (Some v) f = Some (f v)
+  def fmap _ None     = None
+  def fmap f (Some v) = Some (f v)
 }
 
 define Applicative Option {
@@ -143,19 +143,19 @@ define Applicative Option {
 }
 
 define Monad Option {
-  def (>>=) None     _ = None
-  def (>>=) (Some v) f = f v
+  def (>>=) _ None     = None
+  def (>>=) f (Some v) = f v
 }
 ```
 
 ### Usage
 
 ```
-pure 1 fmap $ 1 +                   // Some 2, of type Option Int 
+(1 +) fmap $ pure 1                 // Some 2, of type Option Int 
 pure (1 +) <*> $ pure 1             // Some 2, of type Option Int 
 (+) lift2 (pure 1) (pure 1)         // Some 2, of type Option Int 
 1 + <$> $ pure 1                    // Some 2, of type Option Int 
-pure 1 >>= $ i -> pure $ 1 + i      // Some 2, of type Option Int 
+(i -> pure $ 1 + i) >>= $ pure 1    // Some 2, of type Option Int 
 ```
 
 # Actor Paradigm
