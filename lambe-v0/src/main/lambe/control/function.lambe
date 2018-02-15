@@ -1,10 +1,14 @@
 module control.function
 
+def (a,b,c) flip : (a -> b -> c) -> (b -> a -> c)
+def flip f b a = f a b
+
 trait Function {
     def (.)  : (b -> c) -> (a -> b) -> c
     def (|>) : (a -> b) -> (b -> c) -> c
 }
 
 define Function {
-    def (|>) f g = g . f
+    def (.) f g x = f $ g x
+    def (|>) = flip (.)
 }
