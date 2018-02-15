@@ -142,7 +142,7 @@ define Functor Option {
 
 define Applicative Option {
   def (<*>) None     _ = None
-  def (<*>) (Some f) v = v fmap f
+  def (<*>) (Some f) v = f fmap v
 }
 
 define Monad Option {
