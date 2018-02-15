@@ -1,0 +1,10 @@
+module control.function
+
+trait Function {
+    def (.)  : (b -> c) -> (a -> b) -> c
+    def (|>) : (a -> b) -> (b -> c) -> c
+}
+
+define Function {
+    def (|>) f g = g . f
+}
