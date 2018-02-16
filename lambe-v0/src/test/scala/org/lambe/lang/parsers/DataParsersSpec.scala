@@ -53,7 +53,7 @@ class DataParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   value2 should "be a DataEntity" in {
     parseAll(dataExpression, value2).get shouldBe
-      DataEntity("::", List(("a", "type")), TypeAbstraction("a",TypeAbstraction(TypeApplication("List", "a"),TypeApplication("List", "a"))))
+      DataEntity("::", List(("a", "type")), TypeAbstraction(Option.empty, "a",TypeAbstraction(Option.empty, TypeApplication("List", "a"),TypeApplication("List", "a"))))
   }
 
 }

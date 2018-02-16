@@ -34,6 +34,6 @@ object Tokens {
   val $type = "type"
   val $as = "as"
 
-  val keywords = List($module, $trait, $data, $define, $def, $let, $in, $with, $for, $type, $as)
+  val keywords = List($module, $trait, $data, $define, $def, $let, $in, $with, $for, $as)
   val separators = List("(", ")", "->", ":", "=", "$")
 }

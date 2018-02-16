@@ -32,9 +32,12 @@ trait TypeParser extends TokenParser with Coercions {
     })
 
   def funTypeExpression: Parser[TypeAst] =
-    positioned(appliedTypeExpression ~ ("->" ~> typeExpression) ^^ {
-      case leftTypeExpression ~ rightTypeExpression => TypeAbstraction(leftTypeExpression, rightTypeExpression)
-    })
+    positioned(("(" ~> identifier <~ ":") ~ (typeExpression <~ ")") ~ ("->" ~> typeExpression) ^^ {
+      case name ~ leftTypeExpression ~ rightTypeExpression => TypeAbstraction(Option(name), leftTypeExpression, rightTypeExpression)
+    }) |
+      positioned(appliedTypeExpression ~ ("->" ~> typeExpression) ^^ {
+        case leftTypeExpression ~ rightTypeExpression => TypeAbstraction(Option.empty, leftTypeExpression, rightTypeExpression)
+      })
 
   def typeExpression: Parser[TypeAst] =
     funTypeExpression | appliedTypeExpression

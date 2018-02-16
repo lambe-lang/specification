@@ -7,17 +7,17 @@ from control.applicative import *
 from control.monad import *
 
 define Functor MayBe {
-  def pure = Some
-  def fmap f (Some v) = Some (f v)
+  def pure = Just
+  def fmap f (Just v) = Some (f v)
   def fmap _ None     = None
 }
 
 define Applicative MayBe {
-  def (<*>) (Some f) v = f fmap v
+  def (<*>) (Just f) v = f fmap v
   def (<*>) None     _ = None
 }
 
 define (a) Monad (MayBe a) {
-  def (>>=) f (Some v) = f v
+  def (>>=) f (Just v) = f v
   def (>>=) f None     = None
 }

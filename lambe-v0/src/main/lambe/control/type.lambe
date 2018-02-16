@@ -1,0 +1,6 @@
+module control.type
+
+from control.function import (identity)
+
+def (::) : (a:type) -> a -> a
+def (::) _ = identity

@@ -50,7 +50,8 @@ type ::=
     identifier
     "(" type ")"
     type type
-    type -> type
+    type "->" type
+    "(" identifier ":" type ")" -> type
 
 typeDef ::=
     "def" generics name ":" type

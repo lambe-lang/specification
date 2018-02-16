@@ -42,7 +42,7 @@ case class TypeIdentifier(name: String) extends TypeAst
 
 case class TypeApplication(left: TypeAst, right: TypeAst) extends TypeAst
 
-case class TypeAbstraction(left: TypeAst, right: TypeAst) extends TypeAst
+case class TypeAbstraction(name: Option[String], left: TypeAst, right: TypeAst) extends TypeAst
 
 // ---------------------------------------------------------------------------------------------------------------------
 

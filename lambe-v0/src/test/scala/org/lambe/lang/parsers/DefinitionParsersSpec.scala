@@ -51,7 +51,7 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       ValueType(
         ">>=",
         List(("a", TypeIdentifier("type")), ("b", TypeIdentifier("type"))),
-        TypeAbstraction(TypeAbstraction("a", TypeApplication("m", "b")), TypeApplication("m", "b"))
+        TypeAbstraction(Option.empty, TypeAbstraction(Option.empty, "a", TypeApplication("m", "b")), TypeApplication("m", "b"))
       )
   }
 
@@ -66,7 +66,7 @@ class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers
       ValueType(
         ">>=",
         List(("a", TypeIdentifier("type")), ("b", TypeIdentifier("type"))),
-        TypeAbstraction(TypeAbstraction("a", TypeApplication("m", "b")), TypeApplication("m", "b"))
+        TypeAbstraction(Option.empty, TypeAbstraction(Option.empty, "a", TypeApplication("m", "b")), TypeApplication("m", "b"))
       )
   }
 

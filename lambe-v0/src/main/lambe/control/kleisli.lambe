@@ -1,5 +1,7 @@
 module control.kleisli
 
+from control.monad import (Monad)
+
 trait Kleisli (m:type->type) with Monad m {
     def (a,b,c) andThen : (a -> m b) -> (b -> m c) -> (a -> m c)
     def (a,b,c) (>=>)   : (a -> m b) -> (b -> m c) -> (a -> m c)
