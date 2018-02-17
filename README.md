@@ -87,14 +87,17 @@ define Runnable Trampoline {
 #### Usage
 
 ```
-def fact : Int -> Int
+trait Example {
+    def fact : Int -> Int
+}
 
-def fact i = factTrampoline i 1 run
+define Example {
+    def fact i = factTrampoline i 1 run
 
-def factTrampoline : Int -> Int -> Trampoline Int
-
-def factTrampoline 0 acc = Done acc
-def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
+    def factTrampoline : Int -> Int -> Trampoline Int
+    def factTrampoline 0 acc = Done acc
+    def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
+}    
 ```
 
 ## Advanced FP Concepts
