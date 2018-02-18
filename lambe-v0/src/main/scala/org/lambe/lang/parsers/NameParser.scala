@@ -24,7 +24,7 @@ trait NameParser extends TokenParser {
   def name: Parser[String] = identifier | ("(" ~> operator <~ ")")
 
   def moduleName: Parser[List[String]] =
-    identifier ~ ("." ~> identifier).* ^^ {
+    anyIdentifier ~ ("." ~> anyIdentifier).* ^^ {
       case a ~ l => a +: l
     }
 

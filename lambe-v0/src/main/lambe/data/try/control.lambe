@@ -15,6 +15,6 @@ define Applicative Try {
 }
 
 define Monad Try {
-  def (>>=) f (Success v) = f v
-  def (>>=) _ (Failure s) = Failure s
+  def join (Success v) = f v
+  def join (Failure s) = Failure s
 }

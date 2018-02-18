@@ -2,7 +2,11 @@ module examples.factorial
 
 from lang.data.int import *
 
-def factorial : Int -> Int
+trait Example {
+    def factorial : Int -> Int
+}
 
-def factorial 0 = 1
-def factorial n = n * $ factorial $ n - 1
+define Example {
+    def factorial 0 = 1
+    def factorial n = n * $ factorial $ n - 1
+}

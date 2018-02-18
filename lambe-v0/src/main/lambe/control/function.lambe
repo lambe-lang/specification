@@ -1,13 +1,15 @@
 module control.function
 
-def (a,b,c) flip : (a -> b -> c) -> (b -> a -> c)
-def flip f = b a -> f a b
+trait Function {
+    def (a,b,c) (.)  : (b -> c) -> (a -> b) -> c
+    def (a,b,c) (|>) : (a -> b) -> (b -> c) -> c
+    def (a,b,c) flip : (a -> b -> c) -> (b -> a -> c)
+    def (a) identity : a -> a
+}
 
-def (.) : (b -> c) -> (a -> b) -> c
-def (.) f g = x -> f $ g x
-
-def (a,b,c) (|>) : (a -> b) -> (b -> c) -> c
-def (|>) = flip (.)
-
-def (a) identity : a -> a
-def identity a = a
+define Function {
+    def flip f = b a -> f a b
+    def (.) f g = x -> f $ g x
+    def (|>) = flip (.)
+    def identity a = a
+}

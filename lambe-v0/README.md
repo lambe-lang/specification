@@ -30,7 +30,7 @@ data ::=
    "data" generics name ":" type
 
 trait ::=
-   "trait" name generics ("with" type)* ("{" (typeDef | data | trait)* "}")?
+   "trait" name typeParameters ("with" type)* ("{" (typeDef | data | trait)* "}")?
 
 define ::=
    "define" generics type ("with" type)* ("{" (expressionDef | data | trait | define)* "}")?
@@ -45,6 +45,9 @@ generic ::=
 generics ::=
     "(" generic ("," generic)* ")"
 
+typeParameters ::=
+    ("(" generic ")")*
+
 type ::=
     "type"
     identifier
@@ -58,9 +61,6 @@ typeDef ::=
 
 expressionDef ::=
     "def" name pattern* "=" expression
-
-selfPattern ::=
-    "self" "(" pattern+ ")"
 
 pattern ::=
     pattern "as" identifier

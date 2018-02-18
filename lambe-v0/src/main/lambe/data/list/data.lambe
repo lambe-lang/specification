@@ -1,10 +1,19 @@
 module data.list
 
 data List : type -> type
-data (a) Nil : List a
+data (a) Nil  : List a
 data (a) (::) : a -> List a -> List a
 
+trait Searchable (m) (a) with Equatable a {
+    def member : a -> m a -> Bool
+}
+
+define (a) Searchable List a {
+    def member _ Nil = false
+    def member a (b::l) = a == b || member a l
+}
+
 define (a) Adder (List a) {
-    def self(Nil)  (+) l = l
-    def self(h::t) (+) l = h :: (t + l)
+    def (+) Nil    l = l
+    def (+) (h::t) l = h :: (t + l)
 }

@@ -18,6 +18,6 @@ define Applicative MayBe {
 }
 
 define (a) Monad (MayBe a) {
-  def (>>=) f (Just v) = f v
-  def (>>=) f None     = None
+  def join (Just v) = v
+  def join None     = None
 }

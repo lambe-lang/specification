@@ -21,7 +21,7 @@ package org.lambe.lang.parsers
 
 import org.scalatest._
 
-class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
+class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
   // full code parsing
 
   val helloCode: String =
@@ -54,6 +54,8 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
 
   val booleanCode: String =
     """
+      |module data.boolean
+      |
       |data Bool : type
       |data true : Bool
       |data false : Bool
@@ -77,11 +79,13 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
     """.stripMargin
 
   "booleanCode" should "be parsed" in {
-    parseAll(entities, booleanCode).successful shouldBe true
+    parseAll(module, booleanCode).successful shouldBe true
   }
 
   val listCode: String =
     """
+      |module data.list
+      |
       |data List : type -> type
       |data (a) Nil : List a
       |data (a) (::) : a -> List a -> List a
@@ -98,11 +102,13 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
     """.stripMargin
 
   "listCode" should "be parsed" in {
-    parseAll(entities, listCode).successful shouldBe true
+    parseAll(module, listCode).successful shouldBe true
   }
 
   val listTrait: String =
     """
+      |module list.build
+      |
       |trait List (a) {
       |  def ([) : Parameter a
       |
@@ -123,11 +129,13 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
     """.stripMargin
 
   "listTrait" should "be parsed" in {
-    parseAll(entities, listTrait).successful shouldBe true
+    parseAll(module, listTrait).successful shouldBe true
   }
 
   val listDefine: String =
     """
+      |module list.build
+      |
       |define (a) List a {
       |  def ([) = Parameter (l -> l)
       |
@@ -158,6 +166,35 @@ class EntityParsersSpec extends FlatSpec with EntityParser with Matchers {
     """.stripMargin
 
   "listDefine" should "be parsed" in {
-    parseAll(entities, listDefine).successful shouldBe true
+    parseAll(module, listDefine).successful shouldBe true
   }
+
+  val listControl: String =
+    """
+      |module data.list
+      |
+      |data List : type -> type
+      |data (a) Nil  : List a
+      |data (a) (::) : a -> List a -> List a
+      |
+      |trait Searchable (m:type->type) (a) with Equatable a {
+      |    def member : a -> m a -> Bool
+      |}
+      |
+      |define (a) Searchable List a {
+      |    def member _ Nil = false
+      |    def member a (b::l) = a == b || member a l
+      |}
+      |
+      |define (a) Adder (List a) {
+      |    def (+) Nil    l = l
+      |    def (+) (h::t) l = h :: (t + l)
+      |}
+    """.stripMargin
+
+  "listControl" should "be parsed" in {
+    parseAll(module, listControl).successful shouldBe true
+  }
+
+
 }

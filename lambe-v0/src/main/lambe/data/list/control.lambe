@@ -18,6 +18,6 @@ define Applicative List {
 }
 
 define (a) Monad List a {
-  def (>>=) f (h::t) = f h :: $ f >>= t
-  def (>>=) _ Nil    = Nil
+  def join (h::t) = h + (join t)
+  def join Nil    = Nil
 }

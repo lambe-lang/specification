@@ -29,6 +29,9 @@ trait ParameterParser extends TypeParser {
       case identifier ~ Some(typeExpression) => (identifier, typeExpression)
     }
 
+  def typeParameters : Parser[List[(String, TypeAst)]] =
+    ("(" ~> generic <~ ")").*
+
   def generics: Parser[List[(String, TypeAst)]] =
     ("(" ~> generic ~ ("," ~> generic).* <~ ")").? ^^ {
       case None => List()

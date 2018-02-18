@@ -29,10 +29,11 @@ trait TokenParser extends RegexParsers with Parsers {
 
   def stringLiteral: Parser[String] = '\"' ~> """([^"]|(\\"))+""".r <~ '\"'
 
+  def anyIdentifier: Parser[String] =
+    """[_a-zA-Z][_0-9a-zA-Z_$]*'?""".r
+
   def identifier: Parser[String] =
-    """[_a-zA-Z][_0-9a-zA-Z_$]*'?""".r ^? {
-      case m if !Tokens.keywords.contains(m) => m
-    }
+    anyIdentifier ^? { case m if !Tokens.keywords.contains(m) => m }
 
   def operator: Parser[String] =
     """([#@&!_$*<>,;.:\/+=|-]|\]|\[)+""".r ^? {
