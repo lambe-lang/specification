@@ -126,7 +126,7 @@ trait Monad (m:type->type) with Applicative m {
     def (a)  join   : m (m a) -> m a
 }
 
-define (m:type -> type) Monad m {
+define (m:type->type) Monad m {
     def (>>=) f x = join (f fmap x)
 }
 ```
@@ -154,8 +154,8 @@ define Applicative Option {
 }
 
 define Monad Option {
-  def (>>=) _ None     = None
-  def (>>=) f (Some v) = f v
+  def join None     = None
+  def join (Some v) = v
 }
 ```
 
