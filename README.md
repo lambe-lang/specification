@@ -121,8 +121,13 @@ define (m:type->type) Applicative m with Functor m {
   def (<$>) f = pure f <*>
 }
 
-trait Monad (m:type->type) {
-  def (a,b) (>>=) : (a -> m b) -> m a -> m b
+trait Monad (m:type->type) with Applicative m {
+    def (a,b) (>>=) : (a -> m b) -> m a -> m b
+    def (a)  join   : m (m a) -> m a
+}
+
+define (m:type -> type) Monad m {
+    def (>>=) f x = join (f fmap x)
 }
 ```
 
