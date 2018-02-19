@@ -36,17 +36,19 @@ object TypeDef {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-trait TypeAst extends Positional
+sealed trait TypeAst extends Positional
 
 case class TypeIdentifier(name: String) extends TypeAst
 
 case class TypeApplication(left: TypeAst, right: TypeAst) extends TypeAst
 
-case class TypeAbstraction(name: Option[String], left: TypeAst, right: TypeAst) extends TypeAst
+case class TypeAbstraction(left: TypeAst, right: TypeAst) extends TypeAst
+
+case class TypeForall(name: String, left: TypeAst, right: TypeAst) extends TypeAst
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-trait PatternAst extends Positional
+sealed trait PatternAst extends Positional
 
 case class PatternInteger(value: Int) extends PatternAst
 
@@ -60,7 +62,7 @@ case class PatternApplication(left: PatternAst, right: PatternAst) extends Patte
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-trait ExpressionAst extends Positional
+sealed trait ExpressionAst extends Positional
 
 case class ExpressionInteger(value: Int) extends ExpressionAst
 
@@ -76,7 +78,7 @@ case class ExpressionLet(binding: PatternAst, value: ExpressionAst, body: Expres
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-trait ValueAst extends Positional
+sealed trait ValueAst extends Positional
 
 case class ValueType(name: String, generics: TypeDef.Generics, spec: TypeAst) extends ValueAst
 
@@ -84,7 +86,7 @@ case class ValueExpression(name: String, spec: ExpressionAst) extends ValueAst
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-trait EntityAst extends Positional
+sealed trait EntityAst extends Positional
 
 case class DefinitionEntity(spec: ValueAst) extends EntityAst
 
@@ -96,6 +98,6 @@ case class DefineEntity(generics: TypeDef.Generics, model: TypeAst, extensions: 
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-case class ModuleNameAst(value: List[String])
+sealed case class ModuleNameAst(value: List[String])
 
 case class ModuleAst(name: ModuleNameAst, imports: List[(ModuleNameAst, List[String])], exports: List[EntityAst]) extends Positional
