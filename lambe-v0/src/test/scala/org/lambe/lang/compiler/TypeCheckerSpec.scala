@@ -50,4 +50,10 @@ class TypeCheckerSpec extends FlatSpec with Matchers with Coercions {
       Success(TypeIdentifier("Int"))
   }
 
+  "0 -> 1" should "be Int -> Int" in {
+    new TypeChecker(Map()).
+      verify(ExpressionAbstraction(PatternInteger(0), ExpressionInteger(1))) shouldBe
+      Success(TypeAbstraction("Int", "Int"))
+  }
+
 }

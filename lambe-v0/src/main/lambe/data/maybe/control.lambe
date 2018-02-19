@@ -17,7 +17,8 @@ define Applicative MayBe {
   def (<*>) None     _ = None
 }
 
-define (a) Monad (MayBe a) {
+define Monad MayBe {
   def join (Just v) = v
   def join None     = None
 }
+

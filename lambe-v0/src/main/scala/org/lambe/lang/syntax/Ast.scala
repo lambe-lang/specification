@@ -54,7 +54,7 @@ case class PatternInteger(value: Int) extends PatternAst
 
 case class PatternString(value: String) extends PatternAst
 
-case class PatternAlias(valuer: PatternAst, name: String) extends PatternAst
+case class PatternAlias(value: PatternAst, name: String) extends PatternAst
 
 case class PatternIdentifier(name: String) extends PatternAst
 

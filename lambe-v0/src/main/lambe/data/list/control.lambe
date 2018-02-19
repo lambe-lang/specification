@@ -17,7 +17,7 @@ define Applicative List {
   def (<*>) Nil    _ = Nil
 }
 
-define (a) Monad List a {
+define Monad List {
   def join (h::t) = h + (join t)
   def join Nil    = Nil
 }
