@@ -10,10 +10,10 @@ define Equatable String {
 }
 
 define Concat Stringify Stringify String {
-    def (+) i j = native2 "String.concat" (i toString) (j toString)
+    def (+) i j = native2 "String.concat" (toString i) (toString j)
 }
 
 define Monoid String {
-    def mempty = ""
+    def mempty  = ""
     def mappend = (+)
 }

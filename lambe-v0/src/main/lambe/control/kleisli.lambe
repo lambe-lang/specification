@@ -11,6 +11,6 @@ trait Kleisli (m:type -> type) with Monad m {
 
 define (m:type -> type) Kleisli m {
     def andThen = (>=>)
-    def (>=>) f g = f |> (g fmap) |> join
+    def (>=>) f g = f |> (fmap g) |> join
     def (<=<) = flip (>=>)
 }

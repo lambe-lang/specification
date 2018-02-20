@@ -8,12 +8,12 @@ from control.monad import *
 
 define Functor List {
   def pure a = (a::Nil)
-  def fmap f (h::t) = (f h)::(f fmap t)
+  def fmap f (h::t) = (f h)::(fmap f t)
   def fmap f Nil    = Nil
 }
 
 define Applicative List {
-  def (<*>) (h::t) l = h fmap l + $ t <*> l
+  def (<*>) (h::t) l = fmap h l + $ t <*> l
   def (<*>) Nil    _ = Nil
 }
 

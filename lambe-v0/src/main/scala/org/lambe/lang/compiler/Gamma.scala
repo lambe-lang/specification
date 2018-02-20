@@ -13,15 +13,21 @@ class Gamma(current: List[EntityAst], imports: List[ModuleAst]) {
     current flatMap {
       case d : DataEntity => List(d)
       case _ => List()
-    } find { d => d.name == name
-    } map { d => (d.generics, d.spec) }
+    } find { v =>
+      v.name == name
+    } map { d =>
+      (d.generics, d.spec)
+    }
 
   def findFunction(name: String): Option[(Generics, TypeAst)] =
     current flatMap {
       case DefinitionEntity(d: ValueType) => List(d)
       case _ => List()
-    } find { v => v.name == name
-    } map { d => (d.generics, d.spec) }
+    } find { v =>
+      v.name == name
+    } map { d =>
+      (d.generics, d.spec)
+    }
 
 }
 

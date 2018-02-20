@@ -6,5 +6,5 @@ data (a,f:type->type) Roll : f (Free f a) -> Free f a
 
 define (f:type->type) Functor (Free f) with Functor f {
     def fmap f (Pure a) = Pure $ f a
-    def fmap f (Roll x) = Roll $ x fmap $ f fmap
+    def fmap f (Roll x) = Roll $ fmap x $ fmap f
 }
