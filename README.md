@@ -127,7 +127,7 @@ trait Monad (m:type->type) with Applicative m {
 }
 
 define (m:type->type) Monad m {
-    def (>>=) f x = join (f fmap x)
+    def (>>=) f x = join $ fmap f x
 }
 ```
 
@@ -162,9 +162,9 @@ define Monad Option {
 ### Usage
 
 ```
-(1 +) fmap $ pure 1                 // Some 2, of type Option Int 
+fmap (1 +) $ pure 1                 // Some 2, of type Option Int 
 pure (1 +) <*> $ pure 1             // Some 2, of type Option Int 
-(+) lift2 (pure 1) (pure 1)         // Some 2, of type Option Int 
+lift2 (+) (pure 1) (pure 1)         // Some 2, of type Option Int 
 1 + <$> $ pure 1                    // Some 2, of type Option Int 
 (i -> pure $ 1 + i) >>= $ pure 1    // Some 2, of type Option Int 
 ```
