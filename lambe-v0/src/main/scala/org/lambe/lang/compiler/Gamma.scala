@@ -6,26 +6,22 @@ import org.lambe.lang.syntax._
 
 class Gamma(current: List[EntityAst], imports: List[ModuleAst]) {
 
-  def findType(name: String): Option[(Generics,TypeAst)] =
+  def findType(name: String): Option[(Generics, TypeAst)] =
     findData(name) orElse findFunction(name)
 
-  def findData(name: String): Option[(Generics,TypeAst)] =
-    current find {
-      case DataEntity(n, _, _) => n == name
-      case _ => false
-    } flatMap {
-      case d: DataEntity => Some(d.generics,d.spec)
-      case _ => None
-    }
+  def findData(name: String): Option[(Generics, TypeAst)] =
+    current flatMap {
+      case d : DataEntity => List(d)
+      case _ => List()
+    } find { d => d.name == name
+    } map { d => (d.generics, d.spec) }
 
-  def findFunction(name: String): Option[(Generics,TypeAst)] =
-    current find {
-      case DefinitionEntity(ValueType(n, _, _)) => n == name
-      case _ => false
-    } flatMap {
-      case DefinitionEntity(d: ValueType) => Some(d.generics,d.spec)
-      case _ => None
-    }
+  def findFunction(name: String): Option[(Generics, TypeAst)] =
+    current flatMap {
+      case DefinitionEntity(d: ValueType) => List(d)
+      case _ => List()
+    } find { v => v.name == name
+    } map { d => (d.generics, d.spec) }
 
 }
 

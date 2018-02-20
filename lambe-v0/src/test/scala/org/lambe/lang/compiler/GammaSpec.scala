@@ -32,10 +32,22 @@ class GammaSpec extends FlatSpec with Matchers with Coercions {
       Some((List(), TypeAbstraction("a", "a")))
   }
 
+  "id" should "not be a data in Gamma" in {
+    Gamma(List(DefinitionEntity(ValueType("id", List(), TypeAbstraction("a", "a"))))).
+      findData("id") shouldBe
+      None
+  }
+
   "id" should "be a data in Gamma" in {
     Gamma(List(DataEntity("id", List(), TypeAbstraction("a", "a")))).
       findData("id") shouldBe
       Some((List(), TypeAbstraction("a", "a")))
+  }
+
+  "id" should "not be a function in Gamma" in {
+    Gamma(List(DataEntity("id", List(), TypeAbstraction("a", "a")))).
+      findFunction("id") shouldBe
+      None
   }
 
   "id" should "be a defined in Gamma" in {
