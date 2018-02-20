@@ -25,70 +25,72 @@ import scala.util.parsing.input.Position
 import scala.util.{Failure, Success, Try}
 
 trait TypeException extends Exception
-case class NotAnAbstraction(pos:Position) extends TypeException
-case class NotDefined(pos:Position) extends TypeException
 
+case class NotAnAbstraction(pos: Position) extends TypeException
 
-class TypeChecker(val gamma: Map[String, TypeAst]) {
+case class NotDefined(pos: Position) extends TypeException
 
-  def verify(e: PatternAst): Try[TypeAst] = {
-    e match {
-      case PatternInteger(_) =>
-        Success(TypeIdentifier("Int"))
+class TypeChecker(val gamma: Gamma) {
 
-      case PatternString(_) =>
-        Success(TypeIdentifier("String"))
+  def verify(e: PatternAst): Try[TypeAst] = e match {
+    case PatternInteger(_) =>
+      Success(TypeIdentifier("Int"))
 
-      case PatternApplication(left, right) =>
-        for (tright <- verify(right);
-             tleft  <- verify(left);
-             tresult <- tleft match {
-               case TypeAbstraction(fleft, fright) if fleft == tright => Success(fright)
-               case _ => Failure(NotAnAbstraction(e.pos))
-             })
-          yield tresult
+    case PatternString(_) =>
+      Success(TypeIdentifier("String"))
 
-      case PatternIdentifier(name) =>
-        gamma.get(name).fold[Try[TypeAst]] {
-          Failure(NotDefined(e.pos)) // TODO
-        } {
-          Success(_)
-        }
-    }
+    case PatternApplication(left, right) =>
+      for (tright <- verify(right);
+           tleft <- verify(left);
+           tresult <- tleft match {
+             case TypeAbstraction(fleft, fright) if fleft == tright => Success(fright)
+             case _ => Failure(NotAnAbstraction(e.pos))
+           })
+        yield tresult
+
+    case PatternIdentifier(name) =>
+      gamma.findData(name).map {
+        _._2
+      }.fold[Try[TypeAst]] {
+        Failure(NotDefined(e.pos)) // TODO
+      } {
+        Success(_)
+      }
+
+    case PatternAlias(p, _) => verify(p)
   }
 
+  def verify(e: ExpressionAst): Try[TypeAst] = e match {
+    case ExpressionInteger(_) =>
+      Success(TypeIdentifier("Int"))
 
-  def verify(e: ExpressionAst): Try[TypeAst] = {
-    e match {
-      case ExpressionInteger(_) =>
-        Success(TypeIdentifier("Int"))
+    case ExpressionString(value) =>
+      Success(TypeIdentifier("String"))
 
-      case ExpressionString(value) =>
-        Success(TypeIdentifier("String"))
+    case ExpressionApplication(left, right) =>
+      for (tright <- verify(right);
+           tleft <- verify(left);
+           tresult <- tleft match {
+             case TypeAbstraction(fleft, fright) if fleft == tright => Success(fright)
+             case _ => Failure(NotAnAbstraction(e.pos))
+           })
+        yield tresult
 
-      case ExpressionApplication(left, right) =>
-        for (tright <- verify(right);
-             tleft  <- verify(left);
-             tresult <- tleft match {
-               case TypeAbstraction(fleft, fright) if fleft == tright => Success(fright)
-               case _ => Failure(NotAnAbstraction(e.pos))
-             })
-          yield tresult
+    case ExpressionIdentifier(name, _) => // TODO
+      gamma.findType(name).map {
+        _._2
+      }.fold[Try[TypeAst]] {
+        Failure(NotDefined(e.pos))
+      } {
+        Success(_)
+      }
 
-      case ExpressionIdentifier(name, _) =>
-        gamma.get(name).fold[Try[TypeAst]] {
-          Failure(NotDefined(e.pos))
-        } {
-          Success(_)
-        }
+    case ExpressionAbstraction(left, right) =>
+      for (tright <- verify(right);
+           tleft <- verify(left))
+        yield TypeAbstraction(tleft, tright)
 
-      case ExpressionAbstraction(left, right) =>
-        for (tright <- verify(right);
-             tleft  <- verify(left))
-          yield TypeAbstraction(tleft, tright)
-
-      case ExpressionLet(binding, value, body) => Failure(???)
-    }
+    case ExpressionLet(binding, value, body) => Failure(???)
   }
 
 }

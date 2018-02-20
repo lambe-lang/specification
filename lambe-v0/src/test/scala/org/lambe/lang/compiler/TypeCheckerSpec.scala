@@ -27,31 +27,31 @@ import scala.util.Success
 class TypeCheckerSpec extends FlatSpec with Matchers with Coercions {
 
   "1" should "be Int" in {
-    new TypeChecker(Map()).
+    new TypeChecker(Gamma()).
       verify(ExpressionInteger(1)) shouldBe
       Success(TypeIdentifier("Int"))
   }
 
   "\"aa\"" should "be String" in {
-    new TypeChecker(Map()).
+    new TypeChecker(Gamma()).
       verify(ExpressionString("aa")) shouldBe
       Success(TypeIdentifier("String"))
   }
 
   "id" should "be in Gamma" in {
-    new TypeChecker(Map(("id", TypeForall("a", "type", TypeAbstraction("a", "a"))))).
+    new TypeChecker(Gamma(List(DefinitionEntity(ValueType("id", List(), TypeAbstraction("a", "a")))))).
       verify(ExpressionIdentifier("id", Option.empty)) shouldBe
-      Success(TypeForall("a", "type", TypeAbstraction("a", "a")))
+      Success(TypeAbstraction("a", "a"))
   }
 
   "incr 1" should "be Int" in {
-    new TypeChecker(Map(("incr", TypeAbstraction("Int", "Int")))).
+    new TypeChecker(Gamma(List(DefinitionEntity(ValueType("incr", List(), TypeAbstraction("Int", "Int")))))).
       verify(ExpressionApplication(ExpressionIdentifier("incr", Option.empty), ExpressionInteger(1))) shouldBe
       Success(TypeIdentifier("Int"))
   }
 
   "0 -> 1" should "be Int -> Int" in {
-    new TypeChecker(Map()).
+    new TypeChecker(Gamma()).
       verify(ExpressionAbstraction(PatternInteger(0), ExpressionInteger(1))) shouldBe
       Success(TypeAbstraction("Int", "Int"))
   }
