@@ -70,6 +70,8 @@ case class ExpressionString(value: String) extends ExpressionAst
 
 case class ExpressionIdentifier(name: String, module: Option[List[String]]) extends ExpressionAst
 
+case class ExpressionOperator(name: String, module: Option[List[String]]) extends ExpressionAst
+
 case class ExpressionApplication(left: ExpressionAst, right: ExpressionAst) extends ExpressionAst
 
 case class ExpressionAbstraction(left: PatternAst, right: ExpressionAst) extends ExpressionAst

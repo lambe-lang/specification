@@ -75,6 +75,7 @@ expression ::=
     STRING
     identifier ("from" moduleName)?
     operator ("from" moduleName)?
+    "(" operator ")" ("from" moduleName)?
     "let" pattern "=" expression "in" expression
     expression expression
     pattern+ "->" expression

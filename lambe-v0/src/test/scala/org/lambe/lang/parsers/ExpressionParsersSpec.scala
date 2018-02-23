@@ -62,7 +62,7 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
   }
 
   "a from c1.c2" should "be ExpressionIdentifier" in {
-    parseAll(expression, "a from c1.c2").get shouldBe ExpressionIdentifier("a", Option(List("c1","c2")))
+    parseAll(expression, "a from c1.c2").get shouldBe ExpressionIdentifier("a", Option(List("c1", "c2")))
   }
 
   "++" should "be parsed" in {
@@ -70,7 +70,7 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
   }
 
   "++" should "be ExpressionIdentifier" in {
-    parseAll(expression, "++").get shouldBe ExpressionIdentifier("++", Option.empty)
+    parseAll(expression, "++").get shouldBe ExpressionOperator("++", Option.empty)
   }
 
   "++ from c1.c2" should "be parsed" in {
@@ -78,7 +78,7 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
   }
 
   "++ from c1.c2" should "be ExpressionIdentifier" in {
-    parseAll(expression, "++ from c1.c2").get shouldBe ExpressionIdentifier("++", Option(List("c1","c2")))
+    parseAll(expression, "++ from c1.c2").get shouldBe ExpressionOperator("++", Option(List("c1", "c2")))
   }
 
   "(a)" should "be parsed" in {
@@ -126,7 +126,7 @@ class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers
   }
 
   "a + c" should "be ExpressionApplication" in {
-    parseAll(expression, "a + c").get shouldBe ExpressionApplication(ExpressionApplication("a", "+"), "c")
+    parseAll(expression, "a + c").get shouldBe ExpressionApplication(ExpressionApplication("a", ExpressionOperator("+", None)), "c")
   }
 
   "a (b c)" should "be parsed" in {
