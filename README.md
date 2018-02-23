@@ -9,13 +9,13 @@ Strong typed functional programming and actor based language
 ### Function composition
 
 ```
-def (a,b,c) flip : (a -> b -> c) -> (b -> a -> c)
+def flip : [a,b,c] (a -> b -> c) -> (b -> a -> c)
 def flip f = b a -> f a b
 
-def (a,b,c) (.) : (b -> c) -> (a -> b) -> c
+def (.) : [a,b,c] (b -> c) -> (a -> b) -> c
 def (.) f g = x -> f $ g x
 
-def (a,b,c) (|>) : (a -> b) -> (b -> c) -> c
+def (|>) : [a,b,c] (a -> b) -> (b -> c) -> c
 def (|>) = flip (.)
 ```
 
@@ -65,14 +65,14 @@ def Monoid Peano with Add Peano {
 
 ```
 data Trampoline : type -> type
-data (a) Done : a -> Trampoline a
-data (a) Next : (Unit -> Trampoline a) -> Trampoline a
+data Done : [a] a -> Trampoline a
+data Next : [a] (Unit -> Trampoline a) -> Trampoline a
 ```
 #### Runnable definition
 
 ```
 trait Runnable (m:type->type) {
-    def (a) run : m a -> a
+    def run : [a] m a -> a
 }
 ```
 #### Runnable Trampoline implementation
@@ -106,24 +106,24 @@ define Example {
 
 ``` 
 trait Functor (m:type->type) {
-  def (a) pure : a -> m a
-  def (a,b) fmap : (a -> b) -> m a -> m b
+  def pure : [a] a -> m a
+  def fmap : [a,b] (a -> b) -> m a -> m b
 }
 
-trait Applicative (m:type->type) {
-  def (a,b) (<*>) : m (a -> b) -> m a -> m b
-  def (a,b,c) lift2 : (a -> b -> c) -> m a -> m b -> m c
-  def (a,b) (<$>) : (a -> b) -> m a -> m b
+trait Applicative (m:type->type) with Functor m {
+  def (<*>) : [a,b] m (a -> b) -> m a -> m b
+  def  lift2 : [a,b,c] (a -> b -> c) -> m a -> m b -> m c
+  def (<$>) : [a,b] (a -> b) -> m a -> m b
 }
 
-define (m:type->type) Applicative m with Functor m {
+define (m:type->type) Applicative m {
   def lift2 f = pure f <*>
   def (<$>) f = pure f <*>
 }
 
 trait Monad (m:type->type) with Applicative m {
-    def (a,b) (>>=) : (a -> m b) -> m a -> m b
-    def (a)  join   : m (m a) -> m a
+    def (>>=) : [a,b] (a -> m b) -> m a -> m b
+    def join  : [a] m (m a) -> m a
 }
 
 define (m:type->type) Monad m {
@@ -135,8 +135,8 @@ define (m:type->type) Monad m {
 
 ```
 data Option : type -> type
-data (a) None : Option a
-data (a) Some : a -> Option a
+data None : [a] Option a
+data Some : [a] a -> Option a
 ```
 
 ### Traits definition
