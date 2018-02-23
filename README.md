@@ -116,7 +116,7 @@ trait Applicative (m:type->type) with Functor m {
   def (<$>) : [a,b] (a -> b) -> m a -> m b
 }
 
-define (m:type->type) Applicative m {
+define [m:type->type] Applicative m {
   def lift2 f = pure f <*>
   def (<$>) f = pure f <*>
 }
@@ -126,7 +126,7 @@ trait Monad (m:type->type) with Applicative m {
     def join  : [a] m (m a) -> m a
 }
 
-define (m:type->type) Monad m {
+define [m:type->type] Monad m {
     def (>>=) f x = join $ fmap f x
 }
 ```
