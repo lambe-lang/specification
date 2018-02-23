@@ -35,7 +35,7 @@ class DataParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(dataExpression, value0).get shouldBe DataEntity("Bool", List(), "type")
   }
 
-  private val value1 = "data (a:type) List : type"
+  private val value1 = "data List : [a] type"
 
   value1 should "be parsed" in {
     parseAll(dataExpression, value1).successful shouldBe true
@@ -45,7 +45,7 @@ class DataParsersSpec extends FlatSpec with EntityParser with Matchers {
     parseAll(dataExpression, value1).get shouldBe DataEntity("List", List(("a", "type")),  "type")
   }
 
-  private val value2 = "data (a:type) (::) : a -> List a -> List a"
+  private val value2 = "data (::) : [a:type] a -> List a -> List a"
 
   value2 should "be parsed" in {
     parseAll(dataExpression, value2).successful shouldBe true

@@ -2,6 +2,6 @@ module data.try
 
 from lang.data.string import (String)
 
-data Try : type -> type
-data (a) Success : a -> Try a
-data (a) Failure : String -> Try a
+data Try     : type -> type
+data Success : [a] a -> Try a
+data Failure : [a] String -> Try a

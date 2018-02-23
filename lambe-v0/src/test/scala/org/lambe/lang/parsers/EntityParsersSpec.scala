@@ -87,8 +87,8 @@ class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
       |module data.list
       |
       |data List : type -> type
-      |data (a) Nil : List a
-      |data (a) (::) : a -> List a -> List a
+      |data Nil  : [a] List a
+      |data (::) : [a] a -> List a -> List a
       |
       |define Functor List {
       |  def fmap Nil    b f = Nil
@@ -112,14 +112,14 @@ class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
       |trait List (a) {
       |  def ([) : Parameter a
       |
-      |  data (a) Parameter : (List a -> List a) -> type
+      |  data Parameter : (List a -> List a) -> type
       |
       |  trait Parameter {
       |    def apply : (a) -> NextParameter a
       |    def (]) : List a
       |  }
       |
-      |  data (a) NextParameter : (List a -> List a) -> type
+      |  data NextParameter : (List a -> List a) -> type
       |
       |  trait NextParameter {
       |    def (,) : a -> Parameter a
@@ -136,17 +136,17 @@ class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
     """
       |module list.build
       |
-      |define (a) List a {
+      |define [a] List a {
       |  def ([) = Parameter (l -> l)
       |
-      |  data (a) Parameter : (List a -> List a) -> type
+      |  data Parameter : (List a -> List a) -> type
       |
       |  trait Parameter {
       |    def apply : (a) -> NextParameter a
       |    def (]) : List a i
       |  }
       |
-      |  data (a) NextParameter : (List a -> List a) -> type
+      |  data NextParameter : (List a -> List a) -> type
       |
       |  trait NextParameter {
       |    def (,) : a -> Parameter a
@@ -174,14 +174,14 @@ class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
       |module data.list
       |
       |data List : type -> type
-      |data (a) Nil  : List a
-      |data (a) (::) : a -> List a -> List a
+      |data Nil  : [a] List a
+      |data (::) : [a] a -> List a -> List a
       |
       |trait Searchable (m:type->type) (a) with Equatable a {
       |    def member : a -> m a -> Bool
       |}
       |
-      |define (a) Searchable List a {
+      |define [a] Searchable List a {
       |    def member _ Nil = false
       |    def member a (b::l) = a == b || member a l
       |}

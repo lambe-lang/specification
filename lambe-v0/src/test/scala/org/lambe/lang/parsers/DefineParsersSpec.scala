@@ -77,7 +77,7 @@ class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
       )
   }
 
-  private val value3 = "define (a) Functor (Option a) { def fmap None _ = None def fmap (Some v) f = Some (f v) }"
+  private val value3 = "define [a] Functor (Option a) { def fmap None _ = None def fmap (Some v) f = Some (f v) }"
 
   value3 should "be parsed" in {
     parseAll(defineExpression, value3).successful shouldBe true

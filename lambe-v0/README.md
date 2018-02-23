@@ -27,13 +27,13 @@ entity ::=
     expressionDef
 
 data ::=
-   "data" generics name ":" type
+   "data" name ":" generics? type
 
 trait ::=
    "trait" name typeParameters ("with" type)* ("{" (typeDef | data | trait)* "}")?
 
 define ::=
-   "define" generics type ("with" type)* ("{" (expressionDef | data | trait | define)* "}")?
+   "define" generics? type ("with" type)* ("{" (expressionDef | data | trait | define)* "}")?
 
 name ::=
     identifier
@@ -43,7 +43,7 @@ generic ::=
     identifier (":" type)?
 
 generics ::=
-    "(" generic ("," generic)* ")"
+    "[" generic ("," generic)* "]"
 
 typeParameters ::=
     ("(" generic ")")*
@@ -57,7 +57,7 @@ type ::=
     "(" identifier ":" type ")" -> type
 
 typeDef ::=
-    "def" generics name ":" type
+    "def" name ":" generics? type
 
 expressionDef ::=
     "def" name pattern* "=" expression

@@ -32,12 +32,10 @@ trait ParameterParser extends TypeParser {
   def typeParameters : Parser[List[(String, TypeAst)]] =
     ("(" ~> generic <~ ")").*
 
-  def generics: Parser[List[(String, TypeAst)]] =
-    ("(" ~> generic ~ ("," ~> generic).* <~ ")").? ^^ {
+  def forallParameters: Parser[List[(String, TypeAst)]] =
+    ("[" ~> generic ~ ("," ~> generic).* <~ "]").? ^^ {
       case None => List()
       case Some(h ~ t) => h :: t
     }
 
-  def profileType: Parser[TypeAst] =
-    positioned(":" ~> typeExpression)
 }

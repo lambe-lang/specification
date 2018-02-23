@@ -3,6 +3,6 @@ module control.alternative
 from control.applicative import *
 
 trait Alternative (m:type -> type)  with Applicative m {
-    def (a) empty : m a
-    def (a) (<|>) : m a -> m a -> m a
+    def empty : [a] m a
+    def (<|>) : [a] m a -> m a -> m a
 }

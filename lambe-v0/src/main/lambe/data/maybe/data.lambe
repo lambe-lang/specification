@@ -1,6 +1,6 @@
 module data.maybe
 
 data MayBe : type -> type
-data (a) None : MayBe a
-data (a) Just : a -> MayBe a
+data None  : [a] MayBe a
+data Just  : [a] a -> MayBe a
 

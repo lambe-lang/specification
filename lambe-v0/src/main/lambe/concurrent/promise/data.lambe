@@ -3,7 +3,7 @@ module concurrent.promise.data
 data Future : type -> type
 
 trait AsyncRunner {
-    def (a) async : (unit -> a) -> Future a
+    def async : [a] (unit -> a) -> Future a
 }
 
 defined AsyncRunner {

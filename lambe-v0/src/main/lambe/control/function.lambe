@@ -1,10 +1,10 @@
 module control.function
 
 trait Function {
-    def (a,b,c) (.)  : (b -> c) -> (a -> b) -> c
-    def (a,b,c) (|>) : (a -> b) -> (b -> c) -> c
-    def (a,b,c) flip : (a -> b -> c) -> (b -> a -> c)
-    def (a) identity : a -> a
+    def (.)  : [a,b,c] (b -> c) -> (a -> b) -> c
+    def (|>) : [a,b,c] (a -> b) -> (b -> c) -> c
+    def flip : [a,b,c] (a -> b -> c) -> (b -> a -> c)
+    def identity : [a] a -> a
 }
 
 define Function {
