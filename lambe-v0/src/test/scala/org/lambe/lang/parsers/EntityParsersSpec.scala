@@ -196,5 +196,20 @@ class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
     parseAll(module, listControl).successful shouldBe true
   }
 
+  val proFunctor: String =
+    """
+      |module data.profunctor
+      |
+      |data (::~>) : [a,b] (p:type->type->type) -> (q:type->type->type) -> p a b -> q a b
+      |
+      |trait HPFunctor (pp:(type->type->type)->type) {
+      |  def hpmap  : (p ::~> q) -> (pp p ::~> pp q)
+      |  def ddimap : (s -> a) -> (b -> t) -> pp p a b -> pp p s t
+      |}
+    """.stripMargin
+
+  "proFunctor" should "be parsed" in {
+    parseAll(module, proFunctor).successful shouldBe true
+  }
 
 }

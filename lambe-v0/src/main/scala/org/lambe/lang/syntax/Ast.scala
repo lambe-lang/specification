@@ -40,6 +40,8 @@ sealed trait TypeAst extends Positional
 
 case class TypeIdentifier(name: String) extends TypeAst
 
+case class TypeOperator(name: String) extends TypeAst
+
 case class TypeApplication(left: TypeAst, right: TypeAst) extends TypeAst
 
 case class TypeAbstraction(left: TypeAst, right: TypeAst) extends TypeAst
@@ -55,6 +57,8 @@ case class PatternInteger(value: Int) extends PatternAst
 case class PatternString(value: String) extends PatternAst
 
 case class PatternAlias(value: PatternAst, name: String) extends PatternAst
+
+case class PatternType(value: PatternAst, spec: String) extends PatternAst
 
 case class PatternIdentifier(name: String) extends PatternAst
 

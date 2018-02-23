@@ -21,7 +21,7 @@ package org.lambe.lang.parsers
 
 trait NameParser extends TokenParser {
 
-  def name: Parser[String] = identifier | ("(" ~> operator <~ ")")
+  def name: Parser[String] = identifier | ("(" ~> expressionOperator <~ ")")
 
   def moduleName: Parser[List[String]] =
     anyIdentifier ~ ("." ~> anyIdentifier).* ^^ {

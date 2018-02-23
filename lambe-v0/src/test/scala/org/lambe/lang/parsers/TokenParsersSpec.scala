@@ -67,15 +67,15 @@ class TokenParsersSpec extends FlatSpec with TokenParser with Matchers {
   // Operator Parsing
 
   ">>=" should "be parsed" in {
-    parseAll(operator, ">>=").successful shouldBe true
+    parseAll(expressionOperator, ">>=").successful shouldBe true
   }
 
   ">>=" should "be string >>=" in {
-    parseAll(operator, ">>=").get shouldBe ">>="
+    parseAll(expressionOperator, ">>=").get shouldBe ">>="
   }
 
   "(" should "not be parsed" in {
-    parseAll(operator, "(").successful shouldBe false
+    parseAll(expressionOperator, "(").successful shouldBe false
   }
 
   // Unit Parsing

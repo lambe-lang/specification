@@ -35,9 +35,14 @@ trait TokenParser extends RegexParsers with Parsers {
   def identifier: Parser[String] =
     anyIdentifier ^? { case m if !Tokens.keywords.contains(m) => m }
 
-  def operator: Parser[String] =
-    """([#@&!_$*<>,;.:\/+=|-]|\]|\[)+""".r ^? {
-      case m if !Tokens.separators.contains(m) => m
+  def expressionOperator: Parser[String] =
+    """([#@&!_$*<>,;.:\/+=|-]|~|\]|\[)+""".r ^? {
+      case m if !Tokens.expressionSeparators.contains(m) => m
+    }
+
+  def typeOperator: Parser[String] =
+    """([#@&!_$*<>,;.:\/+=|-]|~|\]|\[)+""".r ^? {
+      case m if !Tokens.typeSeparators.contains(m) => m
     }
 
   def unit: Parser[Unit] = "()" ^^ { _ => () }

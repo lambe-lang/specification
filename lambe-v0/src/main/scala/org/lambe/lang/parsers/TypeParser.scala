@@ -24,7 +24,9 @@ import org.lambe.lang.syntax._
 trait TypeParser extends TokenParser with Coercions {
 
   def simpleTypeExpression: Parser[TypeAst] =
-    positioned((Tokens.$type | identifier) ^^ TypeIdentifier | ("(" ~> typeExpression <~ ")"))
+    positioned((Tokens.$type | identifier) ^^ TypeIdentifier
+      | ("(" ~> typeExpression <~ ")")
+    )
 
   def appliedTypeExpression: Parser[TypeAst] =
     positioned(simpleTypeExpression ~ simpleTypeExpression.* ^^ {
@@ -32,10 +34,10 @@ trait TypeParser extends TokenParser with Coercions {
     })
 
   def funTypeExpression: Parser[TypeAst] =
-    positioned(("(" ~> identifier <~ ":") ~ (typeExpression <~ ")") ~ ("->" ~> typeExpression) ^^ {
+    positioned("(" ~> identifier ~ (":" ~> typeExpression <~ ")") ~ ("->" ~> typeExpression) ^^ {
       case name ~ leftTypeExpression ~ rightTypeExpression => TypeForall(name, leftTypeExpression, rightTypeExpression)
     }) |
-      positioned(appliedTypeExpression ~ ("->" ~> typeExpression) ^^ {
+      positioned(appliedTypeExpression ~ ((typeOperator | "->") ~> typeExpression) ^^ {
         case leftTypeExpression ~ rightTypeExpression => TypeAbstraction(leftTypeExpression, rightTypeExpression)
       })
 

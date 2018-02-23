@@ -27,7 +27,7 @@ trait PatternParser extends TokenParser with Coercions {
     positioned(
       (integerLiteral ^^ PatternInteger)
         | (stringLiteral ^^ PatternString)
-        | (operator | identifier) ^^ PatternIdentifier
+        | (expressionOperator | identifier) ^^ PatternIdentifier
     )
 
   def appliedPattern: Parser[PatternAst] =
