@@ -112,7 +112,7 @@ trait Functor (m:type->type) {
 
 trait Applicative (m:type->type) with Functor m {
   def (<*>) : [a,b] m (a -> b) -> m a -> m b
-  def  lift2 : [a,b,c] (a -> b -> c) -> m a -> m b -> m c
+  def lift2 : [a,b,c] (a -> b -> c) -> m a -> m b -> m c
   def (<$>) : [a,b] (a -> b) -> m a -> m b
 }
 
