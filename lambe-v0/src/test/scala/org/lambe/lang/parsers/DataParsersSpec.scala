@@ -22,17 +22,17 @@ package org.lambe.lang.parsers
 import org.lambe.lang.syntax._
 import org.scalatest._
 
-class DataParsersSpec extends FlatSpec with EntityParser with Matchers {
+class DataParsersSpec extends FlatSpec with EntityParser with Matchers with Coercions {
   // entity parsing
 
-  private val value0 = "data Bool : type"
+  private val value0 = "data Bool : typeA"
 
   value0 should "be parsed" in {
     parseAll(dataExpression, value0).successful shouldBe true
   }
 
   value0 should "be a DataEntity" in {
-    parseAll(dataExpression, value0).get shouldBe DataEntity("Bool", List(), "type")
+    parseAll(dataExpression, value0).get shouldBe DataEntity("Bool", List(), "typeA")
   }
 
   private val value1 = "data List : [a] type"

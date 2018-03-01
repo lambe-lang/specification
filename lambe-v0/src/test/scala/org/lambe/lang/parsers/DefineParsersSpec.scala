@@ -22,7 +22,7 @@ package org.lambe.lang.parsers
 import org.lambe.lang.syntax._
 import org.scalatest._
 
-class DefineParsersSpec extends FlatSpec with EntityParser with Matchers {
+class DefineParsersSpec extends FlatSpec with EntityParser with Matchers with Coercions {
   // entity parsing
 
   private val value0 = "define Bool { def (||) true _ = true def (||) false a = a }"

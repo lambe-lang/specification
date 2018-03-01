@@ -22,7 +22,7 @@ package org.lambe.lang.parsers
 import org.lambe.lang.syntax._
 import org.scalatest._
 
-class TraitParsersSpec extends FlatSpec with EntityParser with Matchers {
+class TraitParsersSpec extends FlatSpec with EntityParser with Matchers with Coercions {
   // entity parsing
 
   private val value0 = "trait Boolean"

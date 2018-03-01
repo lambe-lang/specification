@@ -30,7 +30,7 @@ trait TokenParser extends RegexParsers with Parsers {
   def stringLiteral: Parser[String] = '\"' ~> """([^"]|(\\"))+""".r <~ '\"'
 
   def anyIdentifier: Parser[String] =
-    """[_a-zA-Z][_0-9a-zA-Z_$]*'?""".r
+    """[_a-zA-Z]([0-9a-zA-Z_$]*)('?)""".r
 
   def identifier: Parser[String] =
     anyIdentifier ^? { case m if !Tokens.keywords.contains(m) => m }

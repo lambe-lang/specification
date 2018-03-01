@@ -21,7 +21,7 @@ package org.lambe.lang.parsers
 
 import org.lambe.lang.syntax._
 
-trait ExpressionParser extends PatternParser with TokenParser with NameParser with Coercions {
+trait ExpressionParser extends PatternParser with TokenParser with NameParser {
 
   def letExpression: Parser[ExpressionAst] =
     positioned((Tokens.$let ~> pattern <~ "=") ~ expression ~ (Tokens.$in ~> expression) ^^ {

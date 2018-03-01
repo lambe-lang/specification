@@ -21,14 +21,6 @@ package org.lambe.lang.syntax
 
 import scala.util.parsing.input.Positional
 
-trait Coercions {
-  implicit def toType(a: String): TypeAst = TypeIdentifier(a)
-
-  implicit def toExpression(a: String): ExpressionAst = ExpressionIdentifier(a, Option.empty)
-
-  implicit def toPattern(a: String): PatternAst = PatternIdentifier(a)
-}
-
 object TypeDef {
   type Generics = List[(String, TypeAst)]
   type Parameters = List[TypeAst]
@@ -39,8 +31,6 @@ object TypeDef {
 sealed trait TypeAst extends Positional
 
 case class TypeIdentifier(name: String) extends TypeAst
-
-case class TypeOperator(name: String) extends TypeAst
 
 case class TypeApplication(left: TypeAst, right: TypeAst) extends TypeAst
 
@@ -95,6 +85,8 @@ case class ValueExpression(name: String, spec: ExpressionAst) extends ValueAst
 sealed trait EntityAst extends Positional
 
 case class DefinitionEntity(spec: ValueAst) extends EntityAst
+
+case class AliasEntity(name: String, spec: TypeAst) extends EntityAst
 
 case class DataEntity(name: String, generics: TypeDef.Generics, spec: TypeAst) extends EntityAst
 

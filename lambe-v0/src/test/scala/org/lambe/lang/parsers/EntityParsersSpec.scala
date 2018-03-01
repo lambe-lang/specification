@@ -19,9 +19,10 @@ under the License.
 
 package org.lambe.lang.parsers
 
+import org.lambe.lang.syntax.Coercions
 import org.scalatest._
 
-class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
+class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers with Coercions {
   // full code parsing
 
   val helloCode: String =
@@ -200,11 +201,14 @@ class EntityParsersSpec extends FlatSpec with ModuleParser with Matchers {
     """
       |module data.profunctor
       |
-      |data (::~>) : [a,b] (p:type->type->type) -> (q:type->type->type) -> p a b -> q a b
+      |data type1 : type -> type
+      |data type2 : type -> type1
       |
-      |trait HPFunctor (pp:(type->type->type)->type) {
-      |  def hpmap  : (p ::~> q) -> (pp p ::~> pp q)
-      |  def ddimap : (s -> a) -> (b -> t) -> pp p a b -> pp p s t
+      |data (::~>) : [a,b] (p:type2) -> (q:type2) -> p a b -> q a b
+      |
+      |trait HPFunctor (pp:type2->type) {
+      |  def hpmap  : [p:type2,q:type2,a,b] (p ::~> q) -> (pp p ::~> pp q)
+      |  def ddimap : [p:type2,q:type2,a,b,s,t] (s -> a) -> (b -> t) -> pp p a b -> pp p s t
       |}
     """.stripMargin
 

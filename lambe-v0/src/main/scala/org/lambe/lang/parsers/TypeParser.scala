@@ -21,10 +21,10 @@ package org.lambe.lang.parsers
 
 import org.lambe.lang.syntax._
 
-trait TypeParser extends TokenParser with Coercions {
+trait TypeParser extends TokenParser {
 
   def simpleTypeExpression: Parser[TypeAst] =
-    positioned((Tokens.$type | identifier) ^^ TypeIdentifier
+    positioned((identifier | Tokens.$type) ^^ TypeIdentifier
       | ("(" ~> typeExpression <~ ")")
     )
 

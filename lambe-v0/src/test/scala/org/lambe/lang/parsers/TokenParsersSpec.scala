@@ -19,9 +19,10 @@ under the License.
 
 package org.lambe.lang.parsers
 
+import org.lambe.lang.syntax.Coercions
 import org.scalatest._
 
-class TokenParsersSpec extends FlatSpec with TokenParser with Matchers {
+class TokenParsersSpec extends FlatSpec with TokenParser with Matchers with Coercions {
   // Number parsing
 
   "-12" should "be parsed" in {
@@ -52,12 +53,12 @@ class TokenParsersSpec extends FlatSpec with TokenParser with Matchers {
     parseAll(identifier, "a12").successful shouldBe true
   }
 
-  "a12" should "be string a12" in {
-    parseAll(identifier, "a12").get shouldBe "a12"
+  "aa12" should "be string a12" in {
+    parseAll(identifier, "aa12").get shouldBe "aa12"
   }
 
-  "a12'" should "be string a12'" in {
-    parseAll(identifier, "a12'").get shouldBe "a12'"
+  "aa12'" should "be string a12'" in {
+    parseAll(identifier, "aa12'").get shouldBe "aa12'"
   }
 
   "trait" should "not be parsed'" in {

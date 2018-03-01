@@ -21,7 +21,7 @@ package org.lambe.lang.parsers
 
 import org.lambe.lang.syntax._
 
-trait PatternParser extends TokenParser with Coercions {
+trait PatternParser extends TokenParser {
 
   def simplePattern: Parser[PatternAst] =
     positioned(

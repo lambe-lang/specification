@@ -17,25 +17,12 @@ specific language governing permissions and limitations
 under the License.
  */
 
-package org.lambe.lang.parsers
+package org.lambe.lang.syntax
 
-import org.lambe.lang.syntax._
+trait Coercions {
+  implicit def toType(a: String): TypeAst = TypeIdentifier(a)
 
-trait ParameterParser extends TypeParser {
+  implicit def toExpression(a: String): ExpressionAst = ExpressionIdentifier(a, Option.empty)
 
-  private def generic: Parser[(String, TypeAst)] =
-    identifier ~ (":" ~> positioned(typeExpression)).? ^^ {
-      case identifier ~ None => (identifier, TypeIdentifier("type"))
-      case identifier ~ Some(typeExpression) => (identifier, typeExpression)
-    }
-
-  def typeParameters : Parser[List[(String, TypeAst)]] =
-    ("(" ~> generic <~ ")").*
-
-  def forallParameters: Parser[List[(String, TypeAst)]] =
-    ("[" ~> generic ~ ("," ~> generic).* <~ "]").? ^^ {
-      case None => List()
-      case Some(h ~ t) => h :: t
-    }
-
+  implicit def toPattern(a: String): PatternAst = PatternIdentifier(a)
 }

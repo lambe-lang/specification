@@ -22,7 +22,7 @@ package org.lambe.lang.parsers
 import org.lambe.lang.syntax._
 import org.scalatest._
 
-class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers {
+class ExpressionParsersSpec extends FlatSpec with ExpressionParser with Matchers with Coercions {
   // expression parsing
 
   "-12" should "be parsed" in {

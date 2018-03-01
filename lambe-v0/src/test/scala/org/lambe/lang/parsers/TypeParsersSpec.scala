@@ -22,7 +22,7 @@ package org.lambe.lang.parsers
 import org.lambe.lang.syntax._
 import org.scalatest._
 
-class TypeParsersSpec extends FlatSpec with TypeParser with Matchers {
+class TypeParsersSpec extends FlatSpec with TypeParser with Matchers with Coercions {
   // type parsing
 
   "type" should "be parsed" in {

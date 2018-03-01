@@ -22,7 +22,7 @@ package org.lambe.lang.parsers
 import org.lambe.lang.syntax._
 import org.scalatest._
 
-class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers {
+class DefinitionParsersSpec extends FlatSpec with DefinitionParser with Matchers with Coercions {
   // definition type parsing
 
   private val value0 = "def (||) : Boolean"
