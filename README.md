@@ -96,7 +96,7 @@ define Example {
 
     def factTrampoline : Int -> Int -> Trampoline Int
     def factTrampoline 0 acc = Done acc
-    def factTrampoline n acc = Next $ _ -> factTrampoline (n - 1) (n * acc)
+    def factTrampoline n acc = Next { factTrampoline (n - 1) (n * acc) }
 }    
 ```
 
@@ -122,12 +122,12 @@ define [m:type->type] Applicative m {
 }
 
 trait Monad (m:type->type) with Applicative m {
-    def (>>=) : [a,b] (a -> m b) -> m a -> m b
+    def (>>=) : [a,b] m a -> (a -> m b) -> m b
     def join  : [a] m (m a) -> m a
 }
 
 define [m:type->type] Monad m {
-    def (>>=) f x = join $ fmap f x
+    def (>>=) x f = join $ fmap f x
 }
 ```
 
@@ -162,11 +162,11 @@ define Monad Option {
 ### Usage
 
 ```
-fmap (1 +) $ pure 1                 // Some 2, of type Option Int 
-pure (1 +) <*> $ pure 1             // Some 2, of type Option Int 
-lift2 (+) (pure 1) (pure 1)         // Some 2, of type Option Int 
-1 + <$> $ pure 1                    // Some 2, of type Option Int 
-(i -> pure $ 1 + i) >>= $ pure 1    // Some 2, of type Option Int 
+fmap (1 +) $ pure 1              // Some 2, of type Option Int 
+pure (1 +) <*> $ pure 1          // Some 2, of type Option Int 
+lift2 (+) (pure 1) (pure 1)      // Some 2, of type Option Int 
+1 + <$> $ pure 1                 // Some 2, of type Option Int 
+pure 1 >>= { pure $ 1 + _ }      // Some 2, of type Option Int 
 ```
 
 # Actor Paradigm
