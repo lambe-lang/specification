@@ -2,15 +2,15 @@ module control.profunctor
 
 // See https://bartoszmilewski.com/2018/02/20/free-monoidal-profunctors/
 
-data type1 : type -> type
-data type2 : type -> type1
+typealias type1 = type -> type
+typealias type2 = type -> type1
 
 trait Profunctor (m:type2) {
   def pure  : [a,b] a -> b -> m a b
   def dimap : [a,b,s,t] (a -> s) -> (b -> t) -> m a b ->  m s t
 }
 
-data (::~>) : [a,b] (p:type2) -> (q:type2) -> p a b -> q a b
+typealias (::~>) = [a,b] (p:type2) -> (q:type2) -> p a b -> q a b
 
 trait HPFunctor (pp:type2->type) {
   def hpmap  : [p:type2,q:type2] (p ::~> q) -> (pp p ::~> pp q)
