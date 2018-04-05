@@ -96,7 +96,7 @@ define Example {
 
     def factTrampoline : Int -> Int -> Trampoline Int
     def factTrampoline 0 acc = Done acc
-    def factTrampoline n acc = Next { factTrampoline (n - 1) (n * acc) }
+    def factTrampoline n acc = Next _ -> factTrampoline (n - 1) (n * acc)
 }    
 ```
 
@@ -166,7 +166,7 @@ fmap (1 +) $ pure 1              // Some 2, of type Option Int
 pure (1 +) <*> $ pure 1          // Some 2, of type Option Int 
 lift2 (+) (pure 1) (pure 1)      // Some 2, of type Option Int 
 1 + <$> $ pure 1                 // Some 2, of type Option Int 
-pure 1 >>= { pure $ 1 + _ }      // Some 2, of type Option Int 
+pure 1 >>= i -> pure $ 1 + i     // Some 2, of type Option Int 
 ```
 
 # Actor Paradigm
