@@ -78,7 +78,7 @@ expression ::=
     "(" operator ")" ("from" moduleName)?
     "let" pattern "=" expression "in" expression
     expression expression
-    pattern+ "->" expression
+    "{" (identifier+ "->")? expression "}"
     "(" expression ")"
     "$" type
 ```
