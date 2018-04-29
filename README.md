@@ -165,7 +165,7 @@ define Monad Option {
 fmap (1 +) $ pure 1              // Some 2, of type Option Int 
 pure (1 +) <*> $ pure 1          // Some 2, of type Option Int 
 lift2 (+) (pure 1) (pure 1)      // Some 2, of type Option Int 
-1 + <$> $ pure 1                 // Some 2, of type Option Int 
+(1 +) <$> $ pure 1                 // Some 2, of type Option Int 
 pure 1 >>= i -> pure $ 1 + i     // Some 2, of type Option Int 
 ```
 
