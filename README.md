@@ -80,7 +80,7 @@ trait Runnable (m:type->type) {
 ```
 define Runnable Trampoline {
     def run (Done a) = a
-    def run (Next f) = f unit run
+    def run (Next f) = run $ f unit
 }
 ```
 
@@ -92,7 +92,7 @@ trait Example {
 }
 
 define Example {
-    def fact i = factTrampoline i 1 run
+    def fact i = run $ factTrampoline i 1
 
     def factTrampoline : Int -> Int -> Trampoline Int
     def factTrampoline 0 acc = Done acc
