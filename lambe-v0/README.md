@@ -33,7 +33,7 @@ trait ::=
    "trait" name typeParameters ("with" type)* ("{" (typeDef | data | trait)* "}")?
 
 define ::=
-   "define" generics? type ("with" type)* ("{" (expressionDef | data | trait | define)* "}")?
+   "class" generics? type ("with" type)* ("{" (expressionDef | data | trait | define)* "}")?
 
 name ::=
     identifier
