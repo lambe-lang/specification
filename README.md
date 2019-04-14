@@ -2,11 +2,9 @@
 
 Strong typed functional programming language
 
-# Functional Programming Paradigm
+# Basic FP Concepts
 
-## Basic FP Concepts
-
-### Function composition
+## Function composition
 
 ```
 def flip : [a,b,c] (a -> b -> c) -> (b -> a -> c)
@@ -19,9 +17,9 @@ def (|>) : [a,b,c] (a -> b) -> (b -> c) -> c
 def (|>) = flip (.)
 ```
 
-### Monoïd
+## Monoïd
 
-#### Definition
+### Definition
 
 ```
 trait Monoid (a) {
@@ -30,7 +28,7 @@ trait Monoid (a) {
 }
 ```
 
-#### Integers
+### Integers
 
 ```
 def Monoid Int {
@@ -39,7 +37,7 @@ def Monoid Int {
 }
 ```
 
-#### Peano data type
+### Peano data type
 
 ```
 def Peano : type
@@ -61,21 +59,21 @@ def Monoid Peano with Add Peano {
 }
 ```
 
-### Trampoline definition
+## Trampoline definition
 
 ```
 data Trampoline : type -> type
 data Done : [a] a -> Trampoline a
 data Next : [a] (Unit -> Trampoline a) -> Trampoline a
 ```
-#### Runnable definition
+### Runnable definition
 
 ```
 trait Runnable (m:type->type) {
     def run : [a] m a -> a
 }
 ```
-#### Runnable Trampoline implementation
+### Runnable Trampoline implementation
 
 ```
 define Runnable Trampoline {
@@ -84,7 +82,7 @@ define Runnable Trampoline {
 }
 ```
 
-#### Usage
+### Usage
 
 ```
 trait Example {
@@ -131,7 +129,7 @@ define [m:type->type] Monad m {
 }
 ```
 
-### Data
+## Data
 
 ```
 data Option : type -> type
@@ -139,7 +137,7 @@ data None : [a] Option a
 data Some : [a] a -> Option a
 ```
 
-### Traits definition
+## Traits definition
 
 ```
 define Functor Option {
@@ -159,7 +157,7 @@ define Monad Option {
 }
 ```
 
-### Usage
+## Usage
 
 ```
 fmap (1 +) $ pure 1              // Some 2, of type Option Int 
