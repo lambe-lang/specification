@@ -169,10 +169,6 @@ lift2 (+) (pure 1) (pure 1)      // Some 2, of type Option Int
 pure 1 >>= i -> pure $ 1 + i     // Some 2, of type Option Int 
 ```
 
-# Actor Paradigm
-
-TODO
-
 # Why Lambë
 
 See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition.
