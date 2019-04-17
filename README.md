@@ -133,7 +133,7 @@ def List =
     let listBuider l = CollectionBuilder l { listBuilder $ l +: _ } in
     	listBuilder Nil
 
-// List[   : a -> CloseCollectionBuilder a (List a)
+// List[   : a -> ClosableCollectionBuilder a (List a)
 // List[1  : ClosableCollectionBuilder int (List int)
 // List[1] : List[int]
 ```
