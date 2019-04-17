@@ -112,11 +112,6 @@ impl ClosableCollectionBuilder a b for CollectionBuilder a b {
 ### The list builder
 
 ```
-type List : type -> type
-data Nil  : List a
-data Cons : h:a -> t:(List a) -> List a
-
-// Alternate syntax
 type List a {
     Nil
     Cons h:a t:(List a)
