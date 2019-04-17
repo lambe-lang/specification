@@ -63,8 +63,10 @@ trait Monad (f:type->type) with Applicative f {
 }
 ```
 
+## Trait implementation
+
 ```
-impl Functor Option{
+impl Functor Option {
     def fmap f = self fold { None } { Some $ f _.v }
 }
 
@@ -104,7 +106,7 @@ impl Adder Peano {
 
 ## designing a DSL
 
-### Collection builder
+### Collection builder trait
 
 ```
 data CollectionBuilder b a {
@@ -122,6 +124,8 @@ trait ClosableCollection b a {
     sig (]) : self -> b
 }
 ```
+
+### Collection builder implementation
 
 ```
 impl OpenedCollection b a for CollectionBuilder b a {
