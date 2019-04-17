@@ -49,7 +49,7 @@ impl for Option a { // self : Option a
 
 ```
 trait functor (f:type->type) a for f a {
-     fmap : (a -> b)  -> f b
+     fmap : (a -> b) -> f b
 }
 
 impl functor Option a { // for Option a is infered
