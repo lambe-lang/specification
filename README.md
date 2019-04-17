@@ -77,7 +77,7 @@ impl Applicative Option {
 
 impl Monad Option {
     def join = self fold None id
-    def (>>=) f = self fold { None } { f _.v } // specific
+    def (>>=) f = self fold { None } { f _.v } // specific i.e. override for Monad Option
 }
 
 // Some 1 fmap (1+)            : Option int
