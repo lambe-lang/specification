@@ -140,7 +140,7 @@ def List =
 // List[1] : List[int]
 ```
 
-# Why Lambë
+# Why Lambë?
 
 See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition.
 
