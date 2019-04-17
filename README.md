@@ -1,6 +1,6 @@
 # Lambë
 
-Strong typed functional programming
+A strong typed functional programming
 
 # Functional Programming Paradigm
 
@@ -9,7 +9,7 @@ Strong typed functional programming
 ```
 sig id   : a -> a
 sig swap : (a -> b -> c) -> b -> a -> c
-sig rond : (b -> c) -> (a -> b) -> a -> c
+sig (°)  : (b -> c) -> (a -> b) -> a -> c
 sig (|>) : (a -> b) -> (b -> c) -> a -> c
 ```
 
@@ -18,9 +18,9 @@ sig (|>) : (a -> b) -> (b -> c) -> a -> c
 ```
 def id a       = a
 def swap f x y = f y x		
-def rond f g x = f (g x)
-def (|>)       = swap rond
-```
+def (°) f g x  = f (g x)
+def (|>)       = swap (°)
+ ```
 
 ## Data type definion
 
@@ -31,14 +31,6 @@ type Option a {
 }
 ```
 
-This abstract data type can also be written differently.
-
-```
-type Option : type -> type
-data None   : Option a
-data Some   : v:a -> Option a
-```
-
 ## Direct implementation
 
 ```
@@ -46,10 +38,11 @@ impl for Option a { // self : Option a
      sig fold: b -> (a -> b) -> b
 
      def None.fold n _ = n
-     def Some.fold _ s = s $ self v
+     def Some.fold _ s = s $ self v // self is a Some
 }
 
-// Some 1 fold 0 id = 1 : int
+// Some 1 fold 0 id = 1 : int // for FP addicts
+// (Some 1).fold 0 id   : int // for OO addicts
 ```
 
 ## Trait definition
@@ -67,7 +60,7 @@ impl functor Option a { // for Option a is infered
 
 ```
 
-## Peanos
+## Peanos' integer
 
 ```
 type Peano {
