@@ -2,8 +2,6 @@
 
 A strong typed functional programming
 
-# Functional Programming Paradigm
-
 ## Type definition
 
 ```
