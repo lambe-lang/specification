@@ -1,5 +1,0 @@
-module data.maybe
-
-data MayBe : type -> type
-data None  : [a] MayBe a
-data Just  : [a] a -> MayBe a

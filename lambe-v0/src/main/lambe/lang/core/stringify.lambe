@@ -1,9 +1,0 @@
-module lang.core.stringify
-
-from lang.data.string import (String)
-
-trait Stringify {
-    def toString  : String
-}
-
-

@@ -1,170 +1,150 @@
-# Lambë 
+# Lambë
 
-Strong typed functional programming language
+Strong typed functional programming
 
-# Basic FP Concepts
+# Functional Programming Paradigm
 
-## Function composition
-
-```
-def flip : [a,b,c] (a -> b -> c) -> (b -> a -> c)
-def flip f = b a -> f a b
-
-def (.) : [a,b,c] (b -> c) -> (a -> b) -> c
-def (.) f g = x -> f $ g x
-
-def (|>) : [a,b,c] (a -> b) -> (b -> c) -> c
-def (|>) = flip (.)
-```
-
-## Monoïd
-
-### Definition
+## Type definition
 
 ```
-trait Monoid (a) {
-    def mempty  : a
-    def mappend : a -> a -> a 
+sig id   : a -> a
+sig swap : (a -> b -> c) -> b -> a -> c
+sig rond : (b -> c) -> (a -> b) -> a -> c
+sig (|>) : (a -> b) -> (b -> c) -> a -> c
+```
+
+##  Function definition
+
+```
+def id a       = a
+def swap f x y = f y x		
+def rond f g x = f (g x)
+def (|>)       = swap rond
+```
+
+## Data type definion
+
+```
+type Option a {
+    None
+    Some v:a
 }
 ```
 
-### Integers
+This abstract data type can also be written differently.
 
 ```
-def Monoid Int {
-    def mempty = 0
-    def mappend = (+)
+type Option : type -> type
+data None   : Option a
+data Some   : v:a -> Option a
+```
+
+## Direct implementation
+
+```
+impl for Option a { // self : Option a
+     sig fold: b -> (a -> b) -> b
+
+     def None.fold n _ = n
+     def Some.fold _ s = s $ self v
+}
+
+// Some 1 fold 0 id = 1 : int
+```
+
+## Trait definition
+
+```
+trait functor (f:type->type) a for f a {
+     fmap : (a -> b)  -> f b
+}
+
+impl functor Option a { // for Option a is infered
+     def fmap f = self fold None { Some $ f _ }
+}
+
+// Some 1 fmap (1+) : Option int
+
+```
+
+## Peanos
+
+```
+type Peano {
+    Zero
+    Succ v:Peano
+}
+
+trait Adder a for a {
+    sig (+) : a -> a
+}
+
+impl Adder Peano {
+    def Zero.(+) a = a
+    def Succ.(+) a = Succ (self v + a)
+}
+
+// (Succ Zero) + (Succ Zero)
+```
+
+## DSL
+
+### Collection builder
+
+```
+data CollectionBuilder a b {
+    unbox : b
+    add   : a -> CollectionBuilder a b
+}
+
+trait OpenCollectionBuilder a b {
+    sig ([)   : a -> CloseCollectionBuilder a b
+    sig empty : b
+}
+
+impl OpenCollectionBuilder a b for CollectionBuilder a b {
+    def ([) a = self add a ;
+    def empty = this unbox
+}
+
+trait ClosableCollectionBuilder a b {
+    sig (,) : a -> ClosableCollectionBuilder a b
+    sig (]) : b
+}
+
+impl ClosableCollectionBuilder a b for CollectionBuilder a b {
+    def (,) a = self add a
+    def (])   = this unbox
 }
 ```
 
-### Peano data type
+### The list builder
 
 ```
-def Peano : type
-def Zero : Peano
-def Succ : Peano -> Peano
+type List : type -> type
+data Nil  : List a
+data Cons : h:a -> t:(List a) -> List a
 
-trait Add (a) {
-    def (+) : a -> a -> a
+// Alternate syntax
+type List a {
+    Nil
+    Cons h:a t:(List a)
 }
 
-def Add Peano {
-    def (+) Zero     p = p
-    def (+) (Succ s) p = Succ (s + p)
+impl for List a {
+    sig (+:) : a -> List a
+
+    def (+:) a = Cons a self
 }
 
-def Monoid Peano with Add Peano {
-    def mempty = Zero
-    def mappend = (+)
-}
-```
+sig List : OpenCollectionBuilder (List a) a
+def List =
+    let listBuider l = CollectionBuilder l { listBuilder $ l +: _ } in
+    	listBuilder Nil
 
-## Trampoline definition
-
-```
-data Trampoline : type -> type
-data Done : [a] a -> Trampoline a
-data Next : [a] (Unit -> Trampoline a) -> Trampoline a
-```
-### Runnable definition
-
-```
-trait Runnable (m:type->type) {
-    def run : [a] m a -> a
-}
-```
-### Runnable Trampoline implementation
-
-```
-define Runnable Trampoline {
-    def run (Done a) = a
-    def run (Next f) = run $ f unit
-}
-```
-
-### Usage
-
-```
-trait Example {
-    def fact : Int -> Int
-}
-
-define Example {
-    def fact i = run $ factTrampoline i 1
-
-    def factTrampoline : Int -> Int -> Trampoline Int
-    def factTrampoline 0 acc = Done acc
-    def factTrampoline n acc = Next _ -> factTrampoline (n - 1) (n * acc)
-}    
-```
-
-## Advanced FP Concepts
-
-### Traits
-
-``` 
-trait Functor (m:type->type) {
-  def pure : [a] a -> m a
-  def fmap : [a,b] (a -> b) -> m a -> m b
-}
-
-trait Applicative (m:type->type) with Functor m {
-  def (<*>) : [a,b] m (a -> b) -> m a -> m b
-  def lift2 : [a,b,c] (a -> b -> c) -> m a -> m b -> m c
-  def (<$>) : [a,b] (a -> b) -> m a -> m b
-}
-
-define [m:type->type] Applicative m {
-  def lift2 f = pure f <*>
-  def (<$>) f = pure f <*>
-}
-
-trait Monad (m:type->type) with Applicative m {
-    def (>>=) : [a,b] m a -> (a -> m b) -> m b
-    def join  : [a] m (m a) -> m a
-}
-
-define [m:type->type] Monad m {
-    def (>>=) x f = join $ fmap f x
-}
-```
-
-## Data
-
-```
-data Option : type -> type
-data None : [a] Option a
-data Some : [a] a -> Option a
-```
-
-## Traits definition
-
-```
-define Functor Option {
-  def pure = Some
-  def fmap _ None     = None
-  def fmap f (Some v) = Some (f v)
-}
-
-define Applicative Option {
-  def (<*>) None     _ = None
-  def (<*>) (Some f) v = f fmap v
-}
-
-define Monad Option {
-  def join None     = None
-  def join (Some v) = v
-}
-```
-
-## Usage
-
-```
-fmap (1 +) $ pure 1              // Some 2, of type Option Int 
-pure (1 +) <*> $ pure 1          // Some 2, of type Option Int 
-lift2 (+) (pure 1) (pure 1)      // Some 2, of type Option Int 
-(1 +) <$> $ pure 1                 // Some 2, of type Option Int 
-pure 1 >>= i -> pure $ 1 + i     // Some 2, of type Option Int 
+// List[   : a -> CloseCollectionBuilder a (List a)
+// List[1  : ClosableCollectionBuilder int (List int)
+// List[1] : List[int]
 ```
 
 # Why Lambë
@@ -173,7 +153,7 @@ See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition.
 
 # License
 
-Copyright 2018 D. Plaindoux.
+Copyright 2019 D. Plaindoux.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

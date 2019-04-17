@@ -1,6 +1,0 @@
-module control.functor
-
-trait Functor (m:type->type) {
-  def pure : [a] a -> m a
-  def fmap : [a,b] (a -> b) -> m a ->  m b
-}
