@@ -107,7 +107,7 @@ trait ClosableCollectionBuilder a b {
 
 impl ClosableCollectionBuilder a b for CollectionBuilder a b {
     def (,) a = self add a
-    def (])   = this unbox
+    def (])   = self unbox
 }
 ```
 
