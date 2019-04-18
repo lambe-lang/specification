@@ -15,8 +15,8 @@ sig (|>) : (a -> b) -> (b -> c) -> a -> c
 
 ```
 def id   = { _ }
-def swap = { f x y -> f y x	}
-def (°)  = { f g x -> f (g x) }
+def swap = { f x y -> f y x }
+def (°)  = { f g x -> f $ g x }
 def (|>) = swap (°)
  ```
 
