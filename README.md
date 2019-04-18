@@ -120,10 +120,10 @@ type Peano {
 }
 
 trait Adder {
-    sig (+) : self -> self -> self for a
+    sig (+) : self -> self -> self
 }
 
-impl Adder {
+impl Adder for Peano {
     def Zero.(+) a = a
     def Succ.(+) a = Succ (self v + a)
 }
