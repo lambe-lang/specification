@@ -94,7 +94,7 @@ impl Applicative Option {
 }
 
 impl Monad Option {
-    def join = self fold None id    
+    def join = self fold { None } id    
 }
 ```
 
