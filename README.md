@@ -45,7 +45,7 @@ impl for Option a {
 ### Data type in action
 
 ```
-Some 1 fold 0 id = 1 : int // for FP addicts
+Some 1 fold 0 id = 1 : int // for FP addictscapbility
 (Some 1).fold 0 id   : int // for OO addicts
 ```
 
@@ -59,7 +59,7 @@ trait Functor (f:type->type) {
 }
 ```
 
-The `Functor` has a parametric type constructor `f` reveiling the capbility to support higher-kinded-type in the langage.
+The `Functor` has a parametric type constructor `f` revealing the support of higher-kinded-types in the langage.
 
 The `fmap` has a receiver called `self` and this receiver has the following type (given by the *for* directive): `f a`.
 Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not
