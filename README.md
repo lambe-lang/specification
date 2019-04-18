@@ -66,8 +66,11 @@ The `fmap` has a receiver called `self` and this receiver has the following type
 
 ```
 trait Applicative (f:type->type) with Functor f {
-    sig pure : a -> f a
-    sig <*>  : self -> f (a -> b) -> f b for f a
+    sig pure   : a -> f a
+    sig (<*>)  : self -> f a -> f b for f (a -> b) 
+    sig (<**>) : self -> f (a -> b) -> f b for f a
+    
+    def (<**>) a = a <*> self
 }
 ```
 
@@ -95,8 +98,8 @@ impl Functor Option {
 }
 
 impl Applicative Option {
-    def pure a = Some a
-    def (<*>) f = f fold { None } { a fmap _.v }
+    def pure = Some
+    def (<*>) a = self fold { None } { _.v fmap a }
 }
 
 impl Monad Option {
