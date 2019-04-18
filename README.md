@@ -135,14 +135,18 @@ impl Adder {
 
 ## designing a DSL
 
-### Collection builder trait
+### Collection builder data
 
 ```
 data CollectionBuilder b a {
     unbox : b
     add   : a -> CollectionBuilder b
 }
+```
 
+### Collection builder trait
+
+```
 trait OpenedCollection b a {
     sig ([)   : self -> a -> ClosableCollection f a
     sig empty : self -> f a
