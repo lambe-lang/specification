@@ -45,7 +45,7 @@ impl for Option a {
 ### Data type in action
 
 ```
-Some 1 fold 0 id = 1 : int // for FP addictscapbility
+Some 1 fold 0 id = 1 : int // for FP addicts
 (Some 1).fold 0 id   : int // for OO addicts
 ```
 
