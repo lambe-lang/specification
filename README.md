@@ -33,10 +33,10 @@ type Option a {
 
 ```
 impl for Option a {
-     sig fold: self -> (None a -> b) -> (Some a -> b) -> b
+    sig fold: self -> (None a -> b) -> (Some a -> b) -> b
 
-     def None.fold n _ = n self // self : None a
-     def Some.fold _ s = s self // self : Some a
+    def None.fold n _ = n self // self : None a
+    def Some.fold _ s = s self // self : Some a
 }
 
 // Some 1 fold 0 id = 1 : int // for FP addicts
@@ -71,7 +71,7 @@ impl Functor Option {
 }
 
 impl Applicative Option {
-    def pure a = Option a
+    def pure a = Some a
     def (<*>) f = f fold { None } { a fmap _.v }
 }
 
@@ -80,8 +80,8 @@ impl Monad Option {
     def (>>=) f = self fold { None } { f _.v } // specific i.e. override for Monad Option
 }
 
-// Some 1 fmap (1+)            : Option int
-// (Applicative Option) pure 1 : Option int
+// Some 1 fmap (1+)          : Option int
+// Applicative Option pure 1 : Option int
 ```
 
 ## Peanos' integer
@@ -92,11 +92,11 @@ type Peano {
     Succ v:Peano
 }
 
-trait Adder a {
+trait Adder {
     sig (+) : self -> self -> self for a
 }
 
-impl Adder Peano {
+impl Adder {
     def Zero.(+) a = a
     def Succ.(+) a = Succ (self v + a)
 }
@@ -147,22 +147,17 @@ type List a {
     Cons h:a t:(List a)
 }
 
-impl for List a {
-    sig (+:) : self -> a -> List a
+sig List : (a:type) -> OpenedCollection (List a) a
+def List _ =
+    let builder l = CollectionBuilder l { builder $ Cons _ l } in
+    	builder Nil
 
-    def (+:) a = Cons a self
-}
-
-sig List : OpenedCollection (List a) a
-def List =
-    let listBuider l = CollectionBuilder l { listBuilder $ l +: _ } in
-    	listBuilder Nil
-
-// List[     : a -> ClosableCollection (List a) a
-// List[1    : ClosableCollection (List int) int
-// List[1,   : int -> ClosableCollection (List int) int
-// List[1,2  : ClosableCollection (List int) int
-// List[1,2] : List int
+// List int       : OpenedCollection (List int) int
+// List int [     : int -> ClosableCollection (List int) int
+// List int [1    : ClosableCollection (List int) int
+// List int [1,   : int -> ClosableCollection (List int) int
+// List int [1,2  : ClosableCollection (List int) int
+// List int [1,2] : List int
 ```
 
 # Why Lambë?
