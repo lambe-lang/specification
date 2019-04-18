@@ -14,9 +14,9 @@ sig (|>) : (a -> b) -> (b -> c) -> a -> c
 ##  Function definition
 
 ```
-def id   = a -> a
-def swap = f x y -> f y x		
-def (°)  = f g x -> f (g x)
+def id   = { _ }
+def swap = { f x y -> f y x	}
+def (°)  = { f g x -> f (g x) }
 def (|>) = swap (°)
  ```
 
@@ -29,7 +29,7 @@ type Option a {
 }
 ```
 
-## Direct implementation
+## Data type implementation
 
 ```
 impl for Option a {
