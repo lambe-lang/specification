@@ -2,7 +2,7 @@
 
 A strong typed functional programming inspired by Haskell, OCaml and Rust.
 
-## Type definition
+## Function type definition
 
 ```
 sig id   : a -> a
@@ -11,7 +11,7 @@ sig (°)  : (b -> c) -> (a -> b) -> a -> c
 sig (|>) : (a -> b) -> (b -> c) -> a -> c
 ```
 
-##  Function definition
+##  Function implementation
 
 ```
 def id   = { _ }
