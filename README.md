@@ -42,7 +42,7 @@ impl for Option a {
 }
 ```
 
-### Data type iun action
+### Data type in action
 
 ```
 Some 1 fold 0 id = 1 : int // for FP addicts
