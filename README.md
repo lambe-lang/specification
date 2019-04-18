@@ -47,7 +47,7 @@ impl for Option a {
 ```
 Option int fold (Some 1) { 0 } id : int // for FP addicts
 Some 1 fold { 0 } id              : int // for FP with OO flavor addicts 
-(Some 1).fold { 0 } id            : int // for OO addicts
+(Some 1).fold { 0 } id            : int // for OO with FP flavor addicts
 ```
 
 ## Traits
