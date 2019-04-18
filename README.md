@@ -20,7 +20,9 @@ def (°)  = { f g x -> f $ g x }
 def (|>) = swap (°)
  ```
 
-## Data type definition
+## Data type
+
+### Data type definition
 
 ```
 type Option a {
@@ -29,7 +31,7 @@ type Option a {
 }
 ```
 
-## Data type implementation
+### Data type implementation
 
 ```
 impl for Option a {
@@ -38,18 +40,30 @@ impl for Option a {
     def None.fold n _ = n self // self : None a
     def Some.fold _ s = s self // self : Some a
 }
-
-// Some 1 fold 0 id = 1 : int // for FP addicts
-// (Some 1).fold 0 id   : int // for OO addicts
 ```
 
-## Trait definition
+### Data type iun action
+
+```
+Some 1 fold 0 id = 1 : int // for FP addicts
+(Some 1).fold 0 id   : int // for OO addicts
+```
+
+## Traits
+
+### Trait definition
 
 ```
 trait Functor (f:type->type) {
     sig fmap : self -> (a -> b) -> f b for f a
 }
+```
 
+The `fmap` has a receiver called `self` and this receiver has the following type (given by the *for* directive): `f a`.
+Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not
+expressed for a method it's a *static* method.
+
+```
 trait Applicative (f:type->type) with Functor f {
     sig pure : a -> f a
     sig <*>  : self -> f (a -> b) -> f b for f a
@@ -63,7 +77,7 @@ trait Monad (f:type->type) with Applicative f {
 }
 ```
 
-## Trait implementation
+### Trait implementation
 
 ```
 impl Functor Option {
@@ -79,9 +93,13 @@ impl Monad Option {
     def join = self fold None id
     def (>>=) f = self fold { None } { f _.v } // specific i.e. override for Monad Option
 }
+```
 
-// Some 1 fmap (1+)          : Option int
-// Applicative Option pure 1 : Option int
+### Trait implementation in action
+
+```
+Applicative Option pure 1 fmap (1+)     // FP addicts
+((Applicative Option).pure 1).fmap (1+) // OO addicts
 ```
 
 ## Peanos' integer
@@ -100,8 +118,10 @@ impl Adder {
     def Zero.(+) a = a
     def Succ.(+) a = Succ (self v + a)
 }
+```
 
-// (Succ Zero) + (Succ Zero)
+```
+(Succ Zero) + (Succ Zero)
 ```
 
 ## designing a DSL
@@ -151,13 +171,17 @@ sig List : (a:type) -> OpenedCollection (List a) a
 def List _ =
     let builder l = CollectionBuilder l { builder $ Cons _ l } in
     	builder Nil
+```
 
-// List int       : OpenedCollection (List int) int
-// List int [     : int -> ClosableCollection (List int) int
-// List int [1    : ClosableCollection (List int) int
-// List int [1,   : int -> ClosableCollection (List int) int
-// List int [1,2  : ClosableCollection (List int) int
-// List int [1,2] : List int
+### The List builder in action
+
+```
+List int       : OpenedCollection (List int) int
+List int [     : int -> ClosableCollection (List int) int
+List int [1    : ClosableCollection (List int) int
+List int [1,   : int -> ClosableCollection (List int) int
+List int [1,2  : ClosableCollection (List int) int
+List int [1,2] : List int
 ```
 
 # Why Lambë?
