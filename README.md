@@ -62,15 +62,18 @@ trait Functor (f:type->type) {
 The `Functor` has a parametric type constructor `f` revealing the support of higher-kinded-types in the langage.
 
 The `fmap` has a receiver called `self` and this receiver has the following type (given by the *for* directive): `f a`.
-Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not
-expressed for a method it's a *static* method.
 
 ```
 trait Applicative (f:type->type) with Functor f {
     sig pure : a -> f a
     sig <*>  : self -> f (a -> b) -> f b for f a
 }
+```
 
+Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not
+expressed for a method it's a *static* method.
+
+```
 trait Monad (f:type->type) with Applicative f {
     sig join  : self -> f a for f (f a)
     sig (>>=) : self -> (a -> f b) -> f b for f a
@@ -80,6 +83,8 @@ trait Monad (f:type->type) with Applicative f {
     def (=<<) a = a >>= self
 }
 ```
+
+Finally each method can be specified with a dedicated `self` type. As a conclusion a trait define un logical fonctionnal unit.
 
 ### Trait implementation
 
