@@ -74,8 +74,10 @@ trait Applicative (f:type->type) with Functor f {
 trait Monad (f:type->type) with Applicative f {
     sig join  : self -> f a for f (f a)
     sig (>>=) : self -> (a -> f b) -> f b for f a
+    sig (=<<) : self -> f a -> f b for a -> f b
 
     def (>>=) f = self fmap f join
+    def (=<<) a = a >>= self
 }
 ```
 
@@ -92,8 +94,7 @@ impl Applicative Option {
 }
 
 impl Monad Option {
-    def join = self fold None id
-    def (>>=) f = self fold { None } { f _.v } // specific i.e. override for Monad Option
+    def join = self fold None id    
 }
 ```
 
