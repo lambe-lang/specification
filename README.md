@@ -180,15 +180,12 @@ impl ClosableCollection b a for CollectionBuilder b a {
 ```
 enum List a {
     data Nil
-    data Cons {  h:a t:(List a) }
+    data Cons { h:a t:(List a) }
 }
-
-sig (::) : a -> List a  -> List a
-def (::) = Cons
 
 sig List : (a:type) -> OpenedCollection (List a) a
 def List _ =
-    let builder l = CollectionBuilder l { builder $ _ :: l } in
+    let builder l = CollectionBuilder l { builder $ Cons _ l } in
     	builder Nil
 ```
 
@@ -218,7 +215,7 @@ trait     ::= "trait" IDENT t_param* with* for? "{" trait_ent* "}"
 impl      ::= "impl" IDENT t_param* with* for? "{" trait_ent* "}"
 
 trait_ent ::= sig_trait | def_trait
-sig_trait ::= "sig" dname param* ":" type for?
+sig_trait ::= sig for?
 def_trait ::= "def" (IDENT ".")? dname param* "=" expr
 
 with      ::= "with" type_o
@@ -232,6 +229,7 @@ expr      ::= "{" (param+ "->")? expr "}"
 
 type      ::= type_i "->" type | "(" type ")"
             | i_param | type_s
+            | "self"
 
 type_i    ::= i_param | type_o | "(" type ")"
 type_o    ::= "(" type_s ")" | o_param type_s?
@@ -250,10 +248,15 @@ IDENT     ::= [a-zA-Z][a-zA-Z0-9_$]* - KEYWORDS
 KEYWORDS  ::= "sig" | "def"
             | "data" | "enum"
             | "trait" | "impl"
-            | "let" | "in"
+            | "let" | "in" | "self"
             
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
 SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "="
+=======
+
+OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLES
+SYMPBOLs  ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_"
+>>>>>>> Langage design (WIP)
 ```
 
 # Why Lambë?
