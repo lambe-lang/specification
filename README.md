@@ -285,7 +285,7 @@ enum List a {
     data Cons { h:a t:(List a) }
 }
 
-sig (::) : a -> List a -> List a
+sig (::) : self -> List a -> List a for a
 ```
 
 This trait then can be used but the function `::` implementation is mandatory.
@@ -328,7 +328,7 @@ type_expr ::= type_i "->" type_expr | "(" type_expr ")"
 type_i    ::= i_param | type_o | "(" type ")"
 type_o    ::= "(" type_s ")" | o_param type_s?
 
-data_elem ::= IDENT ("{" attr_elem* "}")?
+data_elem ::= "data" IDENT ("{" attr_elem* "}")?
 attr_elem ::= IDENT ":" type
 
 t_param   ::= i_param | o_param
