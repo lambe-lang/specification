@@ -252,8 +252,8 @@ KEYWORDS  ::= "sig" | "def"
             | "trait" | "impl"
             | "let" | "in"
             
-OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLES
-SYMPBOLs  ::= "(" | ")" | "{" | "}" | "." | "->" | "="
+OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "="
 ```
 
 # Why Lambë?
