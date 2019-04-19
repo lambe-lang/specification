@@ -25,9 +25,9 @@ def (|>) = swap (°)
 ### Data type definition
 
 ```
-type Option a {
+enum Option a {
     None
-    Some v:a
+    Some { v:a }
 }
 ```
 
@@ -46,7 +46,7 @@ impl for Option a {
 
 ```
 Option int fold (Some 1) { 0 } id : int // for FP addicts
-Some 1 fold { 0 } id              : int // for FP with OO flavor addicts 
+Some 1 fold { 0 } id              : int // for FP with OO flavor addicts
 (Some 1).fold { 0 } id            : int // for OO with FP flavor addicts
 ```
 
@@ -67,9 +67,9 @@ The `fmap` has a receiver called `self` and this receiver has the following type
 ```
 trait Applicative (f:type->type) with Functor f {
     sig pure   : a -> f a
-    sig (<*>)  : self -> f a -> f b for f (a -> b) 
+    sig (<*>)  : self -> f a -> f b for f (a -> b)
     sig (<**>) : self -> f (a -> b) -> f b for f a
-    
+
     def (<**>) a = a <*> self
 }
 ```
@@ -117,9 +117,9 @@ Applicative Option pure 1 fmap (1+)     // FP addicts
 ## Peanos' integer
 
 ```
-type Peano {
+enum Peano {
     Zero
-    Succ v:Peano
+    Succ { v:Peano }
 }
 
 trait Adder {
@@ -151,7 +151,7 @@ data CollectionBuilder b a {
 
 ```
 trait OpenedCollection b a {
-    sig ([)   : self -> a -> ClosableCollection f a
+    sig ([)   : self -> a -> ClosableCollection b a
     sig empty : self -> f a
 }
 
@@ -178,14 +178,17 @@ impl ClosableCollection b a for CollectionBuilder b a {
 ### The list builder
 
 ```
-type List a {
-    Nil
-    Cons h:a t:(List a)
+enum List a {
+    data Nil
+    data Cons {  h:a t:(List a) }
 }
+
+sig (::) : a -> List a  -> List a
+def (::) = Cons
 
 sig List : (a:type) -> OpenedCollection (List a) a
 def List _ =
-    let builder l = CollectionBuilder l { builder $ Cons _ l } in
+    let builder l = CollectionBuilder l { builder $ _ :: l } in
     	builder Nil
 ```
 
@@ -198,6 +201,59 @@ List int [1    : ClosableCollection (List int) int
 List int [1,   : int -> ClosableCollection (List int) int
 List int [1,2  : ClosableCollection (List int) int
 List int [1,2] : List int
+```
+
+## Grammar
+
+```
+s0        ::= entity*
+
+entity    ::= sig | def | data | enum | trait | impl
+
+sig       ::= "sig" dname ":" type
+def       ::= "def" dname  param* "=" expr
+data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
+enum      ::= "enum" IDENT t_param* "{" data_elem* "}"
+trait     ::= "trait" IDENT t_param* with* for? "{" trait_ent* "}"
+impl      ::= "impl" IDENT t_param* with* for? "{" trait_ent* "}"
+
+trait_ent ::= sig_trait | def_trait
+sig_trait ::= "sig" dname param* ":" type for?
+def_trait ::= "def" (IDENT ".")? dname param* "=" expr
+
+with      ::= "with" type_o
+for       ::= "for" type_o
+
+expr      ::= "{" (param+ "->")? expr "}"
+            | "let" IDENT param* "=" expr "in" expr
+            | param | native | "_"
+            | expr expr | "(" expr ")"
+            | dname | OPERATOR | expr "." dname
+
+type      ::= type_i "->" type | "(" type ")"
+            | i_param | type_s
+
+type_i    ::= i_param | type_o | "(" type ")"
+type_o    ::= "(" type_s ")" | o_param type_s?
+
+data_elem ::= IDENT ("{" attr_elem* "}")?
+attr_elem ::= IDENT ":" type
+
+t_param   ::= i_param | o_param
+i_param   ::= "(" IDENT ":" type ")"
+o_param   ::= IDENT
+param     ::= IDENT
+dname     ::= IDENT | "(" OPERATOR ")"
+native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
+
+IDENT     ::= [a-zA-Z][a-zA-Z0-9_$]* - KEYWORDS
+KEYWORDS  ::= "sig" | "def"
+            | "data" | "enum"
+            | "trait" | "impl"
+            | "let" | "in"
+            
+OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLES
+SYMPBOLs  ::= "(" | ")" | "{" | "}" | "." | "->" | "="
 ```
 
 # Why Lambë?
