@@ -31,6 +31,8 @@ enum Option a {
 }
 ```
 
+Note: Should be compared to polymorphic variants!
+
 ### Data type implementation
 
 ```
@@ -223,7 +225,7 @@ enum List a {
 sig (::) : a -> List a -> List a
 def (::) = Cons
 
-// :: 1 Nil
+// 1 :: Nil == (::) 1 Nil
 ```
 
 This file content is in fact similar to the trait:
@@ -256,28 +258,9 @@ trait list {
     sig (::) : self -> List a -> List a for a
     def (::) = Cons self
 
-    // 1 :: Nil
+    // 1 :: Nil == (::) 1 Nil
 }
 ```
-
-### Specialising a trait
-
-```
-trait list for a {
-    enum List a {
-        data Nil
-        data Cons { h:a t:(List a) }
-    }
-
-    sig (::) : self -> List a -> List a
-    def (::) = Cons self
-
-    // 1 :: Nil
-}
-```
-
-Therefore by default `self` type is defined at the upper level and can used
-in all function signatures at the `list` trait level.
 
 ### Using trait
 
@@ -336,6 +319,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | param | native | "_"
             | expr expr | "(" expr ")"
             | dname | OPERATOR | expr "." dname
+            | expr "with" ("IDENT "=" expr)+
 
 type_expr ::= type_i "->" type_expr | "(" type_expr ")"
             | i_param | type_s
@@ -361,7 +345,7 @@ KEYWORDS  ::= "sig"  | "def"   | "data"
             | "let"  | "in"    | "self"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
-SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_" | ":"
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "_" | ":"
 ```
 
 # Why Lambë?
