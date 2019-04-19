@@ -286,7 +286,24 @@ def Cons.isEmpty = false
 
 Since a file is a trait it can also define signatures without implementation.
 Therefore the definition should be done when the implementation is required.
-Same for self type which can be specified at the trait level.
+
+For instance the `::` is specified but not defined:
+```
+enum List a {
+    data Nil
+    data Cons { h:a t:(List a) }
+}
+
+sig (::) : a -> List a -> List a
+```
+
+This trait then can be used but the function `::` implementation is mandatory.
+
+```
+impl list {
+    def (::) = Cons self
+}
+```
 
 ## Grammar
 
