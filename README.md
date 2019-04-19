@@ -200,12 +200,12 @@ List int [1,2  : ClosableCollection (List int) int
 List int [1,2] : List int
 ```
 
-## Files are trait implementation
+## Modular system based on files
 
-### Simple file definition
+### File as trait
 
-Each file containing Lambë code is a trait implementation. For instance
-this following code in a file named `list`:
+Each file containing Lambë code is a trait definition. For instance
+a file named `list` can be defined by:
 ```
 enum List a {
     data Nil
@@ -217,8 +217,6 @@ def (::) = Cons
 
 // :: 1 Nil
 ```
-
-### File as trait
 
 This file content is in fact similar to the trait:
 ```
@@ -253,6 +251,25 @@ trait list {
     // 1 :: Nil
 }
 ```
+
+### Specialising a trait
+
+```
+trait list for a {
+    enum List a {
+        data Nil
+        data Cons { h:a t:(List a) }
+    }
+
+    sig (::) : self -> List a -> List a
+    def (::) = Cons self
+
+    // 1 :: Nil
+}
+```
+
+Therefore by default `self` type is defined at the upper level and can used
+in all function signatures at the `list` trait level.
 
 ### Using trait
 
