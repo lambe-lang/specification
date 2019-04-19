@@ -42,12 +42,18 @@ impl for Option a {
 }
 ```
 
+In this implementation for `Option a` we use a type named `self`. In
+fact self denotes the type of the receiver with is `Option a` in this
+case.
+
 ### Data type in action
 
 ```
-Option int fold (Some 1) { 0 } id : int // for FP addicts
-Some 1 fold { 0 } id              : int // for FP with OO flavor addicts
-(Some 1).fold { 0 } id            : int // for OO with FP flavor addicts
+// for FP addicts
+Some 1 fold { 0 } id
+
+// for OO with FP flavor addicts
+(Some 1).fold { 0 } id
 ```
 
 ## Traits
@@ -110,8 +116,11 @@ impl Monad Option {
 ### Trait implementation in action
 
 ```
-Applicative Option pure 1 fmap (1+)     // FP addicts
-((Applicative Option).pure 1).fmap (1+) // OO addicts
+// for FP addicts
+Applicative Option pure 1 fmap (1+)     
+
+// for OO with FP flavor addicts
+((Applicative Option).pure 1).fmap (1+)
 ```
 
 ## Peanos' integer
