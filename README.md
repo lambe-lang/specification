@@ -367,7 +367,8 @@ SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_" | ":"
 
 # Why Lambë?
 
-See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition. May be also because it has the same prefix as lambda 😏
+See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition.
+May be also because it has the same prefix as lambda 😏
 
 # License
 
