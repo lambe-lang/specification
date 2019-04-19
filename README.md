@@ -5,19 +5,19 @@ A strong typed functional programming inspired by Haskell, OCaml and Rust.
 ## Function type definition
 
 ```
-sig id   : a -> a
-sig swap : (a -> b -> c) -> b -> a -> c
-sig (°)  : (b -> c) -> (a -> b) -> a -> c
-sig (|>) : (a -> b) -> (b -> c) -> a -> c
+sig id       : a -> a
+sig swap     : (a -> b -> c) -> b -> a -> c
+sig compose  : (b -> c) -> (a -> b) -> a -> c
+sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ```
 
 ##  Function implementation
 
 ```
-def id   = { _ }
-def swap = { f x y -> f y x }
-def (°)  = { f g x -> f $ g x }
-def (|>) = swap (°)
+def id       = { _ }
+def swap     = { f x y -> f y x }
+def compose  = { f g x -> f $ g x }
+def pipeline = swap compose
  ```
 
 ## Data type
@@ -200,6 +200,77 @@ List int [1,2  : ClosableCollection (List int) int
 List int [1,2] : List int
 ```
 
+## Files are trait implementation
+
+### Simple file definition
+
+Each file containing Lambë code is a trait implementation. For instance
+this following code in a file named `list`:
+```
+enum List a {
+    data Nil
+    data Cons { h:a t:(List a) }
+}
+
+sig (::) : a -> List a -> List a
+def (::) = Cons
+
+// :: 1 Nil
+```
+
+### File as trait
+
+This file content is in fact similar to the trait:
+```
+trait list {
+    enum List a {
+        data Nil
+        data Cons { h:a t:(List a) }
+    }
+
+    sig (::) : a -> List a -> List a
+    def (::) = Cons
+}
+```
+
+This implies the capability to use list as a type elsewhere in the code
+but also the capability to define trait, type etc. in a trait or it's
+implementation.
+
+### Generalising trait approach
+
+If a file is a trait we can also reuse the `for` directive for each function.
+```
+trait list {
+    enum List a {
+        data Nil
+        data Cons { h:a t:(List a) }
+    }
+
+    sig (::) : self -> List a -> List a for a
+    def (::) = Cons self
+
+    // 1 :: Nil
+}
+```
+
+### Using trait
+
+How this trait can be used in another file? Simple provide an implementation:
+```
+impl list
+
+sig isEmpty : self -> bool for List a
+def Nil.isEmpty = true
+def Cons.isEmpty = false
+```
+
+### `Abstract` trait
+
+Since a file is a trait it can also define signatures without implementation.
+Therefore the definition should be done when the implementation is required.
+Same for self type which can be specified at the trait level.
+
 ## Grammar
 
 ```
@@ -207,16 +278,12 @@ s0        ::= entity*
 
 entity    ::= sig | def | data | enum | trait | impl
 
-sig       ::= "sig" dname ":" type
-def       ::= "def" dname  param* "=" expr
+sig       ::= "sig" dname ":" type for?
+def       ::= "def" (IDENT ".")? dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 enum      ::= "enum" IDENT t_param* "{" data_elem* "}"
-trait     ::= "trait" IDENT t_param* with* for? "{" trait_ent* "}"
-impl      ::= "impl" IDENT t_param* with* for? "{" trait_ent* "}"
-
-trait_ent ::= sig_trait | def_trait
-sig_trait ::= sig for?
-def_trait ::= "def" (IDENT ".")? dname param* "=" expr
+trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
+impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
 
 with      ::= "with" type_o
 for       ::= "for" type_o
