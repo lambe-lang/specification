@@ -319,7 +319,7 @@ impl list {
 ```
 s0        ::= entity*
 
-entity    ::= sig | def | data | enum | trait | impl
+entity    ::= sig | def | data | enum | trait | impl | type
 
 sig       ::= "sig" dname ":" type for?
 def       ::= "def" (IDENT ".")? dname  param* "=" expr
@@ -327,6 +327,7 @@ data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 enum      ::= "enum" IDENT t_param* "{" data_elem* "}"
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
+type      ::= "type" IDENT t_param "=" type_expr
 
 with      ::= "with" type_o
 for       ::= "for" type_o
@@ -337,7 +338,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr expr | "(" expr ")"
             | dname | OPERATOR | expr "." dname
 
-type      ::= type_i "->" type | "(" type ")"
+type_expr ::= type_i "->" type_expr | "(" type_expr ")"
             | i_param | type_s
             | "self"
 
@@ -355,11 +356,10 @@ dname     ::= IDENT | "(" OPERATOR ")"
 native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
 
 IDENT     ::= [a-zA-Z][a-zA-Z0-9_$]* - KEYWORDS
-KEYWORDS  ::= "sig" | "def"
-            | "data" | "enum"
-            | "trait" | "impl"
-            | "with" | "for"
-            | "let" | "in" | "self"
+KEYWORDS  ::= "sig"  | "def"   | "data"
+            | "enum" | "trait" | "impl"
+            | "type" | "with"  | "for"  
+            | "let"  | "in"    | "self"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
 SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_" | ":"
