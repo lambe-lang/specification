@@ -80,8 +80,7 @@ trait Applicative (f:type->type) with Functor f {
 }
 ```
 
-Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not
-expressed for a method it's a *static* method.
+Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not expressed for a method it's a *static* method.
 
 ```
 trait Monad (f:type->type) with Applicative f {
@@ -94,7 +93,7 @@ trait Monad (f:type->type) with Applicative f {
 }
 ```
 
-Finally each method can be specified with a dedicated `self` type. As a conclusion a trait define un logical fonctionnal unit.
+Finally each method can be specified with a dedicated `self` type. As a conclusion a trait define a logical development unit.
 
 ### Trait implementation
 
@@ -367,8 +366,7 @@ SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_" | ":"
 
 # Why Lambë?
 
-See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition.
-May be also because it has the same prefix as lambda 😏
+See [Lambë](http://tolkiengateway.net/wiki/Lambë) definition. May be also because it has the same prefix as lambda 😏
 
 # License
 
