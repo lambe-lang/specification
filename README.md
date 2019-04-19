@@ -248,15 +248,11 @@ IDENT     ::= [a-zA-Z][a-zA-Z0-9_$]* - KEYWORDS
 KEYWORDS  ::= "sig" | "def"
             | "data" | "enum"
             | "trait" | "impl"
+            | "with" | "for"
             | "let" | "in" | "self"
-            
-OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
-SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "="
-=======
 
-OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLES
-SYMPBOLs  ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_"
->>>>>>> Langage design (WIP)
+OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "=" | "_"
 ```
 
 # Why Lambë?
