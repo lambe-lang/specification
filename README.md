@@ -282,7 +282,7 @@ in all function signatures at the `list` trait level.
 
 ### Using trait
 
-How this trait can be used in another file? Simple provide an implementation:
+How this trait can be used in another file? Simple! Just provide an implementation:
 ```
 impl list
 
