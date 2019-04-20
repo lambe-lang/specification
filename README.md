@@ -44,9 +44,7 @@ impl for Option a {
 }
 ```
 
-In this implementation for `Option a` we use a type named `self`. In
-fact self denotes the type of the receiver with is `Option a` in this
-case.
+In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case. Furthermore implementations are given for each option data type i.e. None and Some.
 
 ### Data type in action
 
@@ -143,12 +141,18 @@ impl Adder for Peano {
 ```
 
 ```
-(Succ Zero) + (Succ Zero)
+Succ Zero + $ Succ Zero)
 ```
 
 ## designing a DSL
 
-### Collection builder data
+### if/then/else
+
+
+
+### Collection builder
+
+#### Collection builder Data
 
 ```
 data CollectionBuilder b a {
@@ -157,11 +161,11 @@ data CollectionBuilder b a {
 }
 ```
 
-### Collection builder trait
+#### Collection builder trait
 
 ```
 trait OpenedCollection b a {
-    sig ([)   : self -> a -> ClosableCollection b a
+    sig ([)   : self -> a -> ClosbleCollection b a
     sig empty : self -> b
 }
 
@@ -171,7 +175,7 @@ trait ClosableCollection b a {
 }
 ```
 
-### Collection builder implementation
+#### Collection builder implementation
 
 ```
 impl OpenedCollection b a for CollectionBuilder b a {
@@ -185,7 +189,7 @@ impl ClosableCollection b a for CollectionBuilder b a {
 }
 ```
 
-### The list builder
+#### The list builder
 
 ```
 enum List a {
@@ -225,7 +229,7 @@ enum List a {
 sig (::) : a -> List a -> List a
 def (::) = Cons
 
-// :: 1 Nil
+// 1 :: Nil == (::) 1 Nil
 ```
 
 This file content is in fact similar to the trait:
