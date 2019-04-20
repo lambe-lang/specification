@@ -258,7 +258,7 @@ trait list {
     sig (::) : self -> List a -> List a for a
     def (::) = Cons self
 
-    // 1 :: Nil == (::) 1 Nil
+    // 1 :: Nil == 1.(::) Nil
 }
 ```
 
