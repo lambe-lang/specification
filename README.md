@@ -162,7 +162,7 @@ data CollectionBuilder b a {
 ```
 trait OpenedCollection b a {
     sig ([)   : self -> a -> ClosableCollection b a
-    sig empty : self -> f a
+    sig empty : self -> b
 }
 
 trait ClosableCollection b a {
