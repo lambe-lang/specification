@@ -148,7 +148,38 @@ Succ Zero + $ Succ Zero)
 
 ### if/then/else
 
+Note: WIP
 
+```
+data if {
+    cond : -> bool // Deferred
+}
+
+data ifThen a {
+    if   : -> bool // Deferred
+    then : -> a    // Deferred
+}
+
+impl for if {
+    sig then : self -> (-> a) -> ifThen a
+
+    def then t = ifThen self.cond t
+}
+
+impl for ifThen a {
+    // Deferred is finally Evaluated
+    sig else : self -> (-> a) -> a
+
+    def else f = self if cond fold (self then) f
+}
+
+// if (a > 0) then (a-1) else a  : int
+// if (a > 0) then (a-1) else    : (-> int) -> int
+// if (a > 0) then (a-1)         : ifThen int
+// if (a > 0) then               : (-> a) -> ifThen a
+// if (a > 0)                    : if
+// if                            : (-> bool) -> if
+```
 
 ### Collection builder
 
@@ -165,7 +196,7 @@ data CollectionBuilder b a {
 
 ```
 trait OpenedCollection b a {
-    sig ([)   : self -> a -> ClosbleCollection b a
+    sig ([)   : self -> a -> ClosableCollection b a
     sig empty : self -> b
 }
 
@@ -335,23 +366,34 @@ with      ::= "with" type_o
 for       ::= "for" type_o
 
 self      ::= IDENT
-            | "(" (IDENT* ")" // WIP
+            | "(" IDENT* ")" // WIP
 
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
-            | param | native | "_"
-            | expr expr | "(" expr ")"
-            | dname | OPERATOR | expr "." dname
+            | param
+            | native
+            | "_"
+            | expr expr
+            | "(" expr ")"
+            | dname | OPERATOR
+            | expr "." dname
             | expr "with" ("IDENT "=" expr)+
             | expr "." IDENT
             | impl
 
-type_expr ::= type_i "->" type_expr | "(" type_expr ")"
-            | i_param | type_s
+type      ::= type_i "->" type
+            | "(" type ")"
+            | "->" type
+            | i_param
+            | type_s
             | "self"
 
-type_i    ::= i_param | type_o | "(" type ")"
-type_o    ::= "(" type_s ")" | o_param type_s?
+type_i    ::= i_param
+            | type_o
+            | "(" type ")"
+
+type_o    ::= "(" type_s ")"
+            | o_param type_s?
 
 data_elem ::= "data" IDENT ("{" attr_elem* "}")?
 attr_elem ::= IDENT ":" type
