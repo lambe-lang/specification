@@ -141,7 +141,7 @@ impl Adder for Peano {
 ```
 
 ```
-Succ Zero + $ Succ Zero)
+Succ Zero + $ Succ Zero
 ```
 
 ## designing a DSL
