@@ -268,13 +268,29 @@ trait list {
 
 ### Using trait
 
-How this trait can be used in another file? Simple! Just provide an implementation:
+How this trait can be used in another file? Simple! Just provide an implementation.
+
+#### `Global` trait implementation usage
+
 ```
 impl list
 
 sig isEmpty : self -> bool for List a
 def Nil.isEmpty = true
 def Cons.isEmpty = false
+```
+
+#### `Local` trait implementation usage
+
+Note: WIP
+
+```
+sig l : list
+def l = impl list
+
+sig isEmpty : self -> bool for l List a
+def (l Nil).isEmpty = true
+def (l Cons).isEmpty = false
 ```
 
 ### `Abstract` trait
@@ -308,7 +324,7 @@ s0        ::= entity*
 entity    ::= sig | def | data | enum | trait | impl | type
 
 sig       ::= "sig" dname ":" type for?
-def       ::= "def" (IDENT ".")? dname  param* "=" expr
+def       ::= "def" (self  ".")? dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 enum      ::= "enum" IDENT t_param* "{" data_elem* "}"
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
@@ -318,12 +334,17 @@ type      ::= "type" IDENT t_param "=" type_expr
 with      ::= "with" type_o
 for       ::= "for" type_o
 
+self      ::= IDENT
+            | "(" (IDENT* ")" // WIP
+
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | param | native | "_"
             | expr expr | "(" expr ")"
             | dname | OPERATOR | expr "." dname
             | expr "with" ("IDENT "=" expr)+
+            | expr "." IDENT
+            | impl
 
 type_expr ::= type_i "->" type_expr | "(" type_expr ")"
             | i_param | type_s
@@ -349,7 +370,7 @@ KEYWORDS  ::= "sig"  | "def"   | "data"
             | "let"  | "in"    | "self"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
-SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "_" | ":"
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "_" | ":" | "."
 ```
 
 # Why Lambë?
