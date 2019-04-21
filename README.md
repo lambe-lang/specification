@@ -260,7 +260,7 @@ enum List a {
 sig (::) : a -> List a -> List a
 def (::) = Cons
 
-// 1 :: Nil == (::) 1 Nil
+// :: 1 Nil
 ```
 
 This file content is in fact similar to the trait:
