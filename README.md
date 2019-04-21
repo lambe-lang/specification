@@ -141,7 +141,7 @@ impl Adder for Peano {
 ```
 
 ```
-Succ Zero + $ Succ Zero
+Succ Zero + $ Succ Zero)
 ```
 
 ## designing a DSL
@@ -155,28 +155,28 @@ data if {
     cond : -> bool // Deferred
 }
 
-data ifThen a {
+data then a {
     if   : -> bool // Deferred
     then : -> a    // Deferred
 }
 
 impl for if {
-    sig then : self -> (-> a) -> ifThen a
+    sig then : self -> (-> a) -> then a
 
-    def then t = ifThen self.cond t
+    def then t = then self.cond t
 }
 
-impl for ifThen a {
+impl for then a {
     // Deferred is finally Evaluated
     sig else : self -> (-> a) -> a
 
-    def else f = self if cond fold (self then) f
+    def else f = self if fold (self then) f
 }
 
 // if (a > 0) then (a-1) else a  : int
 // if (a > 0) then (a-1) else    : (-> int) -> int
-// if (a > 0) then (a-1)         : ifThen int
-// if (a > 0) then               : (-> a) -> ifThen a
+// if (a > 0) then (a-1)         : then int
+// if (a > 0) then               : (-> a) -> then a
 // if (a > 0)                    : if
 // if                            : (-> bool) -> if
 ```
