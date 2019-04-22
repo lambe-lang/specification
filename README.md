@@ -25,26 +25,24 @@ def pipeline = swap compose
 ### Data type definition
 
 ```
-enum Option a {
-    None
-    Some { v:a }
-}
+data None
+data Some a { v:a }
+type Option a = None | Some a
 ```
-
-Note: Should be compared to polymorphic variants!
 
 ### Data type implementation
 
 ```
 impl for Option a {
-    sig fold: self -> (None a -> b) -> (Some a -> b) -> b
+    sig fold: self -> (None -> b) -> (Some a -> b) -> b
 
-    def None.fold n _ = n self // self : None a
+    def None.fold n _ = n self // self : None
     def Some.fold _ s = s self // self : Some a
 }
 ```
 
-In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case. Furthermore implementations are given for each option data type i.e. None and Some.
+In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case defined thanks to the `for ...` declaration. Furthermore implementations are
+given for each option data type i.e. None and Some.
 
 ### Data type in action
 
@@ -125,16 +123,15 @@ Applicative Option pure 1 fmap (1+)
 ## Peanos' integer
 
 ```
-enum Peano {
-    Zero
-    Succ { v:Peano }
-}
+data Zero
+data Succ { v:Peano }
+type Peano = Zero | Succ
 
-trait Adder {
+trait Adder a for a {
     sig (+) : self -> self -> self
 }
 
-impl Adder for Peano {
+impl Adder Peano {
     def Zero.(+) a = a
     def Succ.(+) a = Succ (self v + a)
 }
@@ -223,10 +220,9 @@ impl ClosableCollection b a for CollectionBuilder b a {
 #### The list builder
 
 ```
-enum List a {
-    data Nil
-    data Cons { h:a t:(List a) }
-}
+data Nil
+data Cons a { h:a t:(List a) }
+type List a = Nil | Cons a
 
 sig List : (a:type) -> OpenedCollection (List a) a
 def List _ =
@@ -252,10 +248,9 @@ List int [1,2] : List int
 Each file containing Lambë code is a trait definition. For instance
 a file named `list` can be defined by:
 ```
-enum List a {
-    data Nil
-    data Cons { h:a t:(List a) }
-}
+data Nil
+data Cons a { h:a t:(List a) }
+type List a = Nil | Cons a
 
 sig (::) : a -> List a -> List a
 def (::) = Cons
@@ -266,10 +261,9 @@ def (::) = Cons
 This file content is in fact similar to the trait:
 ```
 trait list {
-    enum List a {
-        data Nil
-        data Cons { h:a t:(List a) }
-    }
+    data Nil
+    data Cons a { h:a t:(List a) }
+    type List a = Nil | Cons a
 
     sig (::) : a -> List a -> List a
     def (::) = Cons
@@ -285,10 +279,9 @@ implementation.
 If a file is a trait we can also reuse the `for` directive for each function.
 ```
 trait list {
-    enum List a {
-        data Nil
-        data Cons { h:a t:(List a) }
-    }
+    data Nil
+    data Cons a { h:a t:(List a) }
+    type List a = Nil | Cons a
 
     sig (::) : self -> List a -> List a for a
     def (::) = Cons self
@@ -331,10 +324,9 @@ Therefore the definition should be done when the implementation is required.
 
 For instance the `::` is specified but not defined:
 ```
-enum List a {
-    data Nil
-    data Cons { h:a t:(List a) }
-}
+data Nil
+data Cons a { h:a t:(List a) }
+type List a = Nil | Cons a
 
 sig (::) : self -> List a -> List a for a
 ```
@@ -352,15 +344,14 @@ impl list {
 ```
 s0        ::= entity*
 
-entity    ::= sig | def | data | enum | trait | impl | type
+entity    ::= sig | def | data | type | trait | impl
 
 sig       ::= "sig" dname ":" type for?
 def       ::= "def" (self  ".")? dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
-enum      ::= "enum" IDENT t_param* "{" data_elem* "}"
+type      ::= "type" IDENT t_param "=" type_expr
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
-type      ::= "type" IDENT t_param "=" type_expr
 
 with      ::= "with" type_o
 for       ::= "for" type_o
@@ -381,21 +372,21 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "." IDENT
             | impl
 
-type      ::= type_i "->" type
-            | "(" type ")"
-            | "->" type
+type_expr ::= type_i "->" type_expr
+            | "(" type_expr ")"
+            | "->" type_expr
             | i_param
             | type_s
             | "self"
+            | type_expr "|" type_expr
 
 type_i    ::= i_param
             | type_o
-            | "(" type ")"
+            | "(" type_expr ")"
 
 type_o    ::= "(" type_s ")"
             | o_param type_s?
 
-data_elem ::= "data" IDENT ("{" attr_elem* "}")?
 attr_elem ::= IDENT ":" type
 
 t_param   ::= i_param | o_param
@@ -412,7 +403,7 @@ KEYWORDS  ::= "sig"  | "def"   | "data"
             | "let"  | "in"    | "self"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
-SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "_" | ":" | "."
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "_" | ":" | "." | "|"
 ```
 
 # Why Lambë?
