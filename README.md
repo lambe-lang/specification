@@ -2,7 +2,7 @@
 
 A strong typed functional programming inspired by Haskell, OCaml and Rust.
 
-## Paradigms
+## 0. Paradigms
 
 Targeted programming language paradigms:
 - Trait based code organization
@@ -11,7 +11,9 @@ Targeted programming language paradigms:
 - Higher-kinded-type
 - Algebraic effects and handlers
 
-## Function type definition
+## 1. Function 
+
+### Definition
 
 ```
 sig id       : a -> a
@@ -20,7 +22,7 @@ sig compose  : (b -> c) -> (a -> b) -> a -> c
 sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ```
 
-##  Function implementation
+### Implementation
 
 ```
 def id       = { _ } // equivalent to { a -> a }
@@ -29,7 +31,7 @@ def compose  = { f g x -> f $ g x }
 def pipeline = swap compose
  ```
 
-## Data type
+## 2. Data type
 
 ### Data type definition
 
@@ -63,7 +65,7 @@ Some 1 fold { 0 } id
 (Some 1).fold { 0 } id
 ```
 
-## Traits
+## 3. Traits
 
 ### Trait definition
 
@@ -129,7 +131,9 @@ Applicative Option pure 1 fmap (1+)
 ((Applicative Option).pure 1).fmap (1+)
 ```
 
-## Peanos' integer
+## 4. Examples
+
+### Peanos' integer
 
 ```
 data Zero
@@ -150,11 +154,9 @@ impl Adder Peano {
 Succ Zero + $ Succ Zero)
 ```
 
-## designing a DSL
+### if/then/else DSL
 
-### if/then/else
-
-Note: WIP
+WIP: Deferred capability i.e. Lazy | see connection with Algebraic Effect
 
 ```
 data if {
@@ -250,7 +252,7 @@ List int [1,2  : ClosableCollection (List int) int
 List int [1,2] : List int
 ```
 
-## Modular system based on files
+## 5. Modular system based on files
 
 ### File as trait
 
@@ -348,7 +350,7 @@ impl list {
 }
 ```
 
-## Grammar
+## 6. Grammar
 
 ```
 s0        ::= entity*
