@@ -2,6 +2,15 @@
 
 A strong typed functional programming inspired by Haskell, OCaml and Rust.
 
+## Paradigms
+
+Targeted programming language paradigms:
+- Trait based code organization
+- coarse and fine grain self specification
+- Trait implementation as first class citizen
+- Higher-kinded-type
+- Algebraic effects and handlers
+
 ## Function type definition
 
 ```
