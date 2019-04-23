@@ -378,10 +378,10 @@ expr      ::= "{" (param+ "->")? expr "}"
             | "_"
             | expr expr
             | "(" expr ")"
-            | dname | OPERATOR
+            | dname
+            | OPERATOR
             | expr "." dname
             | expr "with" ("IDENT "=" expr)+
-            | expr "." IDENT
             | impl
 
 type_expr ::= type_i "->" type_expr
