@@ -5,13 +5,13 @@ A strong typed functional programming inspired by Haskell, OCaml and Rust.
 ## 0. Paradigms
 
 Targeted programming language paradigms for the design of Lambë are:
-- Trait based code organization
-- Coarse and fine grain self specification
-- Trait implementation as first class citizen
-- Higher-kinded-type
-- Algebraic effects and handlers
+- Trait based code organisation,
+- Coarse and fine grain self specification i.e. receiver type,
+- Trait implementation as first class citizen,
+- Higher-kinded-type and
+- Algebraic effects and handlers.
 
-## 1. Function 
+## 1. Function
 
 ### Definition
 
