@@ -1,6 +1,6 @@
 # Lambë
 
-A strong typed functional programming inspired by Haskell, OCaml and Rust.
+A strongly typed functional programming inspired by Haskell, OCaml and Rust.
 
 ## 0. Paradigms
 
