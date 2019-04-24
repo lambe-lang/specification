@@ -26,8 +26,8 @@ sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ### Implementation
 
 ```
-def id       = { _ } // equivalent to { a -> a }
-def swap     = { f x y -> f y x }
+def id       = { $1 } // equivalent to { a -> a }
+def swap     = { $1 $2 $3 }
 def compose  = { f g x -> f $ g x }
 def pipeline = swap compose
  ```
@@ -132,128 +132,7 @@ Applicative Option pure 1 fmap (1+)
 ((Applicative Option).pure 1).fmap (1+)
 ```
 
-## 4. Examples
-
-### Peanos' integer
-
-```
-data Zero
-data Succ { v:Peano }
-type Peano = Zero | Succ
-
-trait Adder a for a {
-    sig (+) : self -> self -> self
-}
-
-impl Adder Peano {
-    def Zero.(+) a = a
-    def Succ.(+) a = Succ (self v + a)
-}
-```
-
-```
-Succ Zero + $ Succ Zero)
-```
-
-### if/then/else DSL
-
-WIP: Deferred capability i.e. Lazy | see connection with Algebraic Effect
-
-```
-data if {
-    cond : -> bool // Deferred
-}
-
-data then a {
-    if   : -> bool // Deferred
-    then : -> a    // Deferred
-}
-
-impl for if {
-    sig then : self -> (-> a) -> then a
-
-    def then t = then self.cond t
-}
-
-impl for then a {
-    // Deferred is finally Evaluated
-    sig else : self -> (-> a) -> a
-
-    def else f = self if fold (self then) f
-}
-
-// if (a > 0) then (a-1) else a  : int
-// if (a > 0) then (a-1) else    : (-> int) -> int
-// if (a > 0) then (a-1)         : then int
-// if (a > 0) then               : (-> a) -> then a
-// if (a > 0)                    : if
-// if                            : (-> bool) -> if
-```
-
-### Collection builder
-
-#### Collection builder Data
-
-```
-data CollectionBuilder b a {
-    unbox : b
-    add   : a -> CollectionBuilder b
-}
-```
-
-#### Collection builder trait
-
-```
-trait OpenedCollection b a {
-    sig ([)   : self -> a -> ClosableCollection b a
-    sig empty : self -> b
-}
-
-trait ClosableCollection b a {
-    sig (,) : self -> a -> ClosableCollection b a
-    sig (]) : self -> b
-}
-```
-
-#### Collection builder implementation
-
-```
-impl OpenedCollection b a for CollectionBuilder b a {
-    def ([) a = self add a
-    def empty = this unbox
-}
-
-impl ClosableCollection b a for CollectionBuilder b a {
-    def (,) a = self add a
-    def (])   = self unbox
-}
-```
-
-#### The list builder
-
-```
-data Nil
-data Cons a { h:a t:(List a) }
-type List a = Nil | Cons a
-
-sig List : (a:type) -> OpenedCollection (List a) a
-def List _ =
-    let builder l = CollectionBuilder l { builder $ Cons _ l } in
-    	builder Nil
-```
-
-### The List builder in action
-
-```
-List int       : OpenedCollection (List int) int
-List int [     : int -> ClosableCollection (List int) int
-List int [1    : ClosableCollection (List int) int
-List int [1,   : int -> ClosableCollection (List int) int
-List int [1,2  : ClosableCollection (List int) int
-List int [1,2] : List int
-```
-
-## 5. Modular system based on files
+## 4. Modular system based on files
 
 ### File as trait
 
@@ -351,7 +230,172 @@ impl list {
 }
 ```
 
-## 6. Grammar
+## 5. Deferred implementation
+
+Note: Work In progress
+
+### Definition and requirements
+
+```
+trait exception a {
+    sig raise : string -> a
+}
+
+sig div : int -> int -> int
+    with exception int
+
+def div x y =
+    if (y == 0)
+    then { raise "divide by zero!" }
+    else { x / y }
+```
+
+### Global provider
+
+The implementation of `exception int` can be provided at the upper level. Then each expression requiring such `exception int` refers to the same implementation.
+
+```
+impl exception int {
+    def raise _ = 0
+}
+
+div 3 0 // refers to the previous implementation
+```
+
+### Local provider
+
+The following code be embedded in a basic block limiting the scope of the provided implementation.
+
+```
+{
+    impl exception int {
+        def raise _ = 0
+    }
+
+    div 3 0 // refers to the previous implementation (local scope)
+}
+```
+
+## 6. Examples
+
+### Peanos' integer
+
+```
+data Zero
+data Succ { v:Peano }
+type Peano = Zero | Succ
+
+trait Adder a for a {
+    sig (+) : self -> self -> self
+}
+
+impl Adder Peano {
+    def Zero.(+) a = a
+    def Succ.(+) a = Succ (self v + a)
+}
+```
+
+```
+Succ Zero + $ Succ Zero)
+```
+
+### if/then/else DSL
+
+```
+data if {
+    cond : bool
+}
+
+data then a {
+    if   : bool
+    then : unit -> a
+}
+
+impl for if {
+    sig then : self -> (unit -> a) -> then a
+
+    def then t = then self.cond t
+}
+
+impl for then a {
+    // Deferred is finally Evaluated
+    sig else : self -> (unit -> a) -> a
+
+    def else f = self if fold { self then () }  { f () }
+}
+
+// if (a > 0) then { a-1 } else { a } : int
+// if (a > 0) then { a-1 } else       : (unit -> int) -> int
+// if (a > 0) then { a-1 }            : then int
+// if (a > 0) then                    : (unit -> a) -> then a
+// if (a > 0)                         : if
+// if                                 : bool -> if
+```
+
+### Collection builder
+
+#### Collection builder Data
+
+```
+data CollectionBuilder b a {
+    unbox : b
+    add   : a -> CollectionBuilder b
+}
+```
+
+#### Collection builder trait
+
+```
+trait OpenedCollection b a {
+    sig ([)   : self -> a -> ClosableCollection b a
+    sig empty : self -> b
+}
+
+trait ClosableCollection b a {
+    sig (,) : self -> a -> ClosableCollection b a
+    sig (]) : self -> b
+}
+```
+
+#### Collection builder implementation
+
+```
+impl OpenedCollection b a for CollectionBuilder b a {
+    def ([) a = self add a
+    def empty = this unbox
+}
+
+impl ClosableCollection b a for CollectionBuilder b a {
+    def (,) a = self add a
+    def (])   = self unbox
+}
+```
+
+#### The list builder
+
+```
+data Nil
+data Cons a { h:a t:(List a) }
+type List a = Nil | Cons a
+
+sig List : (a:type) -> OpenedCollection (List a) a
+def List _ =
+    let builder l = CollectionBuilder l { builder $ Cons _ l } in
+    	builder Nil
+```
+
+### The List builder in action
+
+```
+List int       : OpenedCollection (List int) int
+List int [     : int -> ClosableCollection (List int) int
+List int [1    : ClosableCollection (List int) int
+List int [1,   : int -> ClosableCollection (List int) int
+List int [1,2  : ClosableCollection (List int) int
+List int [1,2] : List int
+```
+
+## 7. Grammar
 
 ```
 s0        ::= entity*
