@@ -1,6 +1,6 @@
-type int // intrinsic ?
+type Int // intrinsic ?
 
-impl for int {
+impl for Int {
     sig (--) : self -> self
     sig (+)  : self -> self -> self // intrinsic - delta rule
     sig (-)  : self -> self -> self // intrinsic - delta rule

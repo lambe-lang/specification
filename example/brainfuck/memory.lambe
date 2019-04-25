@@ -1,3 +1,5 @@
+impl lang.int
+impl lang.char
 impl lang.string
 impl lang.pair
 impl zipper
@@ -5,13 +7,13 @@ impl zipper
 type Context = Pair (Zipper int) String
 
 impl for Memory {
-    sig create  : unit -> self
-    sig cursor  : self -> int -> self
-    sig memory  : self -> int -> self
+    sig create  : self
+    sig cursor  : self -> Int -> self
+    sig memory  : self -> Int -> self
     sig nullify : self -> self
     sig input   : self -> self
 
-    def create _ = (Zipper create 0) , ""
+    def create = (Zipper create 0) , ""
 
     def cursor offset =
         let move : self -> self for Zipper int =

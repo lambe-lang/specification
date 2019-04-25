@@ -1,0 +1,7 @@
+type String // intrinsic - TODO
+
+trait string for String {
+    sig chatAt : int -> Option char
+}
+
+// implementation to be done
