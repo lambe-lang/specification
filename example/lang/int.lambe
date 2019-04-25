@@ -1,0 +1,10 @@
+type int // intrinsic ?
+
+impl for int {
+    sig (--) : self -> self
+    sig (+)  : self -> self -> self // intrinsic - delta rule
+    sig (-)  : self -> self -> self // intrinsic - delta rule
+    sig abs  : self -> self         // intrinsic - delta rule
+
+    def (--) = self - 1
+}

@@ -1,0 +1,48 @@
+impl lang.list
+
+data Zipper a {
+    left    : List a
+    right   : List a
+    default : a
+}
+
+trait zipper a {
+    sig create     : a -> self
+    sig left       : self -> self
+    sig right      : self -> self
+    sig current    : self -> a
+    sig replace    : self -> (a -> a) -> self
+    sig replace_by : self -> a -> self
+
+    def replace_by a = self replace { a }
+}
+
+impl zipper a for Zipper a {
+    impl lang.pair
+
+    def create default =
+        let l = List[default]
+        in Zipper l l default
+
+    def left =
+        let pair = self left
+                fold { (List[self.default]) , (self.default :: self.right) }
+                     { (List[$1.tail]) , ($1.head :: self.right) }
+        in self with left = pair.left
+                with right = pair.right
+
+    def right =
+        let pair = self right
+                fold { (self.default :: self.left) , (List[self.default]) }
+                     { ($1.head :: self.left) , (List[$1.tail]) }
+        in self with left = pair.left
+                with right = pair.right
+
+    def current = self left fold { self default } { $1 head }
+
+    def replace f =
+        let new_value = self left
+                fold { List[ (f self.default) ] }
+                fold { (f $1.head) :: $1::tail }
+        in self with left = new_value
+}

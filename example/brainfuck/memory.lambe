@@ -1,0 +1,37 @@
+impl lang.string
+impl lang.pair
+impl zipper
+
+type Context = Pair (Zipper int) String
+
+impl for Memory {
+    sig create  : unit -> self
+    sig cursor  : self -> int -> self
+    sig memory  : self -> int -> self
+    sig nullify : self -> self
+    sig input   : self -> self
+
+    def create _ = (Zipper create 0) , ""
+
+    def cursor offset =
+        let move : self -> self for Zipper int =
+            if (offset > 0)
+            then Zipper.right
+            else Zipper.left
+        in let loop : (Zipper int) -> int -> self = { mem  offset -> // rec ?
+            if (offset == 0)
+            then { Pair acc self.second }
+            else { loop (mem move) (offset --) }
+        }
+        in loop self.first (offset abs)
+
+    def memory value =
+        (self.fist replace $ value +) , (self.second)
+
+    def nullify =
+        (self.first replace_by 0) , self.second
+
+    def input =
+        (self.first replace_by $ Char read toInt) , self.second
+
+}

@@ -1,0 +1,12 @@
+impl lang.pair
+impl lang.list
+
+data Memory { v:int }
+data Cursor { v:int }
+data Input
+data Output
+data Loop   { l : List token }
+data Nullify
+type Token = Memory | Cursor | Input | Output | Loop | Nullify
+
+type Parsed = Pair (List Token) Bool

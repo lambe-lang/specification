@@ -1,0 +1,15 @@
+data True
+data False
+type Bool = True | False
+
+impl for Bool {
+    sig fold : (True -> b) -> (False -> b) -> b
+    sig (&&) : self -> self
+    sig (||) : self -> self
+
+    def True.fold f _ = f self
+    def False.fold _ f = f self
+
+    def (&&) b = self fold { b } id
+    def (||) b = self fold id { b }
+}
