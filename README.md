@@ -197,7 +197,7 @@ def Cons.isEmpty = false
 
 #### `Local` trait implementation usage
 
-Note: WIP
+Note: Work in progress
 
 ```
 sig l : list
@@ -250,7 +250,7 @@ def div x y =
     else { x / y }
 ```
 
-### Global provider
+### Global scope
 
 The implementation of `exception int` can be provided at the upper level. Then each expression requiring such `exception int` refers to the same implementation.
 
@@ -262,17 +262,14 @@ impl exception int {
 div 3 0 // refers to the previous implementation
 ```
 
-### Local provider
+### Local scope
 
 The following code be embedded in a basic block limiting the scope of the provided implementation.
 
 ```
-{
-    impl exception int {
-        def raise _ = 0
-    }
-
-    div 3 0 // refers to the previous implementation (local scope)
+div 3 0 // refers to the previous implementation (local scope)
+with impl exception int {
+    def raise _ = 0
 }
 ```
 
@@ -402,7 +399,7 @@ s0        ::= entity*
 
 entity    ::= sig | def | data | type | trait | impl
 
-sig       ::= "sig" dname ":" type for?
+sig       ::= "sig" dname ":" type with* for?
 def       ::= "def" (self  ".")? dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
@@ -417,6 +414,7 @@ self      ::= IDENT
 
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
+            | "let" impl "in"
             | param
             | native
             | "_"
