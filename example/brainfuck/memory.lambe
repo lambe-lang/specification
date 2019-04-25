@@ -16,7 +16,7 @@ impl for Memory {
     def create = (Zipper create 0) , ""
 
     def cursor offset =
-        let move : self -> self for Zipper int =
+        let move : self -> self for Zipper int = // "Héritage" du type => recepteur via self
             if (offset > 0)
             then Zipper.right
             else Zipper.left
