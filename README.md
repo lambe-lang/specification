@@ -315,7 +315,6 @@ impl for if {
 }
 
 impl for then a {
-    // Deferred is finally Evaluated
     sig else : self -> (unit -> a) -> a
 
     def else f = self if fold { self then () }  { f () }
