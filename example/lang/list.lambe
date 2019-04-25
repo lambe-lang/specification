@@ -17,4 +17,4 @@ impl for Cons a {
 }
 
 sig (::) : self -> List a -> List a for a
-def (::) l = Cons self l
+def (::) = Cons self
