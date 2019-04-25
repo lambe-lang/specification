@@ -267,10 +267,10 @@ div 3 0 // refers to the previous implementation
 The following code be embedded in a basic block limiting the scope of the provided implementation.
 
 ```
-div 3 0 // refers to the previous implementation (local scope)
-with impl exception int {
-    def raise _ = 0
-}
+let impl exception int {
+        def raise _ = 0
+    } in
+    div 3 0 // refers to the previous implementation (local scope)
 ```
 
 ## 6. Examples
