@@ -28,12 +28,12 @@ impl for Memory {
         in loop self.first (offset abs)
 
     def memory value =
-        (self.fist replace $ value +) , (self.second)
+        (self fist replace $ value +) , (self.second)
 
     def nullify =
-        (self.first replace_by 0) , self.second
+        (self first replace_by 0) , self.second
 
     def input =
-        (self.first replace_by $ Char read toInt) , self.second
+        (self first replace_by $ Char read toInt) , self.second
 
 }
