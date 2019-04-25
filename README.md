@@ -26,8 +26,8 @@ sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ### Implementation
 
 ```
-def id       = { $1 } // equivalent to { a -> a }
-def swap     = { $1 $2 $3 }
+def id       = { $1 }        // equivalent to { a -> a }
+def swap     = { $1 $3 $2 }  // equivalent to { f x y -> f y x }
 def compose  = { f g x -> f $ g x }
 def pipeline = swap compose
  ```
@@ -109,12 +109,12 @@ Finally each method can be specified with a dedicated `self` type. As a conclusi
 
 ```
 impl Functor Option {
-    def fmap f = self fold { None } { Some $ f _.v }
+    def fmap f = self fold { None } { Some $ f $1.v }
 }
 
 impl Applicative Option {
     def pure = Some
-    def (<*>) a = self fold { None } { _.v fmap a }
+    def (<*>) a = self fold { None } { $1.v fmap a }
 }
 
 impl Monad Option {
@@ -293,7 +293,7 @@ impl Adder Peano {
 ```
 
 ```
-Succ Zero + $ Succ Zero)
+Succ Zero + $ Succ Zero
 ```
 
 ### if/then/else DSL
@@ -311,13 +311,13 @@ data then a {
 impl for if {
     sig then : self -> (unit -> a) -> then a
 
-    def then t = then self.cond t
+    def then t = then (self cond) t
 }
 
 impl for then a {
     sig else : self -> (unit -> a) -> a
 
-    def else f = self if fold { self then () }  { f () }
+    def else f = self if fold (self then) f
 }
 
 // if (a > 0) then { a-1 } else { a } : int
@@ -376,7 +376,7 @@ type List a = Nil | Cons a
 
 sig List : (a:type) -> OpenedCollection (List a) a
 def List _ =
-    let builder l = CollectionBuilder l { builder $ Cons _ l } in
+    let builder l = CollectionBuilder l { builder $ Cons $1 l } in
     	builder Nil
 ```
 
@@ -449,7 +449,7 @@ param     ::= IDENT
 dname     ::= IDENT | "(" OPERATOR ")"
 native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
 
-IDENT     ::= [a-zA-Z][a-zA-Z0-9_$]* - KEYWORDS
+IDENT     ::= [a-zA-Z$][a-zA-Z0-9_$]* - KEYWORDS
 KEYWORDS  ::= "sig"  | "def"   | "data"
             | "enum" | "trait" | "impl"
             | "type" | "with"  | "for"  
