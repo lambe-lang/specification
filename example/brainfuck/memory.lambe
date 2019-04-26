@@ -15,7 +15,7 @@ impl for Memory {
     sig nullify  : self -> self
     sig input    : self -> self with Reader Char
     sig output   : self -> self
-    sig needJump : Bool
+    sig needJump : self -> Bool
 
     def new = (Zipper new 0) , ""
 
