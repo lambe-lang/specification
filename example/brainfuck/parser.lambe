@@ -9,40 +9,40 @@ data BraceMismatch
 data Unknown { c:char }
 type ParseError = BraceMismatch | StackUnderFlow | Unknown char
 
-type ParseContext = Pair Program (Stack Program)
+trait Parse {
+    sig parse : self -> Program with Exception ParseError
+    sig parseChar : self -> ParseContext -> ParseContext
+                    with Error ParseError for Char
 
-sig parser    : String -> Program with Exception ParseError
-sig parseChar : Char -> ParseContext -> ParseContext with Error ParseError
+    def parseChar context =
+        let program  = context first in
+        let programs = context second in
+        switch char
+        case '>' => { Cursor +1 :: program , programs }
+        case '<' => { Cursor -1 :: program , programs }
+        case '+' => { Memory +1 :: program , programs }
+        case '-' => { Memory -1 :: program , programs }
+        case '.' => { Input     :: program , programs }
+        case ',' => { Output    :: program , programs }
+        case '[' => { List empty           , programs push program }
+        case ']' => { programs peek
+                      fold { raise BraceMismatch }
+                           { Loop program :: $1.value , programs pop }
+                    }
+        otherwise => raise $ Unknown char
+}
 
-def parseChar char context =
-    let program  = context first in
-    let programs = context second in
-    switch char
-    case '>' => { Cursor +1 :: program , programs }
-    case '<' => { Cursor -1 :: program , programs }
-    case '+' => { Memory +1 :: program , programs }
-    case '-' => { Memory -1 :: program , programs }
-    case '.' => { Input     :: program , programs }
-    case ',' => { Output    :: program , programs }
-    case '[' => { List empty           , programs push program }
-    case ']' => { programs peek
-                  fold { raise BraceMismatch }
-                       { Loop program :: $1.value , programs pop }
-                }
-    otherwise => raise $ Unknown char
+impl Parser for String {
+    type ParseContext = Pair Program (Stack Program)
 
-def parser s =
-    let parse i context =
-        s chatAt i
-        fold { context second peek
-               fold { context first }
-                    { raise BraceMismatch }
-             }
-             { parse (i++) $ parseChar $1.value context }
-    in parse 0 (Nil , $ Stack new) // TODO - review this ugly code
+    def parse =
+        let parse i context =
+            self chatAt i
+            fold { context second peek
+                   fold { context first }
+                        { raise BraceMismatch }
+                 }
+                 { parse (i++) $ $1 value parseChar context }
+        in parse 0 (Nil , $ Stack new) // TODO - review this ugly code
 
-sig optimise : Program -> Program
-def optimise = id // TODO
-
-sig purity : Program -> Purity
-def purity _ = Impure // TODO - worst case
+}

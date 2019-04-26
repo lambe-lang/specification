@@ -12,7 +12,6 @@ type Token = Memory | Cursor | Input | Output | Loop | Nullify
 type Program = List Token
 
 impl for Token {
-    // o_O - Lake of pattern matching!
     sig fold : (Memory -> b) -> (Cursor -> b) ->
                (Input -> b)  -> (Output -> b) ->
                (Loop -> b)   -> (Nullify -> b) -> b
@@ -24,17 +23,3 @@ impl for Token {
     def Loop.fold    _ _ _ _ f _ = f self
     def Nullify.fold _ _ _ _ _ f = f self
 }
-
-
-data Pure
-data Impure
-type Purity = Pure | Impure
-
-impl for Purity {
-    sig fold : (Pure -> b) -> (Impure -> b) -> b
-
-    def Pure.fold f _ = f self
-    def Impure.fold _ f = f self
-}
-
-type Parsed = Pair Program Purity

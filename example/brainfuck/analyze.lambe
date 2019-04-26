@@ -1,0 +1,21 @@
+impl lang.pair
+
+impl program
+
+data Pure
+data Impure
+type Purity = Pure | Impure
+
+impl for Purity {
+    sig fold : (Pure -> b) -> (Impure -> b) -> b
+
+    def Pure.fold   f _ = f self
+    def Impure.fold _ f = f self
+}
+
+type Parsed = Pair Program Purity
+
+trait Analyse for Program {
+    sig optimise : self -> self for Program
+    sig purity   : self -> Purity
+}

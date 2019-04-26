@@ -6,4 +6,4 @@ impl parse
 
 sig run : String -> Memory with Error ParseError
 
-def run s = interpret (parse s) (Memory new)
+def run s = s parse interpret $ Memory new
