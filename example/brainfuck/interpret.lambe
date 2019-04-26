@@ -10,9 +10,9 @@ def interpret program mem =
              { mem cursor $1.offset }
              { mem output }
              { mem input }
-             { mem needJump
-               fold { mem }
-                    { step token $ interpret $1.program mem }
+             { if (mem needJump)
+               then { mem }
+               else { step token $ interpret $1.program mem }
              }
              { mem nullify }
     in
