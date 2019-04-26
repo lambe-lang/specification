@@ -7,7 +7,7 @@ impl for Int {
     sig (+)  : self -> self -> self // intrinsic - delta rule
     sig (-)  : self -> self -> self // intrinsic - delta rule
     sig abs  : self -> self         // intrinsic - delta rule
-    sig toChar : self -> char
+    sig toChar : self -> Char
 
     def (--) = self - 1
     // ...

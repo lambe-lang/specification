@@ -27,16 +27,16 @@ impl zipper a for Zipper a {
     def left =
         let pair =
             self left
-            fold { (List[self.default]) , (self.default :: self.right) }
-                 { (List[$1.tail]) , ($1.head :: self.right) }
+            fold { List[self.default] , $ self.default :: self.right }
+                 { List[$1.tail] , $ $1.head :: self.right }
         in self with left = pair.left
                 with right = pair.right
 
     def right =
         let pair =
             self right
-            fold { (self.default :: self.left) , (List[self.default]) }
-                 { ($1.head :: self.left) , (List[$1.tail]) }
+            fold { self.default :: self.left , $ List[self.default] }
+                 { $1.head :: self.left , $ List[$1.tail] }
         in self with left = pair.left
                 with right = pair.right
 
@@ -46,6 +46,6 @@ impl zipper a for Zipper a {
         let new_value =
             self left
             fold { List[ (f self.default) ] }
-                 { (f $1.head) :: $1::tail }
+                 { f $1.head :: $ $1 :: tail }
         in self with left = new_value
 }

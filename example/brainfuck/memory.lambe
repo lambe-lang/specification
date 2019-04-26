@@ -13,7 +13,7 @@ impl for Memory {
     sig cursor   : self -> Int -> self
     sig memory   : self -> Int -> self
     sig nullify  : self -> self
-    sig input    : self -> self with Reader char
+    sig input    : self -> self with Reader Char
     sig output   : self -> self
     sig needJump : Bool
 

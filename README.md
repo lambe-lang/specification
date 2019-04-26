@@ -452,12 +452,11 @@ native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
 
 IDENT     ::= [a-zA-Z$][a-zA-Z0-9_$]* - KEYWORDS
 KEYWORDS  ::= "sig"  | "def"   | "data"
-            | "enum" | "trait" | "impl"
-            | "type" | "with"  | "for"  
-            | "let"  | "in"    | "self"
+            | "type" | "trait" | "impl"
+            | "with"  | "for"  | "let" | "in" | "self"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
-SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | "_" | ":" | "." | "|"
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | ":" | "." | "|"
 ```
 
 # Why Lambë?
