@@ -25,24 +25,27 @@ impl zipper a for Zipper a {
         in Zipper l l default
 
     def left =
-        let pair = self left
-                fold { (List[self.default]) , (self.default :: self.right) }
-                     { (List[$1.tail]) , ($1.head :: self.right) }
+        let pair =
+            self left
+            fold { (List[self.default]) , (self.default :: self.right) }
+                 { (List[$1.tail]) , ($1.head :: self.right) }
         in self with left = pair.left
                 with right = pair.right
 
     def right =
-        let pair = self right
-                fold { (self.default :: self.left) , (List[self.default]) }
-                     { ($1.head :: self.left) , (List[$1.tail]) }
+        let pair =
+            self right
+            fold { (self.default :: self.left) , (List[self.default]) }
+                 { ($1.head :: self.left) , (List[$1.tail]) }
         in self with left = pair.left
                 with right = pair.right
 
     def current = self left fold { self default } { $1 head }
 
     def replace f =
-        let new_value = self left
-                fold { List[ (f self.default) ] }
-                fold { (f $1.head) :: $1::tail }
+        let new_value =
+            self left
+            fold { List[ (f self.default) ] }
+                 { (f $1.head) :: $1::tail }
         in self with left = new_value
 }
