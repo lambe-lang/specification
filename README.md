@@ -399,7 +399,7 @@ s0        ::= entity*
 
 entity    ::= sig | def | data | type | trait | impl
 
-sig       ::= "sig" dname ":" type with* for?
+sig       ::= "sig" dname ":" type for? with*
 def       ::= "def" (self  ".")? dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
