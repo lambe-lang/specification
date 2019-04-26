@@ -6,6 +6,7 @@ A statically typed functional programming inspired by Haskell, OCaml and Rust.
 
 Targeted programming language paradigms for the design of Lambë are:
 - [X] Functional programming,
+- [X] Static typing,
 - [X] Trait based code organisation,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
