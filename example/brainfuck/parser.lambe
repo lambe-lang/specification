@@ -42,7 +42,7 @@ impl Parser for String {
                    fold { context first }
                         { raise BraceMismatch }
                  }
-                 { parse (i++) $ $1 value parseChar context }
+                 { self parse (i++) $ $1 value parseChar context }
         in parse 0 (Nil , $ Stack new) // TODO - review this ugly code
 
 }
