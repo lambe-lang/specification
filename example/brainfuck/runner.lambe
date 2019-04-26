@@ -1,0 +1,9 @@
+impl lang.exception
+impl lang.string
+
+impl memory
+impl parse
+
+sig run : String -> Memory with Exception ParseError
+
+def run s = interpret (parse s) (Memory new)

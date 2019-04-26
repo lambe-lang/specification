@@ -7,7 +7,7 @@ data Zipper a {
 }
 
 trait zipper a {
-    sig create     : a -> self
+    sig new        : a -> self
     sig left       : self -> self
     sig right      : self -> self
     sig current    : self -> a
@@ -20,7 +20,7 @@ trait zipper a {
 impl zipper a for Zipper a {
     impl lang.pair
 
-    def create default =
+    def new default =
         let l = List[default]
         in Zipper l l default
 

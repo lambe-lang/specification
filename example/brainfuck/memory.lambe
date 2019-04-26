@@ -1,30 +1,33 @@
-impl lang.int
+impl lang.bool
 impl lang.char
-impl lang.string
+impl lang.int
 impl lang.pair
+impl lang.string
+
 impl zipper
 
-type Context = Pair (Zipper int) String
+type Memory = Pair (Zipper int) String
 
 impl for Memory {
-    sig create  : self
-    sig cursor  : self -> Int -> self
-    sig memory  : self -> Int -> self
-    sig nullify : self -> self
-    sig input   : self -> self
+    sig new      : self
+    sig cursor   : self -> Int -> self
+    sig memory   : self -> Int -> self
+    sig nullify  : self -> self
+    sig input    : self -> self with Reader char
+    sig output   : self -> self
+    sig needJump : Bool
 
-    def create = (Zipper create 0) , ""
+    def new = (Zipper new 0) , ""
 
     def cursor offset =
-        let move : self -> self for Zipper int = // "Héritage" du type => recepteur via self
+        let move =
             if (offset > 0)
             then Zipper.right
             else Zipper.left
-        in let loop : (Zipper int) -> int -> self = { mem  offset -> // rec ?
+        in let loop mem offset =
             if (offset == 0)
             then { Pair acc self.second }
             else { loop (mem move) (offset --) }
-        }
         in loop self.first (offset abs)
 
     def memory value =
@@ -36,4 +39,8 @@ impl for Memory {
     def input =
         (self first replace_by $ Char read toInt) , self.second
 
+    def output =
+        (self first, self second + $ self first current toChar )
+
+    def needJump = self current == 0
 }

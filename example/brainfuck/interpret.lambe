@@ -1,0 +1,19 @@
+impl memory
+impl program
+
+sig interpret : Program -> Memory -> Memory
+
+def interpret program mem =
+    let step token mem =
+        token
+        fold { mem memory $1.alter }
+             { mem cursor $1.offset }
+             { mem output }
+             { mem input }
+             { mem needJump
+               fold { mem }
+                    { step token $ interpret $1.program mem }
+             }
+             { mem nullify }
+    in
+    program fold { mem } { interpret program.tail $ step program.head mem }
