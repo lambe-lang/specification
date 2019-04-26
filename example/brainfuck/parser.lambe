@@ -27,7 +27,7 @@ def parseChar char context =
     case '[' => { List empty           , programs push program }
     case ']' => { programs peek
                   fold { raise BraceMismatch }
-                       { Loop program :: $1 , programs pop }
+                       { Loop program :: $1.value , programs pop }
                 }
     otherwise => raise $ Unknown char
 
@@ -38,7 +38,7 @@ def parser s =
                fold { context first }
                     { raise BraceMismatch }
              }
-             { parse (i++) $ parseChar $1.v context }
+             { parse (i++) $ parseChar $1.value context }
     in parse 0 (Nil , $ Stack new) // TODO - review this ugly code
 
 sig optimise : Program -> Program

@@ -1,5 +1,5 @@
 data None
-data Some a { v : a }
+data Some a { value : a }
 type Option a = None | Some a
 
 impl for Option a {

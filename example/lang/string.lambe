@@ -1,7 +1,10 @@
+impl int
+impl char
+
 type String // intrinsic? array char?
 
 impl for String {
-    sig chatAt : int -> Option char
+    sig chatAt : self -> Int -> Option char
 
     // ...
 }
