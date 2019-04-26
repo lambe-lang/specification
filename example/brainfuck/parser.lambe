@@ -12,7 +12,7 @@ type ParseError = BraceMismatch | StackUnderFlow | Unknown char
 type ParseContext = Pair Program (Stack Program)
 
 sig parser    : String -> Program with Exception ParseError
-sig parseChar : Char -> ParseContext -> ParseContext with Exception ParseError
+sig parseChar : Char -> ParseContext -> ParseContext with Error ParseError
 
 def parseChar char context =
     let program  = context first in

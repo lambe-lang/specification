@@ -305,21 +305,21 @@ data if {
 }
 
 data then a {
-    if   : bool
+    cond : bool
     then : unit -> a
 }
 
 impl for if {
     sig then : self -> (unit -> a) -> then a
 
-    def then t = then (self cond) t
+    def then t = then self.cond t
 }
 
 impl for then a {
     sig else : self -> (unit -> a) -> a
 
-    def else f = self if fold (self then) f
-}
+    def else f = self cond fold { self then () } { f () }
+ }
 
 // if (a > 0) then { a-1 } else { a } : int
 // if (a > 0) then { a-1 } else       : (unit -> int) -> int

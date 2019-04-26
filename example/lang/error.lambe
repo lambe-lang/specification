@@ -1,5 +1,5 @@
 impl string
 
-trait Exception a {
+trait Error a {
     raise : a -> b
 }
