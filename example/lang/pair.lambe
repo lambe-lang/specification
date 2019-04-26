@@ -4,4 +4,4 @@ data Pair a b {
 }
 
 sig (,) : self -> b -> Pair self b for a
-def (,) = Pair self
+def (,) b = Pair self b

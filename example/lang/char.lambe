@@ -1,8 +1,12 @@
 type Char // intrinsic
 
-trait char for Char {
+impl for Char {
     sig read  : self
     sig toInt : self -> int
+
+    // ...
 }
 
-// implementation to be done
+impl Equal Char {
+    def (==) c = ...
+}

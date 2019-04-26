@@ -1,7 +1,7 @@
-type String // intrinsic - TODO
+type String // intrinsic? array char?
 
-trait string for String {
+impl for String {
     sig chatAt : int -> Option char
-}
 
-// implementation to be done
+    // ...
+}

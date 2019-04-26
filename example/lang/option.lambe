@@ -1,0 +1,10 @@
+data None
+data Some a { v : a }
+type Option a = None | Some a
+
+impl for Option a {
+    sig fold : (None -> b) -> (Some a -> b) -> b
+
+    def None.fold f _ = f self
+    def Some.fold _ f = f self
+}

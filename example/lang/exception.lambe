@@ -1,0 +1,5 @@
+impl string
+
+trait Exception a {
+    raise : a -> b
+}

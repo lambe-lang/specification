@@ -5,8 +5,13 @@ data Memory { v:int }
 data Cursor { v:int }
 data Input
 data Output
-data Loop   { l : List token }
+data Loop   { l : Program }
 data Nullify
 type Token = Memory | Cursor | Input | Output | Loop | Nullify
+type Program = List Token
 
-type Parsed = Pair (List Token) Bool
+data Pure
+data Impure
+type Purity = Pure | Impure
+
+type Parsed = Pair Program Purity
