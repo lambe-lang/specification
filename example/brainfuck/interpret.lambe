@@ -8,8 +8,8 @@ def interpret program mem =
         token
         fold { mem memory $1.alter }
              { mem cursor $1.offset }
-             { mem output }
              { mem input }
+             { mem output }
              { mem needJump
                fold { mem }
                     { step token $ interpret $1.program mem }
