@@ -17,7 +17,7 @@ impl for Memory {
     sig output   : self -> self
     sig needJump : self -> Bool
 
-    def new = (Zipper new 0) , ""
+    def new = zipper new 0 , ""
 
     def cursor offset =
         let move =

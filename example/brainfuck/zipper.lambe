@@ -43,9 +43,9 @@ impl zipper a for Zipper a {
     def current = self left fold { self default } { $1 head }
 
     def replace f =
-        let new_value =
+        let value =
             self left
             fold { List[ (f self.default) ] }
                  { f $1.head :: $ $1 :: tail }
-        in self with left = new_value
+        in self with left = value
 }
