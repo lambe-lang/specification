@@ -7,4 +7,6 @@ impl for Option a {
 
     def None.fold f _ = f self
     def Some.fold _ f = f self
+
+    def hasSome : self fold { False } { True }
 }

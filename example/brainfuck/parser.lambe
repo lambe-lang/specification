@@ -12,7 +12,7 @@ type ParseError = BraceMismatch | StackUnderFlow | Unknown char
 trait Parse {
     sig parse : self -> Program with Exception ParseError
     sig parseChar : self -> ParseContext -> ParseContext for Char
-                    with Error ParseError 
+                    with Error ParseError
 
     def parseChar context =
         let program  = context first in
@@ -24,10 +24,10 @@ trait Parse {
         case '-' => { Memory -1 :: program , programs }
         case '.' => { Input     :: program , programs }
         case ',' => { Output    :: program , programs }
-        case '[' => { List empty           , programs push program }
+        case '[' => { List empty           , $ programs push program }
         case ']' => { programs peek
                       fold { raise BraceMismatch }
-                           { Loop program :: $1.value , programs pop }
+                           { Loop program :: $1.value , $ programs pop }
                     }
         otherwise => raise $ Unknown char
 }
