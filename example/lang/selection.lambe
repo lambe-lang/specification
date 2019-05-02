@@ -1,0 +1,26 @@
+impl lang.bool
+impl lang.unit
+
+data If {
+    cond : Bool
+}
+
+sig if : Bool -> If
+def if = If
+
+data Then a {
+    cond : Bool
+    then : Unit -> a
+}
+
+impl for If {
+    sig then : self -> (Unit -> a) -> Then a
+
+    def then t = then self.cond t
+}
+
+impl for Then a {
+    sig else : self -> (Unit -> a) -> a
+
+    def else f = self cond fold { self then () } { f () }
+ }

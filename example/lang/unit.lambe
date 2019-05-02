@@ -1,0 +1,4 @@
+data Unit
+
+sig (()) : Unit
+def (()) = Unit
