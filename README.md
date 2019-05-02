@@ -141,7 +141,10 @@ Each file containing Lambë code is a trait definition. For instance
 a file named `list` can be defined by:
 ```
 data Nil
-data Cons a { h:a t:(List a) }
+data Cons a {
+    h: a
+    t: List a
+}
 type List a = Nil | Cons a
 
 sig (::) : a -> List a -> List a
@@ -154,7 +157,10 @@ This file content is in fact similar to the trait:
 ```
 trait list {
     data Nil
-    data Cons a { h:a t:(List a) }
+    data Cons a {
+        h: a
+        t: List a
+    }
     type List a = Nil | Cons a
 
     sig (::) : a -> List a -> List a
@@ -172,7 +178,10 @@ If a file is a trait we can also reuse the `for` directive for each function.
 ```
 trait list {
     data Nil
-    data Cons a { h:a t:(List a) }
+    data Cons a {
+        h: a
+        t: List a
+    }
     type List a = Nil | Cons a
 
     sig (::) : self -> List a -> List a for a
@@ -217,7 +226,10 @@ Therefore the definition should be done when the implementation is required.
 For instance the `::` is specified but not defined:
 ```
 data Nil
-data Cons a { h:a t:(List a) }
+data Cons a {
+    h: a
+    t: List a
+}
 type List a = Nil | Cons a
 
 sig (::) : self -> List a -> List a for a
@@ -372,7 +384,10 @@ impl ClosableCollection b a for CollectionBuilder b a {
 
 ```
 data Nil
-data Cons a { h:a t:(List a) }
+data Cons a {
+    h: a
+    t: List a
+}
 type List a = Nil | Cons a
 
 sig List : (a:type) -> OpenedCollection (List a) a
@@ -399,7 +414,7 @@ s0        ::= entity*
 
 entity    ::= sig | def | data | type | trait | impl
 
-sig       ::= "sig" dname ":" type for? with*
+sig       ::= "sig" dname ":" type with* for?
 def       ::= "def" (self  ".")? dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
@@ -450,13 +465,13 @@ param     ::= IDENT
 dname     ::= IDENT | "(" OPERATOR ")"
 native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
 
-IDENT     ::= [a-zA-Z$][a-zA-Z0-9_$]* - KEYWORDS
+IDENT     ::= [a-zA-Z$_][a-zA-Z0-9$_]* - KEYWORDS
 KEYWORDS  ::= "sig"  | "def"   | "data"
             | "type" | "trait" | "impl"
             | "with"  | "for"  | "let" | "in" | "self"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
-SYMBOLS   ::= "(" | ")" | "{" | "}" | "." | "->" | ":" | "." | "|"
+SYMBOLS   ::= "(" | ")" | "{" | "}" | "->" | ":" | "." | "|"
 ```
 
 # Why Lambë?
