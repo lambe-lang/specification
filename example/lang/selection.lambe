@@ -16,7 +16,7 @@ data Then a {
 impl for If {
     sig then : self -> (Unit -> a) -> Then a
 
-    def then t = then self.cond t
+    def then t = Then self.cond t
 }
 
 impl for Then a {
