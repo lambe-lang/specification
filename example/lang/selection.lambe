@@ -8,10 +8,10 @@ data Then a {
 }
 
 data Else a {
-    else : (Deferred a) -> (Deferred a)
+    else : (Deferred a) -> a
 }
 
 sig if : Bool -> Then
 def if c =
-    c fold { Then { a -> Else { a () } }
-           { Then { Else { a -> a () } }
+    c fold (Then { a -> Else { a () } })
+           (Then { Else { a -> a () } })
