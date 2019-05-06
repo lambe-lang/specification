@@ -34,3 +34,6 @@ def switch a = SwitchModel
             { CaseModel { switch a } }
     }
     $ CaseOtherwise { $1 }
+
+sig is : Eq a -> Predicate a
+def is a b = a == b
