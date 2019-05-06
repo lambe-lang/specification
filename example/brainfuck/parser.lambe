@@ -2,6 +2,7 @@ impl lang.char
 impl lang.exception
 impl lang.list
 impl lang.string
+impl lang.switch
 
 impl ast
 
@@ -18,14 +19,14 @@ trait Parse {
         let program  = context first in
         let programs = context second in
         switch char
-        case '>' => { Cursor +1 :: program , programs }
-        case '<' => { Cursor -1 :: program , programs }
-        case '+' => { Memory +1 :: program , programs }
-        case '-' => { Memory -1 :: program , programs }
-        case '.' => { Input     :: program , programs }
-        case ',' => { Output    :: program , programs }
-        case '[' => { List empty           , $ programs push program }
-        case ']' => { programs peek
+        case (is '>') => { Cursor +1 :: program , programs }
+        case (is '<') => { Cursor -1 :: program , programs }
+        case (is '+') => { Memory +1 :: program , programs }
+        case (is '-') => { Memory -1 :: program , programs }
+        case (is '.') => { Input     :: program , programs }
+        case (is ',') => { Output    :: program , programs }
+        case (is '[') => { List empty           , $ programs push program }
+        case (is ']') => { programs peek
                       fold { raise BraceMismatch }
                            { Loop program :: $1.value , $ programs pop }
                     }

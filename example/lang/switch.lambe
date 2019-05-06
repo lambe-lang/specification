@@ -1,0 +1,36 @@
+impl lang.bool
+impl lang.eq
+
+/*
+ * Language syntactic extension
+ *
+ *     switch e
+ *     case c1   => e1
+ *     case c2   => e2
+ *     otherwise => e3
+ */
+
+type Predicate a = a -> Bool
+
+data SwitchModel a b {
+    case      : Predicate a  -> CaseModel a b
+    otherwise : CaseOtherwise b
+}
+
+data CaseModel a b {
+    (=>) : b -> SwitchModel a b
+}
+
+data CaseOtherwise b {
+    (=>) : b -> b
+}
+
+sig switch : a -> SwitchModel a b
+def switch a = SwitchModel
+    { $1 a fold
+            { b -> CaseModel { SwitchModel { b } }
+                             $ CaseOtherwise { b }
+            }
+            { CaseModel { switch a } }
+    }
+    $ CaseOtherwise { $1 }
