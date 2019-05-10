@@ -8,15 +8,14 @@ trait Interpret {
 impl Interpret for Program {
     def interpret mem =
         let step token mem =
-            token
-            fold { mem memory $1.alter }
+            token fold
+                 { mem memory $1.alter }
                  { mem cursor $1.offset }
                  { mem input }
                  { mem output }
                  { if (mem needJump)
                    then { mem }
-                   else { step token $ $1 program interpret mem }
-                 }
+                   else { step token $ $1 program interpret mem } }
                  { mem nullify }
         in
         self fold { mem } { program tail interpret $ step program.head mem }

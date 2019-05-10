@@ -3,10 +3,13 @@ impl int
 type Char // intrinsic
 
 impl for Char {
-    sig read  : self
     sig toInt : self -> int
 
     // ...
+}
+
+impl Read Char {
+    def read = ...
 }
 
 impl Equal Char {

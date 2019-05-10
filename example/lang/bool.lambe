@@ -3,7 +3,7 @@ data False
 type Bool = True | False
 
 impl for Bool {
-    sig fold : (True -> b) -> (False -> b) -> b
+    sig fold : self -> (True -> b) -> (False -> b) -> b
     sig (&&) : self -> self
     sig (||) : self -> self
 
