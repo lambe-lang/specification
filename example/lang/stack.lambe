@@ -1,6 +1,6 @@
+impl error
 impl list
 impl option
-impl exception
 
 data Stack a {
     value : List a
@@ -12,10 +12,10 @@ impl for Stack a {
     sig new  : self
     sig push : self -> a -> self
     sig peek : self -> Option a
-    sig pop  : self -> self with Exception StackUnderFlow
+    sig pop  : self -> self with Error StackUnderFlow
 
     def new = Stack $ List empty
     def push a = self with value = a :: self.value
     def peek = self value fold { None } { Some $1.head }
-    def pop = self with value = self value fold { raise StackUnderFlow } { $1 tail }
+    def pop = self with value = self value fold { StackUnderFlow raise } { $1 tail }
 }

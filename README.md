@@ -250,26 +250,25 @@ Note: Work In progress
 ### Definition and requirements
 
 ```
-trait exception a {
-    sig raise : string -> a
+trait Error a for a {
+    raise : self -> b
 }
 
-sig div : int -> int -> int
-    with exception int
+sig div : int -> int -> int with Error string
 
 def div x y =
     if (y == 0)
-    then { raise "divide by zero!" }
+    then { "divide by zero!" raise }
     else { x / y }
 ```
 
 ### Global scope
 
-The implementation of `exception int` can be provided at the upper level. Then each expression requiring such `exception int` refers to the same implementation.
+The implementation of `exception string` can be provided at the upper level. Then each expression requiring such `exception string` refers to the same implementation.
 
 ```
-impl exception int {
-    def raise _ = 0
+impl Error int {
+    def raise = 0
 }
 
 div 3 0 // refers to the previous implementation
@@ -280,8 +279,8 @@ div 3 0 // refers to the previous implementation
 The following code be embedded in a basic block limiting the scope of the provided implementation.
 
 ```
-let impl exception int {
-        def raise _ = 0
+let impl Error int {
+        def raise = 0
     } in
     div 3 0 // refers to the previous implementation (local scope)
 ```

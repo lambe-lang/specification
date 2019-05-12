@@ -1,5 +1,3 @@
-impl string
-
-trait Error a {
-    raise : a -> b
+trait Error a for a {
+    raise : self -> b
 }
