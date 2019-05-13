@@ -7,8 +7,8 @@ impl lang.switch
 impl ast
 
 data BraceMismatch
-data Unknown { c:char }
-type ParseError = BraceMismatch | StackUnderFlow | Unknown char
+data UnknownChar { c:char }
+type ParseError = BraceMismatch | StackUnderFlow | UnknownChar char
 
 trait Parse {
     sig parse : self -> Program with Exception ParseError
@@ -25,11 +25,11 @@ trait Parse {
         case (is '.') => { Input     :: program , programs }
         case (is ',') => { Output    :: program , programs }
         case (is '[') => { List empty           , $ programs push program }
-        case (is ']') => { programs peek
-                      fold { BraceMismatch raise }
-                           { Loop program :: $1.value , $ programs pop }
-                    }
-        otherwise => Unknown char raise
+        case (is ']') => { programs peek fold
+                                { BraceMismatch raise }
+                                { Loop program :: $1.value , $ programs pop }
+                         }
+        otherwise => UnknownChar char raise
 }
 
 impl Parser for String {
