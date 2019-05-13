@@ -23,12 +23,4 @@ impl for Then a {
     sig else : self -> (Unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
- }
-
-data Then a {
-    then : a -> Else a
-}
-
-data Else a {
-    else : a -> a
 }
