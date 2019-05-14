@@ -397,13 +397,13 @@ impl for Otherwise b {
 }
 
 // switch 1 case (is 0) => { true } otherwise => { false } : bool
-// switch 1 case (is 0) => { true } otherwise => : (Unit -> bool) -> bool
-// switch 1 case (is 0) => { true } otherwise : Otherwise bool
-// switch 1 case (is 0) => { true } : Switch int bool
-// switch 1 case (is 0) => : (Unit -> b) -> Switch int b
-// switch 1 case (is 0) : Case int b
-// switch 1 case : Predicate int -> Case int b
-// switch 1 : Switch int b
+// switch 1 case (is 0) => { true } otherwise =>           : (Unit -> bool) -> bool
+// switch 1 case (is 0) => { true } otherwise              : Otherwise bool
+// switch 1 case (is 0) => { true }                        : Switch int bool
+// switch 1 case (is 0) =>                                 : (Unit -> b) -> Switch int b
+// switch 1 case (is 0)                                    : Case int b
+// switch 1 case                                           : Predicate int -> Case int b
+// switch 1                                                : Switch int b
 ```
 
 ### Collection builder
