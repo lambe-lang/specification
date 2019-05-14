@@ -340,6 +340,72 @@ impl for then a {
 // if                                 : bool -> if
 ```
 
+### switch/case/otherwise DSL
+
+```
+/*
+ * Language syntactic extension
+ *
+ *     switch e
+ *     case c1   => e1
+ *     case c2   => e2
+ *     otherwise => e3
+ */
+
+type Predicate a = a -> Bool
+
+sig is : Eq a -> Predicate a
+def is a b = a == b
+
+sig switch : a -> Switch a b
+def switch a = Switch a
+
+data Switch a {
+    value  : a
+    result : Option b
+}
+
+data Case a b {
+    value  : a
+    result : (Unit -> b) -> Option b
+}
+
+data Otherwise b {
+    result : (Unit -> b) -> b
+}
+
+impl for Switch a b {
+    sig case      : Predicate a -> Case a b
+    sig otherwise : Otherwise a b
+
+    def case p = Case self.value $ self.result
+                                   fold { p self.value fold { Some $ $1 () } { None } }
+                                        { self.result }
+    def otherwise = Otherwise self.result
+}
+
+impl for Case a b {
+    sig (=>) : (Unit -> b) -> Switch a b
+
+    def (=>) f = Switch self.value $ self.result f
+}
+
+impl for Otherwise b {
+    sig (=>) : (Unit -> b) -> b
+
+    def (=>) f = self.result () fold { f () } id
+}
+
+// switch 1 case (is 0) => { true } otherwise => { false } : bool
+// switch 1 case (is 0) => { true } otherwise => : (Unit -> bool) -> bool
+// switch 1 case (is 0) => { true } otherwise : Otherwise bool
+// switch 1 case (is 0) => { true } : Switch int bool
+// switch 1 case (is 0) => : (Unit -> b) -> Switch int b
+// switch 1 case (is 0) : Case int b
+// switch 1 case : Predicate int -> Case int b
+// switch 1 : Switch int b
+```
+
 ### Collection builder
 
 #### Collection builder Data

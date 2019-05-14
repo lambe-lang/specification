@@ -15,10 +15,10 @@ type Predicate a = a -> Bool
 sig is : Eq a -> Predicate a
 def is a b = a == b
 
-sig switch : a -> Switch a b
-def switch a = Switch a None
+sig switch : a -> Switch a
+def switch a = Switch a
 
-data Switch a b {
+data Switch a {
     value  : a
     result : Option b
 }
@@ -36,19 +36,16 @@ impl for Switch a b {
     sig case      : Predicate a -> Case a b
     sig otherwise : Otherwise a b
 
-    def case p = result
-                 fold { if (p self.value)
-                        then { Case self.value { Some $ $1 () } }
-                        else { Case self.value { None } }
-                      }
-                      Case self.value { self.result }
+    def case p = Case self.value $ self.result
+                                   fold { p self.value fold { Some $ $1 () } { None } }
+                                        { self.result }
     def otherwise = Otherwise self.result
 }
 
 impl for Case a b {
     sig (=>) : (Unit -> b) -> Switch a b
 
-    def (=>) f = Switch self.value $ self.result f
+    def (=>) f = SwitchCase self.value $ self.result f
 }
 
 impl for Otherwise b {
