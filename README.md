@@ -375,8 +375,8 @@ data Otherwise b {
 }
 
 impl for Switch a b {
-    sig case      : Predicate a -> Case a b
-    sig otherwise : Otherwise a b
+    sig case      : self -> Predicate a -> Case a b
+    sig otherwise : self -> Otherwise a b
 
     def case p = Case self.value $ self.result
                                    fold { p self.value fold { Some $ $1 () } { None } }
@@ -385,13 +385,13 @@ impl for Switch a b {
 }
 
 impl for Case a b {
-    sig (=>) : (Unit -> b) -> Switch a b
+    sig (=>) : self -> (Unit -> b) -> Switch a b
 
     def (=>) f = Switch self.value $ self.result f
 }
 
 impl for Otherwise b {
-    sig (=>) : (Unit -> b) -> b
+    sig (=>) : self -> (Unit -> b) -> b
 
     def (=>) f = self.result () fold { f () } id
 }
