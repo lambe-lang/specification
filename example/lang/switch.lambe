@@ -12,28 +12,47 @@ impl lang.eq
 
 type Predicate a = a -> Bool
 
-data SwitchModel a b {
-    case      : Predicate a  -> CaseModel a b
-    otherwise : CaseOtherwise b
-}
-
-data CaseModel a b {
-    (=>) : b -> SwitchModel a b
-}
-
-data CaseOtherwise b {
-    (=>) : b -> b
-}
-
-sig switch : a -> SwitchModel a b
-def switch a = SwitchModel
-    { $1 a fold
-            { b -> CaseModel { SwitchModel { b } }
-                             $ CaseOtherwise { b }
-            }
-            { CaseModel { switch a } }
-    }
-    $ CaseOtherwise { $1 }
-
 sig is : Eq a -> Predicate a
 def is a b = a == b
+
+sig switch : a -> Switch a b
+def switch a = Switch a None
+
+data Switch a b {
+    value  : a
+    result : Option b
+}
+
+data Case a b {
+    value  : a
+    result : (Unit -> b) -> Option b
+}
+
+data Otherwise b {
+    result : (Unit -> b) -> b
+}
+
+impl for Switch a b {
+    sig case      : Predicate a -> Case a b
+    sig otherwise : Otherwise a b
+
+    def case p = result
+                 fold { if (p self.value)
+                        then { Case self.value { Some $ $1 () } }
+                        else { Case self.value { None } }
+                      }
+                      Case self.value { self.result }
+    def otherwise = Otherwise self.result
+}
+
+impl for Case a b {
+    sig (=>) : (Unit -> b) -> Switch a b
+
+    def (=>) f = Switch self.value $ self.result f
+}
+
+impl for Otherwise b {
+    sig (=>) : (Unit -> b) -> b
+
+    def (=>) f = self.result () fold { f () } id
+}
