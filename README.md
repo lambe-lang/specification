@@ -358,9 +358,9 @@ sig is : Eq a -> Predicate a
 def is a b = a == b
 
 sig switch : a -> Switch a b
-def switch = Switch
+def switch a = Switch a None
 
-data Switch a {
+data Switch a b {
     value  : a
     result : Option b
 }
@@ -455,7 +455,7 @@ data Cons a {
 }
 type List a = Nil | Cons a
 
-sig List : (a:type) -> OpenedCollection (List a) a
+sig List : OpenedCollection (List a) a
 def List _ =
     let builder l = CollectionBuilder l { builder $ Cons $1 l } in
     	builder Nil
@@ -464,12 +464,12 @@ def List _ =
 ### The List builder in action
 
 ```
-List int       : OpenedCollection (List int) int
-List int [     : int -> ClosableCollection (List int) int
-List int [1    : ClosableCollection (List int) int
-List int [1,   : int -> ClosableCollection (List int) int
-List int [1,2  : ClosableCollection (List int) int
-List int [1,2] : List int
+List      : OpenedCollection (List a) a
+List[     : a -> ClosableCollection (List a) a
+List[1    : ClosableCollection (List int) int
+List[1,   : int -> ClosableCollection (List int) int
+List[1,2  : ClosableCollection (List int) int
+List[1,2] : List int
 ```
 
 ## 7. Grammar

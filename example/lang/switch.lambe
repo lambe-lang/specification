@@ -16,9 +16,9 @@ sig is : Eq a -> Predicate a
 def is a b = a == b
 
 sig switch : a -> Switch a
-def switch a = Switch a
+def switch a = Switch a None
 
-data Switch a {
+data Switch a b {
     value  : a
     result : Option b
 }
