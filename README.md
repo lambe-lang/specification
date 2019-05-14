@@ -41,7 +41,12 @@ def pipeline = swap compose
 data None
 data Some a { v:a }
 type Option a = None | Some a
+
+// sig None : None
+// sig Some : a  -> Some a
 ```
+
+Each data has a corresponding constructor denoted by a function when parameters are defined thanks to attributes specification based order.
 
 ### Data type implementation
 
