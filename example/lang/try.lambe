@@ -1,0 +1,22 @@
+impl control
+
+type Try a =
+  data Failure { reason : string }
+| data Success { value  : a }
+
+impl for Try a b {
+    sig fold : self -> (Failure -> b) -> (Success a -> b) -> b
+
+    def Failure.fold f _ = f self
+    def Success.fold _ f = f self
+}
+
+impl Monad Try {
+    def pure a = Success a
+
+    def Failure.(<*>) _ = Failure self.reason
+    def Success.(<*>) a = a fmap self.value
+
+    def Failure.join = Failure self.reason
+    def Failure.join = self value
+}

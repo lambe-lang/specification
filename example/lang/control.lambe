@@ -1,0 +1,22 @@
+trait Functor (f:type->type) {
+    sig fmap : self -> (a -> b) -> f b for f a
+}
+
+trait Applicative (f:type->type) with Functor f {
+    sig pure   : a -> f a
+    sig (<*>)  : self -> f a -> f b for f (a -> b)
+    sig (<**>) : self -> f (a -> b) -> f b for f a
+
+    def fmap f   = pure f <*> a
+    def (<**>) f = f <*> self
+}
+
+trait Monad (f:type->type) with Applicative f {
+    sig join  : self -> f a for f (f a)
+    sig (>>=) : self -> (a -> f b) -> f b for f a
+    sig (=<<) : self -> f a -> f b for a -> f b
+
+    def (>>=) f = self fmap f join
+    def (=<<) a = a >>= self
+}
+

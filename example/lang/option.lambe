@@ -1,4 +1,4 @@
-impl functor
+impl control
 
 type Option a =
   data None
@@ -11,7 +11,12 @@ impl for Option a {
     def Some.fold _ f = f self
 }
 
-impl Function Option {
-    def Some.fmap f = Some $ f value
-    def None.fmap _ = None
+impl Monad Option {
+    def pure a = Some a
+
+    def None.(<*>) _ = None
+    def Some.(<*>) a = a fmap self.value
+
+    def None.join = None
+    def Some.join = self value
 }

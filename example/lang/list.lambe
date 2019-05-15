@@ -7,10 +7,19 @@ type List a = Nil | Cons a
 
 impl for List a {
     sig fold : self -> (Nil -> b) -> (Cons a -> b) -> b
-
     def Nil.fold f _ = f self
     def Cons.fold _ f = f self
+
+    sig (::) : self -> List a -> List a for a
+    def (::) l = Cons self l
 }
 
-sig (::) : self -> List a -> List a for a
-def (::) l = Cons self l
+impl Monad List {
+    def pure a = a :: Nil
+
+    def Nil.(<*>) _ = Nil
+    def Cons.(<*>) a = self tail <*> $ a fmap $ self head
+
+    def Nil.join = Nil
+    def Cons.join = self value
+}
