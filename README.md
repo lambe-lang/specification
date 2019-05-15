@@ -123,6 +123,8 @@ Finally each method can be specified with a dedicated `self` type. As a conclusi
 
 ### Trait implementation
 
+#### Fold based version
+
 ```
 impl Functor Option {
     def fmap f = self fold { None } { Some $ f $1.v }
@@ -130,11 +132,31 @@ impl Functor Option {
 
 impl Applicative Option {
     def pure = Some
-    def (<*>) a = self fold { None } { $1.v fmap a }
+    def (<*>) a = self fold { None } { $1 v fmap a }
 }
 
 impl Monad Option {
-    def join = self fold { None } id    
+    def join = self fold { None } { $1 v }   
+}
+```
+
+#### Smart cast based version
+
+```
+impl Functor Option {
+    def None.fmap f = None
+    def Some.fmap f = Some $ f self.v
+}
+
+impl Applicative Option {
+    def pure = Some
+    def None.(<*>) a = None
+    def Some.(<*>) a = self v fmap a
+}
+
+impl Monad Option {
+    def None.join = None    
+    def Some.join = self v    
 }
 ```
 

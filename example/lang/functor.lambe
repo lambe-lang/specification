@@ -1,0 +1,3 @@
+trait Functor (f:type->type) {
+    sig fmap : self -> (a -> b) -> f b for f a
+}
