@@ -2,9 +2,9 @@ impl lang.bool
 impl lang.char
 impl lang.string
 
-// ---------------------------------------------------
+//
 // Parser response
-// ---------------------------------------------------
+//
 
 type Response a =
   Rejected { consumed : bool }
@@ -24,9 +24,9 @@ trait Parse a {
     sig parse : self -> Sequence char ->  Response a
 }
 
-// ---------------------------------------------------
+//
 // Predicate based parsers
-// ---------------------------------------------------
+//
 
 data Satisfy { predicate : char -> bool }
 
@@ -37,6 +37,7 @@ impl Parser char for Satisfy {
             { if (self $1)
               then { Accepted $1 (s skip) true }
               else { Rejected false }
+            }
 }
 
 def any : Satisfy
@@ -48,9 +49,9 @@ def aChar c = Satisfy { c == $1 }
 def notChar : char -> Satisfy
 def notChar c = Satisfy { c != $1 }
 
-// ---------------------------------------------------
+//
 // Parser sequence
-// ---------------------------------------------------
+//
 
 data And a b {
     left  : Parser a
@@ -60,16 +61,16 @@ data And a b {
 impl Parser (Pair a b) for And a b {
     def parse s =
         self left parse s fold
-            { Rejected $1.consumed }
+            { rl -> Rejected rl.consumed }
             { al -> self right parse a.input fold
                 { rr -> Rejected (al.consumed || rr.consumed) }
                 { ar -> Accepted (al.value,ar.value) b.input (al.consumed || ar.consumed) }
             }
 }
 
-// ---------------------------------------------------
+//
 // Parser choice
-// ---------------------------------------------------
+//
 
 data Or a {
     left  : Parser a
