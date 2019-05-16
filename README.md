@@ -350,22 +350,25 @@ Succ Zero + $ Succ Zero
 ### if/then/else DSL
 
 ```
-data if {
+data If {
     cond : bool
 }
 
-data then a {
+sig if : bool -> If
+def if = If
+
+data Then a {
     cond : bool
     then : unit -> a
 }
 
 impl for if {
-    sig then : self -> (unit -> a) -> then a
+    sig then : self -> (unit -> a) -> Then a
 
-    def then t = then self.cond t
+    def then t = Then self.cond t
 }
 
-impl for then a {
+impl for Then a {
     sig else : self -> (unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
