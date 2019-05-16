@@ -138,6 +138,8 @@ impl Applicative Option {
 impl Monad Option {
     def join = self fold { None } { $1 v }   
 }
+
+// Functor Option pure 1 fmap (1 +)   
 ```
 
 #### Smart lookup based version
@@ -230,7 +232,7 @@ trait list {
 
 ### Using trait
 
-How this trait can be used in another file? Simple! Just provide an implementation.
+How this trait can be used in another file? Simple! Just provide an implementation or require its definitions
 
 #### `Global` trait implementation usage
 
@@ -543,20 +545,18 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "with" ("IDENT "=" expr)+
             | impl
 
-type_expr ::= type_i "->" type_expr
+type_expr ::= type_in "->" type_out
             | "(" type_expr ")"
-            | "->" type_expr
-            | i_param
-            | type_s
+            | type_out
             | "self"
             | type_expr "|" type_expr
 
-type_i    ::= i_param
-            | type_o
+type_in   ::= i_param
+            | type_out
             | "(" type_expr ")"
 
-type_o    ::= "(" type_s ")"
-            | o_param type_s?
+type_out  ::= "(" type_expr ")"
+            | o_param type_out?
 
 attr_elem ::= IDENT ":" type
 

@@ -4,7 +4,7 @@ type Try a =
   data Failure { reason : string }
 | data Success { value  : a }
 
-impl for Try a b {
+impl for Try a {
     sig fold : self -> (Failure -> b) -> (Success a -> b) -> b
 
     def Failure.fold f _ = f self
@@ -18,5 +18,5 @@ impl Monad Try {
     def Success.(<*>) a = a fmap self.value
 
     def Failure.join = Failure self.reason
-    def Failure.join = self value
+    def Success.join = self value
 }
