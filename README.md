@@ -354,15 +354,15 @@ data If {
     cond : bool
 }
 
-sig if : bool -> If
-def if = If
-
 data Then a {
     cond : bool
     then : unit -> a
 }
 
-impl for if {
+sig if : bool -> If
+def if = If
+
+impl for If {
     sig then : self -> (unit -> a) -> Then a
 
     def then t = Then self.cond t
