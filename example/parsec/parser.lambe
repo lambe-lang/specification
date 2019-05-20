@@ -14,7 +14,7 @@ type Response a =
            }
 
 impl for Response a {
-    sig fold : self -> (Reject -> b) -> (Accepted a -> b) -> b
+    sig fold : self -> (Rejected-> b) -> (Accepted a -> b) -> b
 
     def Rejected.fold f _ = f self
     def Accepted.fold f _ = f self
