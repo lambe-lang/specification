@@ -2,13 +2,14 @@ impl lang.int
 impl lang.list
 impl lang.pair
 
-data Memory { alter:int }
-data Cursor { offset:int }
-data Input
-data Output
-data Loop   { program : Program }
-data Nullify
-type Token = Memory | Cursor | Input | Output | Loop | Nullify
+type Token =
+  data Memory { alter:int }
+| data Cursor { offset:int }
+| data Input
+| data Output
+| data Loop { program : Program }
+| data Nullify
+
 type Program = List Token
 
 impl for Token {

@@ -10,11 +10,6 @@ impl lang.eq
  *     otherwise => e3
  */
 
-type Predicate a = a -> Bool
-
-sig is : Eq a -> Predicate a
-def is a b = a == b
-
 sig switch : a -> Switch a
 def switch a = Switch a None
 

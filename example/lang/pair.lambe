@@ -1,6 +1,6 @@
 data Pair a b {
-    left  : a
-    right : b
+    _1 : a
+    _2 : b
 }
 
 sig (,) : self -> b -> Pair self b for a

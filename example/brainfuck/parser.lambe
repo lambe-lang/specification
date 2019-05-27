@@ -3,6 +3,7 @@ impl lang.exception
 impl lang.list
 impl lang.string
 impl lang.switch
+impl lang.predicate
 
 impl ast
 
@@ -15,21 +16,21 @@ trait Parse {
     sig parseChar : self -> ParseContext -> ParseContext for Char with Error ParseError
 
     def parseChar context =
-        let program  = context first in
-        let programs = context second in
-        switch char
-        case (is '>') => { Cursor +1 :: program , programs }
-        case (is '<') => { Cursor -1 :: program , programs }
-        case (is '+') => { Memory +1 :: program , programs }
-        case (is '-') => { Memory -1 :: program , programs }
-        case (is '.') => { Input     :: program , programs }
-        case (is ',') => { Output    :: program , programs }
-        case (is '[') => { List empty           , $ programs push program }
-        case (is ']') => { programs peek fold
-                                { BraceMismatch raise }
-                                { Loop program :: $1.value , $ programs pop }
-                         }
-        otherwise => UnknownChar char raise
+        let program  = context first
+        in let programs = context second
+        in switch char
+            case (equals '>') => { Cursor +1 :: program , programs }
+            case (equals '<') => { Cursor -1 :: program , programs }
+            case (equals '+') => { Memory +1 :: program , programs }
+            case (equals '-') => { Memory -1 :: program , programs }
+            case (equals '.') => { Input     :: program , programs }
+            case (equals ',') => { Output    :: program , programs }
+            case (equals '[') => { List empty           , $ programs push program }
+            case (equals ']') => { programs peek fold
+                                    { BraceMismatch raise }
+                                    { Loop program :: $1.value , $ programs pop }
+                             }
+            otherwise => UnknownChar char raise
 }
 
 impl Parser for String {
