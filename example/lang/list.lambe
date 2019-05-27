@@ -1,9 +1,9 @@
-data Nil
-data Cons a {
+type List a =
+  data Nil
+| data Cons {
     head : a
     tail : List a
-}
-type List a = Nil | Cons a
+  }
 
 impl for List a {
     sig fold : self -> (Nil -> b) -> (Cons a -> b) -> b
