@@ -6,10 +6,14 @@ impl lang.string
 // Parser response
 //
 
-type Response a =
+trait Stream s {
+    sig next : self -> Option (Pair s self)
+}
+
+type Response a s =
   Rejected { consumed : bool }
 | Accepted { value    : a
-             input    : Sequence char
+             input    : Stream s
              consumed : bool
            }
 
@@ -34,8 +38,8 @@ impl Parser char for Satisfy {
     def parse s =
         s next fold
             { Rejected false }
-            { if (self $1)
-              then { Accepted $1 (s skip) true }
+            { if (self $1._1)
+              then { Accepted $1._1 $1._2 true }
               else { Rejected false }
             }
 }
