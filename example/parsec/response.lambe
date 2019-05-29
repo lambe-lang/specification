@@ -1,0 +1,17 @@
+impl lang.bool
+impl stream
+
+type Response a s =
+  Rejected { consumed : bool }
+| Accepted { value    : a
+             input    : Stream s
+             consumed : bool
+           }
+
+impl for Response a {
+    sig fold : self -> (Rejected-> b) -> (Accepted a -> b) -> b
+
+    def Rejected.fold f _ = f self
+    def Accepted.fold _ f = f self
+}
+

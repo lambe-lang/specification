@@ -1,0 +1,3 @@
+trait Stream s {
+    sig next : self -> Option (Pair s self)
+}
