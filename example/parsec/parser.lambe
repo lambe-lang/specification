@@ -22,10 +22,11 @@ data Satisfy { predicate : char -> bool }
 
 impl Parser char for Satisfy {
     def parse s =
-        s next fold
+        let p = s next
+        in p._1 fold
             { Rejected false }
-            { if (self $1._1)
-              then { Accepted $1._1 $1._2 true }
+            { if (self $1)
+              then { Accepted $1 p._2 true }
               else { Rejected false }
             }
 }
