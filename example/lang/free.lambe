@@ -1,6 +1,6 @@
-data Pure a { value:a }
-data Roll (f:type -> type) a { value: f (Free f a) }
-type Free (f:type -> type) a = Pure a | Roll f a
+type Free (f:type -> type) a =
+  data Pure { value:a }
+| data Roll { value: f (Free f a) }
 
 impl Functor (Free f) {
     // Free f : type -> type

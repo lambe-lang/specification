@@ -1,14 +1,17 @@
 impl char
 
-type Int // intrinsic ?
+type Int // native
 
 impl for Int {
     sig (--) : self -> self
-    sig (+)  : self -> self -> self // intrinsic - delta rule
-    sig (-)  : self -> self -> self // intrinsic - delta rule
-    sig abs  : self -> self         // intrinsic - delta rule
+    sig (++) : self -> self
+    sig (+)  : self -> self -> self // native
+    sig (-)  : self -> self -> self // native
+    sig abs  : self -> self         // native
     sig toChar : self -> Char
 
     def (--) = self - 1
-    // ...
+    def (++) = self + 1
+
+    // TODO ...
 }

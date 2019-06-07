@@ -79,5 +79,21 @@ impl Parser a for Or a {
             id
 }
 
+//
+// Parser fmap
+//
+
+data FMap a b {
+    parser : Parser a
+    function : a -> b
+}
+
+impl Parser b for FMap a b {
+    def parse s =
+        self left.parser parse s fold
+            { Rejected $1.consumed }
+            { Accepted (self.function $1) $1.input $1.consumed }
+}
+
 // WIP
 
