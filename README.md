@@ -169,7 +169,7 @@ impl Monad Option {
 Applicative Option pure 1 fmap (1+)     
 
 // for OO with FP flavor addicts
-((Applicative Option).pure 1).fmap (1+)
+((Applicative Option).pure 1).fmap 1.+
 ```
 
 ## 4. Modular system based on files
