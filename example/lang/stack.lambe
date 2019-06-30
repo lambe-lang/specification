@@ -16,6 +16,6 @@ impl for Stack a {
 
     def new = Stack $ List empty
     def push a = self with value = a :: self.value
-    def peek = self value fold { None } { Some $1.head }
+    def peek = self value
     def pop = self with value = self value fold { StackUnderFlow raise } { $1 tail }
 }

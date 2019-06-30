@@ -24,3 +24,4 @@ impl for Then a {
 
     def else f = self cond fold { self then () } { f () }
 }
+

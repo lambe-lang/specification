@@ -18,5 +18,5 @@ impl Monad Option {
     def Some.(<*>) a = a fmap self.value
 
     def None.join = None
-    def Some.join = self value
+    def Some.join = self.value
 }

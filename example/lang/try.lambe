@@ -18,5 +18,5 @@ impl Monad Try {
     def Success.(<*>) a = a fmap self.value
 
     def Failure.join = Failure self.reason
-    def Success.join = self value
+    def Success.join = self.value
 }

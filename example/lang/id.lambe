@@ -1,0 +1,11 @@
+data Id a where a:{
+    value: a
+}
+
+impl Monad Id {
+    def pure a = Id a
+
+    def (<*>) a = a fmap self.value
+
+    def join = self.value
+}

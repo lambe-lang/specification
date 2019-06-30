@@ -537,6 +537,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
+            | "when" expr  
             | param
             | native
             | "_"

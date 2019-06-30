@@ -15,8 +15,10 @@ trait Monad (f:type->type) with Applicative f {
     sig join  : self -> f a for f (f a)
     sig (>>=) : self -> (a -> f b) -> f b for f a
     sig (=<<) : self -> f a -> f b for a -> f b
+    sig (>=>) : self -> (b -> f c) -> (a -> f c) for a -> f b
 
     def (>>=) f = self fmap f join
     def (=<<) a = a >>= self
+    def (>=>) b = self |> (g =<<)
 }
 
