@@ -314,7 +314,7 @@ trait Error a for a {
     raise : self -> b
 }
 
-sig div : int -> int -> int with Error string
+sig div : int -> int -> int with Error String
 
 def div x y =
     if (y == 0)
@@ -324,10 +324,10 @@ def div x y =
 
 ### Global scope
 
-The implementation of `exception string` can be provided at the upper level. Then each expression requiring such `exception string` refers to the same implementation.
+The implementation of `Error String` can be provided at the upper level. Then each expression requiring such `Error String` refers to the same implementation.
 
 ```
-impl Error int {
+impl Error String {
     def raise = 0
 }
 
@@ -339,7 +339,7 @@ div 3 0 // refers to the previous implementation
 The following code be embedded in a basic block limiting the scope of the provided implementation.
 
 ```
-let impl Error int {
+let impl Error String {
         def raise = 0
     } in
     div 3 0 // refers to the previous implementation (local scope)
