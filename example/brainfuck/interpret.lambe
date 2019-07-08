@@ -18,5 +18,7 @@ impl Interpret for Program {
                           else { step token $ token program interpret memory }
             of Nullify -> memory nullify
         in
-        self fold { memory } { program tail interpret $ step program.head memory }
+        case self
+        of Nil  -> memory
+        of Cons -> self tail interpret $ step self.head memory
 }
