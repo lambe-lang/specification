@@ -6,17 +6,17 @@ trait Interpret {
 }
 
 impl Interpret for Program {
-    def interpret mem =
-        let step token mem =
-            token fold
-                 { mem memory $1.alter }
-                 { mem cursor $1.offset }
-                 { mem input }
-                 { mem output }
-                 { if (mem needJump)
-                   then { mem }
-                   else { step token $ $1 program interpret mem } }
-                 { mem nullify }
+    def interpret memory =
+        let step : Token -> Memory -> Memory = token memory ->
+            case token
+            of Memory  -> memory memory token.alter
+            of Cursor  -> memory cursor token.offset
+            of Input   -> memory input
+            of Output  -> memory output
+            of Loop    -> if (memory needJump)
+                          then { memory }
+                          else { step token $ token program interpret memory }
+            of Nullify -> memory nullify
         in
-        self fold { mem } { program tail interpret $ step program.head mem }
+        self fold { memory } { program tail interpret $ step program.head memory }
 }
