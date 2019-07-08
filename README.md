@@ -58,7 +58,7 @@ type Option a =
 | data Some { v:a }
 ```
 
-Synthetised type variable are done using the original order given a the type level definition.
+Synthetised type variables is done using the original order given a the type level definition.
 
 ### Data type implementation
 
