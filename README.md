@@ -11,6 +11,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type and
+- [X] Smart cast
 - [ ] Algebraic effects and handlers.
 
 ## 1. Function
@@ -282,7 +283,27 @@ impl list {
 }
 ```
 
-## 5. Deferred implementation
+## 5. Smart cast
+
+Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
+
+```
+data Nil
+data Cons a {
+    h: a
+    t: List a
+}
+type List a = Nil | Cons a
+
+sig isEmpty : self -> Bool for a
+
+def isEmpty =
+    case self 
+    of Nil  -> true
+    of Cons -> false
+``` 
+
+## 6. Deferred implementation
 
 Note: Work In progress
 
@@ -324,7 +345,7 @@ let impl Error int {
     div 3 0 // refers to the previous implementation (local scope)
 ```
 
-## 6. Examples
+## 7. Examples
 
 ### Peanos' integer
 
@@ -514,7 +535,7 @@ List[1,2  : ClosableCollection (List int) int
 List[1,2] : List int
 ```
 
-## 7. Grammar
+## 8. Grammar
 
 ```
 s0        ::= entity*
@@ -537,7 +558,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
-            | "when" expr  
+            | "case" IDENT cases+
             | param
             | native
             | "_"
@@ -548,6 +569,8 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "." dname
             | expr "with" ("IDENT "=" expr)+
             | impl
+            
+cases     ::= "of" IDENT "->" expr            
 
 type_expr ::= type_in "->" type_out
             | "(" type_expr ")"
@@ -574,7 +597,7 @@ native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
 IDENT     ::= [a-zA-Z$_][a-zA-Z0-9$_]* - KEYWORDS
 KEYWORDS  ::= "sig"  | "def"   | "data"
             | "type" | "trait" | "impl"
-            | "with"  | "for"  | "let" | "in" | "self"
+            | "with"  | "for"  | "let" | "in" | "self" | "case" | "of"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
 SYMBOLS   ::= "(" | ")" | "{" | "}" | "->" | ":" | "." | "|"

@@ -9,13 +9,23 @@ impl for Option a {
 
     def None.fold f _ = f self
     def Some.fold _ f = f self
+
+    def fold s e =
+        case self
+        of Some -> s self
+        of None -> e self
 }
 
 impl Monad Option {
     def pure a = Some a
 
-    def None.(<*>) _ = None
-    def Some.(<*>) a = a fmap self.value
+    // def None.(<*>) _ = None
+    // def Some.(<*>) a = a fmap self.value
+
+    def <*> a =
+        case self
+        of None -> None
+        of Some -> a fmap self
 
     def None.join = None
     def Some.join = self.value
