@@ -12,7 +12,6 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type and
 - [X] Smart cast
-- [ ] Algebraic effects and handlers.
 
 ## 1. Function
 
@@ -28,9 +27,9 @@ sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ### Implementation
 
 ```
-def id       = { $1 }        // equivalent to { a -> a }
-def swap     = { $1 $3 $2 }  // equivalent to { f x y -> f y x }
-def compose  = { f g x -> f $ g x }
+def id       = { $1 }                // equivalent to { a -> a }
+def swap     = { $1 $3 $2 }          // equivalent to { f x y -> f y x }
+def compose  = { f g x -> f $ g x }  // with explicit parameter names
 def pipeline = swap compose
  ```
 
@@ -58,6 +57,8 @@ type Option a =
   data None 
 | data Some { v:a }
 ```
+
+Synthetised type variable are done using the original order given a the type level definition.
 
 ### Data type implementation
 
@@ -303,9 +304,7 @@ def isEmpty =
     of Cons -> false
 ``` 
 
-## 6. Deferred implementation
-
-Note: Work In progress
+## 6. Required implementation
 
 ### Definition and requirements
 
@@ -576,6 +575,7 @@ type_expr ::= type_in "->" type_out
             | "(" type_expr ")"
             | type_out
             | "self"
+            | data
             | type_expr "|" type_expr
 
 type_in   ::= i_param
