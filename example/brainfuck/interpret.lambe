@@ -1,3 +1,4 @@
+impl lang.selection
 impl memory
 impl program
 
@@ -20,5 +21,5 @@ impl Interpret for Program {
         in
         case self
         of Nil  -> memory
-        of Cons -> self tail interpret $ step self.head memory
+        of Cons -> self.tail interpret $ step self.head memory
 }
