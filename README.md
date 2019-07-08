@@ -241,7 +241,7 @@ How this trait can be used in another file? Simple! Just provide an implementati
 ```
 impl list
 
-sig isEmpty : self -> bool for List a
+sig isEmpty : self -> Bool for List a
 def Nil.isEmpty = true
 def Cons.isEmpty = false
 ```
@@ -254,7 +254,7 @@ Note: Work in progress
 sig l : list
 def l = impl list
 
-sig isEmpty : self -> bool for l List a
+sig isEmpty : self -> Bool for l List a
 def (l Nil).isEmpty = true
 def (l Cons).isEmpty = false
 ```
@@ -313,7 +313,7 @@ trait Error a for a {
     raise : self -> b
 }
 
-sig div : int -> int -> int with Error String
+sig div : Int -> Int -> Int with Error String
 
 def div x y =
     if (y == 0)
@@ -346,7 +346,7 @@ let impl Error String {
 
 ## 7. Examples
 
-### Peanos' integer
+### Peanos' Integer
 
 ```
 data Zero
@@ -371,35 +371,35 @@ Succ Zero + $ Succ Zero
 
 ```
 data If {
-    cond : bool
+    cond : Bool
 }
 
 data Then a {
-    cond : bool
-    then : unit -> a
+    cond : Bool
+    then : Unit -> a
 }
 
-sig if : bool -> If
+sig if : Bool -> If
 def if = If
 
 impl for If {
-    sig then : self -> (unit -> a) -> Then a
+    sig then : self -> (Unit -> a) -> Then a
 
     def then t = Then self.cond t
 }
 
 impl for Then a {
-    sig else : self -> (unit -> a) -> a
+    sig else : self -> (Unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
  }
 
-// if (a > 0) then { a-1 } else { a } : int
-// if (a > 0) then { a-1 } else       : (unit -> int) -> int
-// if (a > 0) then { a-1 }            : then int
-// if (a > 0) then                    : (unit -> a) -> then a
+// if (a > 0) then { a-1 } else { a } : Int
+// if (a > 0) then { a-1 } else       : (Unit -> Int) -> Int
+// if (a > 0) then { a-1 }            : then Int
+// if (a > 0) then                    : (Unit -> a) -> then a
 // if (a > 0)                         : if
-// if                                 : bool -> if
+// if                                 : Bool -> if
 ```
 
 ### switch/case/otherwise DSL
@@ -458,14 +458,14 @@ impl for Otherwise b {
     def (=>) f = self.result () fold { f () } id
 }
 
-// switch 1 case (is 0) => { true } otherwise => { false } : bool
-// switch 1 case (is 0) => { true } otherwise =>           : (Unit -> bool) -> bool
-// switch 1 case (is 0) => { true } otherwise              : Otherwise bool
-// switch 1 case (is 0) => { true }                        : Switch int bool
-// switch 1 case (is 0) =>                                 : (Unit -> b) -> Switch int b
-// switch 1 case (is 0)                                    : Case int b
-// switch 1 case                                           : Predicate int -> Case int b
-// switch 1                                                : Switch int b
+// switch 1 case (is 0) => { true } otherwise => { false } : Bool
+// switch 1 case (is 0) => { true } otherwise =>           : (Unit -> Bool) -> Bool
+// switch 1 case (is 0) => { true } otherwise              : Otherwise Bool
+// switch 1 case (is 0) => { true }                        : Switch Int Bool
+// switch 1 case (is 0) =>                                 : (Unit -> b) -> Switch Int b
+// switch 1 case (is 0)                                    : Case Int b
+// switch 1 case                                           : Predicate Int -> Case Int b
+// switch 1                                                : Switch Int b
 ```
 
 ### Collection builder
@@ -528,10 +528,10 @@ def List _ =
 ```
 List      : OpenedCollection (List a) a
 List[     : a -> ClosableCollection (List a) a
-List[1    : ClosableCollection (List int) int
-List[1,   : int -> ClosableCollection (List int) int
-List[1,2  : ClosableCollection (List int) int
-List[1,2] : List int
+List[1    : ClosableCollection (List Int) Int
+List[1,   : Int -> ClosableCollection (List Int) Int
+List[1,2  : ClosableCollection (List Int) Int
+List[1,2] : List Int
 ```
 
 ## 8. Grammar
