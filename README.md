@@ -50,7 +50,7 @@ sig (|>) : self -> (b -> c) -> a -> c for a -> b
 #### Implementation
 
 ```
-def ($) = self (f a)
+def ($) f a = self (f a)
 def (|>) f = f $ self
  ```
 
