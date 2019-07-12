@@ -51,7 +51,7 @@ sig (.>) : self -> (b -> c) -> a -> c for a -> b
 
 ```
 def ($) = self (f a)
-def (.>) f = f . self
+def (|>) f = f $ self
  ```
 
 #### Function with self definition in Action
