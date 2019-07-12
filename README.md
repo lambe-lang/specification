@@ -59,9 +59,11 @@ def (|>) f = f $ self
 ```
 // for FP addicts
 1 + $ 3 + 4
+3 + |> 4 + |> 2 * 5 
 
 // for OO with FP flavor addicts
-1.+.$ (3.+ 4)
+1.+.$ 3.+ 4
+3.+.|> 4.+.|> 2.* 5 
 ```
  
 ## 2. Data type
