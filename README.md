@@ -15,7 +15,9 @@ Targeted programming language paradigms for the design of Lambë are:
 
 ## 1. Function
 
-### Definition
+### 1.1 Basic concept
+
+#### Definition
 
 ```
 sig id       : a -> a
@@ -24,7 +26,7 @@ sig compose  : (b -> c) -> (a -> b) -> a -> c
 sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ```
 
-### Implementation
+#### Implementation
 
 ```
 def id       = { $1 }                // equivalent to { a -> a }
@@ -33,6 +35,35 @@ def compose  = { f g x -> f $ g x }  // with explicit parameter names
 def pipeline = swap compose
  ```
 
+### 1.2 Self concept
+
+A function can be specified with a `self` type at the first position. Therefor such function is infix and accept the
+dot notation. The self type is given by the attached `for` directive.
+
+#### Definition
+
+```
+sig ($)  : self -> (a -> b) -> a -> c for b -> c
+sig (.>) : self -> (b -> c) -> a -> c for a -> b
+```
+
+#### Implementation
+
+```
+def ($) = self (f a)
+def (.>) f = f . self
+ ```
+
+#### Function with self definition in Action
+
+```
+// for FP addicts
+1 + $ 3 + 4
+
+// for OO with FP flavor addicts
+1.+.$ (3.+ 4)
+```
+ 
 ## 2. Data type
 
 ### Data type definition
