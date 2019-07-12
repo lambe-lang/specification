@@ -1,4 +1,4 @@
-sig ($) : self -> (a -> b) -> c for b -> c
+sig ($) : self -> (a -> b) -> a -> c for b -> c
 def ($) f b = self (f b)
 
 // Example
