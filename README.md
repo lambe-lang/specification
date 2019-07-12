@@ -44,7 +44,7 @@ dot notation. The self type is given by the attached `for` directive.
 
 ```
 sig ($)  : self -> (a -> b) -> a -> c for b -> c
-sig (.>) : self -> (b -> c) -> a -> c for a -> b
+sig (|>) : self -> (b -> c) -> a -> c for a -> b
 ```
 
 #### Implementation
