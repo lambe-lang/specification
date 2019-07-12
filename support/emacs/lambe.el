@@ -3,7 +3,7 @@
 )
   
 (defvar lambe-keywords
-    '("with" "for" "let" "in" "self")
+    '("with" "for" "let" "in" "self" "when" "is")
 )
   
 (defvar lambe-tab-width nil "Width of a tab for Lambe mode")
