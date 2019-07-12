@@ -299,9 +299,9 @@ type List a = Nil | Cons a
 sig isEmpty : self -> Bool for a
 
 def isEmpty =
-    case self 
-    of Nil  -> true
-    of Cons -> false
+    when self 
+    is Nil  -> true
+    is Cons -> false
 ``` 
 
 ## 6. Required implementation
@@ -392,7 +392,7 @@ impl for Then a {
     sig else : self -> (Unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
- }
+}
 
 // if (a > 0) then { a-1 } else { a } : Int
 // if (a > 0) then { a-1 } else       : (Unit -> Int) -> Int
@@ -557,7 +557,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
-            | "case" IDENT cases+
+            | "when" IDENT cases+
             | param
             | native
             | "_"
@@ -569,7 +569,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "with" ("IDENT "=" expr)+
             | impl
             
-cases     ::= "of" IDENT "->" expr            
+cases     ::= "is" IDENT "->" expr            
 
 type_expr ::= type_in "->" type_out
             | "(" type_expr ")"
@@ -595,9 +595,10 @@ dname     ::= IDENT | "(" OPERATOR ")"
 native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
 
 IDENT     ::= [a-zA-Z$_][a-zA-Z0-9$_]* - KEYWORDS
-KEYWORDS  ::= "sig"  | "def"   | "data"
-            | "type" | "trait" | "impl"
-            | "with"  | "for"  | "let" | "in" | "self" | "case" | "of"
+KEYWORDS  ::= "sig"   | "def"   | "data"
+            | "type"  | "trait" | "impl"
+            | "with"  | "for"   | "let" 
+            | "in"    | "self"  | "when" | "is"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
 SYMBOLS   ::= "(" | ")" | "{" | "}" | "->" | ":" | "." | "|"

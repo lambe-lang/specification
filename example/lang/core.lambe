@@ -1,0 +1,5 @@
+sig ($) : self -> (a -> b) -> c for b -> c
+def ($) f b = self (f b)
+
+// Example
+// 1 + $ 4 + 3
