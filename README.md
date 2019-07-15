@@ -301,8 +301,8 @@ For instance the `::` is specified but not defined:
 ```
 data Nil
 data Cons a {
-    h: a
-    t: List a
+    head: a
+    tail: List a
 }
 type List a = Nil | Cons a
 
@@ -376,6 +376,24 @@ let impl Error String {
     } in
     div 3 0 // refers to the previous implementation (local scope)
 ```
+
+
+### Requiring trait
+
+In trait definition some traits can be required thanks to the `with` keyword. 
+
+```
+with list
+
+sig (++) : self -> List a -> List a for List a
+
+def (++) l = 
+    when self 
+    is Nil  -> l
+    is Cons -> self.h :: $ self.t ++ l
+```
+
+In this sample the `::` function is used but not implemented. 
 
 ## 7. Examples
 
@@ -572,7 +590,7 @@ List[1,2] : List Int
 ```
 s0        ::= entity*
 
-entity    ::= sig | def | data | type | trait | impl
+entity    ::= sig | def | data | type | trait | impl | with
 
 sig       ::= "sig" dname ":" type for? with* 
 def       ::= "def" (self  ".")? dname  param* "=" expr
@@ -580,9 +598,8 @@ data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
-
-with      ::= "with" type_o
-for       ::= "for" type_o
+with      ::= "with" type_out
+for       ::= "for" type_out
 
 self      ::= IDENT
             | "(" IDENT* ")" // WIP
@@ -590,7 +607,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
-            | "when" IDENT cases+
+            | "when" (IDENT | IDENT = expr) cases+
             | param
             | native
             | "_"
