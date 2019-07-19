@@ -126,9 +126,10 @@ Lambë does not provide a pattern matching but a Kotlin like smart cast on types
 sig isEmpty : self -> Bool for Option _ 
 
 def isEmpty =
-    when self 
+    when self { 
     is None -> true
     is Some -> false
+    }
 ``` 
 
 ## 4. Traits
@@ -601,7 +602,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
-            | "when" (IDENT | IDENT = expr) cases+
+            | "when" (IDENT | "let" IDENT = expr) "{" cases+ "}"
             | param
             | native
             | "_"

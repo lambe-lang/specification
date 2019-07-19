@@ -9,7 +9,7 @@ trait Interpret {
 impl Interpret for Program {
     def interpret memory =
         let step token memory =
-            when token
+            when token {
             is Memory  -> memory memory token.alter
             is Cursor  -> memory cursor token.isfset
             is Input   -> memory input
@@ -18,8 +18,10 @@ impl Interpret for Program {
                           then { memory }
                           else { step token $ token program interpret memory }
             is Nullify -> memory nullify
+            }
         in
-        when self
+        when self {
         is Nil  -> memory
         is Cons -> self.tail interpret $ step self.head memory
+        }
 }

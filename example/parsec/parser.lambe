@@ -23,12 +23,13 @@ data Satisfy { predicate : char -> bool }
 impl Parser char for Satisfy {
     def parse s =
         let p = s next
-        in p._1 fold
-            { Rejected false }
-            { if (self $1)
-              then { Accepted $1 p._2 true }
+        in when r=p._1 {
+           is Rejected -> Rejected false
+           is Accepted ->
+              if (self r)
+              then { Accepted e p._2 true }
               else { Rejected false }
-            }
+           }
 }
 
 def any : Satisfy
@@ -51,12 +52,14 @@ data And a b {
 
 impl Parser (Pair a b) for And a b {
     def parse s =
-        self left parse s fold
-            { rl -> Rejected rl.consumed }
-            { al -> self right parse a.input fold
-                { rr -> Rejected (al.consumed || rr.consumed) }
-                { ar -> Accepted (al.value,ar.value) b.input (al.consumed || ar.consumed) }
+        when r = self left parse s {
+        is Rejected -> Rejected r.consumed
+        is Accepted ->
+            when l = self right parse r.input {
+            is Rejected -> Rejected (r.consumed || l.consumed)
+            is Accepted -> Accepted (r.value,l.value) b.input (r.consumed || l.consumed)
             }
+        }
 }
 
 //
@@ -70,13 +73,13 @@ data Or a {
 
 impl Parser a for Or a {
     def parse s =
-        self left parse s fold
-            { r ->
+        when r = self left parse s {
+        is Rejected ->
               if r.consumed
               then { r }
               else { self right parse s }
-            }
-            id
+        is Accepted -> r
+        }
 }
 
 //
@@ -90,9 +93,10 @@ data FMap a b {
 
 impl Parser b for FMap a b {
     def parse s =
-        self left.parser parse s fold
-            { Rejected $1.consumed }
-            { Accepted (self.function $1) $1.input $1.consumed }
+        when r = self left.parser parse s {
+        is Rejected -> Rejected r.consumed
+        is Accepted -> Accepted (self.function r) r.input r.consumed
+        }
 }
 
 // WIP
