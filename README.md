@@ -123,11 +123,11 @@ Some 1 fold { 0 } id
 Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
 
 ```
-sig isEmpty : self -> Bool for Option a 
+sig isEmpty : self -> Bool for Option _ 
 
 def isEmpty =
     when self 
-    is None  -> true
+    is None -> true
     is Some -> false
 ``` 
 
