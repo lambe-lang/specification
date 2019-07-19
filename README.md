@@ -68,7 +68,7 @@ def (|>) f = f $ self
  
 ## 2. Data type
 
-### Data type definition
+### 2.1 Data type definition
 
 ```
 data None
@@ -93,7 +93,7 @@ type Option a =
 
 Synthetised type variables is done using the original order given a the type level definition.
 
-### Data type implementation
+### 2.2 Data type implementation
 
 ```
 impl for Option a {
@@ -107,7 +107,7 @@ impl for Option a {
 In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case defined thanks to the `for ...` declaration. Furthermore implementations are
 given for each option data type i.e. None and Some.
 
-### Data type in action
+### 2.3 Data type in action
 
 ```
 // for FP addicts
@@ -117,7 +117,21 @@ Some 1 fold { 0 } id
 (Some 1).fold { 0 } id
 ```
 
-## 3. Traits
+
+## 3. Smart cast
+
+Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
+
+```
+sig isEmpty : self -> Bool for Option a 
+
+def isEmpty =
+    when self 
+    is None  -> true
+    is Some -> false
+``` 
+
+## 4. Traits
 
 ### Trait definition
 
@@ -207,7 +221,7 @@ Applicative Option pure 1 fmap (1+)
 ((Applicative Option).pure 1).fmap 1.+
 ```
 
-## 4. Modular system based on files
+## 5. Modular system based on files
 
 ### File as trait
 
@@ -317,26 +331,6 @@ impl list {
 }
 ```
 
-## 5. Smart cast
-
-Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
-
-```
-data Nil
-data Cons a {
-    h: a
-    t: List a
-}
-type List a = Nil | Cons a
-
-sig isEmpty : self -> Bool for a
-
-def isEmpty =
-    when self 
-    is Nil  -> true
-    is Cons -> false
-``` 
-
 ## 6. Required implementation
 
 ### Definition and requirements
@@ -388,7 +382,7 @@ with list
 sig (++) : self -> List a -> List a for List a
 
 def (++) l = 
-    when self 
+    when self
     is Nil  -> l
     is Cons -> self.h :: $ self.t ++ l
 ```
