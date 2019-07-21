@@ -29,8 +29,8 @@ sig pipeline : (a -> b) -> (b -> c) -> a -> c
 #### Implementation
 
 ```
-def id       = { $1 }                // equivalent to { a -> a }
-def swap     = { $1 $3 $2 }          // equivalent to { f x y -> f y x }
+def id       = { a -> a }            // equivalent to { $1 }
+def swap     = { f x y -> f y x }    // equivalent to { $1 $3 $2 }
 def compose  = { f g x -> f $ g x }  // with explicit parameter names
 def pipeline = swap compose
  ```
