@@ -127,8 +127,8 @@ sig isEmpty : self -> Bool for Option _
 
 def isEmpty =
     when self { 
-    is None -> true
-    is Some -> false
+    | None -> true
+    | Some -> false
     }
 ``` 
 
@@ -643,7 +643,7 @@ IDENT     ::= [a-zA-Z$_][a-zA-Z0-9$_]* - KEYWORDS
 KEYWORDS  ::= "sig"   | "def"   | "data"
             | "type"  | "trait" | "impl"
             | "with"  | "for"   | "let" 
-            | "in"    | "self"  | "when" | "is"
+            | "in"    | "self"  | "when"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
 SYMBOLS   ::= "(" | ")" | "{" | "}" | "->" | ":" | "." | "|"
