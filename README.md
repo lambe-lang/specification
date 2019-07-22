@@ -602,7 +602,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
-            | "when" (IDENT | "let" IDENT = expr) "{" cases+ "}"
+            | "when" (IDENT | "let" IDENT = expr) "{" case+ "}"
             | param
             | native
             | "_"
@@ -614,7 +614,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "with" ("IDENT "=" expr)+
             | impl
             
-cases     ::= "is" IDENT "->" expr            
+case      ::= "|" IDENT "->" expr            
 
 type_expr ::= type_in "->" type_out
             | "(" type_expr ")"
