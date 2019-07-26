@@ -604,7 +604,7 @@ self      ::= IDENT
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT param* "=" expr "in" expr
             | "let" impl "in"
-            | "when" (IDENT | "let" IDENT = expr) "{" case+ "}"
+            | "when" ("let" IDENT =)? expr "{" cases+ "}"
             | param
             | native
             | "_"

@@ -23,7 +23,7 @@ data Satisfy { predicate : char -> bool }
 impl Parser char for Satisfy {
     def parse s =
         let p = s next
-        in when r=p._1 {
+        in when let r = p._1 {
            | Rejected -> Rejected false
            | Accepted ->
               if (self r)
@@ -52,10 +52,10 @@ data And a b {
 
 impl Parser (Pair a b) for And a b {
     def parse s =
-        when r = self left parse s {
+        when let r = self left parse s {
         | Rejected -> Rejected r.consumed
         | Accepted ->
-            when l = self right parse r.input {
+            when let l = self right parse r.input {
             | Rejected -> Rejected (r.consumed || l.consumed)
             | Accepted -> Accepted (r.value,l.value) b.input (r.consumed || l.consumed)
             }
@@ -73,7 +73,7 @@ data Or a {
 
 impl Parser a for Or a {
     def parse s =
-        when r = self left parse s {
+        when let r = self left parse s {
         | Rejected ->
               if r.consumed
               then { r }
@@ -93,7 +93,7 @@ data FMap a b {
 
 impl Parser b for FMap a b {
     def parse s =
-        when r = self left.parser parse s {
+        when let r = self left.parser parse s {
         | Rejected -> Rejected r.consumed
         | Accepted -> Accepted (self.function r) r.input r.consumed
         }

@@ -1,10 +1,15 @@
+/**
+ * Ref http://comonad.com/reader/2011/free-monads-for-less/
+ */
+
 type Free (f:type -> type) a =
-  data Pure { value:a }
+  data Pure { value: a }
 | data Roll { value: f (Free f a) }
 
 impl Functor (Free f) {
-    // Free f : type -> type
-    // fmap   : self -> (a -> b) -> (Free f) b for (Free f) a
     def Pure.fmap f = Pure $ f self.value
     def Roll.fmap f = Roll $ self.value fmap { $1 fmap f }
 }
+
+
+
