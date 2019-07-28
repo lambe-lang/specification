@@ -7,16 +7,19 @@ type Try a =
 impl for Try a {
     sig fold : self -> (Failure -> b) -> (Success a -> b) -> b
 
-    def Failure.fold f _ = f self
-    def Success.fold _ f = f self
+    def fold f s =
+        when self {
+        | Failure -> f self
+        | Success -> s self
+        }
 }
 
 impl Monad Try {
     def pure a = Success a
 
-    def Failure.(<*>) _ = Failure self.reason
-    def Success.(<*>) a = a fmap self.value
+    def (<*>) a =
+        case self fold { Failure $1.reason } { a fmap $1.value }
 
-    def Failure.join = Failure self.reason
-    def Success.join = self.value
+    def join =
+        self fold { Failure $1.reason } { $1.value }
 }

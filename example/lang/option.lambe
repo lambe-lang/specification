@@ -7,25 +7,21 @@ type Option a =
 impl for Option a {
     sig fold : self -> (None -> b) -> (Some a -> b) -> b
 
-    def None.fold f _ = f self
-    def Some.fold _ f = f self
-
     def fold s e =
-        case self
-        of Some -> s self
-        of None -> e self
+        when self {
+        | Some -> s self
+        | None -> e self
+        }
 }
 
 impl Monad Option {
     def pure a = Some a
 
-    // def None.(<*>) _ = None
-    // def Some.(<*>) a = a fmap self.value
-
     def <*> a =
-        case self
-        of None -> None
-        of Some -> a fmap self
+        when self {
+        | None -> None
+        | Some -> a fmap self
+        }
 
     def None.join = None
     def Some.join = self.value

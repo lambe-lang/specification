@@ -158,14 +158,16 @@ trait Applicative (f:type->type) with Functor f {
 }
 ```
 
-Such *for* directive can be define at the trait level, method level or implementation level. If such directive is not expressed for a method it's a *static* method.
+Such *for* directive can be define at the trait level, signature level or definition level. If such directive is not expressed for a method and does not have `self` as first parameter it's a *static* method. 
 
 ```
 trait Monad (f:type->type) with Applicative f {
-    sig join  : self -> f a for f (f a)
-    sig (>>=) : self -> (a -> f b) -> f b for f a
-    sig (=<<) : self -> f a -> f b for a -> f b
+    sig return : a -> f a 
+    sig join   : self -> f a for f (f a)
+    sig (>>=)  : self -> (a -> f b) -> f b for f a
+    sig (=<<)  : self -> f a -> f b for a -> f b
 
+    def return  = pure
     def (>>=) f = self fmap f join
     def (=<<) a = a >>= self
 }
@@ -442,12 +444,12 @@ impl for Then a {
     def else f = self cond fold { self then () } { f () }
 }
 
-// if (a > 0) then { a-1 } else { a } : Int
-// if (a > 0) then { a-1 } else       : (Unit -> Int) -> Int
-// if (a > 0) then { a-1 }            : then Int
-// if (a > 0) then                    : (Unit -> a) -> then a
-// if (a > 0)                         : if
 // if                                 : Bool -> if
+// if (a > 0)                         : if
+// if (a > 0) then                    : (Unit -> a) -> then a
+// if (a > 0) then { a-1 }            : then Int
+// if (a > 0) then { a-1 } else       : (Unit -> Int) -> Int
+// if (a > 0) then { a-1 } else { a } : Int
 ```
 
 ### switch/case/otherwise DSL
@@ -506,14 +508,14 @@ impl for Otherwise b {
     def (=>) f = self.result () fold { f () } id
 }
 
-// switch 1 case (is 0) => { true } otherwise => { false } : Bool
-// switch 1 case (is 0) => { true } otherwise =>           : (Unit -> Bool) -> Bool
-// switch 1 case (is 0) => { true } otherwise              : Otherwise Bool
-// switch 1 case (is 0) => { true }                        : Switch Int Bool
-// switch 1 case (is 0) =>                                 : (Unit -> b) -> Switch Int b
-// switch 1 case (is 0)                                    : Case Int b
-// switch 1 case                                           : Predicate Int -> Case Int b
 // switch 1                                                : Switch Int b
+// switch 1 case                                           : Predicate Int -> Case Int b
+// switch 1 case (is 0)                                    : Case Int b
+// switch 1 case (is 0) =>                                 : (Unit -> b) -> Switch Int b
+// switch 1 case (is 0) => { true }                        : Switch Int Bool
+// switch 1 case (is 0) => { true } otherwise              : Otherwise Bool
+// switch 1 case (is 0) => { true } otherwise =>           : (Unit -> Bool) -> Bool
+// switch 1 case (is 0) => { true } otherwise => { false } : Bool
 ```
 
 ### Collection builder

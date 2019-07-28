@@ -1,11 +1,11 @@
-sig (.) : self -> (a -> b) -> a -> c for b -> c
-def (.) f a = self (f a)
+sig (@) : self -> (a -> b) -> a -> c for b -> c
+def (@) f a = self (f a)
 
 sig ($) : self -> (a -> b) -> a -> c for b -> c
-def ($) = self .
+def ($) = self @
 
-sig (.>) : self -> (b -> c) -> a -> c for a -> b
-def (.>) f = f . self
+sig (@>) : self -> (b -> c) -> a -> c for a -> b
+def (@>) f = f @ self
 
 // Examples
 // 1 + $ 4 + 3
