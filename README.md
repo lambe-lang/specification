@@ -7,13 +7,17 @@ A statically typed functional programming inspired by Haskell, OCaml and Rust.
 Targeted programming language paradigms for the design of Lambë are:
 - [X] Functional programming,
 - [X] Static typing,
+- [X] Self receiver concept,
+– [X] Algebraic Data Type aka ADT.  
 - [X] Trait based code organisation,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
-- [X] Higher-kinded-type and
-- [X] Smart cast
+- [X] Higher-kinded-type,
+- [X] Smart cast and
 
 ## 1. Function
+
+**Keyword**: Functional programming, Static typing
 
 ### 1.1 Basic concept
 
@@ -36,6 +40,8 @@ def pipeline = swap compose
  ```
 
 ### 1.2 Self concept
+
+**Keyword**: Self receiver concept
 
 A function can be specified with a `self` type at the first position. Therefor such function is infix and accept the
 dot notation. The self type is given by the attached `for` directive.
@@ -67,6 +73,8 @@ def (|>) f = f $ self
 ```
  
 ## 2. Data type
+
+**Keyword**: Algebraic Data Type
 
 ### 2.1 Data type definition
 
@@ -120,6 +128,8 @@ Some 1 fold { 0 } id
 
 ## 3. Smart cast
 
+**Keyword**: Smart Cast
+
 Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
 
 ```
@@ -135,6 +145,8 @@ impl for Option a {
 ``` 
 
 ## 4. Traits
+
+**Keyword**: Trait based code organisation
 
 ### Trait definition
 
@@ -227,6 +239,8 @@ Applicative Option pure 1 fmap (1+)
 ```
 
 ## 5. Modular system based on files
+
+**Keyword**: Trait based code organisation
 
 ### File as trait
 
