@@ -153,6 +153,9 @@ impl for Option a {
 ```
 trait Functor (f:type->type) {
     sig fmap : self -> (a -> b) -> f b for f a
+    sig <*>  : self -> f a -> f b for a -> b
+    
+    def <*> a = a fmap f
 }
 ```
 
@@ -232,10 +235,10 @@ impl Monad Option {
 
 ```
 // for FP addicts
-Applicative Option pure 1 fmap (1+)     
++ <$> (pure 1) <*> (pure 1) 
 
 // for OO with FP flavor addicts
-((Applicative Option).pure 1).fmap 1.+
++.<$>(pure 1).<*>(pure 1)
 ```
 
 ## 5. Modular system based on files
