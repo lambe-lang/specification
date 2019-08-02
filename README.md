@@ -153,9 +153,9 @@ impl for Option a {
 ```
 trait Functor (f:type->type) {
     sig fmap : self -> (a -> b) -> f b for f a
-    sig <*>  : self -> f a -> f b for a -> b
+    sig <$>  : self -> f a -> f b for a -> b
     
-    def <*> a = a fmap f
+    def <$> a = a fmap f
 }
 ```
 
