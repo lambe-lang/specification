@@ -8,7 +8,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Functional programming,
 - [X] Static typing,
 - [X] Self receiver concept,
-– [X] Algebraic Data Type aka ADT.  
+- [X] Algebraic Data Type aka ADT.  
 - [X] Trait based code organisation,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
