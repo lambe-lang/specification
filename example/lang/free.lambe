@@ -3,12 +3,16 @@
  */
 
 type Free (f:type -> type) a =
-  data Pure { value: a }
-| data Roll { value: f (Free f a) }
+  data Pure   { value: a }
+| data Roll i { value: i cont : i -> Free f a }
 
-impl Functor (Free f) {
-    def Pure.fmap f = Pure $ f self.value
-    def Roll.fmap f = Roll $ self.value fmap { $1 fmap f }
+impl for Free f {
+    sig bind : self -> (a -> b) -> Free f b
+    def Pure.bind f = Pure $ f self.value
+    def Roll.bind f = Roll self.value { self.cont $1 bind f }
+
+    sig liftF : f a -> Free f a
+    def liftF a = Roll a Pure
 }
 
 
