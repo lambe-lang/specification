@@ -128,7 +128,7 @@ Some 1 fold { 0 } id
 
 ### 2.4 About generalization i.e. GADT
 
-Should we allow generalizes ADT or not! This is in correlation with the encoding of a normal Algebraic Data Type using a variation of the visitor pattern + the application of the Yoneda lemma
+Should we support generalized ADT or not! This is in correlation with the encoding of a normal Algebraic Data Type using a variation of the visitor pattern + the application of the Yoneda lemma
 
 ## 3. Smart cast
 
