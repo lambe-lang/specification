@@ -9,6 +9,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Static typing,
 - [X] Self receiver concept,
 - [X] Algebraic Data Type aka ADT.  
+- [ ] Generalized Algebraic Data Type 
 - [X] Trait based code organisation,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
@@ -125,6 +126,9 @@ Some 1 fold { 0 } id
 (Some 1).fold { 0 } id
 ```
 
+### 2.4 About generalization i.e. GADT
+
+Should we allow generalizes ADT or not! This is in correlation with the encoding of a normal Algebraic Data Type using a variation of the visitor pattern + the application of the Yoneda lemma
 
 ## 3. Smart cast
 
@@ -159,9 +163,9 @@ trait Functor (f:type->type) {
 }
 ```
 
-The `Functor` has a parametric type constructor `f` revealing the support of higher-kinded-types in the langage.
+The `Functor` has a parametric type constructor `f` revealing the support of higher-kinded-types in the language.
 
-The `fmap` has a receiver called `self` and this receiver has the following type (given by the *for* directive): `f a`.
+The `fmap` has a receiver called `self` and this receiver has the following type given by the *for* directive: `f a`.
 
 ```
 trait Applicative (f:type->type) with Functor f {
