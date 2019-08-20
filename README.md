@@ -9,7 +9,6 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Static typing,
 - [X] Self receiver concept,
 - [X] Algebraic Data Type aka ADT.  
-- [ ] Generalized Algebraic Data Type 
 - [X] Trait based code organisation,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
@@ -50,7 +49,7 @@ dot notation. The self type is given by the attached `for` directive.
 #### Definition
 
 ```
-sig ($)  : self -> (a -> b) -> a -> c for b -> c
+sig ($)  : exist e . forall self -> (a -> b) -> a -> c for b -> c
 sig (|>) : self -> (b -> c) -> a -> c for a -> b
 ```
 
@@ -100,7 +99,7 @@ type Option a =
 | data Some { v:a }
 ```
 
-Synthetised type variables is done using the original order given a the type level definition.
+Synthesised type variables is done using the original order given a the type level definition.
 
 ### 2.2 Data type implementation
 
@@ -125,12 +124,6 @@ Some 1 fold { 0 } id
 // for OO with FP flavor addicts
 (Some 1).fold { 0 } id
 ```
-
-### 2.4 About generalization i.e. GADT
-
-Should we support generalized ADT or not! This is in correlation with the encoding of a normal Algebraic Data Type using a variation of the visitor pattern + the application of the Yoneda lemma
-
-## 3. Smart cast
 
 **Keyword**: Smart Cast
 
