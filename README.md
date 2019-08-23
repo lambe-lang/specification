@@ -13,7 +13,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type,
-- [X] Smart cast and
+- [X] Smart cast
 
 ## 1. Function
 
@@ -458,10 +458,10 @@ impl for Then a {
     def else f = self cond fold { self then () } { f () }
 }
 
-// if                                 : Bool -> if
-// if (a > 0)                         : if
-// if (a > 0) then                    : (Unit -> a) -> then a
-// if (a > 0) then { a-1 }            : then Int
+// if                                 : Bool -> If
+// if (a > 0)                         : If
+// if (a > 0) then                    : (Unit -> a) -> Then a
+// if (a > 0) then { a-1 }            : Then Int
 // if (a > 0) then { a-1 } else       : (Unit -> Int) -> Int
 // if (a > 0) then { a-1 } else { a } : Int
 ```
