@@ -83,7 +83,7 @@ impl Parser a for Or a {
 }
 
 //
-// Parser fmap
+// Parser map
 //
 
 data FMap a b {

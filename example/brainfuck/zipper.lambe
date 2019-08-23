@@ -31,7 +31,7 @@ impl zipper a for Zipper a {
             | Cons -> l.tail , $ l.head :: self.right
             }
          in self with left = pair._1
-                with right = pair._2
+                 with right = pair._2
 
     def right =
         let pair =

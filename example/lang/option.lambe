@@ -15,8 +15,8 @@ impl Monad Option {
     def pure a = Some a
 
     def None.<*> a = None
-    def Some.<*> a = a fmap self.value
+    def Some.<*> a = a map self.value
 
-    def None.join = None
-    def Some.join = self.value
+    def None.flatten = None
+    def Some.flatten = self.value
 }

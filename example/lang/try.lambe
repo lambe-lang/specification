@@ -18,8 +18,8 @@ impl Monad Try {
     def pure a = Success a
 
     def (<*>) a =
-        case self fold { Failure $1.reason } { a fmap $1.value }
+        case self fold { Failure $1.reason } { a map $1.value }
 
-    def join =
+    def flatten =
         self fold { Failure $1.reason } { $1.value }
 }

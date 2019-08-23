@@ -18,8 +18,8 @@ impl Monad List {
     def pure a = a :: Nil
 
     def Nil.(<*>) _ = Nil
-    def Cons.(<*>) a = self tail <*> $ a fmap $ self head
+    def Cons.(<*>) a = self tail <*> $ a map $ self head
 
-    def Nil.join = Nil
-    def Cons.join = self.head // TODO
+    def Nil.flatten = Nil
+    def Cons.flatten = self.head // TODO
 }
