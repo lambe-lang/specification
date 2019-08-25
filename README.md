@@ -398,7 +398,7 @@ In trait definition some traits can be required thanks to the `with` keyword.
 ```
 with list
 
-sig (++) : self -> List a -> List a for List a
+sig (++) : self -> self -> self for List a
 
 def (++) l = 
     when self
