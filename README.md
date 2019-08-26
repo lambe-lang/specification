@@ -49,7 +49,7 @@ dot notation. The self type is given by the attached `for` directive.
 #### Definition
 
 ```
-sig ($)  : exist e . forall self -> (a -> b) -> a -> c for b -> c
+sig ($)  : self -> (a -> b) -> a -> c for b -> c
 sig (|>) : self -> (b -> c) -> a -> c for a -> b
 ```
 
