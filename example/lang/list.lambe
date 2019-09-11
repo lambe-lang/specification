@@ -5,12 +5,18 @@ type List a =
     tail : List a
   }
 
-impl for List a {
-    sig fold : self -> (Nil -> b) -> (Cons a -> b) -> b
-    def Nil.fold f _ = f self
-    def Cons.fold _ f = f self
+impl for Nil {
+    sig fold : self -> (self -> b) -> (Cons a -> b) -> b
+    def fold f _ = f self
+}
 
-    sig (::) : self -> List a -> List a for a
+impl for Cons a {
+    sig fold : self -> (Nil -> b) -> (self -> b) -> b
+    def fold _ f = f self
+}
+
+impl for List a {
+    sig (::) : self -> List a -> Cons a for a
     def (::) l = Cons self l
 }
 
