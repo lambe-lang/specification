@@ -24,8 +24,8 @@ impl Parser char for Satisfy {
     def parse s =
         let p = s next
         in when let r = p._1 {
-           | Rejected -> Rejected false
-           | Accepted ->
+           is Rejected -> Rejected false
+           is Accepted ->
               if (self r)
               then { Accepted e p._2 true }
               else { Rejected false }
@@ -53,11 +53,11 @@ data And a b {
 impl Parser (Pair a b) for And a b {
     def parse s =
         when let r = self left parse s {
-        | Rejected -> Rejected r.consumed
-        | Accepted ->
+        is Rejected -> Rejected r.consumed
+        is Accepted ->
             when let l = self right parse r.input {
-            | Rejected -> Rejected (r.consumed || l.consumed)
-            | Accepted -> Accepted (r.value,l.value) b.input (r.consumed || l.consumed)
+            is Rejected -> Rejected (r.consumed || l.consumed)
+            is Accepted -> Accepted (r.value,l.value) b.input (r.consumed || l.consumed)
             }
         }
 }
@@ -74,11 +74,11 @@ data Or a {
 impl Parser a for Or a {
     def parse s =
         when let r = self left parse s {
-        | Rejected ->
+        is Rejected ->
               if r.consumed
               then { r }
               else { self right parse s }
-        | Accepted -> r
+        is Accepted -> r
         }
 }
 
@@ -94,8 +94,8 @@ data FMap a b {
 impl Parser b for FMap a b {
     def parse s =
         when let r = self left.parser parse s {
-        | Rejected -> Rejected r.consumed
-        | Accepted -> Accepted (self.function r) r.input r.consumed
+        is Rejected -> Rejected r.consumed
+        is Accepted -> Accepted (self.function r) r.input r.consumed
         }
 }
 

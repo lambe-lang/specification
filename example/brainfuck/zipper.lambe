@@ -27,8 +27,8 @@ impl zipper a for Zipper a {
     def left =
         let pair =
             when let l = self left {
-            | Nil  -> List[self.default] , $ self.default :: self.right
-            | Cons -> l.tail , $ l.head :: self.right
+            is Nil  -> List[self.default] , $ self.default :: self.right
+            is Cons -> l.tail , $ l.head :: self.right
             }
          in self with left = pair._1
                  with right = pair._2
@@ -36,8 +36,8 @@ impl zipper a for Zipper a {
     def right =
         let pair =
             when let r = self right {
-            | Nil  -> self.default :: self.left , $ List[self.default]
-            | Cons -> r.head :: self.left , $ r.tail
+            is Nil  -> self.default :: self.left , $ List[self.default]
+            is Cons -> r.head :: self.left , $ r.tail
             }
         in self with left = pair._1
                 with right = pair._2
@@ -47,8 +47,8 @@ impl zipper a for Zipper a {
     def replace f =
         let value =
             when l = self left {
-            | Nil  -> List[ (f self.default) ]
-            | Cons -> f l.head :: $ l :: tail
+            is Nil  -> List[ (f self.default) ]
+            is Cons -> f l.head :: $ l :: tail
             }
         in self with left = value
 }

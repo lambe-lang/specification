@@ -9,8 +9,8 @@ impl for Try a {
 
     def fold f s =
         when self {
-        | Failure -> f self
-        | Success -> s self
+        is Failure -> f self
+        is Success -> s self
         }
 }
 

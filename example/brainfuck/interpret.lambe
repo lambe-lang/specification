@@ -10,18 +10,18 @@ impl Interpret for Program {
     def interpret memory =
         let step token memory =
             when token {
-            | Memory  -> memory memory token.alter
-            | Cursor  -> memory cursor token.|fset
-            | Input   -> memory input
-            | Output  -> memory output
-            | Loop    -> if (memory needJump)
+            is Memory  -> memory memory token.alter
+            is Cursor  -> memory cursor token.offset
+            is Input   -> memory input
+            is Output  -> memory output
+            is Loop    -> if (memory needJump)
                          then { memory }
                          else { step token $ token program interpret memory }
-            | Nullify -> memory nullify
+            is Nullify -> memory nullify
             }
         in
         when self {
-        | Nil  -> memory
-        | Cons -> self.tail interpret $ step self.head memory
+        is Nil  -> memory
+        is Cons -> self.tail interpret $ step self.head memory
         }
 }

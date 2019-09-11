@@ -35,7 +35,7 @@ sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ```
 def id       = { a -> a }         // equivalent to { $1 }
 def swap     = { f x y -> f y x } // equivalent to { $1 $3 $2 }
-def compose  = { $1 $ $2 $3 }     // equivalent to { f g x -> f $ g x }
+def compose  = { $1 ($2 $3) }     // equivalent to { f g x -> f (g x) }
 def pipeline = swap compose
  ```
 
@@ -135,8 +135,8 @@ impl for Option a {
 
     def fold n s = 
         when self {
-        | None -> n self
-        | Some -> s self
+        is None -> n self
+        is Some -> s self
         }
 }
 ``` 
@@ -401,9 +401,10 @@ with list
 sig (++) : self -> self -> self for List a
 
 def (++) l = 
-    when self
-    is Nil  -> l
-    is Cons -> self.h :: $ self.t ++ l
+    when self {
+        is Nil  -> l
+        is Cons -> self.h :: $ self.t ++ l
+    }
 ```
 
 In this sample the `::` function is used but not implemented. 
@@ -632,7 +633,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "with" ("IDENT "=" expr)+
             | impl
             
-case      ::= "|" IDENT "->" expr            
+case      ::= "is" IDENT "->" expr            
 
 type_expr ::= type_in "->" type_out
             | "(" type_expr ")"
@@ -662,6 +663,7 @@ KEYWORDS  ::= "sig"   | "def"   | "data"
             | "type"  | "trait" | "impl"
             | "with"  | "for"   | "let" 
             | "in"    | "self"  | "when"
+            | "is"
 
 OPERATOR  ::= ([~$#?,;:@&!%><=+*/|_.^-]|\[|\])* - SYMBOLS
 SYMBOLS   ::= "(" | ")" | "{" | "}" | "->" | ":" | "." | "|"
