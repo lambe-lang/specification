@@ -135,8 +135,8 @@ impl for Option a {
 
     def fold n s = 
         when self {
-        is None -> n self
-        is Some -> s self
+          is None -> n self
+          is Some -> s self
         }
 }
 ``` 
