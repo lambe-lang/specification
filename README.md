@@ -1,6 +1,6 @@
 # Lambë
 
-A statically typed functional programming language inspired by Haskell, OCaml and Rust.
+A statically typed functional programming language inspired by Haskell, OCaml, Rust and Kotlin.
 
 ## 0. Paradigms
 
@@ -135,8 +135,8 @@ impl for Option a {
 
     def fold n s = 
         when self {
-        is None -> n self
-        is Some -> s self
+          is None -> n self
+          is Some -> s self
         }
 }
 ``` 
