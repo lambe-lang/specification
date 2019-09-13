@@ -149,16 +149,16 @@ impl for Option a {
 
 ```
 trait Functor (f:type->type) {
-    sig fmap : self -> (a -> b) -> f b for f a
-    sig <$>  : self -> f a -> f b for a -> b
+    sig map   : self -> (a -> b) -> f b for f a
+    sig (<$>) : self -> f a -> f b for a -> b
     
-    def <$> a = a fmap f
+    def (<$>) a = a map f
 }
 ```
 
 The `Functor` has a parametric type constructor `f` revealing the support of higher-kinded-types in the language.
 
-The `fmap` has a receiver called `self` and this receiver has the following type given by the *for* directive: `f a`.
+The `map` has a receiver called `self` and this receiver has the following type given by the *for* directive: `f a`.
 
 ```
 trait Applicative (f:type->type) with Functor f {
@@ -180,7 +180,7 @@ trait Monad (f:type->type) with Applicative f {
     sig (=<<)  : self -> f a -> f b for a -> f b
 
     def return  = pure
-    def (>>=) f = self fmap f join
+    def (>>=) f = self map f join
     def (=<<) a = a >>= self
 }
 ```
@@ -193,33 +193,33 @@ Finally each method can be specified with a dedicated `self` type. As a conclusi
 
 ```
 impl Functor Option {
-    def fmap f = self fold { None } { Some $ f $1.v }
+    def map f = self fold { None } { Some $ f $1.v }
 }
 
 impl Applicative Option {
     def pure = Some
-    def (<*>) a = self fold { None } { $1 v fmap a }
+    def (<*>) a = self fold { None } { $1 v map a }
 }
 
 impl Monad Option {
     def join = self fold { None } { $1 v }   
 }
 
-// Functor Option pure 1 fmap (1 +)   
+// Functor Option pure 1 map (1 +)   
 ```
 
 #### Smart lookup based version
 
 ```
 impl Functor Option {
-    def None.fmap f = None
-    def Some.fmap f = Some $ f self.v
+    def None.map f = None
+    def Some.map f = Some $ f self.v
 }
 
 impl Applicative Option {
     def pure = Some
     def None.(<*>) a = None
-    def Some.(<*>) a = self v fmap a
+    def Some.(<*>) a = self v map a
 }
 
 impl Monad Option {

@@ -1,4 +1,4 @@
-data Id a where a:{
+data Id a {
     value: a
 }
 
