@@ -15,8 +15,8 @@ impl Interpret for Program {
             is Input   -> memory input
             is Output  -> memory output
             is Loop    -> if (memory needJump)
-                         then { memory }
-                         else { step token $ token program interpret memory }
+                          then { memory }
+                          else { step token $ token program interpret memory }
             is Nullify -> memory nullify
             }
         in

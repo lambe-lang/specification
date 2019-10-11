@@ -14,7 +14,7 @@ trait Applicative (f:type->type) with Functor f {
 
 trait Monad (f:type->type) with Applicative f {
     sig returns : a -> f a
-    def returns = self pure
+    def returns = pure self
 
     sig flatten : self -> f a for f (f a)
 

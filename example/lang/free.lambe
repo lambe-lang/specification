@@ -4,7 +4,7 @@
 
 type Free (f:type -> type) a =
   data Return   { value: a }
-| data FlatMap i {
+| data FlatMap i
     value: i
     cont: i -> Free f a
   }
@@ -14,8 +14,8 @@ impl for Free f {
     def Return.flatMap f = Return $ f self.value
     def FlatMap.flatMap f = FlatMap self.value { self.cont $1 flatMap f }
 
-    sig liftF : f a -> Free f a
-    def liftF a = FlatMap a Return
+    sig lift : f a -> Free f a
+    def lift a = FlatMap a Return
 }
 
 

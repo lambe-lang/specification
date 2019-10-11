@@ -3,6 +3,10 @@ impl bool
 
 type Predicate a = a -> Bool
 
+impl for Predicate a {
+   ..
+}
+
 sig equals : Eq a -> Predicate a
 def equals a = a ==
 
