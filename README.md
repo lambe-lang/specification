@@ -118,9 +118,9 @@ impl for Option a {
     sig fold: self -> (None -> b) -> (Some a -> b) -> b
 
     def fold n s = 
-        when seld {
+        when self {
           is None -> n self
-          is Some -> s seld
+          is Some -> s self
         }
 }
 ```
