@@ -5,7 +5,11 @@ type Either a b =
 impl for Either a b {
     sig fold : self -> (Left a -> c) -> (Right b -> c) -> c
 
-    def Left.fold  f _ = f self
-    def Right.fold _ f = f self
+    def fold  l r =
+        when self {
+            is Left -> l self
+            is Right -> r self
+        }
+
 }
 

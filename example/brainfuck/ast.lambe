@@ -11,16 +11,3 @@ type Token =
 | data Nullify
 
 type Program = List Token
-
-impl for Token {
-    sig fold : (Memory -> b) -> (Cursor -> b) ->
-               (Input -> b)  -> (Output -> b) ->
-               (Loop -> b)   -> (Nullify -> b) -> b
-
-    def Memory.fold  f _ _ _ _ _ = f self
-    def Cursor.fold  _ f _ _ _ _ = f self
-    def Input.fold   _ _ f _ _ _ = f self
-    def Output.fold  _ _ _ f _ _ = f self
-    def Loop.fold    _ _ _ _ f _ = f self
-    def Nullify.fold _ _ _ _ _ f = f self
-}

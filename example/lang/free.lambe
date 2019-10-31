@@ -11,8 +11,11 @@ type Free (f:type -> type) a =
 
 impl for Free f {
     sig flatMap : self -> (a -> b) -> Free f b
-    def Return.flatMap f = Return $ f self.value
-    def FlatMap.flatMap f = FlatMap self.value { self.cont $1 flatMap f }
+    def flatMap f =
+        when self {
+            is Return  -> Return $ f self.value
+            is FlatMap -> FlatMap self.value { self.cont $1 flatMap f }
+        }
 
     sig lift : f a -> Free f a
     def lift a = FlatMap a Return

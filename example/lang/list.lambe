@@ -23,9 +23,15 @@ impl for List a {
 impl Monad List {
     def pure a = a :: Nil
 
-    def Nil.(<*>) _ = Nil
-    def Cons.(<*>) a = self tail <*> $ a map $ self head
+    def (<*>) f =
+        when self {
+            is Nil  -> Nil
+            is Cons -> self tail <*> $ a map $ self head
+        }
 
-    def Nil.flatten = Nil
-    def Cons.flatten = self.head // TODO
+    def flatten =
+        when self {
+            is Nil  -> Nil
+            is Cons -> // TODO
+        }
 }

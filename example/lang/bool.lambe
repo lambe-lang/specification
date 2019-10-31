@@ -7,8 +7,11 @@ impl for Bool {
     sig (&&) : self -> self
     sig (||) : self -> self
 
-    def True.fold f _ = f self
-    def False.fold _ f = f self
+    def fold t f =
+        when self {
+            is True -> t self
+            is False -> f self
+        }
 
     def (&&) b = self fold { b } id
     def (||) b = self fold id { b }

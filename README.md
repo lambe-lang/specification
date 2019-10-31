@@ -101,14 +101,27 @@ type Option a =
 
 Synthesised type variables is done using the original order given a the type level definition.
 
+Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
+
+```
+// Given an optional o
+when o {
+  is None -> // o is a None
+  is Some -> // o is a Some
+}
+``` 
+
 ### 2.2 Data type implementation
 
 ```
 impl for Option a {
     sig fold: self -> (None -> b) -> (Some a -> b) -> b
 
-    def None.fold n _ = n self // self : None
-    def Some.fold _ s = s self // self : Some a
+    def fold n s = 
+        when seld {
+          is None -> n self
+          is Some -> s seld
+        }
 }
 ```
 
@@ -124,22 +137,6 @@ Some 1 fold { 0 } id
 // for OO with FP flavor addicts
 (Some 1).fold { 0 } id
 ```
-
-**Keyword**: Smart Cast
-
-Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
-
-```
-impl for Option a {
-    sig fold: self -> (None -> b) -> (Some a -> b) -> b
-
-    def fold n s = 
-        when self {
-          is None -> n self
-          is Some -> s self
-        }
-}
-``` 
 
 ## 4. Traits
 
@@ -218,13 +215,11 @@ impl Functor Option {
 
 impl Applicative Option {
     def pure = Some
-    def None.(<*>) a = None
-    def Some.(<*>) a = self v map a
+    def (<*>) a = self fold {None} {$1 v map a}
 }
 
 impl Monad Option {
-    def None.join = None    
-    def Some.join = self v    
+    def join = self fold {None} {$1 v}    
 }
 ```
 
@@ -423,8 +418,11 @@ trait Adder a for a {
 }
 
 impl Adder Peano {
-    def Zero.(+) a = a
-    def Succ.(+) a = Succ (self v + a)
+    def (+) a = 
+        when self {
+            is Zero -> a
+            is Succ -> Succ $ self v + a
+        }
 }
 ```
 
@@ -607,7 +605,7 @@ s0        ::= entity*
 entity    ::= sig | def | data | type | trait | impl | with
 
 sig       ::= "sig" dname ":" type for? with* 
-def       ::= "def" (self  ".")? dname  param* "=" expr
+def       ::= "def" dname  param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
