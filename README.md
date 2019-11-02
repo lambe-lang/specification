@@ -303,8 +303,11 @@ How this trait can be used in another file? Simple! Just provide an implementati
 impl list
 
 sig isEmpty : self -> Bool for List a
-def Nil.isEmpty = true
-def Cons.isEmpty = false
+def isEmpty = 
+    when self {
+        is Nil  -> true
+        is Cons -> false
+    }
 ```
 
 #### `Local` trait implementation usage
@@ -316,8 +319,11 @@ sig l : list
 def l = impl list
 
 sig isEmpty : self -> Bool for l List a
-def (l Nil).isEmpty = true
-def (l Cons).isEmpty = false
+def Nil.isEmpty = 
+    when self {
+        is l.Nil  -> true
+        is l.Cons -> false
+    }
 ```
 
 ### `Abstract` trait
