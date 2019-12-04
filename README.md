@@ -209,8 +209,11 @@ impl Monad Option {
 
 ```
 impl Functor Option {
-    def None.map f = None
-    def Some.map f = Some $ f self.v
+    def map f = 
+      when self is {
+       is None -> None
+       is Some -> Some $ f self.v
+     }
 }
 
 impl Applicative Option {
@@ -319,7 +322,7 @@ sig l : list
 def l = impl list
 
 sig isEmpty : self -> Bool for l List a
-def Nil.isEmpty = 
+def isEmpty = 
     when self {
         is l.Nil  -> true
         is l.Cons -> false
@@ -611,7 +614,7 @@ s0        ::= entity*
 entity    ::= sig | def | data | type | trait | impl | with
 
 sig       ::= "sig" dname ":" type for? with* 
-def       ::= "def" dname  param* "=" expr
+def       ::= "def" dname param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
