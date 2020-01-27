@@ -682,7 +682,7 @@ See [Lambë](https://www.elfdict.com/w/lambe) definition. May be also because it
 
 # License
 
-Copyright 2019 D. Plaindoux.
+Copyright 2019-2020 D. Plaindoux.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
