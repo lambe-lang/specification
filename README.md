@@ -590,7 +590,7 @@ data Cons a {
 type List a = Nil | Cons a
 
 sig List : OpenedCollection (List a) a
-def List _ =
+def List =
     let builder l = CollectionBuilder l { builder $ Cons $1 l } in
     	builder Nil
 ```
