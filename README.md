@@ -359,15 +359,15 @@ impl list {
 ### Definition and requirements
 
 ```
-trait Error a for a {
-    raise : self -> b
+trait Error a {
+    raise : a -> b
 }
 
 sig div : Int -> Int -> Int with Error String
 
 def div x y =
     if (y == 0)
-    then { "divide by zero!" raise }
+    then { raise "divide by zero!" }
     else { x / y }
 ```
 
