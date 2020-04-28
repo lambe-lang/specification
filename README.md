@@ -209,8 +209,11 @@ impl Monad Option {
 
 ```
 impl Functor Option {
-    def None.map f = None
-    def Some.map f = Some $ f self.v
+    def map f = 
+      when self is {
+       is None -> None
+       is Some -> Some $ f self.v
+     }
 }
 
 impl Applicative Option {
@@ -319,7 +322,7 @@ sig l : list
 def l = impl list
 
 sig isEmpty : self -> Bool for l List a
-def Nil.isEmpty = 
+def isEmpty = 
     when self {
         is l.Nil  -> true
         is l.Cons -> false
@@ -356,15 +359,15 @@ impl list {
 ### Definition and requirements
 
 ```
-trait Error a for a {
-    sig raise : self -> b
+trait Error a {
+    raise : a -> b
 }
 
 sig div : Int -> Int -> Int with Error String
 
 def div x y =
     if (y == 0)
-    then { "divide by zero!" raise }
+    then { raise "divide by zero!" }
     else { x / y }
 ```
 
@@ -587,7 +590,7 @@ data Cons a {
 type List a = Nil | Cons a
 
 sig List : OpenedCollection (List a) a
-def List _ =
+def List =
     let builder l = CollectionBuilder l { builder $ Cons $1 l } in
     	builder Nil
 ```
@@ -611,7 +614,7 @@ s0        ::= entity*
 entity    ::= sig | def | data | type | trait | impl | with
 
 sig       ::= "sig" dname ":" type for? with* 
-def       ::= "def" dname  param* "=" expr
+def       ::= "def" dname param* "=" expr
 data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
 type      ::= "type" IDENT t_param "=" type_expr
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
@@ -679,7 +682,7 @@ See [Lambë](https://www.elfdict.com/w/lambe) definition. May be also because it
 
 # License
 
-Copyright 2019 D. Plaindoux.
+Copyright 2019-2020 D. Plaindoux.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
