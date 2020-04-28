@@ -1,8 +1,9 @@
 impl control
 
-type Option a =
-  data None
-| data Some { value : a }
+data None
+data Some a { value : a }
+
+type Option a = None | Some a
 
 impl for Option a {
     sig fold : self -> (None -> b) -> (Some a -> b) -> b

@@ -10,6 +10,20 @@ impl for Either a b {
             is Left -> l self
             is Right -> r self
         }
-
 }
 
+impl Monad (Either e) {
+    def pure a = Right a
+
+    def (<*>) a =
+        when self {
+            is Left -> Left self.value
+            is Right -> a map self.value
+        }
+
+    def flatten =
+        when self {
+            is Left -> Left self.value
+            is Right -> self.value
+        }
+}

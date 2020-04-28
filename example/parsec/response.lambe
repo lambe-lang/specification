@@ -2,14 +2,16 @@ impl lang.bool
 impl stream
 
 type Response a s =
-  Rejected { consumed : bool }
+  Rejected { stream   : Stream s
+             consumed : bool
+           }
 | Accepted { value    : a
-             input    : Stream s
+             stream   : Stream s
              consumed : bool
            }
 
 impl for Response a {
-    sig fold : self -> (Rejected-> b) -> (Accepted a -> b) -> b
+    sig fold : self -> (Rejected s -> b) -> (Accepted a s -> b) -> b
 
     def fold r a =
         when self {

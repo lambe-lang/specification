@@ -125,8 +125,8 @@ impl for Option a {
 }
 ```
 
-In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case defined thanks to the `for ...` declaration. Furthermore implementations are
-given for each option data type i.e. None and Some.
+In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case defined thanks to the `for ...` declaration. Furthermore, implementations are
+define for each option data type i.e. None and Some.
 
 ### 2.3 Data type in action
 
@@ -182,7 +182,7 @@ trait Monad (f:type->type) with Applicative f {
 }
 ```
 
-Finally each method can be specified with a dedicated `self` type. As a conclusion a trait define a logical development unit.
+Finally, each method can be specified with a dedicated `self` type. As a conclusion a trait define a logical development unit.
 
 ### Trait implementation
 
@@ -257,7 +257,7 @@ def (::) = Cons
 
 This file content is in fact similar to the trait:
 ```
-trait list {
+def list = {
     data Nil
     data Cons a {
         h: a
@@ -278,7 +278,7 @@ implementation.
 
 If a file is a trait we can also reuse the `for` directive for each function.
 ```
-trait list {
+def list {
     data Nil
     data Cons a {
         h: a
@@ -357,7 +357,7 @@ impl list {
 
 ```
 trait Error a for a {
-    raise : self -> b
+    sig raise : self -> b
 }
 
 sig div : Int -> Int -> Int with Error String
@@ -385,7 +385,7 @@ div 3 0 // refers to the previous implementation
 The following code be embedded in a basic block limiting the scope of the provided implementation.
 
 ```
-let impl Error String {
+def Error String = {
         def raise = 0
     } in
     div 3 0 // refers to the previous implementation (local scope)
@@ -419,11 +419,11 @@ data Zero
 data Succ { v:Peano }
 type Peano = Zero | Succ
 
-trait Adder a for a {
+def Adder = a -> {
     sig (+) : self -> self -> self
-}
+} for a 
 
-impl Adder Peano {
+def Adder Peano = {
     def (+) a = 
         when self {
             is Zero -> a
@@ -451,7 +451,7 @@ data Then a {
 sig if : Bool -> If
 def if = If
 
-impl for If {
+def for If = {
     sig then : self -> (Unit -> a) -> Then a
 
     def then t = Then self.cond t

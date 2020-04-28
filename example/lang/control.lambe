@@ -9,7 +9,7 @@ trait Applicative (f:type->type) with Functor f {
     sig (<**>) : self -> f (a -> b) -> f b for f a
     def (<**>) f = f <*> self
 
-    def map f= pure f <*> a
+    def map f = pure f <*> a
 }
 
 trait Monad (f:type->type) with Applicative f {

@@ -10,24 +10,26 @@ impl stream
 // Parser definition
 //
 
-trait Parse a {
-    sig parse : self -> Stream char -> Response a
+trait Parse s a {
+    sig parse : self -> Stream s -> Response a s
 }
 
 //
 // Predicate based parsers
 //
 
-data Satisfy { predicate : char -> bool }
+data Satisfy s {
+    predicate : s -> bool
+}
 
-impl Parser char for Satisfy {
+impl Parser s s for Satisfy s {
     def parse s =
         let p = s next
         in when let r = p._1 {
            is Rejected -> Rejected false
            is Accepted ->
-              if (self r)
-              then { Accepted e p._2 true }
+              if (self predicate r)
+              then { Accepted r.value p._2 true }
               else { Rejected false }
            }
 }
@@ -45,19 +47,19 @@ def notChar c = Satisfy { c != $1 }
 // Parser sequence
 //
 
-data And a b {
-    left  : Parser a
-    right : Parser b
+data And s a b {
+    left  : Parser s a
+    right : Parser s b
 }
 
-impl Parser (Pair a b) for And a b {
+impl Parser s (Pair a b) for And s a b {
     def parse s =
         when let r = self left parse s {
         is Rejected -> Rejected r.consumed
         is Accepted ->
-            when let l = self right parse r.input {
-                is Rejected -> Rejected (r.consumed || l.consumed)
-                is Accepted -> Accepted (r.value,l.value) b.input (r.consumed || l.consumed)
+            when let l = self right parse r.stream {
+                is Rejected -> Rejected r.stream (r.consumed || l.consumed)
+                is Accepted -> Accepted (r.value,l.value) b.stream (r.consumed || l.consumed)
             }
         }
 }
@@ -66,12 +68,12 @@ impl Parser (Pair a b) for And a b {
 // Parser choice
 //
 
-data Or a {
-    left  : Parser a
-    right : Parser a
+data Or s a {
+    left  : Parser s a
+    right : Parser s a
 }
 
-impl Parser a for Or a {
+impl Parser s a for Or s a {
     def parse s =
         when let r = self left parse s {
         is Rejected ->
@@ -86,16 +88,16 @@ impl Parser a for Or a {
 // Parser map
 //
 
-data FMap a b {
-    parser : Parser a
+data FMap s a b {
+    parser : Parser s a
     function : a -> b
 }
 
-impl Parser b for FMap a b {
+impl Parser s b for FMap s a b {
     def parse s =
         when let r = self left.parser parse s {
-            is Rejected -> Rejected r.consumed
-            is Accepted -> Accepted (self.function r) r.input r.consumed
+            is Rejected -> Rejected r.stream r.consumed
+            is Accepted -> Accepted (self.function r) r.stream r.consumed
         }
 }
 
