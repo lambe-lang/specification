@@ -1,21 +1,15 @@
 data Pair a b {
-    _1 : a
-    _2 : b
+    fst : a
+    snd : b
 }
 
 impl for Pair a b {
     sig (,) : self -> b -> Pair self b for a
     def (,) b = Pair self b
 
-    sig fst : self -> a
-    def fst = self _1
-
-    sig snd : self -> b
-    def snd = self _2
-
     sig switch : self -> Pair b a
-    def switch = self._2, self._1
+    def switch = self.snd , self.fst
 
     sig zip : self -> Pair c d -> Pair (Pair a c) (Pair b d)
-    def zip p = (self._1 , p._1), (self._2 , p._2)
+    def zip p = (self.fst , p.fst), (self.snd , p.snd)
 }

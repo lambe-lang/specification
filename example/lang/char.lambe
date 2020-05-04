@@ -1,9 +1,9 @@
 impl int
 
-type Char // intrinsic
+type char // native
 
 impl for Char {
-    sig toInt : self -> int
+    sig toInt : self -> Int
 
     // ...
 }

@@ -35,7 +35,7 @@ sig pipeline : (a -> b) -> (b -> c) -> a -> c
 ```
 def id       = { a -> a }         // equivalent to { $1 }
 def swap     = { f x y -> f y x } // equivalent to { $1 $3 $2 }
-def compose  = { $1 ($2 $3) }     // equivalent to { f g x -> f (g x) }
+def compose  = { _1 $ _2 _3 }     // equivalent to { f g x -> f (g x) }
 def pipeline = swap compose
  ```
 
@@ -44,7 +44,7 @@ def pipeline = swap compose
 **Keyword**: Self receiver concept
 
 A function can be specified with a `self` type at the first position. Therefor such function is infix and accept the
-dot notation. The self type is given by the attached `for` directive.
+dot notation. The self type is define by the attached `for` directive.
 
 #### Definition
 
@@ -91,17 +91,7 @@ sig None : None
 sig Some : a  -> Some a
 ```
 
-In addition data definition can be done at the type level:
-
-```
-type Option a = 
-  data None 
-| data Some { v:a }
-```
-
-Synthesised type variables is done using the original order given a the type level definition.
-
-Lambë does not provide a pattern matching but a Kotlin like smart cast on types.
+Lambë does not provide a pattern matching, but a Kotlin like smart cast on types.
 
 ```
 // Given an optional o
@@ -134,7 +124,7 @@ define for each option data type i.e. None and Some.
 // for FP addicts
 Some 1 fold { 0 } id
 
-// for OO with FP flavor addicts
+// for OO addicts with FP flavor<
 (Some 1).fold { 0 } id
 ```
 
@@ -260,7 +250,7 @@ def (::) = Cons
 
 This file content is in fact similar to the trait:
 ```
-def list = {
+trait list {
     data Nil
     data Cons a {
         h: a
@@ -281,7 +271,7 @@ implementation.
 
 If a file is a trait we can also reuse the `for` directive for each function.
 ```
-def list {
+trait list {
     data Nil
     data Cons a {
         h: a
@@ -570,7 +560,7 @@ trait ClosableCollection b a {
 ```
 impl OpenedCollection b a for CollectionBuilder b a {
     def ([) a = self add a
-    def empty = this unbox
+    def empty = self unbox
 }
 
 impl ClosableCollection b a for CollectionBuilder b a {
@@ -591,7 +581,7 @@ type List a = Nil | Cons a
 
 sig List : OpenedCollection (List a) a
 def List =
-    let builder l = CollectionBuilder l { builder $ Cons $1 l } in
+    let builder = { l -> CollectionBuilder l { builder $ Cons $1 l } } in
     	builder Nil
 ```
 
@@ -613,21 +603,19 @@ s0        ::= entity*
 
 entity    ::= sig | def | data | type | trait | impl | with
 
-sig       ::= "sig" dname ":" type for? with* 
+sig       ::= "sig" dname ":" type_expr for? with* 
 def       ::= "def" dname param* "=" expr
-data      ::= "data" IDENT t_param* ("{" attr_elem* "}")?
-type      ::= "type" IDENT t_param "=" type_expr
+data      ::= "data" dname t_param* ("{" attr_elem* "}")?
+kind      ::= "kind" dname "=" kind_type
+type      ::= "type" dname t_param "=" type_expr
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
-with      ::= "with" type_out
-for       ::= "for" type_out
-
-self      ::= IDENT
-            | "(" IDENT* ")" // WIP
+with      ::= "with" type_expr
+for       ::= "for" type_expr
 
 expr      ::= "{" (param+ "->")? expr "}"
-            | "let" IDENT param* "=" expr "in" expr
-            | "let" impl "in"
+            | "let" IDENT "=" expr "in" expr
+            | "let" impl "in" expr
             | "when" ("let" IDENT =)? expr "{" cases+ "}"
             | param
             | native
@@ -642,25 +630,15 @@ expr      ::= "{" (param+ "->")? expr "}"
             
 case      ::= "is" IDENT "->" expr            
 
-type_expr ::= type_in "->" type_out
-            | "(" type_expr ")"
-            | type_out
+type_expr ::= type_expr OPERATOR type_expr
+            | "(" type_expr | OPERATOR ")"
+            | type_expr type_expr
+            | IDENT 
             | "self"
-            | data
-            | type_expr "|" type_expr
 
-type_in   ::= i_param
-            | type_out
-            | "(" type_expr ")"
+attr_elem ::= IDENT ":" type_expr
 
-type_out  ::= "(" type_expr ")"
-            | o_param type_out?
-
-attr_elem ::= IDENT ":" type
-
-t_param   ::= i_param | o_param
-i_param   ::= "(" IDENT ":" type ")"
-o_param   ::= IDENT
+t_param   ::= "(" IDENT ":" type ")" | IDENT
 param     ::= IDENT
 dname     ::= IDENT | "(" OPERATOR ")"
 native    ::= STRING | DOUBLE | INT | FLOAT | CHAR
