@@ -10,8 +10,8 @@ impl stream
 // Parser definition
 //
 
-trait Parse s a {
-    sig parse : self -> Stream s -> Response a s
+trait Parse a {
+    sig parse : forall s. self -> Stream s -> Response a s
 }
 
 //
@@ -22,7 +22,7 @@ data Satisfy s {
     predicate : s -> bool
 }
 
-impl Parser s s for Satisfy s {
+impl Parser s for Satisfy s {
     def parse s =
         let p = s next
         in when let r = p._1 {
@@ -47,12 +47,12 @@ def notChar c = Satisfy { c != $1 }
 // Parser sequence
 //
 
-data And s a b {
-    left  : Parser s a
-    right : Parser s b
+data And a b {
+    left  : Parser a
+    right : Parser b
 }
 
-impl Parser s (Pair a b) for And s a b {
+impl Parser (Pair a b) for And a b {
     def parse s =
         when let r = self left parse s {
         is Rejected -> Rejected r.consumed
@@ -68,12 +68,12 @@ impl Parser s (Pair a b) for And s a b {
 // Parser choice
 //
 
-data Or s a {
-    left  : Parser s a
-    right : Parser s a
+data Or a {
+    left  : Parser a
+    right : Parser a
 }
 
-impl Parser s a for Or s a {
+impl Parser a for Or a {
     def parse s =
         when let r = self left parse s {
         is Rejected ->
@@ -88,18 +88,16 @@ impl Parser s a for Or s a {
 // Parser map
 //
 
-data FMap s a b {
-    parser : Parser s a
+data FMap a b {
+    parser : Parser a
     function : a -> b
 }
 
-impl Parser s b for FMap s a b {
+impl Parser b for FMap a b {
     def parse s =
         when let r = self left.parser parse s {
             is Rejected -> Rejected r.stream r.consumed
             is Accepted -> Accepted (self.function r) r.stream r.consumed
         }
 }
-
-// WIP
 

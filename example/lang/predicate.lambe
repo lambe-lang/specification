@@ -7,7 +7,7 @@ impl for Predicate a {
    ..
 }
 
-sig equals : Eq a -> Predicate a
+sig equals : forall a. Eq a -> Predicate a
 def equals a = a ==
 
 sig isA : type -> Predicate a

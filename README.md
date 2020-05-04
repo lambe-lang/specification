@@ -24,17 +24,17 @@ Targeted programming language paradigms for the design of Lambë are:
 #### Definition
 
 ```
-sig id       : a -> a
-sig swap     : (a -> b -> c) -> b -> a -> c
-sig compose  : (b -> c) -> (a -> b) -> a -> c
-sig pipeline : (a -> b) -> (b -> c) -> a -> c
+sig id       : forall a. a -> a
+sig swap     : forall a b c.(a -> b -> c) -> b -> a -> c
+sig compose  : forall a b c.(b -> c) -> (a -> b) -> a -> c
+sig pipeline : forall a b c.(a -> b) -> (b -> c) -> a -> c
 ```
 
 #### Implementation
 
 ```
-def id       = { a -> a }         // equivalent to { $1 }
-def swap     = { f x y -> f y x } // equivalent to { $1 $3 $2 }
+def id       = { a -> a }         // equivalent to { _1 }
+def swap     = { f x y -> f y x } // equivalent to { _1 _3 _2 }
 def compose  = { _1 $ _2 _3 }     // equivalent to { f g x -> f (g x) }
 def pipeline = swap compose
  ```
@@ -49,8 +49,8 @@ dot notation. The self type is define by the attached `for` directive.
 #### Definition
 
 ```
-sig ($)  : self -> (a -> b) -> a -> c for b -> c
-sig (|>) : self -> (b -> c) -> a -> c for a -> b
+sig ($)  : forall a b c. self -> (a -> b) -> a -> c for b -> c
+sig (|>) : forall a b c. self -> (b -> c) -> a -> c for a -> b
 ```
 
 #### Implementation
@@ -80,7 +80,8 @@ def (|>) f = f $ self
 
 ```
 data None
-data Some a { v:a }
+data Some a { value: a }
+data Some a { value: a }
 type Option a = None | Some a
 ```
 
@@ -180,16 +181,16 @@ Finally, each method can be specified with a dedicated `self` type. As a conclus
 
 ```
 impl Functor Option {
-    def map f = self fold { None } { Some $ f $1.v }
+    def map f = self fold { None } { Some $ f _1.v }
 }
 
 impl Applicative Option {
     def pure = Some
-    def (<*>) a = self fold { None } { $1 v map a }
+    def (<*>) a = self fold { None } { _1 value map a }
 }
 
 impl Monad Option {
-    def join = self fold { None } { $1 v }   
+    def join = self fold { None } { _1 value }   
 }
 
 // Functor Option pure 1 map (1 +)   
@@ -208,11 +209,11 @@ impl Functor Option {
 
 impl Applicative Option {
     def pure = Some
-    def (<*>) a = self fold {None} {$1 v map a}
+    def (<*>) a = self fold {None} { _ value map a }
 }
 
 impl Monad Option {
-    def join = self fold {None} {$1 v}    
+    def join = self fold {None} { _ value }    
 }
 ```
 
@@ -240,9 +241,10 @@ data Cons a {
     h: a
     t: List a
 }
+
 type List a = Nil | Cons a
 
-sig (::) : a -> List a -> List a
+sig (::) : forall a. a -> List a -> List a
 def (::) = Cons
 
 // :: 1 Nil
@@ -258,7 +260,7 @@ trait list {
     }
     type List a = Nil | Cons a
 
-    sig (::) : a -> List a -> List a
+    sig (::) : forall a. a -> List a -> List a
     def (::) = Cons
 }
 ```
@@ -279,7 +281,7 @@ trait list {
     }
     type List a = Nil | Cons a
 
-    sig (::) : self -> List a -> List a for a
+    sig (::) : forall a. self -> List a -> List a for a
     def (::) = Cons self
 
     // 1 :: Nil == 1.(::) Nil
@@ -295,7 +297,7 @@ How this trait can be used in another file? Simple! Just provide an implementati
 ```
 impl list
 
-sig isEmpty : self -> Bool for List a
+sig isEmpty : forall a. self -> Bool for List a
 def isEmpty = 
     when self {
         is Nil  -> true
@@ -311,7 +313,7 @@ Note: Work in progress
 sig l : list
 def l = impl list
 
-sig isEmpty : self -> Bool for l List a
+sig isEmpty : forall a. self -> Bool for l List a
 def isEmpty = 
     when self {
         is l.Nil  -> true
@@ -333,7 +335,7 @@ data Cons a {
 }
 type List a = Nil | Cons a
 
-sig (::) : self -> List a -> List a for a
+sig (::) : forall a. self -> List a -> List a for a
 ```
 
 This trait then can be used but the function `::` implementation is mandatory.
@@ -350,7 +352,7 @@ impl list {
 
 ```
 trait Error a {
-    raise : a -> b
+    raise : forall b. a -> b
 }
 
 sig div : Int -> Int -> Int with Error String
@@ -392,7 +394,7 @@ In trait definition some traits can be required thanks to the `with` keyword.
 ```
 with list
 
-sig (++) : self -> self -> self for List a
+sig (++) : forall a. self -> self -> self for List a
 
 def (++) l = 
     when self {
@@ -478,7 +480,7 @@ impl for Then a {
 
 type Predicate a = a -> Bool
 
-sig is : Eq a -> Predicate a
+sig is : forall a. Eq a -> Predicate a
 def is a b = a == b
 
 sig switch : a -> Switch a b
@@ -579,7 +581,7 @@ data Cons a {
 }
 type List a = Nil | Cons a
 
-sig List : OpenedCollection (List a) a
+sig List : forall a. OpenedCollection (List a) a
 def List =
     let builder = { l -> CollectionBuilder l { builder $ Cons $1 l } } in
     	builder Nil
@@ -607,14 +609,14 @@ sig       ::= "sig" dname ":" type_expr for? with*
 def       ::= "def" dname param* "=" expr
 data      ::= "data" dname t_param* ("{" attr_elem* "}")?
 kind      ::= "kind" dname "=" kind_type
-type      ::= "type" dname t_param "=" type_expr
+type      ::= "type" dname t_param "=" type_expr ("|" type_expr) 
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
 with      ::= "with" type_expr
 for       ::= "for" type_expr
 
 expr      ::= "{" (param+ "->")? expr "}"
-            | "let" IDENT "=" expr "in" expr
+            | "let" IDENT (param)* "=" expr "in" expr
             | "let" impl "in" expr
             | "when" ("let" IDENT =)? expr "{" cases+ "}"
             | param
@@ -628,7 +630,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "with" ("IDENT "=" expr)+
             | impl
             
-case      ::= "is" IDENT "->" expr            
+case      ::= "is" type_expr "->" expr            
 
 type_expr ::= type_expr OPERATOR type_expr
             | "(" type_expr | OPERATOR ")"

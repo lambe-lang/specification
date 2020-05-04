@@ -6,13 +6,13 @@ data Cons a {
 
 type List a = Nil | Cons a
 
-impl for Nil {
-    sig fold : self -> (self -> b) -> (Cons a -> b) -> b
+impl for List a {
+    sig fold : forall a b. self -> (self -> b) -> (Cons a -> b) -> b
     def fold f _ = f self
 }
 
 impl for Cons a {
-    sig fold : self -> (Nil -> b) -> (self -> b) -> b
+    sig fold : forall b. self -> (Nil -> b) -> (self -> b) -> b
     def fold _ f = f self
 }
 

@@ -5,7 +5,7 @@ type Try a =
 | data Success { value  : a }
 
 impl for Try a {
-    sig fold : self -> (Failure -> b) -> (Success a -> b) -> b
+    sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
 
     def fold f s =
         when self {

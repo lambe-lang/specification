@@ -2,7 +2,7 @@ type Either a b =
   data Left  { value : a }
 | data Right { value : b }
 
-impl for Either a b {
+impl for Either a b { // TODO: forall a b. ???
     sig fold : self -> (Left a -> c) -> (Right b -> c) -> c
 
     def fold  l r =
@@ -12,7 +12,7 @@ impl for Either a b {
         }
 }
 
-impl Monad (Either e) {
+impl Monad (Either e) { // TODO: forall e. ???
     def pure a = Right a
 
     def (<*>) a =

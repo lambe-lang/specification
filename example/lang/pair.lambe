@@ -10,6 +10,6 @@ impl for Pair a b {
     sig switch : self -> Pair b a
     def switch = self.snd , self.fst
 
-    sig zip : self -> Pair c d -> Pair (Pair a c) (Pair b d)
+    sig zip : forall c d. self -> Pair c d -> Pair (Pair a c) (Pair b d)
     def zip p = (self.fst , p.fst), (self.snd , p.snd)
 }
