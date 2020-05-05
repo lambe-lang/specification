@@ -1,6 +1,6 @@
 impl char
 
-type Int // native
+kind Int : type
 
 impl for Int {
     sig (--) : self -> self

@@ -3,7 +3,7 @@ data Pair a b {
     snd : b
 }
 
-impl for Pair a b {
+impl forall a b. for Pair a b {
     sig (,) : self -> b -> Pair self b for a
     def (,) b = Pair self b
 

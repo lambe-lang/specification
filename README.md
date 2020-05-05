@@ -603,17 +603,23 @@ List[1,2] : List Int
 ```
 s0        ::= entity*
 
-entity    ::= sig | def | data | type | trait | impl | with
+entity    ::= kind | sig | def | data | type | trait | impl | with
 
 sig       ::= "sig" dname ":" type_expr for? with* 
 def       ::= "def" dname param* "=" expr
-data      ::= "data" dname t_param* ("{" attr_elem* "}")?
-kind      ::= "kind" dname "=" kind_type
+data      ::= "data" dname t_param* ("{" attr_type* "}")*
+kind      ::= "kind" dname "=" kind_expr
 type      ::= "type" dname t_param "=" type_expr ("|" type_expr) 
 trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
 with      ::= "with" type_expr
 for       ::= "for" type_expr
+
+kind_expr ::= "type"
+            | kind_expr "->" kind_expr
+            | "(" kind_expr ")" 
+
+attr_type ::= IDENT ":" type_expr
 
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT (param)* "=" expr "in" expr
@@ -637,8 +643,10 @@ type_expr ::= type_expr OPERATOR type_expr
             | type_expr type_expr
             | IDENT 
             | "self"
+            | "forall" (attr_kind)+ "." type_expr 
 
-attr_elem ::= IDENT ":" type_expr
+attr_kind ::= IDENT
+            | "(" IDEND : kind_expr ")"
 
 t_param   ::= "(" IDENT ":" type ")" | IDENT
 param     ::= IDENT

@@ -10,7 +10,7 @@ type Free (f:type -> type) a =
     cont: i -> Free f a
   }
 
-impl for Free f {
+impl forall f. for Free f {
     sig flatMap : self -> (a -> b) -> Free f b
 
     def flatMap f =

@@ -1,11 +1,9 @@
-data Id a {
-    value: a
-}
+type Id a = a
 
 impl Monad Id {
     def pure a = Id a
 
-    def (<*>) a = a map self.value
+    def (<*>) a = a map self
 
-    def flatten = self.value
+    def flatten = self
 }

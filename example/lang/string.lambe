@@ -1,7 +1,7 @@
 impl int
 impl char
 
-type String // intrinsic? array char?
+kind String : type
 
 impl for String {
     sig chatAt : self -> Int -> Option char
