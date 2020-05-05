@@ -1,5 +1,5 @@
 (defvar lambe-constants
-    '("sig" "def" "data" "trait" "impl" "type")
+    '("kind" "sig" "def" "data" "trait" "impl" "type")
 )
   
 (defvar lambe-keywords
