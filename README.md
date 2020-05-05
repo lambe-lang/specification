@@ -105,7 +105,7 @@ when o {
 ### 2.2 Data type implementation
 
 ```
-impl for Option a {
+impl forall a. for Option a {
     sig fold: self -> (None -> b) -> (Some a -> b) -> b
 
     def fold n s = 
@@ -411,7 +411,7 @@ In this sample the `::` function is used but not implemented.
 
 ```
 data Zero
-data Succ { v:Peano }
+data Succ { value:Peano }
 type Peano = Zero | Succ
 
 def Adder = a -> {
@@ -422,7 +422,7 @@ def Adder Peano = {
     def (+) a = 
         when self {
             is Zero -> a
-            is Succ -> Succ $ self v + a
+            is Succ -> Succ $ self value + a
         }
 }
 ```
@@ -452,7 +452,7 @@ def for If = {
     def then t = Then self.cond t
 }
 
-impl for Then a {
+impl forall a. for Then a {
     sig else : self -> (Unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
@@ -500,7 +500,7 @@ data Otherwise b {
     result : (Unit -> b) -> b
 }
 
-impl for Switch a b {
+impl forall a b. for Switch a b {
     sig case      : self -> Predicate a -> Case a b
     sig otherwise : self -> Otherwise a b
 
@@ -510,13 +510,13 @@ impl for Switch a b {
     def otherwise = Otherwise self.result
 }
 
-impl for Case a b {
+impl forall a b. for Case a b {
     sig (=>) : self -> (Unit -> b) -> Switch a b
 
     def (=>) f = Switch self.value $ self.result f
 }
 
-impl for Otherwise b {
+impl forall b. for Otherwise b {
     sig (=>) : self -> (Unit -> b) -> b
 
     def (=>) f = self.result () fold { f () } id
@@ -537,37 +537,37 @@ impl for Otherwise b {
 #### Collection builder Data
 
 ```
-data CollectionBuilder b a {
+data CollectionBuilder a b {
+    add   : a -> CollectionBuilder a b
     unbox : b
-    add   : a -> CollectionBuilder b
 }
+
+data OpenableCollection a b { 
+    value : CollectionBuilder a b 
+}
+
+data ClosableCollection a b {
+    value : CollectionBuilder a b
+} 
 ```
 
-#### Collection builder trait
+#### Collection builder trait implementations
 
 ```
-trait OpenedCollection b a {
-    sig ([)   : self -> a -> ClosableCollection b a
+impl forall a b. for OpenableCollection a b {
+    sig ([)   : self -> a -> Closable a b
+    def ([) a = Closable $ self value add a
+
     sig empty : self -> b
+    def empty = self value unbox
 }
 
-trait ClosableCollection b a {
-    sig (,) : self -> a -> ClosableCollection b a
+impl forall a b. for ClosableCollection a b {
+    sig (,) : self -> a -> self
+    def (,) a = Closable $ self value add a
+
     sig (]) : self -> b
-}
-```
-
-#### Collection builder implementation
-
-```
-impl OpenedCollection b a for CollectionBuilder b a {
-    def ([) a = self add a
-    def empty = self unbox
-}
-
-impl ClosableCollection b a for CollectionBuilder b a {
-    def (,) a = self add a
-    def (])   = self unbox
+    def (])   = self value unbox
 }
 ```
 
@@ -581,16 +581,16 @@ data Cons a {
 }
 type List a = Nil | Cons a
 
-sig List : forall a. OpenedCollection (List a) a
+sig List : forall a. OpenableCollection (List a) a
 def List =
     let builder = { l -> CollectionBuilder l { builder $ Cons $1 l } } in
-    	builder Nil
+    	OpenableCollection $ builder Nil
 ```
 
 ### The List builder in action
 
 ```
-List      : OpenedCollection (List a) a
+List      : OpenableCollection (List a) a
 List[     : a -> ClosableCollection (List a) a
 List[1    : ClosableCollection (List Int) Int
 List[1,   : Int -> ClosableCollection (List Int) Int
