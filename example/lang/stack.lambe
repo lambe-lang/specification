@@ -8,7 +8,7 @@ data Stack a {
 
 data StackUnderFlow
 
-impl for Stack a {
+impl forall a. for Stack a {
     sig new : self
     def new = Stack $ List empty
 
@@ -19,5 +19,5 @@ impl for Stack a {
     def peek = self value
 
     sig pop  : self -> self with Error StackUnderFlow
-    def pop = self with value = self value fold { StackUnderFlow raise } { $1 tail }
+    def pop = self with value = self value fold { StackUnderFlow raise } { _ tail }
 }

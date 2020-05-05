@@ -3,12 +3,5 @@ impl bool
 
 type Predicate a = a -> Bool
 
-impl for Predicate a {
-   ..
-}
-
-sig equals : forall a. Eq a -> Predicate a
+sig equals : forall a. a -> Predicate a with Eq a
 def equals a = a ==
-
-sig isA : type -> Predicate a
-def isA a = /* TODO */

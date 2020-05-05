@@ -1,8 +1,8 @@
-sig (@) : forall a b c. self -> (a -> b) -> a -> c for b -> c
-def (@) f a = self (f a)
-
 sig ($) : forall a b c. self -> (a -> b) -> a -> c for b -> c
 def ($) = self @
+
+sig (@) : forall a b c. self -> (a -> b) -> a -> c for b -> c
+def (@) f a = self (f a)
 
 sig (@>) : forall a b c. self -> (b -> c) -> a -> c for a -> b
 def (@>) f = f @ self

@@ -44,6 +44,6 @@ impl Parser for String {
                         { BraceMismatch raise }
                  }
                  { self parse (i++) $ $1 value parseChar context }
-        in parse 0 (Nil , $ Stack new) // TODO - review this ugly code
+        in parse 0 $ Nil , (Stack new)
 
 }

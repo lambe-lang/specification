@@ -1,15 +1,15 @@
-data Pair a b {
+data (*) a b {
     fst : a
     snd : b
 }
 
-impl forall a b. for Pair a b {
-    sig (,) : self -> b -> Pair self b for a
-    def (,) b = Pair self b
+impl forall a b. for a * b {
+    sig (,) : self -> b -> self * b for a
+    def (,) b = self * b
 
-    sig switch : self -> Pair b a
+    sig switch : self -> b * a
     def switch = self.snd , self.fst
 
-    sig zip : forall c d. self -> Pair c d -> Pair (Pair a c) (Pair b d)
+    sig zip : forall c d. self -> c * d -> (a * c) * (b * d)
     def zip p = (self.fst , p.fst), (self.snd , p.snd)
 }

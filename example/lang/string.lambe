@@ -4,7 +4,9 @@ impl char
 kind String : type
 
 impl for String {
-    sig chatAt : self -> Int -> Option char
-
-    // ...
+    sig length : self -> int
+    sig chatAt : self -> int -> Option char
+    sig (+) : self -> self -> self
+    sig replace : self -> char -> char -> self
+    sig index : self -> char -> int
 }

@@ -3,8 +3,8 @@ impl lang.list
 impl lang.pair
 
 type Token =
-  data Memory { alter:int }
-| data Cursor { offset:int }
+  data Memory { alter : int }
+| data Cursor { offset : int }
 | data Input
 | data Output
 | data Loop { program : Program }

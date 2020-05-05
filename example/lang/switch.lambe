@@ -27,7 +27,7 @@ data Otherwise b {
     result : (Unit -> b) -> b
 }
 
-impl for Switch a b {
+impl forall a b. for Switch a b {
     sig case      : self -> Predicate a -> Case a b
     sig otherwise : self -> Otherwise a b
 
@@ -37,13 +37,13 @@ impl for Switch a b {
     def otherwise = Otherwise self.result
 }
 
-impl for Case a b {
+impl forall a b. for Case a b {
     sig (=>) : self -> (Unit -> b) -> Switch a b
 
     def (=>) f = SwitchCase self.value $ self.result f
 }
 
-impl for Otherwise b {
+impl forall b. for Otherwise b {
     sig (=>) : (Unit -> b) -> b
 
     def (=>) f = self.result () fold { f () } id

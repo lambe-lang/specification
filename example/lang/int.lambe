@@ -1,14 +1,14 @@
 impl char
 
-kind Int : type
+kind int : type
 
-impl for Int {
+impl for int {
     sig (--) : self -> self
     sig (++) : self -> self
     sig (+)  : self -> self -> self // native
     sig (-)  : self -> self -> self // native
     sig abs  : self -> self         // native
-    sig toChar : self -> Char
+    sig toChar : self -> Char       // native
 
     def (--) = self - 1
     def (++) = self + 1
