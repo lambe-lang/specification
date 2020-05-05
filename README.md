@@ -556,7 +556,7 @@ data ClosableCollection a b {
 ```
 impl forall a b. for OpenableCollection a b {
     sig ([)   : self -> a -> Closable a b
-    def ([) a = Closable $ self value add a
+    def ([) a = ClosableCollection $ self value add a
 
     sig empty : self -> b
     def empty = self value unbox
@@ -564,7 +564,7 @@ impl forall a b. for OpenableCollection a b {
 
 impl forall a b. for ClosableCollection a b {
     sig (,) : self -> a -> self
-    def (,) a = Closable $ self value add a
+    def (,) a = ClosableCollection $ self value add a
 
     sig (]) : self -> b
     def (])   = self value unbox
