@@ -555,7 +555,7 @@ data ClosableCollection a b {
 
 ```
 impl forall a b. for OpenableCollection a b {
-    sig ([)   : self -> a -> Closable a b
+    sig ([)   : self -> a -> ClosableCollection a b
     def ([) a = ClosableCollection $ self value add a
 
     sig empty : self -> b
