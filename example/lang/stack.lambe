@@ -8,7 +8,7 @@ data Stack a {
 
 data StackUnderFlow
 
-impl forall a. for Stack a {
+impl forall a. Stack a {
     sig new : self
     def new = Stack $ List empty
 

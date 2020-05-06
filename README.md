@@ -105,7 +105,7 @@ when o {
 ### 2.2 Data type implementation
 
 ```
-impl forall a. for Option a {
+impl forall a. Option a {
     sig fold: self -> (None -> b) -> (Some a -> b) -> b
 
     def fold n s = 
@@ -330,7 +330,7 @@ For instance the `::` is specified but not defined:
 ```
 data Nil
 data Cons a {
-    head: a
+    head: a;
     tail: List a
 }
 type List a = Nil | Cons a
@@ -452,7 +452,7 @@ def for If = {
     def then t = Then self.cond t
 }
 
-impl forall a. for Then a {
+impl forall a. Then a {
     sig else : self -> (Unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
@@ -500,7 +500,7 @@ data Otherwise b {
     result : (Unit -> b) -> b
 }
 
-impl forall a b. for Switch a b {
+impl forall a b. Switch a b {
     sig case      : self -> Predicate a -> Case a b
     sig otherwise : self -> Otherwise a b
 
@@ -510,13 +510,13 @@ impl forall a b. for Switch a b {
     def otherwise = Otherwise self.result
 }
 
-impl forall a b. for Case a b {
+impl forall a b. Case a b {
     sig (=>) : self -> (Unit -> b) -> Switch a b
 
     def (=>) f = Switch self.value $ self.result f
 }
 
-impl forall b. for Otherwise b {
+impl forall b. Otherwise b {
     sig (=>) : self -> (Unit -> b) -> b
 
     def (=>) f = self.result () fold { f () } id
@@ -538,7 +538,7 @@ impl forall b. for Otherwise b {
 
 ```
 data CollectionBuilder a b {
-    add   : a -> CollectionBuilder a b
+    add   a -> CollectionBuilder a b
     unbox : b
 }
 
@@ -554,7 +554,7 @@ data ClosableCollection a b {
 #### Collection builder trait implementations
 
 ```
-impl forall a b. for OpenableCollection a b {
+impl forall a b. OpenableCollection a b {
     sig ([)   : self -> a -> ClosableCollection a b
     def ([) a = ClosableCollection $ self value add a
 
@@ -562,7 +562,7 @@ impl forall a b. for OpenableCollection a b {
     def empty = self value unbox
 }
 
-impl forall a b. for ClosableCollection a b {
+impl forall a b. ClosableCollection a b {
     sig (,) : self -> a -> self
     def (,) a = ClosableCollection $ self value add a
 
@@ -583,7 +583,7 @@ type List a = Nil | Cons a
 
 sig List : forall a. OpenableCollection (List a) a
 def List =
-    let builder = { l -> CollectionBuilder l { builder $ Cons $1 l } } in
+    let builder = { l -> CollectionBuilder l { builder $ Cons _ l } } in
     	OpenableCollection $ builder Nil
 ```
 
@@ -610,8 +610,8 @@ def       ::= "def" dname param* "=" expr
 data      ::= "data" dname t_param* ("{" attr_type* "}")*
 kind      ::= "kind" dname "=" kind_expr
 type      ::= "type" dname t_param "=" type_expr ("|" type_expr) 
-trait     ::= "trait" IDENT t_param* with* for? ("{" entity* "}")?
-impl      ::= "impl" IDENT t_param* with* for? ("{" entity* "}")?
+trait     ::= "trait" IDENT t_param* for? with* ("{" entity* "}")?
+impl      ::= "impl" IDENT t_param* for? with* ("{" entity* "}")?
 with      ::= "with" type_expr
 for       ::= "for" type_expr
 

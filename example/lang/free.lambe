@@ -3,24 +3,23 @@
  * Ref http://okmij.org/ftp/Computation/free-monad.html
  */
 
+// To be reviewed
+
 type Free (f:type -> type) a =
-  data Return { value: a }
-| data FlatMap i
-    value: i
-    cont: i -> Free f a
-  }
+  data Pure { value: a }
+| data Bind { value : f (Free a) }
 
-impl forall f. for Free f {
-    sig flatMap : self -> (a -> b) -> Free f b
+impl forall f. Free f with Functor f {
+    sig (>>=) : self -> (a -> b) -> Free f b
 
-    def flatMap f =
+    def (>>=) f =
         when self {
-            is Return  -> Return $ f self.value
-            is FlatMap -> FlatMap self.value { self.cont $1 flatMap f }
+            is Return  -> f self.value
+            is FlatMap -> Bind ((>>= f) map self.value)
         }
 
     sig lift : f a -> Free f a
-    def lift a = FlatMap a Return
+    def lift a = Bind @ map Pure
 }
 
 

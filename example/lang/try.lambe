@@ -4,7 +4,7 @@ type Try a =
   data Failure { reason : string }
 | data Success { value  : a }
 
-impl forall a. for Try a {
+impl forall a. Try a {
     sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
 
     def fold f s =

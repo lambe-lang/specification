@@ -19,7 +19,7 @@ impl for If {
     def then t = Then self.cond t
 }
 
-impl forall a. for Then a {
+impl forall a. Then a {
     sig else : self -> (Unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }

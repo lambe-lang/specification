@@ -3,7 +3,7 @@ data (*) a b {
     snd : b
 }
 
-impl forall a b. for a * b {
+impl forall a b. a * b {
     sig (,) : self -> b -> self * b for a
     def (,) b = self * b
 
