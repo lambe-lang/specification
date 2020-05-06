@@ -1,8 +1,8 @@
 impl char
 
-kind int : type
+data int
 
-impl for int {
+impl int {
     sig (--) : self -> self
     sig (++) : self -> self
     sig (+)  : self -> self -> self // native

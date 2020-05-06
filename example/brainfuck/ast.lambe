@@ -1,6 +1,5 @@
 impl lang.int
 impl lang.list
-impl lang.pair
 
 type Token =
   data Memory { alter : int }

@@ -1,9 +1,9 @@
 impl int
 impl char
 
-kind String : type
+data string
 
-impl for String {
+impl string {
     sig length : self -> int
     sig chatAt : self -> int -> Option char
     sig (+) : self -> self -> self

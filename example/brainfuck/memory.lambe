@@ -6,7 +6,7 @@ impl lang.string
 
 impl zipper
 
-type Memory = Pair (Zipper int) String
+type Memory = Zipper int * String
 
 impl for Memory {
     sig new      : self
@@ -26,7 +26,7 @@ impl for Memory {
             else Zipper.left
         in let loop mem offset =
             if (offset == 0)
-            then { Pair acc self.second }
+            then { acc, self.second }
             else { loop (mem move) (offset --) }
         in loop self.first (offset abs)
 

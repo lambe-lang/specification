@@ -16,7 +16,7 @@ impl for Purity {
         }
 }
 
-type Parsed = Pair Program Purity
+type Parsed = Program * Purity
 
 trait Analyse for Program {
     sig optimise : self -> self

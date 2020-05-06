@@ -1,9 +1,0 @@
-type Id a = a
-
-impl Monad Id {
-    def pure a = Id a
-
-    def (<*>) a = a map self
-
-    def flatten = self
-}

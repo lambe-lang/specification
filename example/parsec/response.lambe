@@ -10,7 +10,7 @@ type Response a s =
              consumed : bool
            }
 
-impl for Response a s {
+impl forall a s. Response a s {
     sig fold : forall b. self -> (Rejected s -> b) -> (Accepted a s -> b) -> b
 
     def fold r a =

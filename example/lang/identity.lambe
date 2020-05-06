@@ -1,0 +1,9 @@
+type Identity a = a
+
+impl Monad Identity {
+    def pure a = Identity a
+
+    def (<*>) a = a map self
+
+    def flatten = self
+}
