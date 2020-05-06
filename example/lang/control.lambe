@@ -1,28 +1,32 @@
 trait Functor (f:type->type) {
-    sig map : forall a b. self -> (a -> b) -> f b for f a
+    sig map : forall a b. self -> f a -> f b for (a -> b)
+    sig <$> : forall a b. self -> f a -> f b for (a -> b)
+    def (<$>) = self map
 }
 
 trait Applicative (f:type->type) with Functor f {
-    sig pure   : forall a. a -> f a
+    sig pure : forall a. a -> f a
+    sig product : self -> f b -> f (a * b) for f a
+    sig (,) : self -> f b -> f (a * b) for f a
     sig (<*>)  : forall a b. self -> f a -> f b for f (a -> b)
-
     sig (<**>) : forall a b. self -> f (a -> b) -> f b for f a
-    def (<**>) f = f <*> self
 
-    def map f = pure f <*> a
+    def (,) = self product
+    def (<*>) a = { _.fst _.snd } <$> (f,a)
+    def (<**>) f = f <*> self
 }
 
-trait Monad (f:type->type) with Applicative f {
+trait Monad (f:type->type) with Functor f {
     sig returns : forall a. a -> f a
-    def returns = pure self
+    def returns = pure
 
     sig flatten : forall a. self -> f a for f (f a)
 
-    sig flatMap : forall a b. self -> (a -> f b) -> f b for f a
-    def flatMap f = self map f flatten
+    sig bind : forall a b. self -> (a -> f b) -> f b for f a
+    def bind f = f map self flatten
 
     sig (>>=) : forall a b. self -> (a -> f b) -> f b for f a
-    def (>>=) = self flatMap
+    def (>>=) = self bind
 
     sig (=<<) : forall a b. self -> f a -> f b for a -> f b
     def (=<<) a = a >>= self
@@ -30,4 +34,3 @@ trait Monad (f:type->type) with Applicative f {
     sig (>=>) : forall a b c. self -> (b -> f c) -> (a -> f c) for a -> f b
     def (>=>) b = self |> (g =<<)
 }
-

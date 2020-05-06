@@ -1,0 +1,25 @@
+trait SemiGroup a {
+    sig compose : self -> self -> self for a
+}
+
+trait Monoid a with SemiGroup a {
+    sig neutral : a
+}
+
+impl Monoid int {
+    def neutral = 0
+    def compose b = self + b
+}
+
+impl forall a. Monoid (Option a) with Semigroup a {
+    def neutral = None
+    def compose b =
+        when self {
+        is None -> b
+        is Some ->
+            when b {
+            is None -> self
+            is Some -> Some $ self.value compose b.value
+            }
+        }
+}

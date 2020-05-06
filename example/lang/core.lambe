@@ -1,3 +1,6 @@
+sig (|>) : forall a b. self -> (a -> b) -> b for a
+def (|>) f = f a
+
 sig ($) : forall a b c. self -> (a -> b) -> a -> c for b -> c
 def ($) = self @
 
