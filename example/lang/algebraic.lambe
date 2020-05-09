@@ -6,13 +6,15 @@ trait Monoid a with SemiGroup a {
     sig neutral : a
 }
 
-impl Monoid int {
-    def neutral = 0
+impl SemiGroup int {
     def compose b = self + b
 }
 
-impl forall a. Monoid (Option a) with Semigroup a {
-    def neutral = None
+impl Monoid int {
+    def neutral = 0
+}
+
+impl forall a. Semigroup (Option a) with Semigroup a {
     def compose b =
         when self {
         is None -> b
@@ -22,4 +24,8 @@ impl forall a. Monoid (Option a) with Semigroup a {
             is Some -> Some $ self.value compose b.value
             }
         }
+}
+
+impl forall a. Monoid (Option a) {
+    def neutral = None
 }

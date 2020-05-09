@@ -1,5 +1,5 @@
-impl pair
-impl bool
+import pair
+import bool
 
 type Predicate a = a -> Bool
 

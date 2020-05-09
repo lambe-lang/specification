@@ -403,7 +403,7 @@ def (++) l =
     }
 ```
 
-In this sample the `::` function is used but not implemented. 
+In this sample the `::` function is use but not implemented. 
 
 ## 7. Examples
 

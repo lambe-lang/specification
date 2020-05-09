@@ -1,9 +1,9 @@
-impl int
+import int
 
-data char
+kind char : type
 
 impl char {
-    sig toInt : self -> Int
+    sig toInt : self -> int
 
     // ...
 }

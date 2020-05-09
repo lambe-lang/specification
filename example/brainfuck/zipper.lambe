@@ -1,4 +1,4 @@
-impl lang.list
+import lang.list
 
 data Zipper a { left : List a; right : List a; default : a }
 

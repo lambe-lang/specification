@@ -1,5 +1,5 @@
-impl lang.bool
-impl lang.eq
+import lang.bool
+import lang.eq
 
 /*
  * Language syntactic extension

@@ -1,6 +1,6 @@
-impl char
+import char
 
-data int
+kind int : type
 
 impl int {
     sig (--) : self -> self

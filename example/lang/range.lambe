@@ -1,0 +1,12 @@
+data RangeFromTo { min:int; max:int }
+data RangeFromDownTo { min:int; max:int }
+
+type Range = RangeFromTo | RangeFromDownTo
+
+impl Range {
+    sig to : self -> self -> Range for int
+    def to m1 m2 =
+        if (m1 <= m2)
+        then { RangeFromTo m1 m2 }
+        else { RangeFromDownTo m2 m1 }
+}

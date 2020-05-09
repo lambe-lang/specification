@@ -1,6 +1,6 @@
-impl error
-impl list
-impl option
+import error
+import list
+import option
 
 data Stack a {
     value : List a

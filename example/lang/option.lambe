@@ -1,4 +1,4 @@
-impl control
+import control
 
 data None
 data Some a { value : a }

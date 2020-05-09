@@ -1,5 +1,5 @@
-impl lang.bool
-impl stream
+import lang.bool
+import stream
 
 type Response a s =
   Rejected { stream   : Stream s

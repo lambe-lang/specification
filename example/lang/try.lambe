@@ -1,4 +1,4 @@
-impl control
+import control
 
 type Try a =
   data Failure { reason : string }

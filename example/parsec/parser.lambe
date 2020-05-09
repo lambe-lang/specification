@@ -1,10 +1,10 @@
-impl lang.bool
-impl lang.char
-impl lang.selection
-impl lang.string
+import lang.bool
+import lang.char
+import lang.selection
+import lang.string
 
-impl response
-impl stream
+import response
+import stream
 
 //
 // Parser definition

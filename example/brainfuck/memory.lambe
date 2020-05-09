@@ -1,8 +1,8 @@
-impl lang.bool
-impl lang.char
-impl lang.int
-impl lang.pair
-impl lang.string
+import lang.bool
+import lang.char
+import lang.int
+import lang.pair
+import lang.string
 
 impl zipper
 

@@ -2,7 +2,7 @@ data True
 data False
 type Bool = True | False
 
-impl for Bool {
+impl Bool {
     sig fold : forall b. self -> (True -> b) -> (False -> b) -> b
     sig (&&) : self -> self
     sig (||) : self -> self
