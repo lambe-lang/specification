@@ -1,7 +1,8 @@
 import int
 import char
+import algebraic
 
-data string
+kind string = type
 
 impl string {
     sig length : self -> int
@@ -9,4 +10,14 @@ impl string {
     sig (+) : self -> self -> self
     sig replace : self -> char -> char -> self
     sig index : self -> char -> int
+
+    // TODO
+}
+
+impl SemiGroup string {
+    def compose b = self + b
+}
+
+impl Monoid string {
+    def neutral = ""
 }

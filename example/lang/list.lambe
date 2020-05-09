@@ -1,3 +1,6 @@
+import algebraic
+import control
+
 data Nil
 data Cons a {
     head : a
@@ -33,6 +36,22 @@ impl Monad List {
     def flatten =
         when self {
             is Nil  -> Nil
-            is Cons -> todo
+            is Cons -> // TODO
         }
+}
+
+impl forall a. Semigroup (Option a) with Semigroup a {
+    def compose b =
+        when self {
+        is None -> b
+        is Some ->
+            when b {
+            is None -> self
+            is Some -> Some $ self.value compose b.value
+            }
+        }
+}
+
+impl forall a. Monoid (Option a) {
+    def neutral = None
 }

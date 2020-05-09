@@ -1,4 +1,5 @@
 import char
+import algebraic
 
 kind int : type
 
@@ -14,4 +15,12 @@ impl int {
     def (++) = self + 1
 
     // TODO ...
+}
+
+impl SemiGroup int {
+    def compose b = self + b
+}
+
+impl Monoid int {
+    def neutral = 0
 }
