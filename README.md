@@ -14,6 +14,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type,
 - [X] Smart cast
+- [ ] Algebraic effects
 
 ## 1. Function
 
@@ -129,7 +130,7 @@ Some 1 fold { 0 } id
 (Some 1).fold { 0 } id
 ```
 
-## 4. Traits
+## 3. Traits
 
 **Keyword**: Trait based code organisation
 
@@ -227,7 +228,7 @@ impl Monad Option {
 +.<$>(pure 1).<*>(pure 1)
 ```
 
-## 5. Modular system based on files
+## 4. Modular system based on file
 
 **Keyword**: Trait based code organisation
 
@@ -295,9 +296,9 @@ How this trait can be used in another file? Simple! Just provide an implementati
 #### `Global` trait implementation usage
 
 ```
-impl list
+import list
 
-sig isEmpty : forall a. self -> Bool for List a
+sig isEmpty : forall a. self -> bool for List a
 def isEmpty = 
     when self {
         is Nil  -> true
@@ -313,7 +314,7 @@ Note: Work in progress
 sig l : list
 def l = impl list
 
-sig isEmpty : forall a. self -> Bool for l List a
+sig isEmpty : forall a. self -> bool for l List a
 def isEmpty = 
     when self {
         is l.Nil  -> true
@@ -324,7 +325,7 @@ def isEmpty =
 ### `Abstract` trait
 
 Since a file is a trait it can also define signatures without implementation.
-Therefore the definition should be done when the implementation is required.
+Therefor the definition should be given when the implementation is require.
 
 For instance the `::` is specified but not defined:
 ```
@@ -344,6 +345,35 @@ This trait then can be used but the function `::` implementation is mandatory.
 impl list {
     def (::) = Cons self
 }
+```
+
+## 5. Algebraic Effect
+
+```
+effect console {
+    val print : forall a. string -> unit  
+    val read  : forall a. unit -> string  
+}
+
+val echo : string -> () with console   
+def echo s = print $ "Hello " + s
+```
+
+The continuation should be identified during the compilation and should be explicit for 
+the end-user.
+
+```
+data System
+
+impl console for System {
+    def print s = self $ native (Print s)
+    def read s = self $ native Read 
+}
+```
+
+```
+let import system in
+    echo "John"
 ```
 
 ## 6. Required implementation
@@ -377,7 +407,7 @@ div 3 0 // refers to the previous implementation
 
 ### Local scope
 
-The following code be embedded in a basic block limiting the scope of the provided implementation.
+The following code is embed in a basic block limiting the scope of the provided implementation.
 
 ```
 def Error String = {
@@ -389,7 +419,8 @@ def Error String = {
 
 ### Requiring trait
 
-In trait definition some traits can be required thanks to the `with` keyword. 
+In trait definition some traits can be required thanks to the `with` keyword. It's important 
+to notice the difference between `with` which is a requirement to be solved later, and an `import`.  
 
 ```
 with list
@@ -435,34 +466,34 @@ Succ Zero + $ Succ Zero
 
 ```
 data If {
-    cond : Bool
+    cond : bool
 }
 
 data Then a {
-    cond : Bool
-    then : Unit -> a
+    cond : bool
+    then : unit -> a
 }
 
-sig if : Bool -> If
+sig if : bool -> If
 def if = If
 
-def for If = {
-    sig then : self -> (Unit -> a) -> Then a
+impl If {
+    sig then : forall a. self -> (unit -> a) -> Then a
 
     def then t = Then self.cond t
 }
 
 impl forall a. Then a {
-    sig else : self -> (Unit -> a) -> a
+    sig else : self -> (unit -> a) -> a
 
     def else f = self cond fold { self then () } { f () }
 }
 
-// if                                 : Bool -> If
+// if                                 : bool -> If
 // if (a > 0)                         : If
-// if (a > 0) then                    : (Unit -> a) -> Then a
+// if (a > 0) then                    : (unit -> a) -> Then a
 // if (a > 0) then { a-1 }            : Then Int
-// if (a > 0) then { a-1 } else       : (Unit -> Int) -> Int
+// if (a > 0) then { a-1 } else       : (unit -> Int) -> Int
 // if (a > 0) then { a-1 } else { a } : Int
 ```
 
@@ -478,9 +509,9 @@ impl forall a. Then a {
  *     otherwise => e3
  */
 
-type Predicate a = a -> Bool
+type Predicate a = a -> bool
 
-sig is : forall a. Eq a -> Predicate a
+sig is : forall a. a -> Predicate a with Eq a
 def is a b = a == b
 
 sig switch : a -> Switch a b
@@ -493,11 +524,11 @@ data Switch a b {
 
 data Case a b {
     value  : a
-    result : (Unit -> b) -> Option b
+    result : (unit -> b) -> Option b
 }
 
 data Otherwise b {
-    result : (Unit -> b) -> b
+    result : (unit -> b) -> b
 }
 
 impl forall a b. Switch a b {
@@ -511,13 +542,13 @@ impl forall a b. Switch a b {
 }
 
 impl forall a b. Case a b {
-    sig (=>) : self -> (Unit -> b) -> Switch a b
+    sig (=>) : self -> (unit -> b) -> Switch a b
 
     def (=>) f = Switch self.value $ self.result f
 }
 
 impl forall b. Otherwise b {
-    sig (=>) : self -> (Unit -> b) -> b
+    sig (=>) : self -> (unit -> b) -> b
 
     def (=>) f = self.result () fold { f () } id
 }
@@ -525,11 +556,11 @@ impl forall b. Otherwise b {
 // switch 1                                                : Switch Int b
 // switch 1 case                                           : Predicate Int -> Case Int b
 // switch 1 case (is 0)                                    : Case Int b
-// switch 1 case (is 0) =>                                 : (Unit -> b) -> Switch Int b
-// switch 1 case (is 0) => { true }                        : Switch Int Bool
-// switch 1 case (is 0) => { true } otherwise              : Otherwise Bool
-// switch 1 case (is 0) => { true } otherwise =>           : (Unit -> Bool) -> Bool
-// switch 1 case (is 0) => { true } otherwise => { false } : Bool
+// switch 1 case (is 0) =>                                 : (unit -> b) -> Switch Int b
+// switch 1 case (is 0) => { true }                        : Switch Int bool
+// switch 1 case (is 0) => { true } otherwise              : Otherwise bool
+// switch 1 case (is 0) => { true } otherwise =>           : (unit -> bool) -> bool
+// switch 1 case (is 0) => { true } otherwise => { false } : bool
 ```
 
 ### Collection builder

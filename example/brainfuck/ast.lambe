@@ -1,5 +1,5 @@
-import lang.int
-import lang.list
+impl lang.int
+impl lang.list
 
 type Token =
   data Memory { alter : int }

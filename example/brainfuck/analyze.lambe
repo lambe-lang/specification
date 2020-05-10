@@ -1,5 +1,5 @@
-use lang.pair
-use program
+impl lang.pair
+impl program
 
 data Pure
 data Impure

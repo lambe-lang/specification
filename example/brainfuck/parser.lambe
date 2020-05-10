@@ -1,11 +1,11 @@
-import lang.char
-import lang.exception
-import lang.list
-import lang.string
-import lang.switch
-import lang.predicate
+impl lang.char
+impl lang.exception
+impl lang.list
+impl lang.string
+impl lang.switch
+impl lang.predicate
 
-import ast
+impl ast
 
 data BraceMismatch
 data UnknownChar { c:char }

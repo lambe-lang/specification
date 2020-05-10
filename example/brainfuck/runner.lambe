@@ -1,8 +1,8 @@
-import lang.exception
-import lang.string
+impl lang.exception
+impl lang.string
 
-import memory
-import parse
+impl memory
+impl parse
 
 sig run : String -> Memory with Error ParseError
 

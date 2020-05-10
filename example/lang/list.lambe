@@ -1,5 +1,5 @@
-import algebraic
-import control
+impl algebraic
+impl control
 
 data Nil
 data Cons a {

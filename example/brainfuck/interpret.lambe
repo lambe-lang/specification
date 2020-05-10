@@ -1,6 +1,6 @@
-import lang.selection
-import memory
-import program
+impl lang.selection
+impl memory
+impl program
 
 trait Interpret {
     sig interpret : self -> Memory -> Memory

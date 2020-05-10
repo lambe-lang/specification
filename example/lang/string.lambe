@@ -1,6 +1,6 @@
-import int
-import char
-import algebraic
+impl int
+impl char
+impl algebraic
 
 kind string = type
 
