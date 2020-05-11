@@ -1,5 +1,8 @@
-sig ($) : forall a b. (a -> b) -> a -> b
+sig ($) : forall a b.(a -> b) -> a -> b
 def ($) f a = f a
+
+sig ($) : forall a b c. self -> (a -> b) -> a -> c for b -> c
+def ($) f a = self (f a)
 
 sig compose : forall a b c. self -> (a -> b) -> a -> c for b -> c
 def compose g = a -> self $ g a

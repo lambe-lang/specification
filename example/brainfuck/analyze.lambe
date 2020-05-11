@@ -1,4 +1,4 @@
-impl lang.pair
+impl lang.product
 impl program
 
 data Pure

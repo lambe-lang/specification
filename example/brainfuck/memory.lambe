@@ -1,7 +1,7 @@
 impl lang.bool
 impl lang.char
 impl lang.int
-impl lang.pair
+impl lang.product
 impl lang.string
 
 impl zipper

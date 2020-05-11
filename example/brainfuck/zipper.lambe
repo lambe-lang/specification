@@ -14,7 +14,7 @@ trait zipper a {
 }
 
 impl zipper a for Zipper a {
-    impl lang.pair
+    impl lang.product
 
     def new default =
         let l = List[default]

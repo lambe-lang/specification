@@ -11,7 +11,6 @@ type Free (f:type -> type) a = Pure a | Bind f a
 
 impl forall f. Free f with Functor f {
     sig (>>=) : self -> (a -> b) -> Free f b
-
     def (>>=) f =
         when self {
             is Return  -> f self.value
