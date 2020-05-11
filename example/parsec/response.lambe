@@ -1,22 +1,16 @@
 import lang.bool
 import stream
 
-type Response a s =
-  Rejected { stream   : Stream s
-             consumed : bool
-           }
-| Accepted { value    : a
-             stream   : Stream s
-             consumed : bool
-           }
+data Rejected { stream : Stream s; consumed : bool}
+data Accepted { value : a; stream : Stream s; consumed : bool }
+type Response a s = Rejected s | Accepted a s
 
 impl forall a s. Response a s {
     sig fold : forall b. self -> (Rejected s -> b) -> (Accepted a s -> b) -> b
 
     def fold r a =
-        when self {
-            is Rejected -> r self
-            is Accepted -> a self
-        }
+        when self
+        is Rejected -> r self
+        is Accepted -> a self
 }
 

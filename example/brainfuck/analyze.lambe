@@ -9,10 +9,9 @@ impl for Purity {
     sig fold : forall a. (Pure -> a) -> (Impure -> a) -> a
 
     def fold p i =
-        when self {
-            is Pure   -> p self
-            is Impure -> i self
-        }
+        when self
+        is Pure   -> p self
+        is Impure -> i self
 }
 
 type Parsed = Program * Purity

@@ -9,24 +9,37 @@ impl forall a. Option a {
     sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
 
     def fold n s =
-        when self {
+        when self
         is None -> n
         is Some -> s self
-        }
 }
 
 impl Monad Option {
     def pure a = Some a
 
     def (<*>) a =
-        when self {
+        when self
         is None -> None
         is Some -> a map self.value
-        }
 
     def flatten =
-        when self {
+        when self
         is None -> None
         is Some -> self.value
-        }
 }
+
+impl forall a. SemiGroup (Option a) with SemiGroup a {
+    def compose b =
+        when self {
+        is None -> b
+        is Some ->
+            when b
+            is None -> self
+            is Some -> self.value compose b.value
+       }
+}
+
+impl Monoid int {
+    def neutral = None
+}
+

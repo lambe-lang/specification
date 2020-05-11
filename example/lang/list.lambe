@@ -28,30 +28,12 @@ impl Monad List {
     def pure a = a :: Nil
 
     def (<*>) f =
-        when self {
-            is Nil  -> Nil
-            is Cons -> self tail <*> $ a map $ self head
-        }
+        when self
+        is Nil  -> Nil
+        is Cons -> self tail <*> $ a map $ self head
 
     def flatten =
-        when self {
-            is Nil  -> Nil
-            is Cons -> // TODO
-        }
-}
-
-impl forall a. Semigroup (Option a) with Semigroup a {
-    def compose b =
-        when self {
-        is None -> b
-        is Some ->
-            when b {
-            is None -> self
-            is Some -> Some $ self.value compose b.value
-            }
-        }
-}
-
-impl forall a. Monoid (Option a) {
-    def neutral = None
+        when self
+        is Nil  -> Nil
+        is Cons -> // TODO
 }

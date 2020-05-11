@@ -6,24 +6,21 @@ impl forall a b. Either a b {
     sig fold : self -> (Left a -> c) -> (Right b -> c) -> c
 
     def fold  l r =
-        when self {
-            is Left -> l self
-            is Right -> r self
-        }
+        when self
+        is Left -> l self
+        is Right -> r self
 }
 
 impl forall e. Monad (Either e) {
     def pure a = Right a
 
     def (<*>) a =
-        when self {
-            is Left -> Left self.value
-            is Right -> a map self.value
-        }
+        when self
+        is Left -> Left self.value
+        is Right -> a map self.value
 
     def flatten =
-        when self {
-            is Left -> Left self.value
-            is Right -> self.value
-        }
+        when self
+        is Left -> Left self.value
+        is Right -> self.value
 }

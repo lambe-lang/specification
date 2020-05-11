@@ -8,10 +8,9 @@ impl forall a. Try a {
     sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
 
     def fold f s =
-        when self {
-            is Failure -> f self
-            is Success -> s self
-        }
+        when self
+        is Failure -> f self
+        is Success -> s self
 }
 
 impl Monad Try {

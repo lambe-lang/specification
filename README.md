@@ -14,7 +14,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type,
 - [X] Smart cast
-- [ ] Algebraic effects
+- [ ] Algebraic effects 
 
 ## 1. Function
 
@@ -97,10 +97,9 @@ Lambë does not provide a pattern matching, but a Kotlin like smart cast on type
 
 ```
 // Given an optional o
-when o {
-  is None -> // o is a None
-  is Some -> // o is a Some
-}
+when o
+is None -> // o is a None
+is Some -> // o is a Some
 ``` 
 
 ### 2.2 Data type implementation
@@ -110,10 +109,9 @@ impl forall a. Option a {
     sig fold: self -> (None -> b) -> (Some a -> b) -> b
 
     def fold n s = 
-        when self {
-          is None -> n self
-          is Some -> s self
-        }
+        when self
+        is None -> n self
+        is Some -> s self       
 }
 ```
 
@@ -202,10 +200,9 @@ impl Monad Option {
 ```
 impl Functor Option {
     def map f = 
-      when self is {
+      when self is
        is None -> None
        is Some -> Some $ f self.v
-     }
 }
 
 impl Applicative Option {
@@ -267,7 +264,7 @@ trait list {
 ```
 
 This implies the capability to use list as a type elsewhere in the code
-but also the capability to define trait, type etc. in a trait or it's
+but also the capability to define trait, type etc. in a trait, or it's
 implementation.
 
 ### Generalising trait approach
@@ -300,10 +297,9 @@ import list
 
 sig isEmpty : forall a. self -> bool for List a
 def isEmpty = 
-    when self {
-        is Nil  -> true
-        is Cons -> false
-    }
+    when self
+    is Nil  -> true
+    is Cons -> false
 ```
 
 #### `Local` trait implementation usage
@@ -316,10 +312,9 @@ def l = impl list
 
 sig isEmpty : forall a. self -> bool for l List a
 def isEmpty = 
-    when self {
-        is l.Nil  -> true
-        is l.Cons -> false
-    }
+    when self
+    is l.Nil  -> true
+    is l.Cons -> false
 ```
 
 ### `Abstract` trait
@@ -428,10 +423,9 @@ with list
 sig (++) : forall a. self -> self -> self for List a
 
 def (++) l = 
-    when self {
-        is Nil  -> l
-        is Cons -> self.h :: $ self.t ++ l
-    }
+    when self
+    is Nil  -> l
+    is Cons -> self.h :: $ self.t ++ l
 ```
 
 In this sample the `::` function is use but not implemented. 
@@ -451,10 +445,9 @@ def Adder = a -> {
 
 def Adder Peano = {
     def (+) a = 
-        when self {
-            is Zero -> a
-            is Succ -> Succ $ self value + a
-        }
+        when self
+        is Zero -> a
+        is Succ -> Succ $ self value + a
 }
 ```
 
@@ -655,7 +648,7 @@ attr_type ::= IDENT ":" type_expr
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT (param)* "=" expr "in" expr
             | "let" impl "in" expr
-            | "when" ("let" IDENT =)? expr "{" cases+ "}"
+            | "when" ("let" IDENT =)? expr cases+``
             | param
             | native
             | "_"

@@ -18,20 +18,17 @@ trait Parse a {
 // Predicate based parsers
 //
 
-data Satisfy s {
-    predicate : s -> bool
-}
+data Satisfy s { predicate : s -> bool }
 
 impl Parser s for Satisfy s {
     def parse s =
         let p = s next
-        in when let r = p._1 {
+        in when let r = p._1
            is Rejected -> Rejected false
            is Accepted ->
               if (self predicate r)
               then { Accepted r.value p._2 true }
               else { Rejected false }
-           }
 }
 
 def any : Satisfy
@@ -47,41 +44,32 @@ def notChar c = Satisfy { c != $1 }
 // Parser sequence
 //
 
-data And a b {
-    left  : Parser a
-    right : Parser b
-}
+data And a b { left  : Parser a; right : Parser b }
 
 impl Parser (Pair a b) for And a b {
     def parse s =
-        when let r = self left parse s {
+        when let r = self left parse s
         is Rejected -> Rejected r.consumed
         is Accepted ->
-            when let l = self right parse r.stream {
-                is Rejected -> Rejected r.stream (r.consumed || l.consumed)
-                is Accepted -> Accepted (r.value,l.value) b.stream (r.consumed || l.consumed)
-            }
-        }
+            when let l = self right parse r.stream
+            is Rejected -> Rejected r.stream (r.consumed || l.consumed)
+            is Accepted -> Accepted (r.value,l.value) b.stream (r.consumed || l.consumed)
 }
 
 //
 // Parser choice
 //
 
-data Or a {
-    left  : Parser a
-    right : Parser a
-}
+data Or a { left  : Parser a; right : Parser a }
 
 impl Parser a for Or a {
     def parse s =
-        when let r = self left parse s {
+        when let r = self left parse s
         is Rejected ->
-              if r.consumed
-              then { r }
-              else { self right parse s }
+            if r.consumed
+            then { r }
+            else { self right parse s }
         is Accepted -> r
-        }
 }
 
 //
@@ -95,9 +83,8 @@ data FMap a b {
 
 impl Parser b for FMap a b {
     def parse s =
-        when let r = self left.parser parse s {
-            is Rejected -> Rejected r.stream r.consumed
-            is Accepted -> Accepted (self.function r) r.stream r.consumed
-        }
+        when let r = self left.parser parse s
+        is Rejected -> Rejected r.stream r.consumed
+        is Accepted -> Accepted (self.function r) r.stream r.consumed
 }
 

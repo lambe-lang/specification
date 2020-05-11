@@ -8,8 +8,9 @@ impl lang.predicate
 impl ast
 
 data BraceMismatch
+data StackUnderFlow
 data UnknownChar { c:char }
-type ParseError = BraceMismatch | StackUnderFlow | UnknownChar char
+type ParseError = BraceMismatch | StackUnderFlow | UnknownChar
 
 trait Parse {
     sig parse : self -> Program with Exception ParseError
