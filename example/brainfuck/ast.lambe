@@ -1,12 +1,13 @@
 impl lang.int
 impl lang.list
 
-type Token =
-  data Memory { alter : int }
-| data Cursor { offset : int }
-| data Input
-| data Output
-| data Loop { program : Program }
-| data Nullify
+data Memory { alter : int }
+data Cursor { offset : int }
+data Input
+data Output
+data Loop { program : Program }
+data Nullify
+
+type Token = Memory | Cursor | Input | Output | Loop | Nullify
 
 type Program = List Token

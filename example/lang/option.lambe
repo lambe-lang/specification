@@ -5,13 +5,14 @@ data Some a { value : a }
 
 type Option a = None | Some a
 
-impl for Option a {
+impl forall a. Option a {
     sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
 
-    def fold n s = when self {
+    def fold n s =
+        when self {
         is None -> n
         is Some -> s self
-    }
+        }
 }
 
 impl Monad Option {
@@ -19,13 +20,13 @@ impl Monad Option {
 
     def (<*>) a =
         when self {
-            is None -> None
-            is Some -> a map self.value
+        is None -> None
+        is Some -> a map self.value
         }
 
     def flatten =
         when self {
-            is None -> None
-            is Some -> self.value
+        is None -> None
+        is Some -> self.value
         }
 }

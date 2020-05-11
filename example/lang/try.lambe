@@ -1,8 +1,8 @@
 impl control
 
-type Try a =
-  data Failure { reason : string }
-| data Success { value  : a }
+data Failure { reason : string }
+data Success { value  : a }
+type Try a = Failure | Success a
 
 impl forall a. Try a {
     sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
