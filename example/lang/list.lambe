@@ -3,23 +3,23 @@ impl control
 
 data Nil
 data Cons a {
-    head : a
+    head : a;
     tail : List a
 }
 
 type List a = Nil | Cons a
 
-impl for List a {
+impl Nil {
     sig fold : forall a b. self -> (self -> b) -> (Cons a -> b) -> b
     def fold f _ = f self
 }
 
-impl for Cons a {
+impl forall a. Cons a {
     sig fold : forall b. self -> (Nil -> b) -> (self -> b) -> b
     def fold _ f = f self
 }
 
-impl for List a {
+impl forall a. List a {
     sig (::) : self -> List a -> Cons a for a
     def (::) l = Cons self l
 }

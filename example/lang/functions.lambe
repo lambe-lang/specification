@@ -5,10 +5,10 @@ sig ($) : forall a b c. self -> (a -> b) -> a -> c for b -> c
 def ($) f a = self (f a)
 
 sig compose : forall a b c. self -> (a -> b) -> a -> c for b -> c
-def compose g = a -> self $ g a
+def compose g = { a -> self $ g a }
 
 sig pipeline : forall a b c. self -> (b -> c) -> a -> c for a -> b
 def pipeline g = g compose self
 
-sig |> : pipeline
-def |> = self pipeline
+sig (|>) : pipeline
+def (|>) = self pipeline

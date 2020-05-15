@@ -1,0 +1,8 @@
+trait Traversable (t:type -> type) (f:type -> type) with Applicative f {
+    sig traverse : forall a b. self -> t a -> f (t b) for (a -> f b)
+    sig sequenceA : forall a b. self -> f (t a) for t (f a)
+
+    def traverse = self map |> sequenceA
+    def sequenceA = id traverse  // Not lazy
+}
+

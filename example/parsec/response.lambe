@@ -1,5 +1,5 @@
-import lang.bool
-import stream
+impl lang.bool
+impl stream
 
 data Rejected { stream : Stream s; consumed : bool}
 data Accepted { value : a; stream : Stream s; consumed : bool }

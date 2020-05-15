@@ -8,7 +8,7 @@ impl zipper
 
 type Memory = Zipper int * String
 
-impl for Memory {
+impl Memory {
     sig new      : self
     sig cursor   : self -> Int -> self
     sig memory   : self -> Int -> self
@@ -25,7 +25,7 @@ impl for Memory {
             then Zipper.right
             else Zipper.left
         in let loop mem offset =
-            if (offset == 0)
+            if (offset = 0)
             then { acc, self.second }
             else { loop (mem move) (offset --) }
         in loop self.first (offset abs)

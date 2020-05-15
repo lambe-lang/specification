@@ -2,6 +2,7 @@ impl control
 
 data Failure { reason : string }
 data Success { value  : a }
+
 type Try a = Failure | Success a
 
 impl forall a. Try a {

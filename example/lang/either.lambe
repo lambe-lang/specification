@@ -1,11 +1,12 @@
-type Either a b =
-  data Left  { value : a }
-| data Right { value : b }
+data Left  { value : a }
+data Right { value : b }
+
+type Either a b = Left a | Right b
 
 impl forall a b. Either a b {
     sig fold : self -> (Left a -> c) -> (Right b -> c) -> c
 
-    def fold  l r =
+    def fold l r =
         when self
         is Left -> l self
         is Right -> r self

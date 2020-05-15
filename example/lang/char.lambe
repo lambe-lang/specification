@@ -1,17 +1,15 @@
 impl int
 
-kind char : type
+data char
 
 impl char {
     sig toInt : self -> int
-
-    // ...
 }
 
 impl Read char {
-    def read = ...
+    def read = TODO
 }
 
 impl Equal char {
-    def (=) c = ...
+    def (=) c = TODO
 }

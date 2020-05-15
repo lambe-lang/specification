@@ -30,13 +30,12 @@ impl Monad Option {
 
 impl forall a. SemiGroup (Option a) with SemiGroup a {
     def compose b =
-        when self {
+        when self
         is None -> b
         is Some ->
             when b
             is None -> self
             is Some -> self.value compose b.value
-       }
 }
 
 impl Monoid int {

@@ -1,25 +1,16 @@
 impl lang.bool
 impl lang.eq
 
-/*
- * Language syntactic extension
- *
- *     switch e
- *     case c1   => e1
- *     case c2   => e2
- *     otherwise => e3
- */
-
 sig switch : a -> Switch a
 def switch a = Switch a None
 
 data Switch a b {
-    value  : a
+    value  : a;
     result : Option b
 }
 
 data Case a b {
-    value  : a
+    value  : a;
     result : (Unit -> b) -> Option b
 }
 

@@ -1,52 +1,40 @@
-import lang.bool
-import lang.char
-import lang.selection
-import lang.string
+impl lang.bool
+impl lang.char
+impl lang.selection
+impl lang.string
 
-import response
-import stream
-
-//
-// Parser definition
-//
+impl response
+impl stream
 
 trait Parse a {
     sig parse : forall s. self -> Stream s -> Response a s
 }
-
-//
-// Predicate based parsers
-//
 
 data Satisfy s { predicate : s -> bool }
 
 impl Parser s for Satisfy s {
     def parse s =
         let p = s next
-        in when let r = p._1
+        in when let r = p.fst
            is Rejected -> Rejected false
            is Accepted ->
               if (self predicate r)
-              then { Accepted r.value p._2 true }
+              then { Accepted r.value p.snd true }
               else { Rejected false }
 }
 
-def any : Satisfy
+sig any : Satisfy
 def any = Satisfy { true }
 
-def aChar : char -> Satisfy
-def aChar c = Satisfy { c == $1 }
+sig aChar : char -> Satisfy
+def aChar c = Satisfy { c == _ }
 
-def notChar : char -> Satisfy
-def notChar c = Satisfy { c != $1 }
-
-//
-// Parser sequence
-//
+sig notChar : char -> Satisfy
+def notChar c = Satisfy { c != _ }
 
 data And a b { left  : Parser a; right : Parser b }
 
-impl Parser (Pair a b) for And a b {
+impl forall a b. Parser (a * b) for And a b {
     def parse s =
         when let r = self left parse s
         is Rejected -> Rejected r.consumed
@@ -56,13 +44,9 @@ impl Parser (Pair a b) for And a b {
             is Accepted -> Accepted (r.value,l.value) b.stream (r.consumed || l.consumed)
 }
 
-//
-// Parser choice
-//
-
 data Or a { left  : Parser a; right : Parser a }
 
-impl Parser a for Or a {
+impl forall a. Parser a for Or a {
     def parse s =
         when let r = self left parse s
         is Rejected ->
@@ -72,12 +56,8 @@ impl Parser a for Or a {
         is Accepted -> r
 }
 
-//
-// Parser map
-//
-
 data FMap a b {
-    parser : Parser a
+    parser : Parser a;
     function : a -> b
 }
 

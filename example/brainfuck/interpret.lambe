@@ -18,10 +18,8 @@ impl Interpret for Program {
                            then { memory }
                            else { step token $ token program interpret memory }
              is Nullify -> memory nullify
-            }
         in
         when self
         is Nil  -> memory
         is Cons -> self.tail interpret $ step self.head memory
-        }
 }

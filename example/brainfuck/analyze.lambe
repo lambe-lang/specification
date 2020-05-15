@@ -5,7 +5,7 @@ data Pure
 data Impure
 type Purity = Pure | Impure
 
-impl for Purity {
+impl Purity {
     sig fold : forall a. (Pure -> a) -> (Impure -> a) -> a
 
     def fold p i =

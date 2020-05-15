@@ -344,32 +344,7 @@ impl list {
 
 ## 5. Algebraic Effect
 
-```
-effect console {
-    val print : forall a. string -> unit  
-    val read  : forall a. unit -> string  
-}
-
-val echo : string -> () with console   
-def echo s = print $ "Hello " + s
-```
-
-The continuation should be identified during the compilation and should be explicit for 
-the end-user.
-
-```
-data System
-
-impl console for System {
-    def print s = self $ native (Print s)
-    def read s = self $ native Read 
-}
-```
-
-```
-let import system in
-    echo "John"
-```
+Under consideration
 
 ## 6. Required implementation
 
