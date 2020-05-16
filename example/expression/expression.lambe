@@ -1,0 +1,60 @@
+trait Eval _ {
+    sig eval : self -> int
+}
+
+// ----------------------------------------------------------------------------
+// Defining the number
+// ----------------------------------------------------------------------------
+
+data Num { value : int }
+
+impl Eval self for Num {
+    def eval = self.value
+}
+
+// ----------------------------------------------------------------------------
+// Defining the addition
+// ----------------------------------------------------------------------------
+
+data Plus a { left: a; right: a }
+
+impl forall a. Eval self for Plus a with Eval a {
+    def eval =
+        let l = self.left eval in
+        let r = self.right eval in
+            l + r
+}
+
+// ----------------------------------------------------------------------------
+// Defining the Expression Level 1
+// ----------------------------------------------------------------------------
+
+type ExpL1 = Num | Plus ExpL1
+
+impl Eval self for ExpL1
+    with Eval Num
+    with Eval (Plus self)
+
+// ----------------------------------------------------------------------------
+// Defining the multiplication
+// ----------------------------------------------------------------------------
+
+data Mult a { left:a; right: a }
+
+impl forall a. Eval self for Mult a with Eval a {
+    def eval =
+        let l = self.left eval in
+        let r = self.right eval in
+            l * r
+}
+
+// ----------------------------------------------------------------------------
+// Defining the Expression Level 2
+// ----------------------------------------------------------------------------
+
+type ExpL2 = Num | Plus ExpL2 | Mult ExpL2
+
+impl Eval self for ExpL2
+    with Eval Num
+    with Eval (Plus self)
+    with Eval (Mult self)

@@ -1,6 +1,6 @@
 trait Functor (f:type->type) {
     sig map : forall a b. self -> f a -> f b for (a -> b)
-    sig <$> : forall a b. self -> f a -> f b for (a -> b)
+    sig (<$>) : forall a b. self -> f a -> f b for (a -> b)
     def (<$>) = self map
 }
 
