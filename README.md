@@ -14,6 +14,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type,
 - [X] Smart cast
+- [ ] Comment as ... code
 - [ ] Algebraic effects 
 
 ## 1. Function
@@ -635,7 +636,7 @@ attr_type ::= IDENT ":" type_expr
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT (param)* "=" expr "in" expr
             | "let" impl "in" expr
-            | "when" ("let" IDENT =)? expr cases+``
+            | "when" (("let" IDENT =)? expr)+ cases+``
             | param
             | native
             | "_"
@@ -647,7 +648,7 @@ expr      ::= "{" (param+ "->")? expr "}"
             | expr "with" ("IDENT "=" expr)+
             | impl
             
-case      ::= "is" type_expr "->" expr            
+case      ::= ("is" type_expr)+ "->" expr            
 
 type_expr ::= type_expr OPERATOR type_expr
             | "(" type_expr | OPERATOR ")"

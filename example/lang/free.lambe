@@ -1,7 +1,7 @@
 comment {
-  @cite http://comonad.com/reader/2011/free-monads-for-less/
-  @cite http://okmij.org/ftp/Computation/free-monad.html
- }
+  cite { http://comonad.com/reader/2011/free-monads-for-less/ }
+  cite { http://okmij.org/ftp/Computation/free-monad.html }
+}
 
 data Pure a { value: a }
 data Bind (f:type -> type) a { value : f (Free a) }
@@ -17,6 +17,3 @@ impl forall f. Free f with Functor f {
     sig lift : f a -> Free f a
     def lift a = Bind @ map Pure
 }
-
-
-
