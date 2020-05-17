@@ -86,7 +86,8 @@ data Some a { value: a }
 type Option a = None | Some a
 ```
 
-Each data has a corresponding constructor denoted by a function when parameters are defined thanks to attributes specification based order:
+Each data has a corresponding constructor denoted by a function when parameters are define thanks to attribute
+specification based order:
 
 ```
 sig None : None
@@ -100,6 +101,17 @@ Lambë does not provide a pattern matching, but a Kotlin like smart cast on type
 when o
 is None -> // o is a None
 is Some -> // o is a Some
+``` 
+
+This smart cast can be stacked providing seamless multiple smart casts.
+
+```
+// Given an optional o and i
+when o when i
+is None is None -> // o is a None and i is None
+is Some is None -> // o is a Some and i is None
+is None is Some -> // o is a None and i is Some
+is Some is Some -> // o is a Some and i is Some
 ``` 
 
 ### 2.2 Data type implementation
