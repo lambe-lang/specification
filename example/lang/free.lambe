@@ -1,9 +1,7 @@
-/**
- * Ref http://comonad.com/reader/2011/free-monads-for-less/
- * Ref http://okmij.org/ftp/Computation/free-monad.html
- */
-
-// To be reviewed
+comment {
+  @cite http://comonad.com/reader/2011/free-monads-for-less/
+  @cite http://okmij.org/ftp/Computation/free-monad.html
+ }
 
 data Pure a { value: a }
 data Bind (f:type -> type) a { value : f (Free a) }

@@ -1,23 +1,22 @@
 impl int
 impl char
 impl algebraic
+impl list
 
-kind string = type
+data String { value: List char }
 
-impl string {
+impl String {
     sig length : self -> int
     sig chatAt : self -> int -> Option char
-    sig (+) : self -> self -> self
+    sig (++) : self -> self -> self
     sig replace : self -> char -> char -> self
-    sig index : self -> char -> int
-
-    // TODO
+    sig indexOf : self -> char -> Option int
 }
 
-impl SemiGroup string {
-    def compose b = self + b
+impl SemiGroup String {
+    def compose b = String (self.value + b.value)
 }
 
-impl Monoid string {
-    def neutral = ""
+impl Monoid String {
+    def neutral = String neutral
 }

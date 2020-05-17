@@ -5,24 +5,36 @@ data Some a { value : a }
 
 type Option a = None | Some a
 
-impl forall a. Option a {
-    sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
+comment { section Foldable | such material can be automatically generated }
 
-    def fold n s =
-        when self
-        is None -> n
-        is Some -> s self
+trait Foldable _ {
+    sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
 }
+
+impl Foldable self for None {
+    def fold f _ = f self
+}
+
+impl forall a. Foldable self for Some a {
+    def fold _ f = f self
+}
+
+impl forall a. Foldable self for Option a
+    with Foldable None
+    with Foldable (Some a)
+
+comment { section Monad }
 
 impl Monad Option {
     def pure a = Some a
 
-    def (<*>) a =
-        when self
-        is None -> None
-        is Some -> a map self.value
+    def product a =
+        when self when a
+        is None is _    -> None
+        is _    is None -> None
+        is Some is Some -> Some (self.value , a.value)
 
-    def flatten =
+    def join =
         when self
         is None -> None
         is Some -> self.value
@@ -30,12 +42,10 @@ impl Monad Option {
 
 impl forall a. SemiGroup (Option a) with SemiGroup a {
     def compose b =
-        when self
-        is None -> b
-        is Some ->
-            when b
-            is None -> self
-            is Some -> self.value compose b.value
+        when self when b
+        is None is _    -> b
+        is _    is None -> self
+        is Some is Some -> self.value compose b.value
 }
 
 impl Monoid int {

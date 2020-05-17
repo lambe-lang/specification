@@ -6,15 +6,13 @@ kind int : type
 impl int {
     sig (--) : self -> self
     sig (++) : self -> self
-    sig (+)  : self -> self -> self // native
-    sig (-)  : self -> self -> self // native
-    sig abs  : self -> self         // native
-    sig toChar : self -> Char       // native
+    sig (+)  : self -> self -> self
+    sig (-)  : self -> self -> self
+    sig abs  : self -> self
+    sig toChar : self -> Char
 
     def (--) = self - 1
     def (++) = self + 1
-
-    // TODO ...
 }
 
 impl SemiGroup int {

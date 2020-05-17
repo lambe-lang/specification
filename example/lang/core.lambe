@@ -12,6 +12,3 @@ def (@) f a = self (f a)
 
 sig (@>) : forall a b c. self -> (b -> c) -> a -> c for a -> b
 def (@>) f = f @ self
-
-// Examples
-// 1 + $ 4 + 3
