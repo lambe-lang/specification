@@ -5,20 +5,40 @@ data Nil
 data Cons a { head : a; tail : List a }
 type List a = Nil | Cons a
 
+-- section foldable
+
+trait foldable a s for s {
+    sig fold : forall b. self -> (Nil -> b) -> (Cons a -> b) -> b
+}
+
+impl foldable a Nil {
+    def fold n _ = n self
+}
+
+impl foldable a (Cons a) {
+    def fold _ c = c self
+}
+
+impl foldable a (List a)
+    with Foldable a Nil
+    with Foldable a (Cons a)
+
+-- miscellaneous
+
 impl forall a. List a {
-    sig (::) : self -> self -> Cons a for a
+    sig (::) : self -> List a -> Cons a for a -- override self type definition |
     def (::) l = Cons self l
 
     sig (++) : forall a. self -> self -> self
     def (++) = self compose
 }
 
-comment { section Monoid }
+-- section Monoid
 
 impl SemiGroup for List a {
     def compose l =
         when self
-        is Nil -> l
+        is Nil  -> l
         is Cons -> self.head :: (self.tail compose l)
 }
 
@@ -26,7 +46,7 @@ impl Monoid for List a {
     def neutral = Nil
 }
 
-comment { section Foldable | such material can be automatically generated }
+-- section Foldable | such material can be automatically generated
 
 trait Foldable _ {
     sig fold : forall a b. self -> (self -> b) -> (Cons a -> b) -> b
@@ -44,7 +64,7 @@ impl forall a. Foldable self for List a
     with Foldable Nil
     with Foldable (Cons a)
 
-comment { section Monad }
+-- section Monad
 
 impl Monad List {
     def pure a = a :: Nil

@@ -1,18 +1,23 @@
+/*
+ Expression in this example shows how an Expression language can be design step
+ by step introduction basic constructions like *Number* and *Plus*.
+*/
+
 impl int
 
 trait Eval _ {
     sig eval : self -> int
 }
 
-comment { Defining the number }
+-- Defining the number
 
-data Num { value : int }
+data Number { value : int }
 
-impl Eval self for Num {
+impl Eval self for Number {
     def eval = self.value
 }
 
-comment { Defining the addition }
+-- Defining the addition
 
 data Plus a { left: a; right: a }
 
@@ -20,15 +25,26 @@ impl forall a. Eval self for Plus a with Eval a {
     def eval = (self.left eval) + (self.right eval)
 }
 
-comment { Defining the Expression Level 1 }
+-- This is a stupid and useless comment !
 
-type ExpL1 = Num | Plus ExpL1
+-{
+   The following function define the polymorphic identity function.
+
+   ```
+   sig id : forall a. a -> a
+   def id = { _ }
+   ```
+
+   This function can be apply to any term: `id 1`.
+}
+
+type ExpL1 = Number | Plus ExpL1
 
 impl Eval self for ExpL1
-    with Eval Num
+    with Eval Number
     with Eval (Plus self)
 
-comment { Defining the multiplication }
+-- Defining the multiplication
 
 data Mult a { left:a; right: a }
 
@@ -36,11 +52,11 @@ impl forall a. Eval self for Mult a with Eval a {
     def eval = (self.left eval) * (self.right eval)
 }
 
-comment { Defining the Expression Level 2 }
+--| Defining the Expression Level 2
 
-type ExpL2 = Num | Plus ExpL2 | Mult ExpL2
+type ExpL2 = Number | Plus ExpL2 | Mult ExpL2
 
 impl Eval self for ExpL2
-    with Eval Num
+    with Eval Number
     with Eval (Plus self)
     with Eval (Mult self)

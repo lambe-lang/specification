@@ -13,7 +13,7 @@ impl forall a. Stack a {
     def new = Stack $ List empty
 
     sig push : self -> a -> self
-    def push a = self with value = a :: self.value
+    def push a = self with value = a::self.value
 
     sig peek : self -> Option a
     def peek = self value

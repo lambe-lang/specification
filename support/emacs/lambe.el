@@ -3,7 +3,7 @@
 )
   
 (defvar lambe-keywords
-    '("with" "for" "let" "in" "self" "when" "is")
+    '("with" "for" "let" "where" "in" "self" "when" "is")
 )
   
 (defvar lambe-tab-width nil "Width of a tab for Lambe mode")
@@ -26,7 +26,7 @@
   (when lambe-tab-width
     (setq tab-width lambe-tab-width))
   
-  (setq comment-start "//")
+  (setq comment-start "--")
   (setq comment-end "")
   
   (modify-syntax-entry ?/ "< b" lambe-mode-syntax-table)

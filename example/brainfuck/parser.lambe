@@ -13,9 +13,12 @@ data UnknownChar { c:char }
 type ParseError = BraceMismatch | StackUnderFlow | UnknownChar
 
 trait Parse {
-    sig parse : self -> Program with Exception ParseError
-    sig parseChar : self -> ParseContext -> ParseContext for Char with Error ParseError
 
+    sig parse : self -> Program with Exception ParseError
+
+    type ParseContext = Pair Program (Stack Program)
+
+    sig parseChar : self -> ParseContext -> ParseContext for Char with Error ParseError
     def parseChar context =
         let program  = context first
         in let programs = context second
@@ -30,13 +33,11 @@ trait Parse {
             case (equals ']') => { programs peek fold
                                     { BraceMismatch raise }
                                     { Loop program :: $1.value , $ programs pop }
-                             }
-            otherwise => UnknownChar char raise
+                                 }
+            otherwise         => UnknownChar char raise
 }
 
 impl Parser for String {
-    type ParseContext = Pair Program (Stack Program)
-
     def parse =
         let parse i context =
             self chatAt i

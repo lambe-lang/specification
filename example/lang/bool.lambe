@@ -2,16 +2,38 @@ data True
 data False
 type Bool = True | False
 
-impl Bool {
+-- section foldable
+
+trait foldable s for s {
     sig fold : forall b. self -> (True -> b) -> (False -> b) -> b
-    sig (&&) : self -> self
-    sig (||) : self -> self
-
-    def fold t f =
-        when self
-        is True -> t self
-        is False -> f self
-
-    def (&&) b = self fold { b } id
-    def (||) b = self fold id { b }
 }
+
+impl foldable True {
+    def fold t _ = t self
+}
+
+impl foldable False {
+    def fold _ f = f self
+}
+
+impl foldable Bool
+    with foldable True
+    with foldable False
+
+-- The operator trait defines basic capabilities
+
+trait operator for Bool with foldable Bool {
+    sig (||) : self -> Bool -> Bool
+    def (||) b = self fold { True } { b }
+
+    sig (&&) : self -> Bool -> Bool
+    def (&&) b = self fold { b } { False }
+
+    sig not : self -> Bool
+    def not = self fold { False } { True }
+
+    sig (=>) : self -> Bool -> Bool
+    def (=>) b = self not || b
+}
+
+impl operator

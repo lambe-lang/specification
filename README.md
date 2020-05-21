@@ -7,14 +7,14 @@ A statically typed functional programming language inspired by Haskell, OCaml, R
 Targeted programming language paradigms for the design of Lambë are:
 - [X] Functional programming,
 - [X] Static typing,
-- [X] Self receiver concept,
-- [X] Algebraic Data Type aka ADT.  
-- [X] Trait based code organisation,
-- [X] Coarse and fine grain self specification i.e. receiver type,
-- [X] Trait implementation as first class citizen,
 - [X] Higher-kinded-type,
 - [X] Smart cast
-- [ ] Comment as ... code
+- [X] Algebraic Data Type aka ADT.  
+- [X] Trait based code organisation,
+- [X] Trait implementation as first class citizen,
+- [X] Self receiver concept,
+- [X] Coarse and fine grain self specification i.e. receiver type,
+- [ ] Comment
 - [ ] Algebraic effects 
 
 ## 1. Function

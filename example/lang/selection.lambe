@@ -4,10 +4,10 @@ impl lang.unit
 data If { cond : bool }
 data Then a { cond : bool; then : Unit -> a }
 
-impl If {
-    sig if : bool -> self
-    def if = If
+sig if : bool -> self
+def if = If
 
+impl If {
     sig then : forall a. self -> (unit -> a) -> Then a
     def then t = Then self.cond t
 }

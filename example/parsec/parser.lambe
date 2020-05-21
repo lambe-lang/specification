@@ -10,7 +10,7 @@ trait Parse a {
     sig parse : forall s. self -> Stream s -> Response a s
 }
 
-comment { section Satisfy }
+-- section Satisf
 
 data Satisfy a { predicate : a -> bool }
 
@@ -36,7 +36,7 @@ impl Parser a for Satisfy a {
               else { Rejected false }
 }
 
-comment { section And }
+-- section And
 
 data And a b { left: Parser a; right: Parser b }
 
@@ -50,7 +50,7 @@ impl forall a b. Parser (a * b) for And a b {
             is Accepted -> Accepted (r.value,l.value) b.stream (r.consumed || l.consumed)
 }
 
-comment { section Or }
+-- section Or
 
 data Or a { left  : Parser a; right : Parser a }
 
@@ -64,7 +64,7 @@ impl forall a. Parser a for Or a {
         is Accepted -> r
 }
 
-comment { section Map }
+- section Map
 
 data Map a b {
     parser : Parser a;

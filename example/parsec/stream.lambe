@@ -1,4 +1,4 @@
 trait Stream s {
-    comment { State monad? }
+    -- State monad?
     sig next : self -> Option s * self
 }
