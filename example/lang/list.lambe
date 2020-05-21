@@ -2,33 +2,30 @@ impl algebraic
 impl control
 
 data Nil
-data Cons a { head : a; tail : List a }
+data (::) a { head : a; tail : List a }
 type List a = Nil | Cons a
 
 -- section foldable
 
 trait foldable a s for s {
-    sig fold : forall b. self -> (Nil -> b) -> (Cons a -> b) -> b
+    sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
 }
 
 impl foldable a Nil {
     def fold n _ = n self
 }
 
-impl foldable a (Cons a) {
+impl foldable a ((::) a) {
     def fold _ c = c self
 }
 
 impl foldable a (List a)
     with Foldable a Nil
-    with Foldable a (Cons a)
+    with Foldable a ((::) a)
 
 -- miscellaneous
 
 impl forall a. List a {
-    sig (::) : self -> List a -> Cons a for a -- override self type definition |
-    def (::) l = Cons self l
-
     sig (++) : forall a. self -> self -> self
     def (++) = self compose
 }
@@ -49,20 +46,20 @@ impl Monoid for List a {
 -- section Foldable | such material can be automatically generated
 
 trait Foldable _ {
-    sig fold : forall a b. self -> (self -> b) -> (Cons a -> b) -> b
+    sig fold : forall a b. self -> (self -> b) -> ((::) a -> b) -> b
 }
 
 impl Foldable self for Nil {
-    def fold self f _ = f self
+    def fold f _ = f self
 }
 
-impl forall a. Foldable self for Cons a {
+impl forall a. Foldable self for (::) a {
     def fold _ f = f self
 }
 
 impl forall a. Foldable self for List a
     with Foldable Nil
-    with Foldable (Cons a)
+    with Foldable ((::) a)
 
 -- section Monad
 
@@ -72,10 +69,10 @@ impl Monad List {
     def product f =
         when self
         is Nil  -> Nil
-        is Cons -> self.tail <*> $ f map self.head
+        is (::) -> self.tail <*> $ f map self.head
 
     def join =
         when self
         is Nil  -> Nil
-        is Cons -> self.head compose (self.tail join)
+        is (::) -> self.head compose (self.tail join)
 }

@@ -1,7 +1,7 @@
 type Identity a = a
 
 impl Monad Identity {
-    def pure a = Identity a
+    def pure a = a
 
     def (<*>) a = a map self
 

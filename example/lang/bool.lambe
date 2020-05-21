@@ -1,3 +1,9 @@
+-{
+  This boolean trait provides:
+  - foldable Bool
+  - operator
+}
+
 data True
 data False
 type Bool = True | False
