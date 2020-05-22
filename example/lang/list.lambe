@@ -23,24 +23,27 @@ impl foldable a (List a)
     with Foldable a Nil
     with Foldable a ((::) a)
 
--- miscellaneous
-
-impl forall a. List a {
-    sig (++) : forall a. self -> self -> self
-    def (++) = self compose
-}
-
 -- section Monoid
 
-impl SemiGroup for List a {
+impl SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
         is Cons -> self.head :: (self.tail compose l)
 }
 
-impl Monoid for List a {
+impl Monoid (List a) {
     def neutral = Nil
+}
+
+-- operation
+
+trait operation a for List a {
+    sig (++) : forall a. self -> self -> self
+}
+
+impl forall a. operation a {
+    def (++) = self compose
 }
 
 -- section Foldable | such material can be automatically generated
@@ -63,16 +66,12 @@ impl forall a. Foldable self for List a
 
 -- section Monad
 
-impl Monad List {
+impl forall a. Monad List with foldable a (List a) {
     def pure a = a :: Nil
 
     def product f =
-        when self
-        is Nil  -> Nil
-        is (::) -> self.tail <*> $ f map self.head
+        self fold { Nil } { _.tail <*> $ f map _.head }
 
     def join =
-        when self
-        is Nil  -> Nil
-        is (::) -> self.head compose (self.tail join)
+        self fold { nil } { _.head compose $ _.tail join }
 }

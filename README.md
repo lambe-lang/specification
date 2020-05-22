@@ -14,7 +14,8 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Trait implementation as first class citizen,
 - [X] Self receiver concept,
 - [X] Coarse and fine grain self specification i.e. receiver type,
-- [ ] Comment
+- [ ] Lazy evaluation and type definition
+- [ ] Structured comments
 - [ ] Algebraic effects 
 
 ## 1. Function

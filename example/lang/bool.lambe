@@ -1,7 +1,7 @@
 -{
   This boolean trait provides:
   - foldable Bool
-  - operator
+  - operation
 }
 
 data True
@@ -26,20 +26,20 @@ impl foldable Bool
     with foldable True
     with foldable False
 
--- The operator trait defines basic capabilities
+-- The operation trait defines basic capabilities
 
-trait operator for Bool with foldable Bool {
-    sig (||) : self -> Bool -> Bool
+trait operation for Bool with foldable Bool {
+    sig (||) : self -> { Bool } -> Bool
     def (||) b = self fold { True } { b }
 
-    sig (&&) : self -> Bool -> Bool
+    sig (&&) : self -> { Bool } -> Bool
     def (&&) b = self fold { b } { False }
 
     sig not : self -> Bool
     def not = self fold { False } { True }
 
-    sig (=>) : self -> Bool -> Bool
+    sig (=>) : self -> { Bool } -> Bool
     def (=>) b = self not || b
 }
 
-impl operator
+impl operation

@@ -5,8 +5,8 @@ type Range = RangeFromTo | RangeFromDownTo
 
 impl Range {
     sig to : self -> self -> Range for int
-    def to m1 m2 =
-        if (m1 <= m2)
-        then { RangeFromTo m1 m2 }
-        else { RangeFromDownTo m2 m1 }
+    def to m2 =
+        if (self <= m2)
+        then { RangeFromTo self m2 }
+        else { RangeFromDownTo m2 self }
 }

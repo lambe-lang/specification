@@ -1,0 +1,40 @@
+-{
+ Pure data approach
+}
+
+data (~>) (f:type->type) (g:type->type) {
+    transform: forall a. f a -> g a
+}
+
+-- Implementation
+
+sig option_of_try : Try ~> Option
+def option_of_try = (~>) {
+    transform t =
+        when t
+        is Failure -> None
+        is Success -> Some t.value
+}
+
+sig transform : Try int -> (Try ~> Option) -> Option int
+def transform a t = t.transform a
+
+-{
+ Trait approach
+}
+
+trait (~>) (f:type->type) (g:type->type) {
+    sig transform: forall a. self -> g a for f a
+}
+
+-- Implementation
+
+impl (~>) Try Option {
+    def transform =
+        when self
+        is Failure -> None
+        is Success -> Some self.value
+}
+
+sig transform : Try int-> Option int with Try ~> Option
+def transform a = a transform

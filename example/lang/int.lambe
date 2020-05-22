@@ -1,14 +1,14 @@
 impl char
 impl algebraic
 
-kind int : type
+kind int = type
 
 impl int {
-    sig (--) : self -> self
-    sig (++) : self -> self
-    sig (+)  : self -> self -> self
-    sig (-)  : self -> self -> self
-    sig abs  : self -> self
+    sig (--)   : self -> self
+    sig (++)   : self -> self
+    sig (+)    : self -> self -> self
+    sig (-)    : self -> self -> self
+    sig abs    : self -> self
     sig toChar : self -> Char
 
     def (--) = self - 1

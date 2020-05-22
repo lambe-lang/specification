@@ -5,18 +5,18 @@ impl list
 
 data String { value: List char }
 
+impl SemiGroup String with SemiGroup (List char) {
+    def compose b = String (self.value composes b.value)
+}
+
+impl Monoid String with Monoid (List char) {
+    def neutral = String neutral
+}
+
 impl String {
     sig length : self -> int
     sig chatAt : self -> int -> Option char
     sig (++) : self -> self -> self
     sig replace : self -> char -> char -> self
     sig indexOf : self -> char -> Option int
-}
-
-impl SemiGroup String {
-    def compose b = String (self.value + b.value)
-}
-
-impl Monoid String {
-    def neutral = String neutral
 }
