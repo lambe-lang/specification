@@ -22,7 +22,7 @@ trait Parse {
     def parseChar context =
         let program  = context first
         in let programs = context second
-        in switch char
+        in switch self
             case (equals '>') => { Cursor +1 :: program , programs }
             case (equals '<') => { Cursor -1 :: program , programs }
             case (equals '+') => { Memory +1 :: program , programs }
@@ -34,7 +34,7 @@ trait Parse {
                                     { BraceMismatch raise }
                                     { Loop program :: $1.value , $ programs pop }
                                  }
-            otherwise         => UnknownChar char raise
+            otherwise         => UnknownChar self raise
 }
 
 impl Parser for String {

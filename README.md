@@ -105,17 +105,6 @@ is None -> // o is a None
 is Some -> // o is a Some
 ``` 
 
-This smart cast can be stacked providing seamless multiple smart casts.
-
-```
-// Given an optional o and i
-when o when i
-is None is None -> // o is a None and i is None
-is Some is None -> // o is a Some and i is None
-is None is Some -> // o is a None and i is Some
-is Some is Some -> // o is a Some and i is Some
-``` 
-
 ### 2.2 Data type implementation
 
 ```
@@ -637,7 +626,7 @@ attr_type ::= IDENT ":" type_expr
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT (param)* "=" expr "in" expr
             | "let" impl "in" expr
-            | "when" (("let" IDENT =)? expr)+ cases+``
+            | ("when" ("let" IDENT =)? expr)+ cases+``
             | param
             | native
             | "_"

@@ -29,10 +29,12 @@ impl Monad Option {
     def pure = Some
 
     def product a =
-        when self when a
-        is None is _    -> None
-        is _    is None -> None
-        is Some is Some -> Some (self.value , a.value)
+        when self
+        is None -> None
+        is Some is Some ->
+            when a
+            is None -> None
+            is Some -> Some (self.value , a.value)
 
     def join =
         when self
@@ -44,11 +46,12 @@ impl Monad Option {
 
 impl forall a. SemiGroup (Option a) with SemiGroup a {
     def compose b =
-        when self when b
-        is None is _    -> b
-        is _    is None -> self
-        is Some is Some -> Some $ self.value compose b.value
-}
+        when self
+        is None -> b
+        is Some ->
+            when b
+            is None -> self
+            is Some -> self.value compose b.value}
 
 impl forall a. Monoid (Option a) {
     def neutral = None

@@ -29,16 +29,16 @@ impl foldable Bool
 -- The operation trait defines basic capabilities
 
 trait operation for Bool with foldable Bool {
-    sig (||) : self -> { Bool } -> Bool
+    sig (||) : self -> Bool -> Bool
     def (||) b = self fold { True } { b }
 
-    sig (&&) : self -> { Bool } -> Bool
+    sig (&&) : self -> Bool -> Bool
     def (&&) b = self fold { b } { False }
 
     sig not : self -> Bool
     def not = self fold { False } { True }
 
-    sig (=>) : self -> { Bool } -> Bool
+    sig (=>) : self -> Bool -> Bool
     def (=>) b = self not || b
 }
 
