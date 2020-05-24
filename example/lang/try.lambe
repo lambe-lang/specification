@@ -1,25 +1,43 @@
-impl control
+-- section ADT definition
 
 data Failure { reason : string }
 data Success { value  : a }
 
 type Try a = Failure | Success a
 
-impl forall a. Try a {
-    sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
+-- section foldable | such material can be automatically generated
 
-    def fold f s =
-        when self
-        is Failure -> f self
-        is Success -> s self
+trait foldable a s for s {
+    sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
 }
 
-impl Monad Try {
-    def pure a = Success a
+impl forall a. foldable a Failure {
+    def fold f _ = f self
+}
 
-    def (<*>) a =
-        case self fold { Failure $1.reason } { a map $1.value }
+impl forall a. foldable a (Success a) {
+    def fold _ f = f self
+}
+
+impl forall a. foldable a (Try a)
+    with foldable a Failure
+    with foldable a (Success a)
+
+-- section Monad
+
+impl control
+
+impl Monad Try {
+    def pure = Success
+
+    def product a =
+        when self
+        is Failure -> Failure self.value
+        is Success ->
+            when a
+            is Failure -> Failure a.value
+            is Success -> Success (self.value , a.value)
 
     def flatten =
-        self fold { Failure $1.reason } { $1.value }
+        self fold { Failure _.reason } { _.value }
 }

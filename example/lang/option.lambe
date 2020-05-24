@@ -1,11 +1,11 @@
-impl control
+-- section ADT definition
 
 data None
 data Some a { value : a }
 
 type Option a = None | Some a
 
--- section foldable  such material can be automatically generated
+-- section foldable | such material can be automatically generated
 
 trait foldable a s for s {
     sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
@@ -25,13 +25,15 @@ impl forall a. foldable a (Option a)
 
 -- section Monad
 
+impl control
+
 impl Monad Option {
     def pure = Some
 
     def product a =
         when self
         is None -> None
-        is Some is Some ->
+        is Some ->
             when a
             is None -> None
             is Some -> Some (self.value , a.value)

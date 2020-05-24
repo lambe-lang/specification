@@ -1,9 +1,9 @@
 impl char
 impl algebraic
 
-kind int = type
+kind Int = type
 
-impl int {
+impl Int {
     sig (--)   : self -> self
     sig (++)   : self -> self
     sig (+)    : self -> self -> self
@@ -15,10 +15,10 @@ impl int {
     def (++) = self + 1
 }
 
-impl SemiGroup int {
+impl SemiGroup Int {
     def compose b = self + b
 }
 
-impl Monoid int {
+impl Monoid Int {
     def neutral = 0
 }
