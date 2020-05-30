@@ -3,25 +3,71 @@ impl control
 
 data Nil
 data (::) a { head : a; tail : List a }
-type List a = Nil | Cons a
+type List a = Nil | (::) a
 
--- section foldable
+-- section Constructor
 
-trait foldable a s for s {
+trait Construction {
+    trait Builder a {
+        sig (]) : List a
+        sig (,) : a -> ListBuilder a
+    }
+
+    sig ([]) : Nil
+    def ([]) = Nil
+
+    data ([) a { value:a }
+
+    impl forall a. Builder a for ([) a {
+        def (]) = self.value::Nil
+        def (,) a = ListBuilder { (self.value::a::_) }
+    }
+
+    data ListBuilder a { value : List a -> List a }
+
+    impl forall a. Builder a for ListBuilder a {
+        def (]) = self
+        def (,) a = ListBuilder { self.value (a::_) }
+    }
+}
+
+impl Constructor
+
+-- section Foldable
+
+trait Foldable a s for s {
     sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
 }
 
-impl foldable a Nil {
+impl Foldable a Nil {
     def fold n _ = n self
 }
 
-impl foldable a ((::) a) {
+impl Foldable a ((::) a) {
     def fold _ c = c self
 }
 
-impl foldable a (List a)
+impl Foldable a (List a)
     with Foldable a Nil
     with Foldable a ((::) a)
+
+-- section Equatable
+
+trait Equatable a s for s with Equatable a {
+    sig (=) : self -> List a -> bool
+}
+
+impl Equatable a Nil {
+    def (=) l = l fold { true } { false }
+}
+
+impl Equatable a ((::) a) {
+    def (=) l = l fold { false } { (self.head = l.head) && (self.tail = l.tail) }
+}
+
+impl Equatable a (List a)
+    with Equatable a Nil
+    with Equatable a ((::) a)
 
 -- section Monoid
 
@@ -29,7 +75,7 @@ impl SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
-        is Cons -> self.head :: (self.tail compose l)
+        is (::) -> self.head :: (self.tail compose l)
 }
 
 impl Monoid (List a) {
@@ -66,8 +112,8 @@ impl forall a. Foldable self for List a
 
 -- section Monad
 
-impl forall a. Monad List with foldable a (List a) {
-    def pure a = a :: Nil
+impl forall a. Monad List with Foldable a (List a) {
+    def pure a = []
 
     def product f =
         self fold { Nil } { _.tail <*> $ f map _.head }

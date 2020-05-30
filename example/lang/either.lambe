@@ -1,26 +1,58 @@
-data Left  { value : a }
-data Right { value : b }
+data Left  a { value : a }
+data Right a { value : a }
 
 type Either a b = Left a | Right b
 
-impl forall a b. Either a b {
-    sig fold : self -> (Left a -> c) -> (Right b -> c) -> c
+-- section Foldable | Can be automatically generated
 
-    def fold l r =
-        when self
-        is Left -> l self
-        is Right -> r self
+trait Foldable a b s for s {
+    sig fold : forall c. self -> (Left a -> c) -> (Right b -> c) -> c
 }
+
+impl forall a b. Foldable a b (Left a) {
+    def fold l _ = l self
+}
+
+impl forall a b. Foldable a b (Right b) {
+    def fold _ r = l self
+}
+
+impl forall a b. Foldable a b (Either b)
+    with Foldable a b (Left b)
+    with Foldable a b (Right b)
+
+-- section Equatable | Can be automatically generated
+
+trait Equatable a b s for s with Equatable a with Equatable b {
+    sig (=) : self -> Either a b -> bool
+}
+
+impl forall a b. Equatable a b (Left a) {
+    def (=) t = t fold { self.value = _.value } { false }
+}
+
+impl forall a b. Equatable a b (Right b) {
+    def (=) t = t fold { false } { self.value = _.value }
+}
+
+impl forall a b. Equatable a b (Either a b)
+    with Equatable a b (Left a)
+    with Equatable a b (Right b)
+
+-- section Monad
 
 impl forall e. Monad (Either e) {
     def pure a = Right a
 
-    def (<*>) a =
+    def product a =
         when self
-        is Left -> Left self.value
-        is Right -> a map self.value
+        is Left -> self
+        is Right ->
+            when a
+            is Left -> a
+            is Right -> Right (self.value , a.value)
 
-    def flatten =
+    def join =
         when self
         is Left -> Left self.value
         is Right -> self.value

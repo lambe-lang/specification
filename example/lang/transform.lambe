@@ -8,6 +8,7 @@ trait Data {
     }
 
     -- Implementation
+
     sig option_of_try : Try ~> Option
     def option_of_try = (~>) {
         transform t =
@@ -22,7 +23,6 @@ trait Data {
      Success 1 transform option_of_try
      ```
     }
-
 }
 
 trait Trait {

@@ -3,7 +3,7 @@ type Identity a = a
 impl Monad Identity {
     def pure a = a
 
-    def (<*>) a = a map self
+    def product a = self,a
 
     def flatten = self
 }

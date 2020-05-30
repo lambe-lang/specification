@@ -5,7 +5,7 @@ data Some a { value : a }
 
 type Option a = None | Some a
 
--- section foldable | such material can be automatically generated
+-- section foldable | Can be automatically generated
 
 trait foldable a s for s {
     sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
@@ -22,6 +22,24 @@ impl forall a. foldable a (Some a) {
 impl forall a. foldable a (Option a)
     with foldable a None
     with foldable a (Some a)
+
+-- section Equatable | Can be automatically generated
+
+trait Equatable a s for s with Equatable a {
+    sig (=) : self -> Option a -> bool
+}
+
+impl forall a. Equatable a None {
+    def (=) t = t fold { true } { false }
+}
+
+impl forall a. Equatable a (Some a) {
+    def (=) t = t fold { false } { self.value = _.value }
+}
+
+impl forall a. Equatable a (Option a)
+    with Equatable a None
+    with Equatable a (Some b)
 
 -- section Monad
 
