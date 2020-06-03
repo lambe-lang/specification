@@ -84,11 +84,10 @@ def (|>) f = f $ self
 ```
 data None
 data Some a { value: a }
-data Some a { value: a }
 type Option a = None | Some a
 ```
 
-Each data has a corresponding constructor denoted by a function when parameters are define thanks to attribute
+For each data a corresponding constructor is define denoted by a function where parameters are define thanks to attribute
 specification based order:
 
 ```
@@ -109,12 +108,12 @@ is Some -> // o is a Some
 
 ```
 impl forall a. Option a {
-    sig fold: self -> (None -> b) -> (Some a -> b) -> b
+    sig fold: self -> b -> (a -> b) -> b
 
     def fold n s = 
         when self
-        is None -> n self
-        is Some -> s self       
+        is None -> n
+        is Some -> s self.value       
 }
 ```
 

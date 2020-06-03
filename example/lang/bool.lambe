@@ -11,15 +11,15 @@ type Bool = True | False
 -- section foldable
 
 trait foldable s for s {
-    sig fold : forall b. self -> (True -> b) -> (False -> b) -> b
+    sig fold : forall b. self -> b -> b -> b
 }
 
 impl foldable True {
-    def fold t _ = t self
+    def fold t _ = t
 }
 
 impl foldable False {
-    def fold _ f = f self
+    def fold _ f = f
 }
 
 impl foldable Bool

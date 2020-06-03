@@ -9,7 +9,7 @@ impl forall (f:type->type). Fix f with Functor f {
     def fold interpret = interpret $ { _ fold interpret } map self.unfix
 }
 
--- Example
+-- Simple logical expression
 
 data Boolean a { value : Bool }
 data Or  a { left : a; right : a }
@@ -17,14 +17,17 @@ data And a { left : a; right : a }
 
 type Exp a = Boolean a | Or a | And a
 
-sig bool : Bool -> Fix (Boolean (Fix Exp))
-def bool b = Fix (Boolean b)
+-- Associated functor | Can generate a free monad right now
 
-sig or : Fix Exp -> Fix Exp -> Fix (Or (Fix Exp))
-def or l r = Or l r
+impl Functor Exp {
+    def map e =
+        when e
+        is Boolean -> e
+        is Or -> Or (self e.left) (self e.right)
+        is And -> And (self e.left) (self e.right)
+}
 
-sig and : Fix Exp -> Fix Exp -> Fix (Or (Fix Exp))
-def and l r = And l r
+-- Evaluations
 
 impl Exp string {
     sig pretty : self -> string
@@ -44,19 +47,25 @@ impl Exp bool {
             is And -> e.left && e.right
 }
 
+-- Smart constructors
 
-impl Functor Exp {
-    def map e =
-        when e
-        is Boolean -> e
-        is Or -> Or (self e.left) (self e.right)
-        is And -> And (self e.left) (self e.right)
+impl Fix Exp {
+    sig bool : Bool -> self
+    def bool b = Fix (Boolean b)
+
+    sig (||) : self -> self -> self
+    def (||) r = Fix (Or self r)
+
+    sig (&&) : self -> self -> self
+    def (&&) r = Fix (And self r)
 }
+
+-- Use case
 
 -{
     The code above can therefore simply used.
 
-    The expression `(bool true) (bool false) fold { _ pretty }`
-    returns a string representation when the expression
-    `(bool true) (bool false) fold { _ eval }` returns a boolean
+    The expression `(bool true) && (bool false) fold { _ pretty }`
+    returns a string representation and the expression
+    `(bool true) && (bool false) fold { _ eval }` returns a boolean
 }

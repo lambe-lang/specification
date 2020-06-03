@@ -36,20 +36,38 @@ impl Constructor
 -- section Foldable
 
 trait Foldable a s for s {
-    sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b -- Not a recursive schema
+    sig fold : forall b. self -> b -> (a -> b -> b) -> b
 }
 
 impl Foldable a Nil {
-    def fold n _ = n self
+    def fold n _ = n
 }
 
 impl Foldable a ((::) a) {
-    def fold _ c = c self
+    def fold n c = c self.head (self.tail fold n c)
 }
 
 impl Foldable a (List a)
     with Foldable a Nil
     with Foldable a ((::) a)
+
+-- section Selectable (?)
+
+trait Selectable a s for s {
+    sig project : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
+}
+
+impl Selectable a Nil {
+    def select n _ = n self
+}
+
+impl Selectable a ((::) a) {
+    def select n c = c self
+}
+
+impl Selectable a (List a)
+    with Selectable a Nil
+    with Selectable a ((::) a)
 
 -- section Equatable
 

@@ -8,15 +8,15 @@ type Try a = Failure | Success a
 -- section foldable | such material can be automatically generated
 
 trait foldable a s for s {
-    sig fold : forall b. self -> (Failure -> b) -> (Success a -> b) -> b
+    sig fold : forall b. self -> (string -> b) -> (a -> b) -> b
 }
 
 impl forall a. foldable a Failure {
-    def fold f _ = f self
+    def fold f _ = f self.reason
 }
 
 impl forall a. foldable a (Success a) {
-    def fold _ f = f self
+    def fold _ f = f self.value
 }
 
 impl forall a. foldable a (Try a)
