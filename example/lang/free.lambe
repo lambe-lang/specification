@@ -1,4 +1,4 @@
---{
+-{
   cite { http://comonad.com/reader/2011/free-monads-for-less/ }
   cite { http://okmij.org/ftp/Computation/free-monad.html }
 }
@@ -11,9 +11,9 @@ impl forall f. Free f with Functor f {
     sig (>>=) : self -> (a -> b) -> Free f b
     def (>>=) f =
         when self
-        is Return  -> f self.value
-        is FlatMap -> Bind ((>>= f) map self.value)
+        is Pure -> f self.value
+        is Bind -> Bind (f >>= map self.value)
 
     sig lift : f a -> Free f a
-    def lift a = Bind @ map Pure
+    def lift a = Bind $ Pure map
 }

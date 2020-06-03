@@ -4,4 +4,4 @@ impl bool
 type Predicate a = a -> Bool
 
 sig equals : forall a. a -> Predicate a with Eq a
-def equals = =
+def equals = (=)

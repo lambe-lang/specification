@@ -1,0 +1,62 @@
+-{
+    Recursive schema definition and fold implementation
+}
+
+data Fix (f:type->type) { unfix: f (Fix f) }
+
+impl forall (f:type->type). Fix f with Functor f {
+    sig fold : forall a. self -> (f a -> a) -> a
+    def fold interpret = interpret $ { _ fold interpret } map self.unfix
+}
+
+-- Example
+
+data Boolean a { value : Bool }
+data Or  a { left : a; right : a }
+data And a { left : a; right : a }
+
+type Exp a = Boolean a | Or a | And a
+
+sig bool : Bool -> Fix (Boolean (Fix Exp))
+def bool b = Fix (Boolean b)
+
+sig or : Fix Exp -> Fix Exp -> Fix (Or (Fix Exp))
+def or l r = Or l r
+
+sig and : Fix Exp -> Fix Exp -> Fix (Or (Fix Exp))
+def and l r = And l r
+
+impl Exp string {
+    sig pretty : self -> string
+    def pretty e =
+        when e
+            is Boolean -> e.value to_string
+            is Or -> "(" + e.left + " || " + e.right + ")"
+            is And -> "(" + e.left + " && " + e.right + ")"
+}
+
+impl Exp bool {
+    sig eval : self -> Bool
+    def eval e =
+        when e
+            is Boolean -> e.value
+            is Or -> e.left || e.right
+            is And -> e.left && e.right
+}
+
+
+impl Functor Exp {
+    def map e =
+        when e
+        is Boolean -> e
+        is Or -> Or (self e.left) (self e.right)
+        is And -> And (self e.left) (self e.right)
+}
+
+-{
+    The code above can therefore simply used.
+
+    The expression `(bool true) (bool false) fold { _ pretty }`
+    returns a string representation when the expression
+    `(bool true) (bool false) fold { _ eval }` returns a boolean
+}

@@ -36,7 +36,7 @@ impl Constructor
 -- section Foldable
 
 trait Foldable a s for s {
-    sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
+    sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b -- Not a recursive schema
 }
 
 impl Foldable a Nil {
@@ -91,24 +91,6 @@ trait operation a for List a {
 impl forall a. operation a {
     def (++) = self compose
 }
-
--- section Foldable | such material can be automatically generated
-
-trait Foldable _ {
-    sig fold : forall a b. self -> (self -> b) -> ((::) a -> b) -> b
-}
-
-impl Foldable self for Nil {
-    def fold f _ = f self
-}
-
-impl forall a. Foldable self for (::) a {
-    def fold _ f = f self
-}
-
-impl forall a. Foldable self for List a
-    with Foldable Nil
-    with Foldable ((::) a)
 
 -- section Monad
 
