@@ -18,7 +18,7 @@ trait Parse {
 
     type ParseContext = Pair Program (Stack Program)
 
-    sig parseChar : self -> ParseContext -> ParseContext for Char with Error ParseError
+    sig parseChar : self -> ParseContext -> ParseContext for char with Error ParseError
     def parseChar context =
         let program  = context first
         in let programs = context second
@@ -37,7 +37,7 @@ trait Parse {
             otherwise         => UnknownChar self raise
 }
 
-impl Parser for String {
+impl Parser for string {
     def parse =
         let parse i context =
             self chatAt i

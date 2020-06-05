@@ -3,17 +3,17 @@ impl char
 impl algebraic
 impl list
 
-data String { value: List char }
+data string { value: List char }
 
-impl SemiGroup String with SemiGroup (List char) {
-    def compose b = String (self.value composes b.value)
+impl SemiGroup string with SemiGroup (List char) {
+    def compose b = string (self.value composes b.value)
 }
 
-impl Monoid String with Monoid (List char) {
-    def neutral = String <List char>::neutral
+impl Monoid string with Monoid (List char) {
+    def neutral = string <List char>::neutral
 }
 
-impl String {
+impl string {
     sig length : self -> int
     sig chatAt : self -> int -> Option char
     sig (++) : self -> self -> self

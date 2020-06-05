@@ -6,14 +6,14 @@ impl lang.string
 
 impl zipper
 
-type Memory = Zipper int * String
+type Memory = Zipper int * string
 
 impl Memory {
     sig new      : self
-    sig cursor   : self -> Int -> self
-    sig memory   : self -> Int -> self
+    sig cursor   : self -> int -> self
+    sig memory   : self -> int -> self
     sig nullify  : self -> self
-    sig input    : self -> self with Reader Char
+    sig input    : self -> self with Reader char
     sig output   : self -> self
     sig needJump : self -> Bool
 
@@ -37,7 +37,7 @@ impl Memory {
         (self first replace_by 0) , self.second
 
     def input =
-        (self first replace_by $ Char read toInt) , self.second
+        (self first replace_by $ char read toInt) , self.second
 
     def output =
         (self first, self second + $ self first current toChar )

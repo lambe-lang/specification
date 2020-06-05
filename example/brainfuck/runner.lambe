@@ -4,6 +4,6 @@ impl lang.string
 impl memory
 impl parse
 
-sig run : String -> Memory with Error ParseError
+sig run : string -> Memory with Error ParseError
 
 def run s = s parse interpret $ Memory new -- ??

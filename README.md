@@ -377,7 +377,7 @@ trait Error a {
     raise : forall b. a -> b
 }
 
-sig div : Int -> Int -> Int with Error String
+sig div : int -> int -> int with Error string
 
 def div x y =
     if (y == 0)
@@ -387,10 +387,10 @@ def div x y =
 
 ### Global scope
 
-The implementation of `Error String` can be provided at the upper level. Then each expression requiring such `Error String` refers to the same implementation.
+The implementation of `Error string` can be provided at the upper level. Then each expression requiring such `Error string` refers to the same implementation.
 
 ```
-impl Error String {
+impl Error string {
     def raise = 0
 }
 
@@ -402,7 +402,7 @@ div 3 0 // refers to the previous implementation
 The following code is embed in a basic block limiting the scope of the provided implementation.
 
 ```
-def Error String = {
+def Error string = {
         def raise = 0
     } in
     div 3 0 // refers to the previous implementation (local scope)
@@ -482,9 +482,9 @@ impl forall a. Then a {
 // if                                 : bool -> If
 // if (a > 0)                         : If
 // if (a > 0) then                    : (unit -> a) -> Then a
-// if (a > 0) then { a-1 }            : Then Int
-// if (a > 0) then { a-1 } else       : (unit -> Int) -> Int
-// if (a > 0) then { a-1 } else { a } : Int
+// if (a > 0) then { a-1 }            : Then int
+// if (a > 0) then { a-1 } else       : (unit -> int) -> int
+// if (a > 0) then { a-1 } else { a } : int
 ```
 
 ### switch/case/otherwise DSL
@@ -543,11 +543,11 @@ impl forall b. Otherwise b {
     def (=>) f = self.result () fold { f () } id
 }
 
-// switch 1                                                : Switch Int b
-// switch 1 case                                           : Predicate Int -> Case Int b
-// switch 1 case (is 0)                                    : Case Int b
-// switch 1 case (is 0) =>                                 : (unit -> b) -> Switch Int b
-// switch 1 case (is 0) => { true }                        : Switch Int bool
+// switch 1                                                : Switch int b
+// switch 1 case                                           : Predicate int -> Case int b
+// switch 1 case (is 0)                                    : Case int b
+// switch 1 case (is 0) =>                                 : (unit -> b) -> Switch int b
+// switch 1 case (is 0) => { true }                        : Switch int bool
 // switch 1 case (is 0) => { true } otherwise              : Otherwise bool
 // switch 1 case (is 0) => { true } otherwise =>           : (unit -> bool) -> bool
 // switch 1 case (is 0) => { true } otherwise => { false } : bool
@@ -613,10 +613,10 @@ def List =
 ```
 List      : OpenableCollection (List a) a
 List[     : a -> ClosableCollection (List a) a
-List[1    : ClosableCollection (List Int) Int
-List[1,   : Int -> ClosableCollection (List Int) Int
-List[1,2  : ClosableCollection (List Int) Int
-List[1,2] : List Int
+List[1    : ClosableCollection (List int) int
+List[1,   : int -> ClosableCollection (List int) int
+List[1,2  : ClosableCollection (List int) int
+List[1,2] : List int
 ```
 
 ## 8. Grammar
