@@ -290,7 +290,7 @@ trait list {
 
 ### Using trait
 
-How this trait can be used in another file? Simple! Just provide an implementation or require its definitions
+How this trait can be used in another file? Simple! Just provide an implementation or require its definitions.
 
 #### `Global` trait implementation usage
 
@@ -306,17 +306,37 @@ def isEmpty =
 
 #### `Local` trait implementation usage
 
-Note: Work in progress
+Implementation car also be local using a specific `let` binding.
+
+For instance, we can design a trait which denotes a transformation and an implementation from `Try` to `Option`.
 
 ```
-sig l : list
-def l = impl list
+trait (~>) (f:type->type) (g:type->type) {
+    sig transform: forall a. self -> g a for f a
+}
 
-sig isEmpty : forall a. self -> bool for l List a
-def isEmpty = 
-    when self
-    is l.Nil  -> true
-    is l.Cons -> false
+impl Try ~> Option {
+    def transform =
+        when self
+        is Failure -> None
+        is Success -> Some self.value
+}
+```
+
+In another compilation an implementation can be locally and explicitly required. This is done using the specific binding.
+
+```
+sig main : forall a. Try a -> Option a
+def main t =
+    let impl Try ~> Option in
+        t transform
+```
+
+Of course this example requirement can only be specified. Therefore its implementation should be provided by the caller.
+
+```
+sig main : forall a.Try a -> Option a with Try ~> Option
+def main t = t transform
 ```
 
 ### `Abstract` trait
@@ -624,7 +644,7 @@ attr_type ::= IDENT ":" type_expr
 
 expr      ::= "{" (param+ "->")? expr "}"
             | "let" IDENT (param)* "=" expr "in" expr
-            | "let" impl "in" expr
+            | "let" "impl" type_expr "in" expr
             | ("when" ("let" IDENT =)? expr)+ cases+``
             | param
             | native

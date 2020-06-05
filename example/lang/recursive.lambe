@@ -34,8 +34,8 @@ impl Exp string {
     def pretty e =
         when e
             is Boolean -> e.value to_string
-            is Or -> "(" + e.left + " || " + e.right + ")"
-            is And -> "(" + e.left + " && " + e.right + ")"
+            is Or -> "(%1 || %2)" e.left e.right
+            is And -> "(%1 && %2)" e.left e.right
 }
 
 impl Exp bool {
@@ -63,9 +63,8 @@ impl Fix Exp {
 -- Use case
 
 -{
-    The code above can therefore simply used.
-
-    The expression `(bool true) && (bool false) fold { _ pretty }`
+    The code above is therefore simply used. For instance, the
+    expression `(bool true) && (bool false) fold { _ pretty }`
     returns a string representation and the expression
     `(bool true) && (bool false) fold { _ eval }` returns a boolean
 }

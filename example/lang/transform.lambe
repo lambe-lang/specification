@@ -36,17 +36,23 @@ trait Trait {
 
     -- Implementation
 
-    impl (~>) Try Option {
+    impl Try ~> Option {
         def transform =
             when self
             is Failure -> None
             is Success -> Some self.value
     }
 
+    sig main : forall a. Try a -> Option a
+    def main t =
+        let impl Try ~> Option
+        in t transform
+
     -{
      Example:
      ```
-     Success 1 transform
+     let impl Try ~> Option in
+        Success 1 transform
      ```
 
      a `Try ~> Option` implementation should be in the context
