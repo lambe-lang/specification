@@ -15,7 +15,7 @@ trait Applicative (f:type->type) with Functor f {
     def (<*>) a = { _.fst _.snd } <$> (self,a)
     def (<**>) f = f <*> self
 
-    -- map and pure
+    -- map and pure are required for the implementation
 }
 
 trait Monad (f:type->type) with Functor f {
@@ -34,5 +34,5 @@ trait Monad (f:type->type) with Functor f {
     def (=<<) a = a >>= self
 
     sig (>=>) : forall a b c. self -> (b -> f c) -> (a -> f c) for a -> f b
-    def (>=>) b = self |> (g =<<)
+    def (>=>) b = self |> $ g =<<
 }

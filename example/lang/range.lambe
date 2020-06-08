@@ -8,5 +8,5 @@ impl Range {
     def to m2 =
         if (self <= m2)
         then { RangeFromTo self m2 }
-        else { RangeFromDownTo m2 self }
+        else { RangeFromDownTo self m2 }
 }

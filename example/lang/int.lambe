@@ -16,7 +16,7 @@ impl int {
 }
 
 impl SemiGroup int {
-    def compose b = self + b
+    def compose b = int + b
 }
 
 impl Monoid int {

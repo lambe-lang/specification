@@ -1,4 +1,3 @@
-trait Stream s {
-    -- State monad?
-    sig next : self -> Option s * self
+data Stream s {
+    next : unit -> Option s * Stream s
 }

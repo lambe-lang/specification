@@ -10,7 +10,7 @@ trait Parse a {
     sig parse : forall s. self -> Stream s -> Response a s
 }
 
--- section Satisf
+-- section Satisfy
 
 data Satisfy a { predicate : a -> bool }
 
@@ -27,7 +27,7 @@ impl forall a. Satisfy a {
 
 impl Parser a for Satisfy a {
     def parse s =
-        let p = s next
+        let p = s.next ()
         in when let r = p.fst
            is Rejected -> Rejected false
            is Accepted ->

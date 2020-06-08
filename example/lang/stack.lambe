@@ -19,5 +19,5 @@ impl forall a. Stack a {
     def peek = self value
 
     sig pop : self -> self with Error StackUnderFlow
-    def pop = self with value = self value fold { StackUnderFlow raise } { _ tail }
+    def pop = self with value = self value select { StackUnderFlow raise _ } { _ tail }
 }
