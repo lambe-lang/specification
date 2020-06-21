@@ -1,7 +1,7 @@
-/*
+-{
  Expression in this example shows how an Expression language can be design step
  by step introduction basic constructions like *Number* and *Plus*.
-*/
+}
 
 impl int
 
@@ -25,18 +25,7 @@ impl forall a. Eval self for Plus a with Eval a {
     def eval = (self.left eval) + (self.right eval)
 }
 
--- This is a stupid and useless comment !
-
--{
-   The following function define the polymorphic identity function.
-
-   ```
-   sig id : forall a. a -> a
-   def id = { _ }
-   ```
-
-   This function can be apply to any term: `id 1`.
-}
+-- Defining the Expression Level 1
 
 type ExpL1 = Number | Plus ExpL1
 
@@ -52,7 +41,7 @@ impl forall a. Eval self for Mult a with Eval a {
     def eval = (self.left eval) * (self.right eval)
 }
 
---| Defining the Expression Level 2
+-- Defining the Expression Level 2
 
 type ExpL2 = Number | Plus ExpL2 | Mult ExpL2
 

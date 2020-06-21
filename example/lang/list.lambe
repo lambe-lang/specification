@@ -113,7 +113,6 @@ impl forall a. operation a {
 -- section Monad
 
 impl forall a. Monad List with Foldable a (List a) {
-
     def pure a = []
 
     def product f =

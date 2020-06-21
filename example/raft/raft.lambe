@@ -1,0 +1,50 @@
+-- ================================================================
+
+data Identifier { name : string }
+
+data Term { value : Int }
+
+impl Term {
+    sig term : self -> Term for int
+    def term = Term self
+
+    sig next : self -> self
+    def next = Term (self.value + 1)
+}
+
+-- ================================================================
+
+data Index { value : Int }
+
+impl Index {
+    sig index : self -> Term for int
+    def index = Term self
+
+    sig (+) : self -> Int -> self
+    def (+) i = Term (self.value + i)
+
+    sig (<) : self -> self -> Bool
+    def (<) i = self.value < i.value
+
+    sig (-) : self -> Int -> self
+    def (-) i = Term (self.value + (-i))
+}
+
+-- ================================================================
+
+data Context   { term: Term, self: Identifier, nodes: List Identifier }
+data Leader    { context: Context }
+data Elector   { context: Context }
+data Follower  { context: Context, leader: NodeIdentifier }
+data Candidate { context: Context, followers: List NodeIdentifier }
+
+type Kind = Leader | Elector | Follower | Candidate
+
+data Context {
+     numberOfNodes : int;
+     activeNodes : List NodeIdentifier
+     extendedTime : bool
+}
+
+data VoteRequested { candidate :
+

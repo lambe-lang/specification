@@ -2,6 +2,6 @@ trait SemiGroup a for a {
     sig compose : self -> self -> self
 }
 
-trait Monoid a with SemiGroup a {
-    sig neutral : a
+trait Monoid a for a with SemiGroup a {
+    sig neutral : self
 }

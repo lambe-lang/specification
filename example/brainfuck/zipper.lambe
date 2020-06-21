@@ -1,6 +1,10 @@
 impl lang.list
 
-data Zipper a { left : List a; right : List a; default : a }
+data Zipper a {
+    left : List a;
+    right : List a;
+    default : a
+}
 
 trait zipper a {
     sig new        : a -> self

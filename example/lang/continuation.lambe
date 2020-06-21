@@ -1,0 +1,17 @@
+-{
+    Continuation monad
+}
+
+type Continuation a = forall b.(a -> b) -> b
+
+sig pure : forall a. a -> Continuation a
+def pure c k = k c
+
+impl Monad Continuation {
+    def return = pure
+
+    // TODO
+}
+
+
+

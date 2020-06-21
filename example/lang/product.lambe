@@ -2,10 +2,10 @@ data (*) a b { fst : a; snd : b }
 
 impl forall a b. a * b {
     sig (,) : self -> b -> self * b for a
-    def (,) b = self * b
+    def (,) b = * self b
 
-    sig switch : self -> b * a
-    def switch = self.snd , self.fst
+    sig swap : self -> b * a
+    def swap = self.snd , self.fst
 
     sig zip : forall c d. self -> c * d -> (a * c) * (b * d)
     def zip p = (self.fst , p.fst), (self.snd , p.snd)

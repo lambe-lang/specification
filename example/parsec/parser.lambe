@@ -31,7 +31,7 @@ impl Parser a for Satisfy a {
         in when let r = p.fst
            is Rejected -> Rejected false
            is Accepted ->
-              if (self predicate r)
+              if (self.predicate r)
               then { Accepted r.value p.snd true }
               else { Rejected false }
 }

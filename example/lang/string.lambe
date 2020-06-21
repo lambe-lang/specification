@@ -10,7 +10,7 @@ impl SemiGroup string with SemiGroup (List char) {
 }
 
 impl Monoid string with Monoid (List char) {
-    def neutral = string <List char>::neutral
+    def neutral = string (self.value neutral)
 }
 
 impl string {

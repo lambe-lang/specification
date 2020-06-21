@@ -1,4 +1,0 @@
--{
-    Continuation monad
-}
-

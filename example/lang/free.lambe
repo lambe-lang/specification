@@ -15,5 +15,5 @@ impl forall f. Free f with Functor f {
         is Bind -> Bind (f >>= map self.value)
 
     sig lift : f a -> Free f a
-    def lift a = Bind $ Pure map
+    def lift = Bind $ Pure map
 }
