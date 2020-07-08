@@ -6,3 +6,17 @@ trait Reader s {
 
     sig next : self -> Option e * self for Stream s
 }
+
+-{
+    Example where `Stream` is incarnated by a `List`
+}
+
+impl forall a. Reader a {
+    type Stream = List
+
+    def next =
+        when self
+        is Nil -> None, self
+        is (::) -> Some self.head, self.tail
+
+}
