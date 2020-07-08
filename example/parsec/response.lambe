@@ -1,8 +1,8 @@
 impl lang.bool
 impl stream
 
-data Rejected { stream : Stream s; consumed : bool}
-data Accepted { value : a; stream : Stream s; consumed : bool }
+data Rejected s { stream : Stream s; consumed : bool}
+data Accepted a s { value : a; stream : Stream s; consumed : bool }
 type Response a s = Rejected s | Accepted a s
 
 impl forall a s. Response a s {

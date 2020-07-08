@@ -32,19 +32,20 @@ impl Index {
 
 -- ================================================================
 
-data Context   { term: Term, self: Identifier, nodes: List Identifier }
+data Context { numberOfNodes : int; activeNodes : List NodeIdentifier extendedTime : bool }
+
 data Leader    { context: Context }
 data Elector   { context: Context }
-data Follower  { context: Context, leader: NodeIdentifier }
-data Candidate { context: Context, followers: List NodeIdentifier }
+data Follower  { context: Context, leader: eIdentifier }
+data Candidate { context: Context, followers: List Identifier }
 
 type Kind = Leader | Elector | Follower | Candidate
 
-data Context {
-     numberOfNodes : int;
-     activeNodes : List NodeIdentifier
-     extendedTime : bool
-}
+-- ================================================================
 
-data VoteRequested { candidate :
+data VoteRequested { candidate : Identifier, term: Term, lastLog : (Index, Term) }
+data VoteAccepted { follower : Identifier, term: Term }
+
+
+
 

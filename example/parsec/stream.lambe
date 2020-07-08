@@ -1,3 +1,8 @@
-data Stream s {
-    next : unit -> Option s * Stream s
+trait Reader s {
+    -{
+        Stream type should be specified in each implementation of the Reader trait
+    }
+    kind Stream = type -> type
+
+    sig next : self -> Option e * self for Stream s
 }

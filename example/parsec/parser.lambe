@@ -7,7 +7,7 @@ impl response
 impl stream
 
 trait Parse a {
-    sig parse : forall s. self -> Stream s -> Response a s
+    sig parse : forall s. self -> Stream s -> Response a s with Reader s
 }
 
 -- section Satisfy
@@ -27,7 +27,7 @@ impl forall a. Satisfy a {
 
 impl Parser a for Satisfy a {
     def parse s =
-        let p = s.next ()
+        let p = s next
         in when let r = p.fst
            is Rejected -> Rejected false
            is Accepted ->
@@ -52,7 +52,7 @@ impl forall a b. Parser (a * b) for And a b {
 
 -- section Or
 
-data Or a { left  : Parser a; right : Parser a }
+data Or a { left: Parser a; right: Parser a }
 
 impl forall a. Parser a for Or a {
     def parse s =
@@ -64,12 +64,9 @@ impl forall a. Parser a for Or a {
         is Accepted -> r
 }
 
-- section Map
+-- section Map
 
-data Map a b {
-    parser : Parser a;
-    function : a -> b
-}
+data Map a b { parser: Parser a ; function: a -> b }
 
 impl forall a b. Parser b for Map a b {
     def parse s =

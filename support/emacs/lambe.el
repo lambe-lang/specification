@@ -3,7 +3,7 @@
 )
   
 (defvar lambe-keywords
-    '("with" "for" "let" "where" "in" "self" "when" "is")
+    '("forall" "with" "for" "let" "where" "in" "self" "when" "is")
 )
   
 (defvar lambe-tab-width nil "Width of a tab for Lambe mode")
@@ -12,7 +12,6 @@
   `((
      ;; stuff between double quotes
      ("\"\\.\\*\\?" . font-lock-string-face)
-     ;; ("\'\\.\\?" . font-lock-string-face)
      ("(\\|)\\|{\\|}\\|->\\|:\\|\\.\\|=\\||" . font-lock-keyword-face)
      ( ,(regexp-opt lambe-keywords 'words) . font-lock-builtin-face)
      ( ,(regexp-opt lambe-constants 'words) . font-lock-constant-face)

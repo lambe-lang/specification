@@ -9,7 +9,7 @@ trait Eval _ {
     sig eval : self -> int
 }
 
--- Defining the number
+-- Defining the number and its evaluation
 
 data Number { value : int }
 
@@ -17,7 +17,7 @@ impl Eval self for Number {
     def eval = self.value
 }
 
--- Defining the addition
+-- Defining the addition and its evaluation
 
 data Plus a { left: a; right: a }
 
@@ -33,7 +33,7 @@ impl Eval self for ExpL1
     with Eval Number
     with Eval (Plus self)
 
--- Defining the multiplication
+-- Defining the multiplication and its evaluation
 
 data Mult a { left:a; right: a }
 
