@@ -20,7 +20,7 @@ trait Data {
     -{
      Example:
      ```
-     Success 1 transform option_of_try
+     option_of_try transform (Success 1)
      ```
     }
 }
@@ -55,6 +55,6 @@ trait Trait {
         Success 1 transform
      ```
 
-     a `Try ~> Option` implementation should be in the context
+     a `Try ~> Option` implementation should be  in the context
     }
 }

@@ -1,34 +1,46 @@
+-{
+    Work in progress
+}
+
 impl lang.bool
 impl lang.char
 impl lang.selection
 impl lang.string
 
 impl response
-impl stream
+impl reader
 
 trait Parse a {
-    sig parse : forall s. self -> Stream s -> Response a s with Reader s
+    sig parse : forall s. self -> Source s -> Response a (Source s) with Reader s
+}
+
+-- section Any
+
+data Any
+
+impl Parser a for Any {
+    def parse s =
+        let p = s next
+        in when let r = p.fst
+           is None -> Rejected false
+           is Some -> Accepted r.value p.snd true
 }
 
 -- section Satisfy
 
-data Satisfy a { predicate : a -> bool }
+data Satisfy a { parser: Parser a ; predicate : a -> bool }
 
-impl forall a. Satisfy a {
-    sig any : self
-    def any = Satisfy { true }
+impl Satisfy char {
+    sig aChar : self -> char -> Satisfy char for Parser char
+    def aChar c = Satisfy self { c == _ }
 
-    sig aChar : char -> self
-    def aChar c = Satisfy { c == _ }
-
-    sig notChar : char -> self
-    def notChar c = Satisfy { c != _ }
+    sig notChar : self -> char -> Satisfy char for Parser char
+    def notChar c = Satisfy self { c != _ }
 }
 
-impl Parser a for Satisfy a {
+impl forall a.Parser a for Satisfy a {
     def parse s =
-        let p = s next
-        in when let r = p.fst
+        in when let r = self parser parse s
            is Rejected -> Rejected false
            is Accepted ->
               if (self.predicate r)

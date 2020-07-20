@@ -5,7 +5,7 @@
 
 impl int
 
-trait Eval _ {
+trait Eval a for a {
     sig eval : self -> int
 }
 
@@ -35,7 +35,7 @@ impl Eval self for ExpL1
 
 -- Defining the multiplication and its evaluation
 
-data Mult a { left:a; right: a }
+data Mult a { left: a; right: a }
 
 impl forall a. Eval self for Mult a with Eval a {
     def eval = (self.left eval) * (self.right eval)

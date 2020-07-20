@@ -121,3 +121,4 @@ impl forall a. Monad List with Foldable a (List a) {
     def join =
         self fold { nil } { _.head compose $ _.tail join }
 }
+

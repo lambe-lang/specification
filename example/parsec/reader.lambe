@@ -1,0 +1,22 @@
+trait Reader s {
+    -{
+        Source type should be specified in each implementation of the Reader trait
+    }
+    kind Source = type -> type
+
+    sig next : self -> Option e * self for Source s
+}
+
+-{
+    Example where `Source` is incarnated by a `List`
+}
+
+impl forall a. Reader a {
+    type Source = List
+
+    def next =
+        when self
+        is Nil -> None, self
+        is (::) -> Some self.head, self.tail
+
+}

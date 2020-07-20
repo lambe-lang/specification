@@ -1,4 +1,3 @@
-impl pair
 impl bool
 
 type Predicate a = a -> Bool

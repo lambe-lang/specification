@@ -1,0 +1,20 @@
+impl algebraic
+impl control
+
+type DList a = List a -> List a
+
+impl forall a. DList a {
+
+    sig new : List a -> self
+    def new l = l ++
+
+    sig toList : self -> List a
+    def toList = self []
+
+    sig (++) : self -> self -> self
+    def (++) l = self @> l
+
+    sig snoc : self -> a -> self
+    def snoc = self ++ $ [a]
+
+}

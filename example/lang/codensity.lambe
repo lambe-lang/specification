@@ -1,0 +1,7 @@
+data Codensity (f:type->type) a {
+    value : forall r. (a -> f r) -> f r
+}
+
+impl forall (f:type->type). Functor (Codensity f) {
+    def map c = Codensity (k -> c.value (k @> self))
+}
