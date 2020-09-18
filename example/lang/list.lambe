@@ -1,6 +1,3 @@
-impl algebraic
-impl control
-
 data Nil
 data (::) a { head : a; tail : List a }
 type List a = Nil | (::) a
@@ -93,7 +90,7 @@ impl SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
-        is (::) -> self.head :: (self.tail compose l)
+        is (::) -> self.head :: (self.tail compose l) -- Not really efficient operation I know
 }
 
 impl Monoid (List a) {

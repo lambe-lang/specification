@@ -1,5 +1,5 @@
 trait Data {
-    -{
+    --{
      Pure data approach
     }
 
@@ -17,7 +17,7 @@ trait Data {
             is Success -> Some t.value
     }
 
-    -{
+    --{
      Example:
      ```
      option_of_try transform (Success 1)
@@ -26,7 +26,7 @@ trait Data {
 }
 
 trait Trait {
-    -{
+    --{
      Trait approach
     }
 
@@ -48,7 +48,7 @@ trait Trait {
         let impl Try ~> Option
         in t transform
 
-    -{
+    --{
      Example:
      ```
      let impl Try ~> Option in

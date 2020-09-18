@@ -1,4 +1,4 @@
--{
+--{
     Recursive schema definition and fold implementation
 }
 
@@ -60,7 +60,7 @@ impl Fix Exp {
     def (&&) r = Fix (And self r)
 }
 
--{
+--{
     The code above is therefore simply used. For instance, the
     expression `(bool true) && (bool false) fold { _ pretty }`
     returns a string representation and the expression

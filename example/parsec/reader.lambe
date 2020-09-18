@@ -1,5 +1,5 @@
 trait Reader s {
-    -{
+    --{
         Source type should be specified in each implementation of the Reader trait
     }
     kind Source = type -> type
@@ -7,7 +7,7 @@ trait Reader s {
     sig next : self -> Option e * self for Source s
 }
 
--{
+--{
     Example where `Source` is incarnated by a `List`
 }
 

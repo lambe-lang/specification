@@ -32,11 +32,10 @@ impl Index {
 
 -- ================================================================
 
-data Context { numberOfNodes : int; activeNodes : List NodeIdentifier extendedTime : bool }
-
+data Context   { numberOfNodes : int; activeNodes : List NodeIdentifier extendedTime : bool }
 data Leader    { context: Context }
 data Elector   { context: Context }
-data Follower  { context: Context, leader: eIdentifier }
+data Follower  { context: Context, leader: Identifier }
 data Candidate { context: Context, followers: List Identifier }
 
 type Kind = Leader | Elector | Follower | Candidate

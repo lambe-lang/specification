@@ -1,5 +1,5 @@
-impl char
-impl algebraic
+import char
+import algebraic
 
 kind int = type
 
@@ -16,7 +16,7 @@ impl int {
 }
 
 impl SemiGroup int {
-    def compose b = int + b
+    def compose b = self + b
 }
 
 impl Monoid int {
