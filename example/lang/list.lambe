@@ -32,19 +32,19 @@ impl Constructor
 
 -- section Foldable
 
-trait Foldable a s for s {
+trait forall a. Foldable a s for s {
     sig fold : forall b. self -> b -> (a -> b -> b) -> b
 }
 
-impl Foldable a Nil {
+impl forall a. Foldable a Nil {
     def fold n _ = n
 }
 
-impl Foldable a ((::) a) {
+impl forall a. Foldable a ((::) a) {
     def fold n c = c self.head (self.tail fold n c)
 }
 
-impl Foldable a (List a)
+impl forall a. Foldable a (List a)
     with Foldable a Nil
     with Foldable a ((::) a)
 
@@ -54,15 +54,15 @@ trait Selectable a s for s {
     sig select : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
 }
 
-impl Selectable a Nil {
+impl forall a. Selectable a Nil {
     def select n _ = n self
 }
 
-impl Selectable a ((::) a) {
+impl forall a. Selectable a ((::) a) {
     def select n c = c self
 }
 
-impl Selectable a (List a)
+impl forall a. Selectable a (List a)
     with Selectable a Nil
     with Selectable a ((::) a)
 
@@ -86,24 +86,24 @@ impl Equatable a (List a)
 
 -- section Monoid
 
-impl SemiGroup (List a) {
+impl forall a. SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
-        is (::) -> self.head :: (self.tail compose l) -- Not really efficient operation I know
+        is (::) -> self.head :: (self.tail compose l) -- Not a really efficient operation I know
 }
 
-impl Monoid (List a) {
+impl forall a. Monoid (List a) {
     def neutral = Nil
 }
 
 -- operation
 
-trait operation a for List a {
+trait Operation a for List a {
     sig (++) : forall a. self -> self -> self
 }
 
-impl forall a. operation a {
+impl forall a. Operation a {
     def (++) = self compose
 }
 

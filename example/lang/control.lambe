@@ -7,12 +7,14 @@ trait Functor (f:type->type) {
 trait Applicative (f:type->type) with Functor f {
     sig pure : forall a. a -> f a
     sig product : forall a b. self -> f b -> f (a * b) for f a
-    sig (,) : forall a b. self -> f b -> f (a * b) for f a
-    sig (<*>)  : forall a b. self -> f a -> f b for f (a -> b)
-    sig (<**>) : forall a b. self -> f (a -> b) -> f b for f a
 
+    sig (,) : forall a b. self -> f b -> f (a * b) for f a
     def (,) = self product
+
+    sig (<*>)  : forall a b. self -> f a -> f b for f (a -> b)
     def (<*>) a = { _.fst _.snd } <$> (self,a)
+
+    sig (<**>) : forall a b. self -> f (a -> b) -> f b for f a
     def (<**>) f = f <*> self
 
     -- map and pure are required for the implementation
