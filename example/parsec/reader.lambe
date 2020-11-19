@@ -1,7 +1,5 @@
 trait Reader s {
-    --{
-        Source type should be specified in each implementation of the Reader trait
-    }
+    -- Source type should be specified in each implementation of the Reader trait
     kind Source = type -> type
 
     sig next : self -> Option e * self for Source s

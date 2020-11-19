@@ -12,6 +12,9 @@ type Bool = True | False
 
 trait foldable s for s {
     sig fold : forall b. self -> b -> b -> b
+
+    sig fold : forall b. self -> b -> b -> b for unit -> s
+    def fold s b1 b2 = self () fold b1 b1
 }
 
 impl foldable True {
@@ -26,28 +29,29 @@ impl foldable Bool
     with foldable True
     with foldable False
 
--- The operation trait defines basic capabilities
-
-trait operation b for b with foldable Bool {
-    sig (||) : self -> self -> self
-    sig (&&) : self -> self -> self
-    sig not  : self -> self
-    sig (=>) : self -> self -> self
-    sig eval : self -> Bool
-}
+-- The lazy bool implementation
 
 type bool = unit -> Bool
 
-sig true : unit -> True
-def true = { True }
+impl bool with foldable Bool {
+    sig true : unit -> True
+    def true = { True }
 
-sig false : unit -> False
-def false = { False }
+    sig false : unit -> False
+    def false = { False }
 
-impl operation bool with foldable Bool {
-    def (||) b = { self () fold true b }
-    def (&&) b = { self () fold b false }
-    def not    = { self () fold false true }
+    sig (||) : self -> self -> self
+    def (||) b = { self fold true b }
+
+    sig (&&) : self -> self -> self
+    def (&&) b = { self fold b false }
+
+    sig not : self -> self
+    def not = { self fold false true }
+
+    sig (=>) : self -> self -> self
     def (=>) b = self not || b
+
+    sig eval : self -> Bool
     def eval   = self ()
 }

@@ -71,7 +71,8 @@ impl forall a. SemiGroup (Option a) with SemiGroup a {
         is Some ->
             when b
             is None -> self
-            is Some -> self.value compose b.value}
+            is Some -> self.value compose b.value
+}
 
 impl forall a. Monoid (Option a) {
     def neutral = None

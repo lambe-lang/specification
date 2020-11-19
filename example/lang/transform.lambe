@@ -44,9 +44,9 @@ trait Trait {
     }
 
     sig main : forall a. Try a -> Option a
-    def main t =
+    def main =
         let impl Try ~> Option
-        in t transform
+        in { _ transform }
 
     --{
      Example:

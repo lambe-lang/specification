@@ -1,6 +1,6 @@
 --{
  Expression in this example shows how an Expression language can be design step
- by step introduction basic constructions like *Number* and *Plus*.
+ by step introducing basic constructions like *Number* and *Plus*.
 }
 
 impl int

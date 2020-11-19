@@ -11,11 +11,11 @@ impl forall (f:type->type). Fix f with Functor f {
 
 -- Simple logical expression
 
-data Boolean a { value : Bool }
+data Boolean { value : Bool }
 data Or  a { left : a; right : a }
 data And a { left : a; right : a }
 
-type Exp a = Boolean a | Or a | And a
+type Exp a = Boolean | Or a | And a
 
 -- Associated functor | Can generate a free monad right now
 
@@ -31,26 +31,26 @@ impl Functor Exp {
 
 impl Exp string {
     sig pretty : self -> string
-    def pretty e =
-        when e
-            is Boolean -> e.value to_string
-            is Or -> "(%1 || %2)" e.left e.right
-            is And -> "(%1 && %2)" e.left e.right
+    def pretty =
+        when self
+            is Boolean -> self.value to_string
+            is Or -> "(%1 || %2)" self.left self.right
+            is And -> "(%1 && %2)" self.left self.right
 }
 
 impl Exp bool {
-    sig eval : self -> Bool
-    def eval e =
-        when e
-            is Boolean -> e.value
-            is Or -> e.left || e.right
-            is And -> e.left && e.right
+    sig eval : self -> bool
+    def eval =
+        when self
+            is Boolean -> self.value
+            is Or -> self.left || self.right
+            is And -> self.left && self.right
 }
 
 -- Smart constructors
 
 impl Fix Exp {
-    sig bool : Bool -> self
+    sig bool : bool -> self
     def bool b = Fix (Boolean b)
 
     sig (||) : self -> self -> self

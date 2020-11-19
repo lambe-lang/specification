@@ -1,14 +1,14 @@
-sig ($) : forall a b.(a -> b) -> a -> b
-def ($) f a = f a
+sig $ : forall a b.(a -> b) -> a -> b
+def $ f a = f a
 
-sig ($) : forall a b c. self -> (a -> b) -> a -> c for b -> c
-def ($) f a = self (f a)
+sig $ : forall a b c. self -> (a -> b) -> a -> c for b -> c
+def $ f a = self (f a)
 
-sig (<|) : forall a b c. self -> (a -> b) -> a -> c for b -> c
-def (<|) g = { a -> self $ g a }
+sig <| : forall a b c. self -> (a -> b) -> a -> c for b -> c
+def <| g = { a -> self $ g a }
 
 sig pipeline : forall a b c. self -> (b -> c) -> a -> c for a -> b
 def pipeline g = g compose self
 
-sig (|>) : pipeline
-def (|>) = self pipeline
+sig |> : pipeline
+def |> = self pipeline

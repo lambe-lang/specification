@@ -14,6 +14,6 @@ impl If {
 
 impl forall a. Then a {
     sig else : self -> (unit -> a) -> a
-    def else f = self cond fold { self then () } { f () }
+    def else f = self (cond ()) fold { self then () } { f () }
 }
 

@@ -1,6 +1,5 @@
 data Left  a { value : a }
 data Right a { value : a }
-
 type Either a b = Left a | Right b
 
 -- section Foldable | Can be automatically generated
