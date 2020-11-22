@@ -1,8 +1,10 @@
-trait Reader s {
+trait Reader a {
     -- Source type should be specified in each implementation of the Reader trait
-    kind Source = type -> type
+    kind t = type -> type
 
-    sig next : self -> Option e * self for Source s
+    data Source a { s: t a; pos: (int*int*int) }
+
+    sig next : self -> Option a * self for Source a
 }
 
 --{
@@ -10,11 +12,10 @@ trait Reader s {
 }
 
 impl forall a. Reader a {
-    type Source = List
+    type t = List
 
     def next =
-        when self
+        when self.s
         is Nil -> None, self
-        is (::) -> Some self.head, self.tail
-
+        is (::) -> Some self.head, (Source self.tail self.pos)
 }

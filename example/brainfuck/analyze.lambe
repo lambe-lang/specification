@@ -5,14 +5,21 @@ data Pure
 data Impure
 type Purity = Pure | Impure
 
-impl Purity {
-    sig fold : forall a. (Pure -> a) -> (Impure -> a) -> a
-
-    def fold p i =
-        when self
-        is Pure   -> p self
-        is Impure -> i self
+trait Foldable self for s {
+    sig fold : forall a. self -> (Pure -> a) -> (Impure -> a) -> a
 }
+
+impl Foldable for Pure {
+    def fold p _ = p self
+}
+
+impl Foldable for Impure {
+    def fold _ i = i self
+}
+
+impl Foldable Purity
+    with Foldable Pure
+    with Foldable Impure
 
 type Parsed = Program * Purity
 

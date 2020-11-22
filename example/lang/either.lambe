@@ -53,6 +53,6 @@ impl forall e. Monad (Either e) {
 
     def join =
         when self
-        is Left -> Left self.value
+        is Left -> self.value
         is Right -> self.value
 }

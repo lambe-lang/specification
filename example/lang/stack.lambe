@@ -18,6 +18,6 @@ impl forall a. Stack a {
     sig peek : self -> Option a
     def peek = self value
 
-    sig pop : self -> self with Error StackUnderFlow
-    def pop = self with value = self value select { StackUnderFlow raise _ } { _ tail }
+    sig pop : self -> Option self
+    def pop = self with value = self.value fold { None } { Some(_ tail) }
 }

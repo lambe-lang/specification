@@ -64,6 +64,8 @@ impl Monad Option {
 
 -- section SemiGroup and Monoid
 
+impl algebraic
+
 impl forall a. SemiGroup (Option a) with SemiGroup a {
     def compose b =
         when self

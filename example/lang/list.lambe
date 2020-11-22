@@ -50,21 +50,21 @@ impl forall a. Foldable a (List a)
 
 -- section Selectable
 
-trait Selectable a s for s {
-    sig select : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
+trait Foldable a self for s {
+    sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
 }
 
-impl forall a. Selectable a Nil {
-    def select n _ = n self
+impl forall a. Foldable a Nil {
+    def fold n _ = n self
 }
 
-impl forall a. Selectable a ((::) a) {
-    def select n c = c self
+impl forall a. Foldable a ((::) a) {
+    def fold n c = c self
 }
 
-impl forall a. Selectable a (List a)
-    with Selectable a Nil
-    with Selectable a ((::) a)
+impl forall a. Foldable a (List a)
+    with Foldable a Nil
+    with Foldable a ((::) a)
 
 -- section Equatable
 
