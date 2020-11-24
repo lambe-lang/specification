@@ -1,5 +1,5 @@
 impl algebraic
-impl control
+impl list
 
 type DList a = List a -> List a
 
@@ -16,5 +16,4 @@ impl forall a. DList a {
 
     sig snoc : self -> a -> self
     def snoc = self ++ $ [a]
-
 }

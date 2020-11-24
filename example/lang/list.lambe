@@ -1,10 +1,10 @@
 data Nil
-data (::) a { head : a; tail : List a }
-type List a = Nil | (::) a
+data Cons a { head : a; tail : List a }
+type List a = Nil | Cons a
 
 -- section Constructor
 
-trait Construction {
+trait Helper {
     trait Builder a {
         sig (]) : List a
         sig (,) : a -> ListBuilder a
@@ -12,6 +12,9 @@ trait Construction {
 
     sig ([]) : Nil
     def ([]) = Nil
+
+    sig (::) : forall a. self -> List a -> List a for a
+    def (::) = Cons self
 
     data ([) a { value:a }
 
@@ -40,35 +43,35 @@ impl forall a. Foldable a Nil {
     def fold n _ = n
 }
 
-impl forall a. Foldable a ((::) a) {
+impl forall a. Foldable a (Cons a) {
     def fold n c = c self.head (self.tail fold n c)
 }
 
 impl forall a. Foldable a (List a)
     with Foldable a Nil
-    with Foldable a ((::) a)
+    with Foldable a (Cons a)
 
 -- section Selectable
 
 trait Foldable a self for s {
-    sig fold : forall b. self -> (Nil -> b) -> ((::) a -> b) -> b
+    sig fold : forall b. self -> (Nil -> b) -> (Cons a -> b) -> b
 }
 
 impl forall a. Foldable a Nil {
     def fold n _ = n self
 }
 
-impl forall a. Foldable a ((::) a) {
+impl forall a. Foldable a (Cons a) {
     def fold n c = c self
 }
 
 impl forall a. Foldable a (List a)
     with Foldable a Nil
-    with Foldable a ((::) a)
+    with Foldable a (Cons a)
 
 -- section Equatable
 
-trait Equatable a s for s with Equatable a {
+trait Equatable a self for s with Equatable a {
     sig (=) : self -> List a -> bool
 }
 
@@ -76,13 +79,13 @@ impl Equatable a Nil {
     def (=) l = l fold { true } { false }
 }
 
-impl Equatable a ((::) a) {
+impl Equatable a (Cons a) {
     def (=) l = l fold { false } { (self.head = l.head) && (self.tail = l.tail) }
 }
 
 impl Equatable a (List a)
     with Equatable a Nil
-    with Equatable a ((::) a)
+    with Equatable a (Cons a)
 
 -- section Monoid
 
@@ -90,7 +93,7 @@ impl forall a. SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
-        is (::) -> self.head :: (self.tail compose l) -- Not a really efficient operation I know
+        is Cons -> self.head :: (self.tail compose l) -- Not a really efficient operation I know
 }
 
 impl forall a. Monoid (List a) {

@@ -1,0 +1,26 @@
+--{
+  cite { https://ro-che.info/articles/2013-03-31-flavours-of-free-applicative-functors.html }
+  cite { https://www.eyrie.org/~zednenem/2013/05/27/freeapp }
+}
+
+data Pure a { value: a }
+data App (f:type -> type) a { value : forall b.(Free f (b -> a)) * (f b) }  -- Ugly
+type Free f a = Pure a | App f a
+
+impl forall (f:type -> type). Functor (Free f) with Functor f {
+    def map f =
+        when f
+        Pure -> Pure $ self f.value
+        App  -> App ((self <| <$> f.value.fst), f.value.snd)                -- Ugly
+}
+
+impl forall (f:type -> type). Applicative (Free f) with Functor f {
+    def pure = Pure
+    def <*> f =
+        when f
+        Pure -> ($ f.value) map self
+        App  -> App (({ _ <| } <$> self <*> f.value.fst), f.value.snd)      -- Ugly
+}
+
+sig lift : forall (f:type -> type) a. f a -> Free f a
+def lift = App (Pure { _ })

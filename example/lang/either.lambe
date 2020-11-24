@@ -4,7 +4,7 @@ type Either a b = Left a | Right b
 
 -- section Foldable | Can be automatically generated
 
-trait Foldable a b s for s {
+trait Foldable a b self for s {
     sig fold : forall c. self -> (a -> c) -> (b -> c) -> c
 }
 
@@ -16,13 +16,15 @@ impl forall a b. Foldable a b (Right b) {
     def fold _ r = l self.value
 }
 
-impl forall a b. Foldable a b (Either b)
-    with Foldable a b (Left b)
+impl forall a b. Foldable a b (Either a b)
+    with Foldable a b (Left a)
     with Foldable a b (Right b)
 
 -- section Equatable | Can be automatically generated
 
-trait Equatable a b s for s with Equatable a with Equatable b {
+trait Equatable a b self for s
+    with Equatable a
+    with Equatable b {
     sig (=) : self -> Either a b -> bool
 }
 

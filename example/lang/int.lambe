@@ -4,14 +4,18 @@ import algebraic
 kind int = type
 
 impl int {
-    sig (--)   : self -> self
-    sig (++)   : self -> self
-    sig (+)    : self -> self -> self
-    sig (-)    : self -> self -> self
+    sig (+) : self -> self -> self
+    sig (-) : self -> self -> self
+    sig (/) : self -> self -> self
+    sig (*) : self -> self -> self
     sig abs    : self -> self
-    sig toChar : self -> char
+}
 
+trait Extension for int {
+    sig (--) : self -> self
     def (--) = self - 1
+
+    sig (++) : self -> self
     def (++) = self + 1
 }
 
