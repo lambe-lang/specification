@@ -1,0 +1,26 @@
+impl product
+impl unit
+impl control
+
+type State v a = v -> (a * v)
+
+impl forall v a. State v a {
+    sig get : State v v
+    def get = { _, _ }
+
+    sig set : v -> State v unit
+    def set = { v _ -> (), v }
+}
+
+impl forall v. Functor (State v) {
+    def map ma v = let a = ma v in (self a.fst), a.snd
+}
+
+impl forall v. Applicative (State v) {
+    def pure a = { a, _ }
+}
+
+impl forall v. Monad (State v) {
+
+}
+

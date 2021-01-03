@@ -2,7 +2,7 @@ trait Reader a {
     -- Source type should be specified in each implementation of the Reader trait
     kind t = type -> type
 
-    data Source a { s: t a; pos: (int*int*int) }
+    data Source { s: t a; pos: (int*int*int) }
 
     sig next : self -> Option a * self for Source a
 }

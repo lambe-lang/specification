@@ -1,4 +1,4 @@
-data unit
+data Unit
 
-sig (()) : unit
-def (()) = unit
+sig (()) : Unit
+def (()) = Unit

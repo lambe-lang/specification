@@ -1,6 +1,6 @@
-data Nil
-data Cons a { head : a; tail : List a }
-type List a = Nil | Cons a
+impl listF
+
+type List a = ListF a (List a)
 
 -- section Constructor
 
@@ -53,7 +53,7 @@ impl forall a. Foldable a (List a)
 
 -- section Selectable
 
-trait Foldable a self for s {
+trait Foldable a s for s {
     sig fold : forall b. self -> (Nil -> b) -> (Cons a -> b) -> b
 }
 
@@ -71,7 +71,7 @@ impl forall a. Foldable a (List a)
 
 -- section Equatable
 
-trait Equatable a self for s with Equatable a {
+trait Equatable a s for s with Equatable a {
     sig (=) : self -> List a -> bool
 }
 
@@ -93,7 +93,7 @@ impl forall a. SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
-        is Cons -> self.head :: (self.tail compose l) -- Not a really efficient operation I know
+        is Cons -> self.head :: $ self.tail compose l -- Not a really efficient operation I know
 }
 
 impl forall a. Monoid (List a) {

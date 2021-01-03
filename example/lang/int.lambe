@@ -8,7 +8,7 @@ impl int {
     sig (-) : self -> self -> self
     sig (/) : self -> self -> self
     sig (*) : self -> self -> self
-    sig abs    : self -> self
+    sig abs : self -> self
 }
 
 trait Extension for int {

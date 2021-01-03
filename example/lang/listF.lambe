@@ -1,0 +1,6 @@
+data Nil
+data Cons a l { head : a; tail : l }
+type ListF a l = Nil | Cons a l
+
+type List a = ListF a (List a)
+

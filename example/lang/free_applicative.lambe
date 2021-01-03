@@ -3,15 +3,17 @@
   cite { https://www.eyrie.org/~zednenem/2013/05/27/freeapp }
 }
 
+impl functions
+
 data Pure a { value: a }
-data App (f:type -> type) a { value : forall b.(Free f (b -> a)) * (f b) }  -- Ugly
+data App (f:type -> type) a { value : forall b.(Free f (b -> a)) * (f b) }
 type Free f a = Pure a | App f a
 
 impl forall (f:type -> type). Functor (Free f) with Functor f {
     def map f =
         when f
         Pure -> Pure $ self f.value
-        App  -> App ((self <| <$> f.value.fst), f.value.snd)                -- Ugly
+        App  -> App ((self <| <$> f.value.fst), f.value.snd)
 }
 
 impl forall (f:type -> type). Applicative (Free f) with Functor f {
@@ -19,8 +21,8 @@ impl forall (f:type -> type). Applicative (Free f) with Functor f {
     def <*> f =
         when f
         Pure -> ($ f.value) map self
-        App  -> App (({ _ <| } <$> self <*> f.value.fst), f.value.snd)      -- Ugly
+        App  -> App (({ _ <| } <$> self <*> f.value.fst), f.value.snd)
 }
 
 sig lift : forall (f:type -> type) a. f a -> Free f a
-def lift = App (Pure { _ })
+def lift = App (Pure id)

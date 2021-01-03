@@ -5,4 +5,3 @@ trait Traversable (t:type -> type) (f:type -> type) with Applicative f {
     def traverse = self map |> sequence
     def sequence = id traverse
 }
-

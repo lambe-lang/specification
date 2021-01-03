@@ -12,3 +12,6 @@ def pipeline g = g compose self
 
 sig |> : pipeline
 def |> = self pipeline
+
+sig id : forall a. a -> a
+def id a = a
