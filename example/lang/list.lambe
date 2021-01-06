@@ -1,6 +1,6 @@
 impl listF
 
-type List a = ListF a (List a)
+type List = (a:type) -> ListF a (List a)
 
 -- section Constructor
 

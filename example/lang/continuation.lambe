@@ -4,15 +4,18 @@
 
 impl functions
 
-type Continuation a = forall b.(a -> b) -> b
+type Continuation = (a:type) -> forall b.(a -> b) -> b
 
-impl Monad Continuation {
-    def return c = { k -> k c }
-
-    def join c = { k -> c { c' -> c' k }}
-
+impl Functor Continuation {
     def map f c = { k -> c (f |> k) }
 }
 
+impl Applicative Continuation {
+    def pure c = { k -> k c }
 
+    def product ca cb = { k -> ca { a -> cb { b -> k (a, b) }}}
+}
 
+impl Monad Continuation {
+    def join c = { k -> c { c -> c k }}
+}

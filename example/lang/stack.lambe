@@ -15,11 +15,11 @@ impl forall a. Stack a {
     def isEmpty = self value fold true false
 
     sig push : self -> a -> self
-    def push a = self with value = a::self.value
+    def push a = self with value = (a :: self.value)
 
     sig peek : self -> Option a
-    def peek = self value
+    def peek = self value fold { None } { Some _.tail }
 
     sig pop : self -> Option self
-    def pop = self with value = self value fold { None } { Some(_ tail) }
+    def pop = self with value = self value fold { None } { Some _.tail }
 }

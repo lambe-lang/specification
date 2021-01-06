@@ -1,7 +1,7 @@
 trait SemiGroup a for a {
-    sig compose : self -> self -> self
+    type compose = self -> self -> self
 }
 
 trait Monoid a for a with SemiGroup self {
-    sig neutral : self
+    type neutral = self
 }

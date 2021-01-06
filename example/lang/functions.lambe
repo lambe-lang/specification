@@ -1,10 +1,17 @@
-sig $ : forall a b.(a -> b) -> a -> b
-def $ f a = f a
+--{
+ Is the definition `sig m : t` equivalent to `type m = t`?
+}
 
-sig $ : forall a b c. self -> (a -> b) -> a -> c for b -> c
-def $ f a = self (f a)
+sig id : forall a. a -> a
+def id a = a
 
-sig <| : forall a b c. self -> (a -> b) -> a -> c for b -> c
+sig apply : forall a b.id (a -> b)
+def apply f a = f a
+
+sig compose : forall a b c. self -> (a -> b) -> a -> c for b -> c
+def compose f a = self (f a)
+
+sig <| : compose
 def <| g = { a -> self $ g a }
 
 sig pipeline : forall a b c. self -> (b -> c) -> a -> c for a -> b
@@ -12,6 +19,3 @@ def pipeline g = g compose self
 
 sig |> : pipeline
 def |> = self pipeline
-
-sig id : forall a. a -> a
-def id a = a
