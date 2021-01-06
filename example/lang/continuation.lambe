@@ -4,7 +4,7 @@
 
 impl functions
 
-type Continuation = (a:type) -> forall b.(a -> b) -> b
+type Continuation a = forall b.(a -> b) -> b
 
 impl Functor Continuation {
     def map f c = { k -> c (f |> k) }

@@ -1,7 +1,11 @@
-trait SemiGroup a for a {
-    type compose = self -> self -> self
+trait Neutral a for a {
+    sig neutral : self
 }
 
-trait Monoid a for a with SemiGroup self {
-    type neutral = self
+trait SemiGroup a for a {
+    sig compose : self -> self -> self
 }
+
+trait Monoid a for a
+    with Neutral self
+    with SemiGroup self

@@ -89,11 +89,14 @@ impl Equatable a (List a)
 
 -- section Monoid
 
+impl algebraic
+
 impl forall a. SemiGroup (List a) {
     def compose l =
         when self
         is Nil  -> l
-        is Cons -> self.head :: $ self.tail compose l -- Not a really efficient operation I know
+        is Cons -> self with tail = self.tail compose l
+                   -- Not a really efficient operation I know
 }
 
 impl forall a. Monoid (List a) {
