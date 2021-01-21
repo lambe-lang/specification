@@ -8,15 +8,15 @@ type Option a = None | Some a
 -- section foldable | Can be automatically generated
 
 trait foldable a s for s {
-    sig fold : forall b. self -> b -> (a -> b) -> b
+    sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
 }
 
-impl forall a. foldable a None {
-    def fold f _ = f
+impl forall a. foldable a Non e {
+    def fold f _ = f self
 }
 
 impl forall a. foldable a (Some a) {
-    def fold _ f = f self.value
+    def fold _ f = f self
 }
 
 impl forall a. foldable a (Option a)

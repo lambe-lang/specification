@@ -5,15 +5,15 @@ type Either a b = Left a | Right b
 -- section Foldable | Can be automatically generated
 
 trait Foldable a b self for s {
-    sig fold : forall c. self -> (a -> c) -> (b -> c) -> c
+    sig fold : forall c. self -> (Left a -> c) -> (Right b -> c) -> c
 }
 
 impl forall a b. Foldable a b (Left a) {
-    def fold l _ = l self.value
+    def fold l _ = l self
 }
 
 impl forall a b. Foldable a b (Right b) {
-    def fold _ r = l self.value
+    def fold _ r = l self
 }
 
 impl forall a b. Foldable a b (Either a b)

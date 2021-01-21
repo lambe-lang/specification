@@ -1,10 +1,10 @@
-impl listF
-
-type List = (a:type) -> ListF a (List a)
+type Nil    = listf.Nil
+data Cons a = listf.Cons a (List a)
+data List a = listf.ListF a (List a)
 
 -- section Constructor
 
-trait Helper {
+impl forall a. List a {
     trait Builder a {
         sig (]) : List a
         sig (,) : a -> ListBuilder a
@@ -26,7 +26,7 @@ trait Helper {
     data ListBuilder a { value : List a -> List a }
 
     impl forall a. Builder a for ListBuilder a {
-        def (]) = self
+        def (]) = self.value
         def (,) a = ListBuilder { self.value (a::_) }
     }
 }
@@ -36,15 +36,15 @@ impl Constructor
 -- section Foldable
 
 trait forall a. Foldable a s for s {
-    sig fold : forall b. self -> b -> (a -> b -> b) -> b
+    sig fold : forall b. self -> (Nil -> b) -> (Cons a -> b) -> b
 }
 
 impl forall a. Foldable a Nil {
-    def fold n _ = n
+    def fold n _ = n self
 }
 
 impl forall a. Foldable a (Cons a) {
-    def fold n c = c self.head (self.tail fold n c)
+    def fold n c = c self
 }
 
 impl forall a. Foldable a (List a)
@@ -71,7 +71,7 @@ impl forall a. Foldable a (List a)
 
 -- section Equatable
 
-trait Equatable a s for s with Equatable a {
+trait Equatable a s for s with Equatable a with Foldable a (List a) {
     sig (=) : self -> List a -> bool
 }
 
@@ -91,16 +91,13 @@ impl Equatable a (List a)
 
 impl algebraic
 
-impl forall a. SemiGroup (List a) {
+impl forall a. SemiGroup (List a) with Foldable a (List a) {
     def compose l =
-        when self
-        is Nil  -> l
-        is Cons -> self with tail = self.tail compose l
-                   -- Not a really efficient operation I know
+        self fold { l } { self with tail = self.tail compose l }
 }
 
 impl forall a. Monoid (List a) {
-    def neutral = Nil
+    def neutral = []
 }
 
 -- operation
@@ -115,13 +112,20 @@ impl forall a. Operation a {
 
 -- section Monad
 
-impl forall a. Monad List with Foldable a (List a) {
-    def pure a = []
+impl forall a. Functor List with Foldable a (List a) {
+    def map l =
+        l fold { Nil } { self _.head :: $ self map _.tail }
+}
+
+impl forall a. Applicative List with Foldable a (List a) {
+    def pure a = [a]
 
     def product f =
         self fold { Nil } { _.tail <*> $ f map _.head }
+}
 
+impl forall a. Monad List with Foldable a (List a) {
     def join =
-        self fold { nil } { _.head compose $ _.tail join }
+        self fold { nil } { _.head ++ $ _.tail join }
 }
 

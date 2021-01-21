@@ -1,9 +1,17 @@
+impl control
+
 type Identity a = a
 
-impl Monad Identity {
+impl Functor Identity {
+    def map a = self a
+}
+
+impl Applicative Identity {
     def pure a = a
 
     def product a = self,a
+}
 
+impl Monad Identity {
     def flatten = self
 }

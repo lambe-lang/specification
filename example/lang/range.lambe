@@ -1,5 +1,5 @@
-data RangeFromTo { min:int; max:int }
-data RangeFromDownTo { min:int; max:int }
+data (<..<) { min:int; max:int }
+data (>..>) { min:int; max:int }
 
 type Range = RangeFromTo | RangeFromDownTo
 
@@ -7,6 +7,6 @@ impl Range {
     sig to : self -> self -> Range for int
     def to m2 =
         if (self <= m2)
-        then { RangeFromTo self m2 }
-        else { RangeFromDownTo self m2 }
+        then { self <..< m2 }
+        else { self >..> m2 }
 }
