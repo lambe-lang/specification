@@ -1,0 +1,20 @@
+trait Arrow ((~>): type -> type -> type) {
+    sig arrow : forall a b.(a -> b) -> (a ~> b)
+
+    trait First {
+        sig fst : forall a b d.a ~> b -> (a * d) ~> (b * d)
+    }
+
+    trait Split {
+        sig split : forall a b c d.a ~> b -> c ~> d -> (a * c) ~> (b * d)
+    }
+
+    trait Operators {
+        sig ( *** ) : forall a b c d.a ~> b -> c ~> d -> (a * c) ~> (b * d)
+        sig ( &&& ) : forall a b c.a ~> b -> a ~> c -> a ~> (b * c)
+        sig ( ^>> ) : forall a b c.(a -> b) -> b ~> c -> a ~> c
+        sig ( >>^ ) : forall a b c.a ~> b -> (b -> c) -> a ~> c
+        sig ( <<^ ) : forall a b c.b ~> c -> (a -> b) -> a ~> c
+        sig ( ^<< ) : forall a b c.(b -> c) -> a ~> b -> a ~> c
+    }
+}

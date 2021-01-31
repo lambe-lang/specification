@@ -11,7 +11,7 @@ impl response
 impl reader
 
 trait Parse a {
-    sig parse : forall a. self -> Source -> Response a Source with Reader a
+    sig parse : self -> Source -> Response a Source with Reader a
 }
 
 -- section Any

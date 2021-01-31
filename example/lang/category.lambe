@@ -1,0 +1,4 @@
+trait Category ((~>):type->type->type) {
+  sig identity: forall a. a ~> a
+  sig compose : forall a b c.b ~> c -> a ~> b -> a ~> c
+}
