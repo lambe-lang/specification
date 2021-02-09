@@ -11,3 +11,6 @@ def (@) f a = self (f a)
 
 sig (@>) : forall a b c. self -> (b -> c) -> a -> c for a -> b
 def (@>) f = f @ self
+
+sig (::) : forall a b.(self -> a for b) -> (a -> b)
+def (::) f a = a f
