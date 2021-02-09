@@ -1,8 +1,8 @@
-impl lang.exception
-impl lang.string
+using lang.exception
+using lang.string
 
-impl memory
-impl parse
+using memory
+using parse
 
 sig run : string -> Memory with Error ParseError
 

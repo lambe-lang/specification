@@ -4,8 +4,11 @@ impl forall a b. a * b {
     sig (,) : self -> b -> self * b for a
     def (,) b = * self b
 
-    sig swap : self -> b * a
-    def swap = self.snd , self.fst
+    sig swap : a * b -> b * a
+    def swap ab = ab.snd , ab.fst
+
+    sig duplicate : a -> a * a
+    def duplicate a = a , a
 
     sig zip : forall c d. self -> c * d -> (a * c) * (b * d)
     def zip p = (self.fst , p.fst), (self.snd , p.snd)

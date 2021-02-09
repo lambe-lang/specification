@@ -1,4 +1,4 @@
-impl bool
+using bool
 
 type Predicate a = a -> Bool
 

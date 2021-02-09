@@ -1,20 +1,52 @@
-trait Arrow ((~>): type -> type -> type) {
-    sig arrow : forall a b.(a -> b) -> (a ~> b)
+using core
+using product
 
-    trait First {
-        sig fst : forall a b d.a ~> b -> (a * d) ~> (b * d)
+trait Arrow (A: type -> type -> type) with Category A {
+    sig arrow : forall a b.(a -> b) -> A a b
+    sig (>>>) : forall a b c.self -> A b c -> A c d for A a b
+    sig first : forall a b c.A a b -> A (a * c) (b * c)
+}
+
+trait ArrowExtension (A: type -> type -> type) with Arrow A {
+    sig second : forall a b c.A a b -> A (c * a) (c * b)
+    def second f = arr swap >> first f >> arr swap
+
+    sig (***) : forall a b c d.self -> A c d -> A (a * c) (b * d) for A a b
+    def (***) g = first self >>> second g
+
+    sig (&&&) : forall a b c.self -> A a c -> A a (b * c) for A a b
+    def (&&&) g = arrow duplicate >>> (self *** g)
+
+    sig lift2 : forall a b c d.self -> A d a -> A d b -> A d c for a -> b -> c
+    def lift2 f g = f &&& g >>> $ arrow { ab -> self ab.fst ab.snd }
+}
+
+trait ArrowZero (A: type -> type -> type) with Arrow A {
+    sig zero : forall a b. A a b
+}
+
+trait ArrowPlus (A: type -> type -> type) with ArrowZero A {
+    sig (<+>) : forall a b. A a b -> A a b -> A a b
+}
+
+trait Arrow_from_monad {
+    type Kleisli (m:type -> type) a b = a -> m b
+
+    impl forall (m:type -> type).Arrow (Kleisli m) with Monad m {
+        def arrow f = { b -> return (f b) }
+        def (>>>) g = { b -> self b >>= g.k }
+        def first f = { ac -> f ac.fst >>= { c -> return (c,ac.snd) } }
     }
 
-    trait Split {
-        sig split : forall a b c d.a ~> b -> c ~> d -> (a * c) ~> (b * d)
+    impl forall (m:type -> type).ArrowExtension (Kleisli m)
+}
+
+trait Arrow_from_function {
+    impl forall (m:type -> type).Arrow (->) {
+        def arrow f = f
+        def (>>>) g = f @> g
+        def first f = { ac -> (f ac.fst),ac.snd }
     }
 
-    trait Operators {
-        sig ( *** ) : forall a b c d.a ~> b -> c ~> d -> (a * c) ~> (b * d)
-        sig ( &&& ) : forall a b c.a ~> b -> a ~> c -> a ~> (b * c)
-        sig ( ^>> ) : forall a b c.(a -> b) -> b ~> c -> a ~> c
-        sig ( >>^ ) : forall a b c.a ~> b -> (b -> c) -> a ~> c
-        sig ( <<^ ) : forall a b c.b ~> c -> (a -> b) -> a ~> c
-        sig ( ^<< ) : forall a b c.(b -> c) -> a ~> b -> a ~> c
-    }
+    impl ArrowExtension (->)
 }

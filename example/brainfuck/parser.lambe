@@ -1,11 +1,11 @@
-impl lang.char
-impl lang.exception
-impl lang.list
-impl lang.string
-impl lang.switch
-impl lang.predicate
+using lang.char
+using lang.exception
+using lang.list
+using lang.string
+using lang.switch
+using lang.predicate
 
-impl ast
+using ast
 
 data BraceMismatch
 data StackUnderFlow

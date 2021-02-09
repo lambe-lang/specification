@@ -1,5 +1,5 @@
-impl lang.bool
-impl lang.unit
+using bool
+using unit
 
 data If { cond : bool }
 data Then a { cond : bool; then : Unit -> a }

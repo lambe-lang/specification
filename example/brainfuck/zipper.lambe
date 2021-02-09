@@ -1,4 +1,4 @@
-impl lang.list
+using lang.list
 
 data Zipper a {
     left : List a;

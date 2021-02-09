@@ -7,7 +7,6 @@ trait Functor (f:type->type) {
 
 trait Applicative (f:type->type) with Functor f {
     sig pure : forall a. a -> f a
-
     sig product : forall a b. self -> f b -> f (a * b) for f a
 
     sig (,) : forall a b. self -> f b -> f (a * b) for f a

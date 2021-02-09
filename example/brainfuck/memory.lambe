@@ -1,12 +1,12 @@
-impl lang.bool
-impl lang.char
-impl lang.int
-impl lang.product
-impl lang.string
+using lang.bool
+using lang.char
+using lang.int
+using lang.product
+using lang.string
 
-impl zipper
+using zipper
 
-type Memory = Zipper int * string
+type Memory = Zipper (int * string)
 
 impl Memory {
     sig new      : self

@@ -1,7 +1,7 @@
-impl error
-impl list
-impl option
-impl bool
+using error
+using list
+using option
+using bool
 
 data Stack a {
     value : List a

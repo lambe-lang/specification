@@ -1,7 +1,7 @@
-impl int
-impl char
-impl algebraic
-impl list
+using int
+using char
+using algebraic
+using list
 
 data string { value: List char }
 

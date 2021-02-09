@@ -1,6 +1,6 @@
-impl product
-impl unit
-impl control
+using product
+using unit
+using control
 
 type State v a = v -> (a * v)
 

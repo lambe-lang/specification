@@ -2,7 +2,7 @@
     Continuation monad
 }
 
-impl functions
+using functions
 
 type Continuation a = forall b.(a -> b) -> b
 

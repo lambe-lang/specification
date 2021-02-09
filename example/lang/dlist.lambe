@@ -1,5 +1,5 @@
-impl algebraic
-impl list
+using algebraic
+using list
 
 type DList a = List a -> List a
 

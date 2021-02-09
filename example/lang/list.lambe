@@ -1,6 +1,6 @@
-type Nil    = listf.Nil
-data Cons a = listf.Cons a (List a)
-data List a = listf.ListF a (List a)
+using listf
+
+type List a = ListF a (List a)
 
 -- section Constructor
 

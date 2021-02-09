@@ -1,6 +1,6 @@
 --{
   This boolean trait provides:
-  - foldable Bool
+  - Foldable Bool
   - operation
 }
 
@@ -8,32 +8,32 @@ data True
 data False
 type Bool = True | False
 
--- section foldable
+-- section Foldable
 
-trait foldable s for s {
+trait Foldable s for s {
     sig fold : forall b. self -> b -> b -> b
 
     sig fold : forall b. self -> b -> b -> b for unit -> s
     def fold s b1 b2 = self () fold b1 b1
 }
 
-impl foldable True {
+impl Foldable True {
     def fold t _ = t
 }
 
-impl foldable False {
+impl Foldable False {
     def fold _ f = f
 }
 
-impl foldable Bool
-    with foldable True
-    with foldable False
+impl Foldable Bool
+    with Foldable True
+    with Foldable False
 
 -- The lazy bool implementation
 
 type bool = unit -> Bool
 
-impl bool with foldable Bool {
+impl bool with Foldable Bool {
     sig true : unit -> True
     def true = { True }
 
