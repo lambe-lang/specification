@@ -2,13 +2,13 @@
     Work in progress
 }
 
-impl lang.bool
-impl lang.char
-impl lang.selection
-impl lang.string
+use lang.bool
+use lang.char
+use lang.selection
+use lang.string
 
-impl response
-impl reader
+use response
+use reader
 
 trait Parse a {
     sig parse : self -> Source -> Response a Source with Reader a
@@ -28,7 +28,7 @@ impl Parser a for Any {
 
 -- section Satisfy
 
-data Satisfy a { parser: Parser a ; predicate : a -> bool }
+data Satisfy a { parser: impl Parser a ; predicate : a -> bool }
 
 impl Satisfy char {
     sig aChar : self -> char -> Satisfy char for Parser char
@@ -50,7 +50,7 @@ impl forall a.Parser a for Satisfy a {
 
 -- section And
 
-data And a b { left: Parser a; right: Parser b }
+data And a b { left: impl Parser a; right: impl Parser b }
 
 impl forall a b. Parser (a * b) for And a b {
     def parse s =
@@ -64,7 +64,7 @@ impl forall a b. Parser (a * b) for And a b {
 
 -- section Or
 
-data Or a { left: Parser a; right: Parser a }
+data Or a { left: impl Parser a; right: impl Parser a }
 
 impl forall a. Parser a for Or a {
     def parse s =
@@ -78,7 +78,7 @@ impl forall a. Parser a for Or a {
 
 -- section Map
 
-data Map a b { parser: Parser a ; function: a -> b }
+data Map a b { parser: impl Parser a ; function: a -> b }
 
 impl forall a b. Parser b for Map a b {
     def parse s =

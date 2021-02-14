@@ -1,4 +1,4 @@
-using listf
+use listf
 
 type List a = ListF a (List a)
 

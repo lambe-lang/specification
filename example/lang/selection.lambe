@@ -1,5 +1,5 @@
-using bool
-using unit
+use bool
+use unit
 
 data If { cond : bool }
 data Then a { cond : bool; then : Unit -> a }
@@ -17,3 +17,4 @@ impl forall a. Then a {
     def else f = self cond () fold { self then () } { f () }
 }
 
+sig if <p> then else

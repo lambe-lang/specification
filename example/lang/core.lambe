@@ -12,5 +12,26 @@ def (@) f a = self (f a)
 sig (@>) : forall a b c. self -> (b -> c) -> a -> c for a -> b
 def (@>) f = f @ self
 
-sig (::) : forall a b.(self -> a for b) -> (a -> b)
+type (#>) a b = self -> b for a
+
+sig (::) : forall a b.(a #> b) -> (a -> b)
 def (::) f a = a f
+
+sig (#$) : forall a b c.(a #> b) -> (b #> c) -> (a -> c)
+def (#$) f g = g #@ f
+
+sig (#@) : forall a b c.(b #> c) -> (a #> b) -> (a -> c)
+def (#@) f g a =  a g f
+
+--{
+    ```
+    trait T {
+        sig m : forall a b.a #> a -> b
+        def m f = f self
+    }
+
+    let impl T in
+    let e = :: m in
+        e 1 { _ + 1 }
+    ```
+}

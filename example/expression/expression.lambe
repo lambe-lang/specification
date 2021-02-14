@@ -3,7 +3,7 @@
  by step introducing basic constructions like *Number* and *Plus*.
 }
 
-impl int
+use int
 
 trait Eval a for a {
     sig eval : self -> int

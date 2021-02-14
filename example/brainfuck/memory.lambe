@@ -1,10 +1,10 @@
-using lang.bool
-using lang.char
-using lang.int
-using lang.product
-using lang.string
+use lang.bool
+use lang.char
+use lang.int
+use lang.product
+use lang.string
 
-using zipper
+use zipper
 
 type Memory = Zipper (int * string)
 

@@ -1,5 +1,5 @@
-using char
-using algebraic
+use char
+use algebraic
 
 kind int = type
 

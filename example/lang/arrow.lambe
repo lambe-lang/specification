@@ -1,5 +1,5 @@
-using core
-using product
+use core
+use product
 
 trait Arrow (A: type -> type -> type) with Category A {
     sig arrow : forall a b.(a -> b) -> A a b
@@ -8,8 +8,8 @@ trait Arrow (A: type -> type -> type) with Category A {
 }
 
 trait ArrowExtension (A: type -> type -> type) with Arrow A {
-    sig second : forall a b c.A a b -> A (c * a) (c * b)
-    def second f = arr swap >> first f >> arr swap
+    type second = forall a b c.A a b -> A (c * a) (c * b)
+    func second f = arr swap >> first f >> arr swap
 
     sig (***) : forall a b c d.self -> A c d -> A (a * c) (b * d) for A a b
     def (***) g = first self >>> second g
@@ -22,11 +22,13 @@ trait ArrowExtension (A: type -> type -> type) with Arrow A {
 }
 
 trait ArrowZero (A: type -> type -> type) with Arrow A {
-    sig zero : forall a b. A a b
+    sig neutral : forall a b. A a b
 }
 
 trait ArrowPlus (A: type -> type -> type) with ArrowZero A {
-    sig (<+>) : forall a b. A a b -> A a b -> A a b
+    sig combine : forall a b. self -> A a b -> A a b for A a b
+    sig (<+>) : forall a b. self -> A a b -> A a b for A a b
+    sig (<+>) = self combine
 }
 
 trait Arrow_from_monad {

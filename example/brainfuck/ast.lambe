@@ -1,5 +1,5 @@
-using lang.int
-using lang.list
+use lang.int
+use lang.list
 
 data Memory { alter : int }
 data Cursor { offset : int }

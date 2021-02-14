@@ -1,6 +1,6 @@
-using lang.selection
-using memory
-using program
+use lang.selection
+use memory
+use program
 
 trait Interpret {
     sig interpret : self -> Memory -> Memory

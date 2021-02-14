@@ -1,11 +1,11 @@
-using lang.char
-using lang.exception
-using lang.list
-using lang.string
-using lang.switch
-using lang.predicate
+use lang.char
+use lang.exception
+use lang.list
+use lang.string
+use lang.switch
+use lang.predicate
 
-using ast
+use ast
 
 data BraceMismatch
 data StackUnderFlow

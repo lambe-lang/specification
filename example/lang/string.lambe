@@ -1,7 +1,7 @@
-using int
-using char
-using algebraic
-using list
+use int
+use char
+use algebraic
+use list
 
 data string { value: List char }
 

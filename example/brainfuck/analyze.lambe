@@ -1,5 +1,5 @@
-impl lang.product
-impl program
+use lang.product
+use program
 
 data Pure
 data Impure

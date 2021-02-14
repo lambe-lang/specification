@@ -626,6 +626,8 @@ s0        ::= entity*
 
 entity    ::= kind | sig | def | data | type | trait | impl | with
 
+use       ::= "use" IDENT
+            | "from" IDENT use IDENT ("," IDENT)*
 sig       ::= "sig" dname ":" type_expr for? with* 
 def       ::= "def" dname param* "=" expr
 data      ::= "data" dname t_param* ("{" attr_type* "}")*
@@ -665,6 +667,7 @@ type_expr ::= type_expr OPERATOR type_expr
             | IDENT 
             | "self"
             | "forall" (attr_kind)+ "." type_expr 
+            | "self" "->" type_expr "for" type_expr 
 
 attr_kind ::= IDENT
             | "(" IDEND : kind_expr ")"

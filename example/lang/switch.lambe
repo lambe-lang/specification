@@ -1,5 +1,5 @@
-using lang.bool
-using lang.eq
+use lang.bool
+use lang.eq
 
 sig switch : a -> Switch a
 def switch a = Switch a None

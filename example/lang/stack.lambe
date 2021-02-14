@@ -1,7 +1,7 @@
-using error
-using list
-using option
-using bool
+use error
+use list
+use option
+use bool
 
 data Stack a {
     value : List a

@@ -48,6 +48,7 @@ trait Trait {
         let impl Try ~> Option
         in { _ transform }
 
+
     --{
      Example:
      ```

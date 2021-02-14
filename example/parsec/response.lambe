@@ -1,4 +1,4 @@
-using lang.bool
+use lang.bool
 
 data Rejected s { source : s; consumed : bool}
 data Accepted a s { value : a; source : s; consumed : bool }

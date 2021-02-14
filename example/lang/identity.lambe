@@ -1,4 +1,4 @@
-using control
+use control
 
 type Identity a = a
 
