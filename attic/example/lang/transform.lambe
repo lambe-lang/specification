@@ -56,6 +56,6 @@ trait Trait {
         Success 1 transform
      ```
 
-     a `Try ~> Option` implementation should be  in the context
+     a `Try ~> Option` implementation should be in the context
     }
 }

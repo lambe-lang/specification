@@ -1,9 +1,9 @@
 (defvar lambe-constants
-    '("kind" "sig" "def" "data" "trait" "impl" "type")
+    '("kind" "sig" "def" "data" "trait" "impl" "type" "use")
 )
   
 (defvar lambe-keywords
-    '("forall" "with" "for" "let" "where" "in" "self" "when" "is")
+    '("forall" "with" "for" "let" "where" "in" "self" "when" "is" "match")
 )
   
 (defvar lambe-tab-width nil "Width of a tab for Lambe mode")

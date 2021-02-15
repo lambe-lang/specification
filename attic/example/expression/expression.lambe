@@ -27,7 +27,9 @@ impl forall a. Eval self for Plus a with Eval a {
 
 -- Defining the Expression Level 1
 
-type ExpL1 = Number | Plus ExpL1
+type Exp X = Number | PLus X
+
+type ExpL1 = Exp ExpL1
 
 impl Eval self for ExpL1
     with Eval Number
@@ -43,7 +45,7 @@ impl forall a. Eval self for Mult a with Eval a {
 
 -- Defining the Expression Level 2
 
-type ExpL2 = Number | Plus ExpL2 | Mult ExpL2
+type ExpL2 = Exp ExpL2 | Mult ExpL2
 
 impl Eval self for ExpL2
     with Eval Number

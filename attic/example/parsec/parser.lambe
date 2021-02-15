@@ -10,8 +10,9 @@ use lang.string
 use response
 use reader
 
-trait Parse a {
-    sig parse : self -> Source -> Response a Source with Reader a
+trait Parse a with Reader a {
+    type parse = Source -> Response a Source
+    sig parse : self -> parse
 }
 
 -- section Any
@@ -28,7 +29,7 @@ impl Parser a for Any {
 
 -- section Satisfy
 
-data Satisfy a { parser: impl Parser a ; predicate : a -> bool }
+data Satisfy a { parser: (Parser a).parse ; predicate : a -> bool }
 
 impl Satisfy char {
     sig aChar : self -> char -> Satisfy char for Parser char
@@ -40,7 +41,7 @@ impl Satisfy char {
 
 impl forall a.Parser a for Satisfy a {
     def parse s =
-        in when let r = self parser parse s
+        in when let r = self parser s
            is Rejected -> Rejected false
            is Accepted ->
               if (self.predicate r)
@@ -50,40 +51,40 @@ impl forall a.Parser a for Satisfy a {
 
 -- section And
 
-data And a b { left: impl Parser a; right: impl Parser b }
+data And a b { left: (Parser a).parse; right: (Parser b).parse }
 
 impl forall a b. Parser (a * b) for And a b {
     def parse s =
-        when let r = self left parse s
+        when let r = self left s
         is Rejected -> Rejected r.consumed
         is Accepted ->
-            when let l = self right parse r.stream
+            when let l = self right r.stream
             is Rejected -> Rejected r.stream (r.consumed || l.consumed)
             is Accepted -> Accepted (r.value,l.value) b.stream (r.consumed || l.consumed)
 }
 
 -- section Or
 
-data Or a { left: impl Parser a; right: impl Parser a }
+data Or a { left: (Parser a).parse; right: (Parser a).parse }
 
 impl forall a. Parser a for Or a {
     def parse s =
-        when let r = self left parse s
+        when let r = self left s
         is Rejected ->
             if r.consumed
             then { r }
-            else { self right parse s }
+            else { self right s }
         is Accepted -> r
 }
 
 -- section Map
 
-data Map a b { parser: impl Parser a ; function: a -> b }
+data Map a b { parser: (Parser a).parse ; function: a -> b }
 
 impl forall a b. Parser b for Map a b {
     def parse s =
-        when let r = self left.parser parse s
+        when let r = self parser s
         is Rejected -> Rejected r.stream r.consumed
-        is Accepted -> Accepted (self.function r) r.stream r.consumed
+        is Accepted -> Accepted (self function r) r.stream r.consumed
 }
 

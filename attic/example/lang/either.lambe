@@ -4,7 +4,7 @@ type Either a b = Left a | Right b
 
 -- section Foldable | Can be automatically generated
 
-trait Foldable a b self for s {
+trait Foldable a b s for s {
     sig fold : forall c. self -> (Left a -> c) -> (Right b -> c) -> c
 }
 
