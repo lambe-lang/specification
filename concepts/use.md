@@ -75,9 +75,7 @@ trait NeutralInt {
     def zero = 0
 }
 
-sig implNeutralInt : NeutralInt 
-def implNeutralInt = impl NeutralInt
-use implNeutralInt
+use impl NeutralInt
 ```
 
 

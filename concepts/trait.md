@@ -19,7 +19,7 @@ In a trait we can define:
 
 ## Trait implementation
 
-**Kind**: Trait Expression
+**Kind**: Trait Expression, Directive
 
 A trait can be implemented and such implementation can be used at 
 the expression level.
