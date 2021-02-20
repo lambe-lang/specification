@@ -14,8 +14,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Trait implementation as first class citizen,
 - [X] Self receiver concept,
 - [X] Coarse and fine grain self specification i.e. receiver type,
-- [ ] Lazy evaluation and type definition
-- [ ] Structured comments
+- [X] Structured comments
 - [ ] Algebraic effects 
 
 ## 1. Function
@@ -624,7 +623,7 @@ List[1,2] : List int
 ```
 s0        ::= entity*
 
-entity    ::= kind | sig | def | data | type | trait | impl | with
+entity    ::= kind | sig | def | data | type | trait | impl | use
 
 use       ::= "use" IDENT
             | "from" IDENT use IDENT ("," IDENT)*
@@ -635,7 +634,7 @@ kind      ::= "kind" dname "=" kind_expr
 type      ::= "type" dname t_param "=" type_expr ("|" type_expr) 
 trait     ::= "trait" IDENT t_param* for? with* ("{" entity* "}")?
 impl      ::= "impl" IDENT t_param* for? with* ("{" entity* "}")?
-with      ::= "with" type_expr
+with      ::= "use" type_expr
 for       ::= "for" type_expr
 
 kind_expr ::= "type"
@@ -663,6 +662,7 @@ case      ::= ("is" type_expr)+ "->" expr
 
 type_expr ::= type_expr OPERATOR type_expr
             | "(" type_expr | OPERATOR ")"
+            | type_expr "." type_expr
             | type_expr type_expr
             | IDENT 
             | "self"

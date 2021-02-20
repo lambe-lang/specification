@@ -1,0 +1,314 @@
+\documentclass{article}[11pt]
+
+% ---------------------------------- DEBUT EXTENSIONS
+
+\newcommand{\invisible}[1] { }
+
+\newtheorem{prop}{Proposition}
+\newtheorem{corol}{Corollaire}
+\newtheorem{lemme}{Lemme}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\newcommand{\epsffig}[3]
+{
+    \begin{figure}[hbt]
+        \centerline{\epsffile{#1.eps}}
+        \caption{\label{#2}{#3}}
+    \end{figure}
+}
+
+\newcommand{\subsubsubsection}[1]
+{
+    ~\\
+    {\bf {\em #1}} \\
+}
+
+\newcommand{\regle}[2]
+{
+    \frac{\begin{array}{l}
+              #1
+    \end{array}}
+    {\begin{array}{l}
+         #2
+    \end{array}}
+}
+
+\newcommand{\reglenomme}[3]
+{
+    \noindent
+    \begin{tabular}{ll}
+        $\regle{#1}{#2}$
+        & {\small {\sf #3}} \\
+        ~ \\
+    \end{tabular}
+}
+
+\newcommand{\condreglenomme}[4]
+{
+    \noindent
+    \begin{tabular}{l}
+    {\small {\sf (#3)}}
+        $\regle{#1}{#2} \left\langle#4\right\rangle$ \\
+        ~                                            \\
+    \end{tabular}
+}
+
+\newcommand{\downtree}[1]
+{
+    \begin{tabular}{c}
+        \vspace{0.1mm} \\
+        {\small\({\rm #1}\)} \\
+    \end{tabular}
+}
+
+\newcommand{\leaf}[1]
+{
+    \regle{}{#1}
+}
+
+\newcommand{\Class}[1]{\langle\kern-1mm\langle{#1}\rangle\kern-1mm\rangle}
+\newcommand{\Rec}[1]{\{\kern-1mm\{{#1}\}\kern-1mm\}}
+\newcommand{\Obj}[1]{\langle{#1}\rangle}
+\newcommand{\ObjT}[1]{\langle\kern-.5mm\langle{#1}\rangle\kern-.5mm\rangle}
+\newcommand{\Spe}[1]{[\kern-.5mm[{#1}]\kern-.5mm]}
+\newcommand{\NSpe}[2]{{\cal #1}\Spe{#2}}
+\newcommand{\Card}[1]{|\kern-.5mm|{#1}|\kern-.5mm|}
+\newcommand{\CardF}[1]{|\kern-.5mm|{#1}|\kern-.5mm|^f}
+\newcommand{\squetch}[1]{\begin{flushright}
+                             #1
+\end{flushright}}
+
+% \newtheorem{lemme}{Lemme}
+% \newtheorem{definition}{Definition}
+
+\newcommand{\crtdef}[1]
+{
+        {\small
+        \begin{center}
+            \begin{tabular}{p{8cm}}
+                $\ulcorner\hfill\urcorner$ \\
+                #1                         \\
+                $\llcorner\hfill\lrcorner$ \\
+            \end{tabular}
+        \end{center}
+    }
+}
+
+\newcommand{\crtdefblock}[1]
+{
+    \begin{figure\star}[hbt]
+    {\small
+        \begin{center}
+            \begin{tabular}{c}
+                $\ulcorner\hfill\urcorner$ \\
+                #1                         \\
+                $\llcorner\hfill\lrcorner$ \\
+            \end{tabular}
+        \end{center}
+    }
+    \end{figure\star}
+}
+
+\newcommand{\crt}[1]
+{
+        {\small
+        \begin{center}
+            \begin{tabular}{p{8cm}}
+                #1 \\
+            \end{tabular}
+        \end{center}
+    }
+}
+
+\newcommand{\term}[1]{\verb~#1~}
+\newcommand{\cons}[1]{\underline{\verb~#1~}}
+\newcommand{\lambe}[0]{{\sf Lamb\"e~}}
+
+% ------------------------------------ FIN EXTENSIONS
+
+\usepackage{amssymb}
+
+\begin{document}
+
+    \title{The \lambe programming language}
+    \author{D. Plaindoux}
+
+    \maketitle
+
+    \section{Kind level}\label{sec:kind-level}
+
+    \begin{math}
+        \begin{array}{rcll}
+            \kappa
+            & =    & \star                    \\
+            & \mid & \star \rightarrow \kappa
+        \end{array}
+    \end{math}
+
+
+    \section{Type level}\label{sec:type-level}
+
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \underline{c} & \in & {\cal C} \\
+            m & \in & {\cal M} \\
+            \tau & =
+            & \alpha & Variable \\
+            & \mid & m                               & Constant                   \\
+            & \mid & \tau \rightarrow \tau           & Function                   \\
+            & \mid & \tau \looparrowright \tau       & Method                     \\
+            & \mid & \tau~\tau                       & Application                \\
+            & \mid & \tau + \tau                     & Sum~type                   \\
+            & \mid & \forall (\alpha:\kappa).\tau    & Universal~Quantification   \\
+            & \mid & \exists (\alpha:\kappa).\tau    & Existential~Quantification \\
+            & \mid & \underline{c}\{ m_i:\tau_i \}_I & Constructor                \\
+            & \mid & \gamma                          & Trait~type                 \\
+        \end{array}
+    \end{math}
+
+
+    \section{Trait level}\label{sec:trait-level}
+
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            k, t, m & \in & {\cal M}                                                                                       \\
+            \gamma  & =   & \langle \{k_i \triangleq \kappa_i\}_I, \{t_i \triangleq \tau_i\}_I, \{m_i : \tau_i\}_I \rangle \\
+            \sigma  & =   & \gamma \circledast \{m_i \triangleq \epsilon_i\}_I
+        \end{array}
+    \end{math}
+
+
+    \section{Expression level}\label{sec:expression-level}
+
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \underline{c} & \in & {\cal C} \\
+            m & \in & {\cal M} \\
+            \epsilon & =
+            & \alpha & Variable \\
+            & \mid & m                                                             & Constant        \\
+            & \mid & \lambda \alpha . \epsilon                                     & Abstraction     \\
+            & \mid & \term{let}~\alpha = \epsilon ~\term{in}~\epsilon              & Let~binding     \\
+            & \mid & \term{let}~\term{use}~\epsilon ~\term{in}~\epsilon            & Let~use~binding \\
+            & \mid & \epsilon~\epsilon                                             & Application     \\
+            & \mid & \epsilon . \epsilon                                           & Access          \\
+            & \mid & \term{when}(\epsilon).\{ \tau_i \rhd \epsilon_i \}_I          & Smart cast      \\
+            & \mid & \sigma                                                        & Trait~term      \\
+        \end{array}
+    \end{math}
+
+
+    \section{Illustration}\label{sec:illustration}
+
+    \subsection{Algebraic datatype}\label{subsec:algebraic-datatype}
+
+    \begin{verbatim}
+data Nil
+data Cons a { head: a; tail: List a }
+data List a = Nil | Cons a
+    \end{verbatim}
+
+    \noindent\begin{math}
+                 \term{Nil} \triangleq \cons{Nil}\{\} \\
+                 \term{Cons} \triangleq \forall(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List}~\alpha \} \\
+                 \term{List} \triangleq \forall(\alpha:\star).\term{Nil} + \term{Cons}~\alpha
+    \end{math}
+
+    \subsection{Function signature}\label{subsec:function-signature}
+
+    \begin{verbatim}
+sig isEmpty : forall a. self -> bool for List a
+    \end{verbatim}
+
+    \noindent\begin{math}
+                 \term{isEmpty} \triangleq \forall(\alpha:\star).\term{List}~\alpha \looparrowright \term{bool}
+    \end{math}
+
+    \subsection{Closed trait}\label{subsec:closed-trait}
+
+    \begin{verbatim}
+trait Access a for List a {
+    sig head : self -> Option
+}
+    \end{verbatim}
+
+    \noindent\begin{math}
+                 \term{Access} \triangleq \forall(\alpha:\star).\langle
+                 \emptyset,
+                 \emptyset,
+                 \{ \term{head} \triangleq (\term{List}~\alpha) \looparrowright \alpha \} \rangle
+    \end{math}
+
+    \subsection{Open trait}
+
+    \begin{verbatim}
+trait Set a {
+    sig contains : self -> a -> bool
+}
+    \end{verbatim}
+
+    \noindent
+    \begin{math}
+        \term{Set} \triangleq \forall(\alpha:\star).\exists(\term{self}:\star).\langle
+        \emptyset,
+        \emptyset,
+        \{ \term{contains} \triangleq \term{self} \looparrowright \alpha \rightarrow bool \} \rangle
+    \end{math}
+
+    \subsection{Trait with and abstract type}
+
+    \begin{verbatim}
+trait Pure a {
+    kind t = type -> type
+    sig pure : a -> t a
+}
+    \end{verbatim}
+
+    \noindent
+    \begin{math}
+        \term{Pure} \triangleq \forall(\alpha:\star).\exists(\term{T}:\star \rightarrow \star).\langle
+        \emptyset,
+        \{t \triangleq T\},
+        \{ \term{pure} \triangleq \alpha \rightarrow \term{t}~\alpha \} \rangle
+    \end{math}
+
+    \subsection{Trait with requirement}\label{subsec:trait-with-requirement}
+
+    \begin{verbatim}
+trait Applicative (t:type->type) with Functor t {
+    sig pure : forall a.a -> t a
+}
+    \end{verbatim}
+
+    \noindent
+    \begin{math}
+        \term{Pure} \triangleq \forall(\term{t}:\star \rightarrow \star).\exists(\term{self}:\star).((\term{Functor}~\term{t}) + \langle
+        \emptyset,
+        \{ \term{pure} \triangleq \forall(\alpha:\star).\alpha \rightarrow \term{t}~\alpha \} \rangle)
+    \end{math}
+
+
+    \section{Type system}\label{sec:type-system}
+
+    \reglenomme
+    {\Gamma \vdash n : t_1 \rightarrow t_2 ~~ \Gamma \vdash a : t_1}
+    {\Gamma \vdash n~a : t_2}
+    {}
+
+    \reglenomme
+    {\Gamma \vdash n : t_1 \looparrowright t_2 ~~ \Gamma \vdash a : t_1}
+    {\Gamma \vdash a~n : t_2}
+    {}
+
+    \reglenomme
+    {\Gamma \vdash r : \underline{c}\{ m_i:t_i \}_I ~~ \exists i \in I, m_i = n}
+    {\Gamma \vdash r.n : t_i}
+    {}
+
+    \reglenomme
+    {\Gamma \vdash r : \langle K; \{ m_i:t_i \}_I ; M \rangle ~~ \exists i \in I, m_i = n}
+    {\Gamma \vdash r.n : t_i}
+    {}
+
+\end{document}

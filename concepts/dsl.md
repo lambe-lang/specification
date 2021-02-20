@@ -5,7 +5,6 @@ TODO
 ## if/then/else expression
 
 ```
-
 dsl if <p> then <a> else <b>
     : forall a. bool -> (() -> a) -> (() -> a) -> a   
     = p cond a b ()

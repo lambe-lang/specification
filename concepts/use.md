@@ -76,6 +76,8 @@ can be used directly if an implementation can be performed
 seamlessly.
 
 ```
+use lang.int
+
 trait NeutralInt {
     sig neutral : Int
     def neutral = 0
@@ -87,6 +89,8 @@ use NeutralInt
 In fact this code is equivalent to:
 
 ```
+use lang.int
+
 trait NeutralInt {
     sig neutral : Int
     def neutral = 0

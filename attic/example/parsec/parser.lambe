@@ -10,9 +10,8 @@ use lang.string
 use response
 use reader
 
-trait Parse a with Reader a {
-    type parse = Source -> Response a Source
-    sig parse : self -> parse
+trait Parser a with Reader a {
+    sig parse : Source -> Response a Source
 }
 
 -- section Any
@@ -29,7 +28,7 @@ impl Parser a for Any {
 
 -- section Satisfy
 
-data Satisfy a { parser: (Parser a).parse ; predicate : a -> bool }
+data Satisfy a { parser: Parser a ; predicate : a -> bool }
 
 impl Satisfy char {
     sig aChar : self -> char -> Satisfy char for Parser char
@@ -41,7 +40,7 @@ impl Satisfy char {
 
 impl forall a.Parser a for Satisfy a {
     def parse s =
-        in when let r = self parser s
+        in when let r = self.parser.parse s
            is Rejected -> Rejected false
            is Accepted ->
               if (self.predicate r)

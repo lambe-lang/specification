@@ -1,0 +1,29 @@
+--{ see https://wiki.haskell.org/Existential_type }
+
+trait Shape_ a for a {
+    sig perimeter : self -> Double
+    sig area      : self -> Double
+}
+
+data Shape { shape : forall a. a with Shape_ a }
+
+type Radius = Double
+type Side   = Double
+
+data Rectangle { height : Double; weight : Double }
+data Square    { height : Double }
+
+impl Shape_ Rectangle {
+   def perimeter = 2*(self.height + self.weight)
+   def area      = self.height * self.weight
+}
+
+impl Shape_ Square {
+   perimeter = 4*self.height
+   area      = self.height*self.height
+}
+
+impl Shape_ Shape {
+   perimeter = self.shape perimeter
+   area      = self.shape area
+}
