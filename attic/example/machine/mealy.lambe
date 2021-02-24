@@ -4,4 +4,3 @@ data Emit (m:type->type) a b { value : b; automata: Mealy m a b }
 data Halt
 
 type Step (m:type->type) a b = Emit m a b | Halt
-
