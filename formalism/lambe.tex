@@ -135,8 +135,9 @@
             & \mid & \tau + \tau                  & Sum~type                   \\
             & \mid & \forall (\alpha:\kappa).\tau & Universal~Quantification   \\
             & \mid & \exists (\alpha:\kappa).\tau & Existential~Quantification \\
+            & \mid & \mu(\alpha).\tau             & Recursion                  \\
             & \mid & \underline{c} S              & Constructor                \\
-            & \mid & \sigma                       & Trait                      \\
+            & \mid & \Gamma                       & Trait                      \\
         \end{array}
     \end{math}
 
@@ -151,8 +152,8 @@
             S       & =   & \{ m_i : \tau_i \}_I              \\
             W       & =   & \{ \sigma_i \}_I                  \\
             M       & =   & \{ m_i \triangleq \epsilon_i \}_I \\
-            \gamma  & =   & \langle K, T, S, W \rangle        \\
-            \sigma  & =   & \gamma \circledast M
+            \Gamma  & =   & \langle K, T, S, W \rangle        \\
+            \Sigma  & =   & \Gamma \circledast M
         \end{array}
     \end{math}
 
@@ -164,7 +165,7 @@
             \underline{c} & \in & {\cal C} \\
             m & \in & {\cal I} \\
             \epsilon & =
-            & \alpha & Variable \\
+                   & \alpha                                                                  & Variable        \\
             & \mid & m                                                                       & Constant        \\
             & \mid & \lambda \alpha . \epsilon                                               & Abstraction     \\
             & \mid & \epsilon~\epsilon                                                       & Application     \\
@@ -172,7 +173,7 @@
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~\term{in}~\epsilon             & Let~binding     \\
             & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast      \\
-            & \mid & \sigma                                                                  & Trait~term      \\
+            & \mid & \Sigma                                                                  & Trait~term      \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack            \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack          \\
         \end{array}
@@ -184,15 +185,15 @@
     \subsection{Algebraic datatype}\label{subsec:algebraic-datatype}
 
     \begin{verbatim}
-data Nil
-data Cons a { head: a; tail: List a }
-data List a = Nil | Cons a
+type Nil  = data Nil
+type Cons = forall a.data Cons (head:a) (tail:List a)
+type List = forall a.Nil | Cons a
     \end{verbatim}
 
     \subsubsubsection{Type kind}
 
     \noindent\begin{math}
-                 \term{Nil} : \star \\
+                 \term{Nil}~ : \star \\
                  \term{Cons} : \star \rightarrow \star \\
                  \term{List} : \star \rightarrow \star
     \end{math}
@@ -200,9 +201,9 @@ data List a = Nil | Cons a
     \subsubsubsection{Type definition}
 
     \noindent\begin{math}
-                 \term{Nil} \triangleq \cons{Nil}\{\} \\
-                 \term{Cons} \triangleq \forall(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List}~\alpha \} \\
-                 \term{List} \triangleq \forall(\alpha:\star).\term{Nil} + \term{Cons}~\alpha
+                 \term{Nil}~ \triangleq \cons{Nil}\{\} \\
+                 \term{Cons} \triangleq \forall(\alpha:\star).\mu(X).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \cons{Nil}\{\} + X \} \\
+                 \term{List} \triangleq \forall(\alpha:\star).\mu(X).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : X \}
     \end{math}
 
     \subsubsubsection{Function definition}
@@ -215,10 +216,12 @@ data List a = Nil | Cons a
     \subsection{Function signature}\label{subsec:function-signature}
 
     \begin{verbatim}
+sig emptyList : forall a. unit -> List a
 sig isEmpty : forall a. self -> bool for List a
     \end{verbatim}
 
     \noindent\begin{math}
+                 \term{emptyList} : \forall(\alpha:\star).\term{unit} \rightarrow \term{List}~\alpha \\
                  \term{isEmpty} : \forall(\alpha:\star).\term{List}~\alpha \looparrowright \term{bool}
     \end{math}
 
@@ -226,7 +229,13 @@ sig isEmpty : forall a. self -> bool for List a
 
     \begin{verbatim}
 trait Access a for List a {
-    sig head : self -> Option
+    sig head : self -> Option a
+}
+    \end{verbatim}
+
+    \begin{verbatim}
+type Access = forall a. trait for List a {
+    sig head : self -> Option a
 }
     \end{verbatim}
 
@@ -234,7 +243,7 @@ trait Access a for List a {
                  \term{Access} \triangleq \forall(\alpha:\star).\langle
                  \emptyset,
                  \emptyset,
-                 \{ \term{head} : (\term{List}~\alpha) \looparrowright \alpha \},
+                 \{ \term{head} : \term{List}~\alpha \looparrowright \term{Option}~\alpha \},
                  \emptyset
                  \rangle
     \end{math}
@@ -280,17 +289,19 @@ trait Pure a {
     \subsection{Trait with requirement}\label{subsec:trait-with-requirement}
 
     \begin{verbatim}
-trait Applicative (t:type->type) with Functor t
+trait Applicative (t:type->type) with Functor t {
+    sig  pure : a -> t a
+}
     \end{verbatim}
 
     \noindent
     \begin{math}
-        \term{Applicative} \triangleq \forall(\term{t}:\star \rightarrow \star).\exists(\term{self}:\star).
+        \term{Applicative} \triangleq \forall(\term{t}:\star \rightarrow \star).
         \langle
         \emptyset,
         \emptyset,
-        \emptyset,
-        \{ (\term{Functor}~\term{t}) \}
+        \{ \term{pure} : \alpha \rightarrow \term{t}~\alpha \},
+        \{ \term{Functor}~\term{t} \}
         \rangle
     \end{math}
 
@@ -302,7 +313,10 @@ trait Applicative (t:type->type) with Functor t
     \begin{math}
         \begin{array}{rcl}
             \Gamma       & = & \gamma \\
-            {\cal K}[\_] & : & \Gamma \rightarrow K \\
+            {\cal K}_\downarrow[\_] & : & \Gamma \rightarrow K \\
+            {\cal K}_\uparrow[\_] & : & K \rightarrow \Gamma \\
+            {\cal T}_\downarrow[\_] & : & \Gamma \rightarrow T \\
+            {\cal T}_\uparrow[\_] & : & T \rightarrow \Gamma \\
             {\cal S}[\_] & : & \Gamma \rightarrow S \\
         \end{array}
     \end{math}
@@ -320,81 +334,119 @@ trait Applicative (t:type->type) with Functor t
     \subsection{Type rules}\label{subsec:type-rules}
 
     \[\trfrac[(Identity)]
-    {{\cal K}[\Gamma][t] = k' ~~~ k \subseteq_\kappa k'}
-    {\Gamma \vdash_k t : k}\]
+    {{\cal K}_\downarrow[\Gamma][t] = k' ~~~ k \subseteq_\kappa k'}
+    {\Gamma \vdash t :_\kappa k}\]
 
     \[\trfrac[(apply-type)]
-    {\Gamma \vdash_k t_1 : \star \rightarrow \star ~~~ \Gamma \vdash_t t_2 : \star}
-    {\Gamma \vdash_k t_1 ~ t_2 : \star}\]
+    {\Gamma \vdash t_1 :_\kappa \star \rightarrow k ~~~ \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
+
+    \subsection{Type inclusion}\label{subsec:subtyping-rules}
+
+    \[\trfrac[(sub-refl)]
+    {\Gamma \vdash t :_\kappa \star}
+    {\Gamma \vdash t \subseteq t}\]
+
+    \[\trfrac[(sub-$\rightarrow$)]
+    {\Gamma \vdash t_3 \subseteq t_1 ~~~ \Gamma \vdash t_2 \subseteq t_4}
+    {\Gamma \vdash t_1 \rightarrow t_2 \subseteq t_3 \rightarrow t_4}\]
+
+    \[\trfrac[(sub-$\looparrowright$)]
+    {\Gamma \vdash t_3 \looparrowright t_1 ~~~ \Gamma \vdash t_2 \looparrowright t_4}
+    {\Gamma \vdash t_1 \looparrowright t_2 \subseteq t_3 \looparrowright t_4}\]
+
+    \[\trfrac[(sub-+1)]
+    {\Gamma \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
+
+    \[\trfrac[(sub-+2)]
+    {\Gamma \vdash t_1 \subseteq t_3}
+    {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
+
+    \[\trfrac[(sub-$\mu$)]
+    {\Gamma \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \mu(X).t_1 \subseteq \mu(X).t_2}\]
+
+    \[\trfrac[(sub-$\mu$-unfold1)]
+    {\Gamma \vdash t_1[\mu(X).t_1/X] \subseteq t_2}
+    {\Gamma \vdash \mu(X).t_1 \subseteq t_2}\]
+
+    \[\trfrac[(sub-$\mu$-unfold2)]
+    {\Gamma \vdash t_1 \subseteq t_2[\mu(X).t_2/X]}
+    {\Gamma \vdash t_1 \subseteq \mu(X).t_2}\]
+
+    \[\trfrac[(sub-const)]
+    {\forall i \in I, \Gamma \vdash t_i \subseteq t'_i}
+    {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m_i : t'_i \}_I }\]
+
+    \[\trfrac[(sub-$\forall$)]
+    {\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k).t_2 }\]
+
+    \[\trfrac[(sub-$\exists$)]
+    {\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k).t_2 }\]
 
     \subsection{Expression rules}\label{subsec:expression-rules}
 
-    \[\trfrac[(+-intro1)]
-    {\Gamma \vdash_t e : t_1}
-    {\Gamma \vdash_t e : t_1 + t_2} \]
-
-    \[\trfrac[(+-intro2)]
-    {\Gamma \vdash_t e : t_2}
-    {\Gamma \vdash_t e : t_1 + t_2} \]
-
-    \[\trfrac[(Identity-Type)]
-    {{\cal S}[\Gamma][e] = t}
-    {\Gamma \vdash_t e : t} \]
+    \[\trfrac[(identity)]
+    {{\cal S}_\downarrow[\Gamma][e] = t' ~~~ \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash e : t} \]
 
     \[\trfrac[(apply)]
-    {\Gamma \vdash_t n : t_1 \rightarrow t_2 ~~~ \Gamma \vdash_t a : t_1 }
-    {\Gamma \vdash_t n~a : t_2} \]
+    {\Gamma \vdash n : t_1 \rightarrow t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
+    {\Gamma \vdash n~a : t_2} \]
 
     \[\trfrac[(invoke)]
-    {\Gamma \vdash_t n : t_1 \looparrowright t_2 ~~~ \Gamma \vdash_t a : t_1 }
-    {\Gamma \vdash_t a~n : t_2} \]
+    {\Gamma \vdash n : t_1 \looparrowright t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
+    {\Gamma \vdash a~n : t_2} \]
 
     \[\trfrac[(abstr)]
-    {\Gamma \cup \{ n : t_1 \} \vdash_t a : t_2}
-    {\Gamma \vdash_t \lambda n.a : t_1 \rightarrow t_2} \]
+    {\Gamma \oplus {\cal T}_\uparrow[\{ n : t_1 \}] \vdash a : t_2}
+    {\Gamma \vdash \lambda n.a : t_1 \rightarrow t_2} \]
 
     \[\trfrac[(const-access)]
-    {\Gamma \vdash_t r : \underline{c} S ~~~ S[n] = t_i}
-    {\Gamma \vdash_t r.n : t_i} \]
+    {\Gamma \vdash r : \underline{c} S ~~~ S[n] = t' ~~~ \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash_t r : \langle \_, \_ ,S, \_ \rangle ~~~ S[n] = t_i}
-    {\Gamma \vdash_t r.n : t_i} \]
+    {\Gamma \vdash r : \langle \_, \_ ,S, \_ \rangle ~~~ S[n] = t' ~~~ \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash_t r : \langle \_, \_ ,\_, W \rangle ~~~ \exists \gamma \circledast M \in W, \gamma \vdash_t r.n : t}
-    {\Gamma \vdash_t r.n : t} \]
+    {\Gamma \vdash r : \langle \_, \_ ,\_, W \rangle ~~~ \exists \gamma \circledast M \in W, \gamma \vdash r.n : t}
+    {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[($\forall$-elim)]
-    {\Gamma \vdash_t e : \forall (a:k).t1 ~~~ \Gamma \vdash_k t_a : k }
-    {\Gamma \vdash_t e : t[t_a/a]} \]
+    {\Gamma \vdash e : \forall (a:k).t1 ~~~ \Gamma \vdash t_a : k }
+    {\Gamma \vdash e : t[t_a/a]} \]
 
     \[\trfrac[($\forall$-intro)]
-    {\Gamma \oplus \langle \{ a : k \}, \emptyset, \emptyset, \emptyset \rangle \vdash_t e : t}
-    {\Gamma \vdash_t e : \forall (a:k).t} \]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash e : t}
+    {\Gamma \vdash e : \forall (a:k).t} \]
 
     \[\trfrac[($\exists$-elim)]
-    {\Gamma \vdash_t e_1 : \forall (a:k).t_1 ~~~ \Gamma \oplus \langle \{ A : k \}, \emptyset, \{ a : t_1 \}, \emptyset, \emptyset \rangle \vdash_t e_2 : t_2 ~~~ A \not\in \term{ftv}(t_2)}
-    {\Gamma \vdash_t \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2} \]
+    {\Gamma \vdash e_1 : \forall (a:k).t_1 ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2 ~~~ A \not\in \term{ftv}(t_2)}
+    {\Gamma \vdash \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[($\exists$-intro)]
-    {\Gamma \vdash_k t_1 : k ~~~ \Gamma \vdash_t e : t_2[t_1/a]}
-    {\Gamma \vdash_t \{t_1,e\} : \exists (a:k).t_2} \]
+    {\Gamma \vdash t_1 : k ~~~ \Gamma \vdash e : t_2[t_1/a]}
+    {\Gamma \vdash \{t_1,e\} : \exists (a:k).t_2} \]
 
     \[\trfrac[(let-=)]
-        {\Gamma \vdash_t e_1 : t1 ~~~ \Gamma \oplus \langle \emptyset, \emptyset, \{ a : t_1 \}, \emptyset, \emptyset \rangle \vdash_t e_2 : t_2}
-        {\Gamma \vdash_t \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
+        {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
+        {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[(let-use)]
-    {\Gamma \vdash_t e_1 : \langle K, T, S, W \rangle ~~~ \Gamma \oplus \langle K, T, S, W \rangle \vdash_t e_2 : t}
-    {\Gamma \vdash_t \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
+    {\Gamma \vdash e_1 : \langle K, T, S, W \rangle ~~~ \Gamma \oplus \langle K, T, S, W \rangle \vdash e_2 : t}
+    {\Gamma \vdash \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
 
     \[\trfrac[(when)]
-    {\forall i \in I, \Gamma \vdash_t a : t_i ~~~ \Gamma \oplus \langle \emptyset, \emptyset, \{ a : t_i \}, \emptyset \rangle \vdash_t e_i : t }
-    {\Gamma \vdash_t \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
+    {\forall i \in I, \Gamma \vdash a : t_i ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_i \}] \vdash e_i : t }
+    {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
 
     \[\trfrac[(trait)]
-    {\forall i \in I, \Gamma \oplus \gamma \vdash_t e_i : {\cal S}[\gamma][m_i] }
-    {\Gamma \vdash_t \gamma \circledast \{ m_i \triangleq e_i \}_I : \gamma } \]
+    {\forall i \in I, \Gamma \oplus \gamma \vdash e_i : {\cal S}[\gamma][m_i] }
+    {\Gamma \vdash \gamma \circledast \{ m_i \triangleq e_i \}_I : \gamma } \]
 
 \end{document}
