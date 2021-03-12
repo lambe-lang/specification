@@ -1,7 +1,7 @@
 %! suppress = GatherEquations
 \documentclass{article}[11pt]
 
-% ---------------------------------- DEBUT EXTENSIONS
+% ---------------------------------- DEBUT E\alphaTENSIONS
 
 \newcommand{\invisible}[1] { }
 
@@ -56,13 +56,13 @@
 \newcommand{\crtdef}[1]
 {
         {\small
-        \begin{center}
-            \begin{tabular}{p{8cm}}
-                $\ulcorner\hfill\urcorner$ \\
-                #1                         \\
-                $\llcorner\hfill\lrcorner$ \\
-            \end{tabular}
-        \end{center}
+    \begin{center}
+        \begin{tabular}{p{8cm}}
+            $\ulcorner\hfill\urcorner$ \\
+            #1                         \\
+            $\llcorner\hfill\lrcorner$ \\
+        \end{tabular}
+    \end{center}
     }
 }
 
@@ -84,11 +84,11 @@
 \newcommand{\crt}[1]
 {
         {\small
-        \begin{center}
-            \begin{tabular}{p{8cm}}
-                #1 \\
-            \end{tabular}
-        \end{center}
+    \begin{center}
+        \begin{tabular}{p{8cm}}
+            #1 \\
+        \end{tabular}
+    \end{center}
     }
 }
 
@@ -96,7 +96,7 @@
 \newcommand{\cons}[1]{\underline{\verb~#1~}}
 \newcommand{\lambe}[0]{{\sf Lamb\"e~}}
 
-% ------------------------------------ FIN EXTENSIONS
+% ------------------------------------ FIN E\alphaTENSIONS
 
 \usepackage{amssymb}
 \usepackage{trfrac}
@@ -114,8 +114,9 @@
     \begin{math}
         \begin{array}{rcll}
             \kappa
-            & =    & \star                    \\
-            & \mid & \star \rightarrow \kappa
+            & =    & \star                     \\
+            & \mid & \kappa \rightarrow \kappa \\
+            & \mid & K                         \\
         \end{array}
     \end{math}
 
@@ -124,20 +125,21 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \underline{c} & \in & {\cal C} \\
-            m & \in & {\cal I} \\
+            \underline{c} & \in  & {\cal C}                     & Constructor names          \\
+            \alpha        & \in  & {\cal I}                     & Variable names             \\
+            \\
             \tau & =
-            & \alpha & Variable \\
-            & \mid & m                            & Constant                   \\
-            & \mid & \tau \rightarrow \tau        & Function                   \\
-            & \mid & \tau \looparrowright \tau    & Method                     \\
-            & \mid & \tau~\tau                    & Application                \\
-            & \mid & \tau + \tau                  & Sum~type                   \\
-            & \mid & \forall (\alpha:\kappa).\tau & Universal~Quantification   \\
-            & \mid & \exists (\alpha:\kappa).\tau & Existential~Quantification \\
-            & \mid & \mu(\alpha).\tau             & Recursion                  \\
-            & \mid & \underline{c} S              & Constructor                \\
-            & \mid & \Gamma                       & Trait                      \\
+            & \alpha                       & Variable or Constant              \\
+            & \mid & \tau \rightarrow \tau        & Function              \\
+            & \mid & \tau \looparrowright \tau    & Method              \\
+            & \mid & \tau~\tau                    & Application              \\
+            & \mid & \tau + \tau                  & Sum~type              \\
+            & \mid & \tau . m                  & Access~type              \\
+            & \mid & \forall (\alpha:\kappa).\tau & Universal~Quantification              \\
+            & \mid & \exists (\alpha:\kappa).\tau & Existential~Quantification              \\
+            & \mid & \mu(\alpha).\tau             & Recursion              \\
+            & \mid & \underline{c} S              & Constructor              \\
+            & \mid & \Gamma                       & Trait              \\
         \end{array}
     \end{math}
 
@@ -146,13 +148,15 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            k, t, m & \in & {\cal I}                          \\
+            m      & \in & {\cal I}                          \\
+            \\
             K       & =   & \{ m_i : \kappa_i \}_I            \\
             T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
             S       & =   & \{ m_i : \tau_i \}_I              \\
-            W       & =   & \{ \sigma_i \}_I                  \\
-            M       & =   & \{ m_i \triangleq \epsilon_i \}_I \\
+            W       & =   & \{ \Gamma_i \}_I                  \\
             \Gamma  & =   & \langle K, T, S, W \rangle        \\
+            \\
+            M       & =   & \{ m_i \triangleq \epsilon_i \}_I \\
             \Sigma  & =   & \Gamma \circledast M
         \end{array}
     \end{math}
@@ -162,20 +166,21 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \underline{c} & \in & {\cal C} \\
-            m & \in & {\cal I} \\
+            \underline{c} & \in  & {\cal C}                                                                & Constructor names \\
+            \alpha        & \in  & {\cal I}                                                                & Variable names    \\
+            \\
             \epsilon & =
-                   & \alpha                                                                  & Variable        \\
-            & \mid & m                                                                       & Constant        \\
-            & \mid & \lambda \alpha . \epsilon                                               & Abstraction     \\
-            & \mid & \epsilon~\epsilon                                                       & Application     \\
-            & \mid & \epsilon . \epsilon                                                     & Access          \\
-            & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~\term{in}~\epsilon             & Let~binding     \\
-            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding \\
-            & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast      \\
-            & \mid & \Sigma                                                                  & Trait~term      \\
-            & \mid & \{\tau, \epsilon\}                                                      & Pack            \\
-            & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack          \\
+            & \alpha                                                                         & Variable              \\
+            & \mid & m                                                                       & Constant              \\
+            & \mid & \lambda \alpha . \epsilon                                               & Abstraction              \\
+            & \mid & \epsilon ~ \epsilon                                                     & Application              \\
+            & \mid & \epsilon . m                                                         & Access              \\
+            & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~\term{in}~\epsilon             & Let~binding              \\
+            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
+            & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
+            & \mid & \Sigma                                                                  & Trait~term              \\
+            & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
+            & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
         \end{array}
     \end{math}
 
@@ -185,32 +190,41 @@
     \subsection{Algebraic datatype}\label{subsec:algebraic-datatype}
 
     \begin{verbatim}
-type Nil  = data Nil
-type Cons = forall a.data Cons (head:a) (tail:List a)
-type List = forall a.Nil | Cons a
+type Nil    = data Nil
+type Cons a = data Cons (head:a) (tail:List a)
+type List a = Nil | Cons a
     \end{verbatim}
 
     \subsubsubsection{Type kind}
 
-    \noindent\begin{math}
-                 \term{Nil}~ : \star \\
-                 \term{Cons} : \star \rightarrow \star \\
-                 \term{List} : \star \rightarrow \star
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Nil}  & : & \star                   \\
+            \term{Cons} & : & \star \rightarrow \star \\
+            \term{List} & : & \star \rightarrow \star
+        \end{array}
     \end{math}
 
     \subsubsubsection{Type definition}
 
-    \noindent\begin{math}
-                 \term{Nil}~ \triangleq \cons{Nil}\{\} \\
-                 \term{Cons} \triangleq \forall(\alpha:\star).\mu(X).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \cons{Nil}\{\} + X \} \\
-                 \term{List} \triangleq \forall(\alpha:\star).\mu(X).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : X \}
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Nil}  & \triangleq & \cons{Nil}\{\}                                                                                \\
+            \term{Cons} & \triangleq & \forall(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~\alpha \} \\
+            \term{List} & \triangleq & \forall(\alpha:\star).\term{Nil} + \term{Cons} ~ \alpha
+        \end{array}
     \end{math}
 
     \subsubsubsection{Function definition}
 
-    \noindent\begin{math}
-                 \term{Nil} : \term{Nil} \\
-                 \term{Cons} : \forall(\alpha:\star).\alpha \rightarrow \term{List}~\alpha \rightarrow \term{Cons} ~ \alpha \\
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Nil}  & : & \term{Nil}                                                                                   \\
+            \term{Cons} & : & \forall(\alpha:\star).\alpha \rightarrow \term{List}~\alpha \rightarrow \term{Cons} ~ \alpha \\
+        \end{array}
     \end{math}
 
     \subsection{Function signature}\label{subsec:function-signature}
@@ -220,9 +234,12 @@ sig emptyList : forall a. unit -> List a
 sig isEmpty : forall a. self -> bool for List a
     \end{verbatim}
 
-    \noindent\begin{math}
-                 \term{emptyList} : \forall(\alpha:\star).\term{unit} \rightarrow \term{List}~\alpha \\
-                 \term{isEmpty} : \forall(\alpha:\star).\term{List}~\alpha \looparrowright \term{bool}
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{emptyList} & : & \forall(\alpha:\star).\term{unit} \rightarrow \term{List}~\alpha     \\
+            \term{isEmpty}   & : & \forall(\alpha:\star).\term{List}~\alpha \looparrowright \term{bool}
+        \end{array}
     \end{math}
 
     \subsection{Closed trait}\label{subsec:closed-trait}
@@ -233,19 +250,22 @@ trait Access a for List a {
 }
     \end{verbatim}
 
+    which is equivalent to the following type definition:
+
     \begin{verbatim}
 type Access = forall a. trait for List a {
     sig head : self -> Option a
 }
     \end{verbatim}
 
-    \noindent\begin{math}
-                 \term{Access} \triangleq \forall(\alpha:\star).\langle
-                 \emptyset,
-                 \emptyset,
-                 \{ \term{head} : \term{List}~\alpha \looparrowright \term{Option}~\alpha \},
-                 \emptyset
-                 \rangle
+    \noindent
+    \begin{math}
+        \term{Access} \triangleq \forall(\alpha:\star).\langle
+        \emptyset,
+        \emptyset,
+        \{ \term{head} : \term{List}~\alpha \looparrowright \term{Option}~\alpha \},
+        \emptyset
+        \rangle
     \end{math}
 
     \subsection{Open trait}
@@ -276,6 +296,17 @@ trait Pure a {
 }
     \end{verbatim}
 
+    \subsubsubsection{Type kind}
+
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Pure} & : & \star \rightarrow \{ t : \star \rightarrow \star \}
+        \end{array}
+    \end{math}
+
+    \subsubsubsection{Type definition}
+
     \noindent
     \begin{math}
         \term{Pure} \triangleq \forall(\alpha:\star).\exists(\term{t}:\star \rightarrow \star).\langle
@@ -305,6 +336,22 @@ trait Applicative (t:type->type) with Functor t {
         \rangle
     \end{math}
 
+    \subsection{Function signature with requirement}\label{subsec:function-signature-with-requirement}
+
+    \begin{verbatim}
+sig (=) : forall a. List a -> List a with Equatable a
+    \end{verbatim}
+
+    \noindent
+    \begin{math}
+        \term{(=)} \triangleq \forall(\alpha:\star).\langle
+        \emptyset,
+        \{ \term{=} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha  \},
+        \emptyset,
+        \{ \term{Equatable} ~ \alpha \}
+        \rangle.\term{=}
+    \end{math}
+
 
     \section{Type system}\label{sec:type-system}
 
@@ -312,12 +359,12 @@ trait Applicative (t:type->type) with Functor t {
 
     \begin{math}
         \begin{array}{rcl}
-            \Gamma       & = & \gamma \\
+            \Gamma                  & = & \gamma \\
             {\cal K}_\downarrow[\_] & : & \Gamma \rightarrow K \\
-            {\cal K}_\uparrow[\_] & : & K \rightarrow \Gamma \\
+            {\cal K}_\uparrow[\_]   & : & K \rightarrow \Gamma \\
             {\cal T}_\downarrow[\_] & : & \Gamma \rightarrow T \\
-            {\cal T}_\uparrow[\_] & : & T \rightarrow \Gamma \\
-            {\cal S}[\_] & : & \Gamma \rightarrow S \\
+            {\cal T}_\uparrow[\_]   & : & T \rightarrow \Gamma \\
+            {\cal S}_\downarrow[\_] & : & \Gamma \rightarrow S \\
         \end{array}
     \end{math}
 
@@ -328,8 +375,12 @@ trait Applicative (t:type->type) with Functor t {
     {k \subseteq_\kappa \star}\]
 
     \[\trfrac[]
-    {k' \subseteq_\kappa k}
-    {\star \rightarrow k' \subseteq_\kappa \star \rightarrow k}\]
+    {k_1 \subseteq_\kappa k_3 ~~~ k_2 \subseteq_\kappa k_4}
+    {k_1 \rightarrow k_2 \subseteq_\kappa k_3 \rightarrow k_4}\]
+
+    \[\trfrac[]
+    {\forall i \in I, \exists j \in J, n_i = m_j ~~~ k_i \subseteq k'_j}
+    {\{n_i:k_i\}_I \subseteq_\kappa \{m_j:k'_j\}_J}\]
 
     \subsection{Type rules}\label{subsec:type-rules}
 
@@ -337,15 +388,79 @@ trait Applicative (t:type->type) with Functor t {
     {{\cal K}_\downarrow[\Gamma][t] = k' ~~~ k \subseteq_\kappa k'}
     {\Gamma \vdash t :_\kappa k}\]
 
+    \[\trfrac[($\rightarrow$-type)]
+    {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 \rightarrow t_2 :_\kappa \star}\]
+
+    \[\trfrac[($\looparrowright$-type)]
+    {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}\]
+
     \[\trfrac[(apply-type)]
     {\Gamma \vdash t_1 :_\kappa \star \rightarrow k ~~~ \Gamma \vdash t_2 :_\kappa \star}
     {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
+
+    \[\trfrac[(access-type)]
+    {\Gamma \vdash t_1 :_\kappa \{n:k\}}
+    {\Gamma \vdash t_1.n :_\kappa k}\]
+
+    \[\trfrac[(+-type)]
+    {\Gamma \vdash t_1 :_\kappa k ~~~ \Gamma \vdash t_2 :_\kappa k}
+    {\Gamma \vdash t_1 + t_2 :_\kappa k}\]
+
+    \[\trfrac[($\forall$-type)]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k'}
+    {\Gamma \vdash \forall (a:k).t :_\kappa k \rightarrow k'}\]
+
+    \[\trfrac[($\exists$-type)]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+    {\Gamma \vdash \exists (a:k).t :_\kappa k}\]
+
+    \[\trfrac[($\mu$-type)]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t :_\kappa k}
+    {\Gamma \vdash \mu (a).t :_\kappa k}\]
+
+    \[\trfrac[($\mu$-type)]
+    {\forall i \in I, \Gamma \vdash S[m_i] : k}
+    {\Gamma \vdash \cons{c}S_I :_\kappa k}\]
 
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
 
     \[\trfrac[(sub-refl)]
     {\Gamma \vdash t :_\kappa \star}
     {\Gamma \vdash t \subseteq t}\]
+
+    \[\trfrac[(apply-left)]
+    {{\cal T}_\downarrow[\Gamma][n] = t_1 ~~~ \Gamma \vdash t_1 ~ t_2 \subseteq t_3 }
+    {\Gamma \vdash n ~ t_2 \subseteq t_3}\]
+
+    \[\trfrac[(apply-right)]
+    {{\cal T}_\downarrow[\Gamma][n] = t_2 ~~~ \Gamma \vdash t_1 \subseteq t_2 ~ t_3 }
+    {\Gamma \vdash t_1 \subseteq n ~ t_3}\]
+
+    \[\trfrac[(reduce-left)]
+    {\Gamma \vdash t_1[t_2/x] \subseteq t_3}
+    {\Gamma \vdash (\forall(x:k).t_1) ~ t_2 \subseteq t_3}\]
+
+    \[\trfrac[(reduce-right)]
+    {\Gamma \vdash t_1 \subseteq t_3[t_2/x] }
+    {\Gamma \vdash t_1 \subseteq (\forall(x:k).t_3) ~ t_2}\]
+
+    \[\trfrac[(access-left)]
+    {{\cal T}_\downarrow[\Gamma][m] = t_1 ~~~ \Gamma \vdash t_1.n \subseteq t_3 }
+    {\Gamma \vdash m.n \subseteq t_1}\]
+
+    \[\trfrac[(access-right)]
+    {{\cal T}_\downarrow[\Gamma][m] = t_2 ~~~ \Gamma \vdash t_1 \subseteq t_2.n }
+    {\Gamma \vdash t_1 \subseteq m.n}\]
+
+    \[\trfrac[(reduce-.-left)]
+    {T[n] = t_1 ~~~ \Gamma \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \langle \_,T,\_,\_ \rangle.n \subseteq t_2}\]
+
+    \[\trfrac[(reduce-.-right)]
+    {T[n] = t_2 ~~~ \Gamma \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash t_1 \subseteq \langle \_,T,\_,\_ \rangle.n}\]
 
     \[\trfrac[(sub-$\rightarrow$)]
     {\Gamma \vdash t_3 \subseteq t_1 ~~~ \Gamma \vdash t_2 \subseteq t_4}
@@ -355,25 +470,29 @@ trait Applicative (t:type->type) with Functor t {
     {\Gamma \vdash t_3 \looparrowright t_1 ~~~ \Gamma \vdash t_2 \looparrowright t_4}
     {\Gamma \vdash t_1 \looparrowright t_2 \subseteq t_3 \looparrowright t_4}\]
 
-    \[\trfrac[(sub-+1)]
+    \[\trfrac[(sub-+-left)]
+    {\Gamma \vdash t_1 \subseteq t_3 ~~~ \Gamma \vdash t_2 \subseteq t_3}
+    {\Gamma \vdash t_1 + t_2 \subseteq t_3}\]
+
+    \[\trfrac[(sub-+-right-1)]
     {\Gamma \vdash t_1 \subseteq t_2}
     {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
 
-    \[\trfrac[(sub-+2)]
+    \[\trfrac[(sub-+-right-2)]
     {\Gamma \vdash t_1 \subseteq t_3}
     {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
 
     \[\trfrac[(sub-$\mu$)]
-    {\Gamma \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \mu(X).t_1 \subseteq \mu(X).t_2}\]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \mu(a).t_1 \subseteq \mu(a).t_2}\]
 
-    \[\trfrac[(sub-$\mu$-unfold1)]
-    {\Gamma \vdash t_1[\mu(X).t_1/X] \subseteq t_2}
-    {\Gamma \vdash \mu(X).t_1 \subseteq t_2}\]
+    \[\trfrac[(sub-$\mu$-unfold-left)]
+    {\Gamma \vdash t_1[\mu(a).t_1/a] \subseteq t_2}
+    {\Gamma \vdash \mu(a).t_1 \subseteq t_2}\]
 
-    \[\trfrac[(sub-$\mu$-unfold2)]
-    {\Gamma \vdash t_1 \subseteq t_2[\mu(X).t_2/X]}
-    {\Gamma \vdash t_1 \subseteq \mu(X).t_2}\]
+    \[\trfrac[(sub-$\mu$-unfold-right)]
+    {\Gamma \vdash t_1 \subseteq t_2[\mu(a).t_2/a]}
+    {\Gamma \vdash t_1 \subseteq \mu(a).t_2}\]
 
     \[\trfrac[(sub-const)]
     {\forall i \in I, \Gamma \vdash t_i \subseteq t'_i}
@@ -433,12 +552,12 @@ trait Applicative (t:type->type) with Functor t {
     {\Gamma \vdash t_1 : k ~~~ \Gamma \vdash e : t_2[t_1/a]}
     {\Gamma \vdash \{t_1,e\} : \exists (a:k).t_2} \]
 
-    \[\trfrac[(let-=)]
-        {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
-        {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
+    \[\trfrac[(let-in)]
+    {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
+    {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[(let-use)]
-    {\Gamma \vdash e_1 : \langle K, T, S, W \rangle ~~~ \Gamma \oplus \langle K, T, S, W \rangle \vdash e_2 : t}
+    {\Gamma \vdash e_1 : \Gamma' ~~~ \Gamma \oplus \Gamma' \vdash e_2 : t}
     {\Gamma \vdash \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
 
     \[\trfrac[(when)]
@@ -446,7 +565,7 @@ trait Applicative (t:type->type) with Functor t {
     {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
 
     \[\trfrac[(trait)]
-    {\forall i \in I, \Gamma \oplus \gamma \vdash e_i : {\cal S}[\gamma][m_i] }
-    {\Gamma \vdash \gamma \circledast \{ m_i \triangleq e_i \}_I : \gamma } \]
+    {\forall i \in I, \Gamma \oplus \Gamma' \vdash e_i : {\cal S}_\downarrow[\gamma][m_i] }
+    {\Gamma \vdash \Gamma' \circledast \{ m_i \triangleq e_i \}_I : \gamma } \]
 
 \end{document}

@@ -1,10 +1,10 @@
 trait Reader a {
-    -- Source type should be specified in
-    -- each implementation of the Reader trait
-
-    kind t = type -> type
+    kind t = type -> type -- Existential type
 
     data Source { s: t a; pos: (int*int*int) }
+
+    sig new : t a -> Source
+    def new s = Source s (0,0,0)
 
     sig next : self -> Option a * self for Source a
 }
@@ -18,6 +18,8 @@ impl forall a. Reader a {
 
     def next =
         when self.s
-        is Nil -> None, self
-        is (::) -> Some self.head, (Source self.tail self.pos)
+        is Nil  -> None, self
+        is Cons -> Some self.head, (Source self.tail self.pos)
 }
+
+let source = (Reader int).Source in

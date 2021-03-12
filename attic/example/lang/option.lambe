@@ -11,7 +11,7 @@ trait foldable a s for s {
     sig fold : forall b. self -> (None -> b) -> (Some a -> b) -> b
 }
 
-impl forall a. foldable a Non e {
+impl forall a. foldable a None {
     def fold f _ = f self
 }
 

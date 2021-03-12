@@ -8,12 +8,12 @@ use zipper
 
 type Memory = Zipper (int * string)
 
-impl Memory {
+impl Memory with Reader char{
     sig new      : self
     sig cursor   : self -> int -> self
     sig memory   : self -> int -> self
     sig nullify  : self -> self
-    sig input    : self -> self with Reader char
+    sig input    : self -> self
     sig output   : self -> self
     sig needJump : self -> Bool
 

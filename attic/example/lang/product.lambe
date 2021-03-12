@@ -1,9 +1,6 @@
-data (*) a b { fst : a; snd : b }
+type (*) a b = data (,) { fst : a; snd : b }
 
 impl forall a b. a * b {
-    sig (,) : self -> b -> self * b for a
-    def (,) b = * self b
-
     sig swap : a * b -> b * a
     def swap ab = ab.snd , ab.fst
 

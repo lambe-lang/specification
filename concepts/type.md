@@ -7,11 +7,12 @@ type  ::= type "->" type ("for" type)?
         | type type
         | forall param+.type
         | exist param+.type
-        | id "{" (attr (";" attr)* )? "}
+        | data id attr*
         | type "|" type        
-        | "trait" for? with* ("{" entity* "}")?    
+        | "trait" for? with* ("{" entity* "}")?
+        | type "." id    
         
-attr  ::= id : type
+attr  ::= "(" id : type ")"
 param ::= id | "(" id ":" kind)        
 ```
 
@@ -24,8 +25,9 @@ list string
 forall a.list a
 exist a.list a
 Nil {}
-forall a.a | Nil{}
+forall a.data Cons (h:a) (t:list a) | data Nil
 trait { sig add : self -> int -> int for self }
+trait { type t : int }.t
 ```
 
 

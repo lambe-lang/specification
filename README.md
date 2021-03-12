@@ -11,7 +11,8 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Smart cast
 - [X] Algebraic Data Type aka ADT.  
 - [X] Trait based code organisation,
-- [X] Trait implementation as first class citizen,
+- [X] Trait specification as first class type citizen,
+- [X] Trait implementation as first class term citizen,
 - [X] Self receiver concept,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Structured comments
@@ -65,13 +66,8 @@ def (|>) f = f $ self
 #### Function with self definition in Action
 
 ```
-// for FP addicts
 1 + $ 3 + 4
-3 + |> 4 + |> 2 * 5 
-
-// for OO with FP flavor addicts
-1.+.$ 3.+ 4
-3.+.|> 4.+.|> 2.* 5 
+3 + |> 4 + |> 2 * 5  
 ```
  
 ## 2. Data type
@@ -82,7 +78,7 @@ def (|>) f = f $ self
 
 ```
 data None
-data Some a { value: a }
+data Some a (value: a)
 type Option a = None | Some a
 ```
 
@@ -91,7 +87,7 @@ specification based order:
 
 ```
 sig None : None
-sig Some : a  -> Some a
+sig Some : a -> Some a
 ```
 
 Lambë does not provide a pattern matching, but a Kotlin like smart cast on types.
@@ -122,11 +118,7 @@ define for each option data type i.e. None and Some.
 ### 2.3 Data type in action
 
 ```
-// for FP addicts
 Some 1 fold { 0 } id
-
-// for OO addicts with FP flavor<
-(Some 1).fold { 0 } id
 ```
 
 ## 3. Traits
@@ -219,11 +211,7 @@ impl Monad Option {
 ### Trait implementation in action
 
 ```
-// for FP addicts
 + <$> (pure 1) <*> (pure 1) 
-
-// for OO with FP flavor addicts
-+.<$>(pure 1).<*>(pure 1)
 ```
 
 ## 4. Modular system based on file
@@ -236,27 +224,21 @@ Each file containing Lambë code is a trait definition. For instance
 a file named `list` can be defined by:
 ```
 data Nil
-data Cons a {
-    h: a
-    t: List a
-}
+data Cons a (h: a) (t: List a)
 
 type List a = Nil | Cons a
 
 sig (::) : forall a. a -> List a -> List a
 def (::) = Cons
 
-// :: 1 Nil
+// 1 :: Nil
 ```
 
 This file content is in fact similar to the trait:
 ```
 trait list {
     data Nil
-    data Cons a {
-        h: a
-        t: List a
-    }
+    data Cons a (h: a) (t: List a)
     type List a = Nil | Cons a
 
     sig (::) : forall a. a -> List a -> List a
@@ -274,16 +256,11 @@ If a file is a trait we can also reuse the `for` directive for each function.
 ```
 trait list {
     data Nil
-    data Cons a {
-        h: a
-        t: List a
-    }
+    data Cons a (h: a) (t: List a)
     type List a = Nil | Cons a
 
     sig (::) : forall a. self -> List a -> List a for a
     def (::) = Cons self
-
-    // 1 :: Nil == 1.(::) Nil
 }
 ```
 
@@ -294,7 +271,7 @@ How this trait can be used in another file? Simple! Just provide an implementati
 #### `Global` trait implementation usage
 
 ```
-import list
+use list
 
 sig isEmpty : forall a. self -> bool for List a
 def isEmpty = 
@@ -340,16 +317,13 @@ def main t = t transform
 
 ### `Abstract` trait
 
-Since a file is a trait it can also define signatures without implementation.
+If a file is a trait it can also define signatures without implementation.
 Therefor the definition should be given when the implementation is require.
 
 For instance the `::` is specified but not defined:
 ```
 data Nil
-data Cons a {
-    head: a;
-    tail: List a
-}
+data Cons a (h: a) (t: List a)
 type List a = Nil | Cons a
 
 sig (::) : forall a. self -> List a -> List a for a
@@ -428,40 +402,11 @@ In this sample the `::` function is use but not implemented.
 
 ## 7. Examples
 
-### Peanos' Integer
-
-```
-data Zero
-data Succ { value:Peano }
-type Peano = Zero | Succ
-
-def Adder = a -> {
-    sig (+) : self -> self -> self
-} for a 
-
-def Adder Peano = {
-    def (+) a = 
-        when self
-        is Zero -> a
-        is Succ -> Succ $ self value + a
-}
-```
-
-```
-Succ Zero + $ Succ Zero
-```
-
 ### if/then/else DSL
 
 ```
-data If {
-    cond : bool
-}
-
-data Then a {
-    cond : bool
-    then : unit -> a
-}
+data If (cond : bool)
+data Then a (cond : bool) (then : unit -> a)
 
 sig if : bool -> If
 def if = If
@@ -473,16 +418,16 @@ impl If {
 }
 
 impl forall a. Then a {
-    sig else : self -> (unit -> a) -> a
+    sig else : forall b.self -> (unit -> a) -> a | b
 
     def else f = self cond fold { self then () } { f () }
 }
 
 // if                                 : bool -> If
 // if (a > 0)                         : If
-// if (a > 0) then                    : (unit -> a) -> Then a
+// if (a > 0) then                    : forall a.(unit -> a) -> Then a
 // if (a > 0) then { a-1 }            : Then int
-// if (a > 0) then { a-1 } else       : (unit -> int) -> int
+// if (a > 0) then { a-1 } else       : forall b.(unit -> int) -> int | b
 // if (a > 0) then { a-1 } else { a } : int
 ```
 
@@ -506,19 +451,9 @@ def is a b = a == b
 sig switch : a -> Switch a b
 def switch a = Switch a None
 
-data Switch a b {
-    value  : a
-    result : Option b
-}
-
-data Case a b {
-    value  : a
-    result : (unit -> b) -> Option b
-}
-
-data Otherwise b {
-    result : (unit -> b) -> b
-}
+data Switch a b (value: a) (result : Option b)
+data Case a b (value : a) (result : (unit -> b) -> Option b)
+data Otherwise b (result : (unit -> b) -> b)
 
 impl forall a b. Switch a b {
     sig case      : self -> Predicate a -> Case a b
@@ -595,10 +530,7 @@ impl forall a b. ClosableCollection a b {
 
 ```
 data Nil
-data Cons a {
-    h: a
-    t: List a
-}
+data Cons a (h: a) (t: List a)
 type List a = Nil | Cons a
 
 sig List : forall a. OpenableCollection (List a) a

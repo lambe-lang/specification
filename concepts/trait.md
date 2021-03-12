@@ -40,7 +40,6 @@ In a trait we can define:
 - a function specification
 - a function implementation
 - a use
-- a dsl
 
 ## Trait implementation
 

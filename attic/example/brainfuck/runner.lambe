@@ -4,6 +4,7 @@ use lang.string
 use memory
 use parse
 
-sig run : string -> Memory with Error ParseError
-
-def run s = s parse interpret $ Memory new -- ??
+trait Runner with Error ParseError {
+    sig run : string -> Memory
+    def run s = s parse interpret $ Memory new -- ??
+}
