@@ -561,7 +561,7 @@ use       ::= "use" IDENT
             | "from" IDENT use IDENT ("," IDENT)*
 sig       ::= "sig" dname ":" type_expr for? with* 
 def       ::= "def" dname param* "=" expr
-data      ::= "data" dname t_param* ("{" attr_type* "}")*
+data      ::= "data" dname t_kind* t_param*
 kind      ::= "kind" dname "=" kind_expr
 type      ::= "type" dname t_param "=" type_expr ("|" type_expr) 
 trait     ::= "trait" IDENT t_param* for? with* ("{" entity* "}")?
@@ -594,17 +594,20 @@ case      ::= ("is" type_expr)+ "->" expr
 
 type_expr ::= type_expr OPERATOR type_expr
             | "(" type_expr | OPERATOR ")"
-            | type_expr "." type_expr
             | type_expr type_expr
+            | type_expr "." dname
+            | type_expr "|" type_expr
+            | data dname t_param*
             | IDENT 
             | "self"
             | "forall" (attr_kind)+ "." type_expr 
+            | "exists" (attr_kind)+ "." type_expr 
             | "self" "->" type_expr "for" type_expr 
 
 attr_kind ::= IDENT
             | "(" IDEND : kind_expr ")"
 
-t_param   ::= "(" IDENT ":" type ")" | IDENT
+t_param   ::= "(" IDENT ":" type ")"
 param     ::= IDENT
 dname     ::= IDENT | "(" OPERATOR ")"
 native    ::= STRING | DOUBLE | INT | FLOAT | CHAR

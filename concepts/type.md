@@ -30,5 +30,15 @@ trait { sig add : self -> int -> int for self }
 trait { type t : int }.t
 ```
 
+### Accessing types 
+
+```
+trait F (m:type->type) {
+    type G = forall a.m a -> a 
+}
+
+type ListG = (F List).G
+```
+
 
 

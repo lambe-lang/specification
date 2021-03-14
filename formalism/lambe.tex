@@ -1,4 +1,3 @@
-%! suppress = GatherEquations
 \documentclass{article}[11pt]
 
 % ---------------------------------- DEBUT E\alphaTENSIONS
@@ -25,33 +24,7 @@
     {\bf {\em #1}} \\
 }
 
-\newcommand{\downtree}[1]
-{
-    \begin{tabular}{c}
-        \vspace{0.1mm} \\
-        {\small\({\rm #1}\)} \\
-    \end{tabular}
-}
-
-\newcommand{\leaf}[1]
-{
-    \regle{}{#1}
-}
-
-\newcommand{\Class}[1]{\langle\kern-1mm\langle{#1}\rangle\kern-1mm\rangle}
-\newcommand{\Rec}[1]{\{\kern-1mm\{{#1}\}\kern-1mm\}}
-\newcommand{\Obj}[1]{\langle{#1}\rangle}
-\newcommand{\ObjT}[1]{\langle\kern-.5mm\langle{#1}\rangle\kern-.5mm\rangle}
-\newcommand{\Spe}[1]{[\kern-.5mm[{#1}]\kern-.5mm]}
-\newcommand{\NSpe}[2]{{\cal #1}\Spe{#2}}
-\newcommand{\Card}[1]{|\kern-.5mm|{#1}|\kern-.5mm|}
-\newcommand{\CardF}[1]{|\kern-.5mm|{#1}|\kern-.5mm|^f}
-\newcommand{\squetch}[1]{\begin{flushright}
-                             #1
-\end{flushright}}
-
-% \newtheorem{lemme}{Lemme}
-% \newtheorem{definition}{Definition}
+\newcommand{\Set}[1]{\{\kern-1mm\{{#1}\}\kern-1mm\}}
 
 \newcommand{\crtdef}[1]
 {
@@ -157,7 +130,9 @@
             \Gamma  & =   & \langle K, T, S, W \rangle        \\
             \\
             M       & =   & \{ m_i \triangleq \epsilon_i \}_I \\
-            \Sigma  & =   & \Gamma \circledast M
+            \Sigma  & =   & \Gamma \circledast M               \\
+            \\
+            \Gamma_\emptyset &=& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle
         \end{array}
     \end{math}
 
@@ -321,7 +296,7 @@ trait Pure a {
 
     \begin{verbatim}
 trait Applicative (t:type->type) with Functor t {
-    sig  pure : a -> t a
+    sig pure : forall a.a -> t a
 }
     \end{verbatim}
 
@@ -331,7 +306,7 @@ trait Applicative (t:type->type) with Functor t {
         \langle
         \emptyset,
         \emptyset,
-        \{ \term{pure} : \alpha \rightarrow \term{t}~\alpha \},
+        \{ \term{pure} : \forall(\alpha:\star).\alpha \rightarrow \term{t}~\alpha \},
         \{ \term{Functor}~\term{t} \}
         \rangle
     \end{math}
@@ -345,7 +320,7 @@ sig (=) : forall a. List a -> List a with Equatable a
     \noindent
     \begin{math}
         \term{(=)} \triangleq \forall(\alpha:\star).\langle
-        \emptyset,
+        \{ \term{=} : \star \rightarrow \star)\},
         \{ \term{=} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha  \},
         \emptyset,
         \{ \term{Equatable} ~ \alpha \}
@@ -370,17 +345,17 @@ sig (=) : forall a. List a -> List a with Equatable a
 
     \subsection{Kind inclusion}\label{subsec:kind-inclusion}
 
-    \[\trfrac[]
+    \[\trfrac[($\top_\star$)]
     {}
     {k \subseteq_\kappa \star}\]
 
-    \[\trfrac[]
-    {k_1 \subseteq_\kappa k_3 ~~~ k_2 \subseteq_\kappa k_4}
+    \[\trfrac[($\rightarrow_\star$)]
+    {k_3\subseteq_\kappa k_1 ~~~ k_2 \subseteq_\kappa k_4}
     {k_1 \rightarrow k_2 \subseteq_\kappa k_3 \rightarrow k_4}\]
 
-    \[\trfrac[]
-    {\forall i \in I, \exists j \in J, n_i = m_j ~~~ k_i \subseteq k'_j}
-    {\{n_i:k_i\}_I \subseteq_\kappa \{m_j:k'_j\}_J}\]
+    \[\trfrac[(trait$_\star$)]
+    {\forall j \in J, \exists i \in I, n_i = n'_j ~~~ k_i \subseteq k'_j}
+    {\{n_i:k_i\}_I \subseteq_\kappa \{n'_j:k'_j\}_J}\]
 
     \subsection{Type rules}\label{subsec:type-rules}
 
@@ -397,7 +372,7 @@ sig (=) : forall a. List a -> List a with Equatable a
     {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}\]
 
     \[\trfrac[(apply-type)]
-    {\Gamma \vdash t_1 :_\kappa \star \rightarrow k ~~~ \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 :_\kappa k' \rightarrow k'' ~~~ k'' \subseteq k ~~~ \Gamma \vdash t_2 :_\kappa k'}
     {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
 
     \[\trfrac[(access-type)]
@@ -409,20 +384,28 @@ sig (=) : forall a. List a -> List a with Equatable a
     {\Gamma \vdash t_1 + t_2 :_\kappa k}\]
 
     \[\trfrac[($\forall$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k'}
-    {\Gamma \vdash \forall (a:k).t :_\kappa k \rightarrow k'}\]
+    {k_1 \subseteq_\kappa k ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
+    {\Gamma \vdash \forall (a:k).t :_\kappa k_1 \rightarrow k_2}\]
 
     \[\trfrac[($\exists$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-    {\Gamma \vdash \exists (a:k).t :_\kappa k}\]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k'}
+    {\Gamma \vdash \exists (a:k).t :_\kappa k'}\]
 
     \[\trfrac[($\mu$-type)]
     {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t :_\kappa k}
     {\Gamma \vdash \mu (a).t :_\kappa k}\]
 
-    \[\trfrac[($\mu$-type)]
+    \[\trfrac[(const-type)]
     {\forall i \in I, \Gamma \vdash S[m_i] : k}
     {\Gamma \vdash \cons{c}S_I :_\kappa k}\]
+
+    \[\trfrac[(type-type)]
+    {\Gamma' = \langle K,T,S,W \rangle ~~~
+    \forall (\_,t) \in T,\Gamma' \vdash t :_\kappa \star ~~~
+    \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star ~~~
+    \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \star
+    }
+    {\Gamma \vdash \langle K,T,S,W \rangle :_\kappa K \cup (\bigcup_{w \in W} {\cal K}_\downarrow[w])}\]
 
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
 
@@ -495,8 +478,8 @@ sig (=) : forall a. List a -> List a with Equatable a
     {\Gamma \vdash t_1 \subseteq \mu(a).t_2}\]
 
     \[\trfrac[(sub-const)]
-    {\forall i \in I, \Gamma \vdash t_i \subseteq t'_i}
-    {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m_i : t'_i \}_I }\]
+    {\forall j \in J,\exists i \in I, m_i = m'_j ~~~ \Gamma \vdash t_i \subseteq t'_j}
+    {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }\]
 
     \[\trfrac[(sub-$\forall$)]
     {\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
