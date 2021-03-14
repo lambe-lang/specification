@@ -6,8 +6,8 @@
 use functions
 use product
 
-data Pure a { value: a }
-data App (f:type -> type) a { value : forall b.(Free f (b -> a)) * (f b) }
+data Pure a (value: a)
+data App (f:type -> type) a (value : forall b.(Free f (b -> a)) * (f b))
 type Free f a = Pure a | App f a
 
 impl forall (f:type -> type). Functor (Free f) with Functor f {

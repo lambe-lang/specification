@@ -4,19 +4,9 @@ use lang.eq
 sig switch : a -> Switch a
 def switch a = Switch a None
 
-data Switch a b {
-    value  : a;
-    result : Option b
-}
-
-data Case a b {
-    value  : a;
-    result : (Unit -> b) -> Option b
-}
-
-data Otherwise b {
-    result : (Unit -> b) -> b
-}
+data Switch a b (value : a) (result : Option b)
+data Case a b (value : a) (result : (Unit -> b) -> Option b)
+data Otherwise b (result : (Unit -> b) -> b)
 
 impl forall a b. Switch a b {
     sig case : self -> Predicate a -> Case a b

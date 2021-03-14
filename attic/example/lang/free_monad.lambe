@@ -3,8 +3,8 @@
   cite { http://okmij.org/ftp/Computation/free-monad.html }
 }
 
-data Pure a { value: a }
-data Bind (f:type -> type) a { value : f (Free a) }
+data Pure a (value: a)
+data Bind (f:type -> type) a (value : f (Free a))
 type Free (f:type -> type) a = Pure a | Bind f a
 
 impl forall (f:type -> type). Free f with Functor f {

@@ -1,7 +1,7 @@
 -- section ADT definition
 
 data None
-data Some a { value : a }
+data Some a (value : a)
 
 type Option a = None | Some a
 

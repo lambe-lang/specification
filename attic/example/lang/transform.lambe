@@ -3,9 +3,8 @@ trait Data {
      Pure data approach
     }
 
-    data (~>) (f:type->type) (g:type->type) {
-        transform: forall a. f a -> g a
-    }
+    data (~>) (f:type->type) (g:type->type)
+         (transform: forall a. f a -> g a)
 
     -- Implementation
 

@@ -1,5 +1,5 @@
 data Nil
-data Cons a l { head : a; tail : l }
+data Cons a l (head : a) (tail : l)
 
 sig ([]) : Nil
 def ([]) = Nil

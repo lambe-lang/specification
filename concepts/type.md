@@ -2,7 +2,7 @@
 
 ## Grammar
 ```
-type  ::= type "->" type ("for" type)?
+type  ::= type "->" type ("for" type)?        
         | "self"
         | type type
         | forall param+.type

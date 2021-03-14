@@ -1,7 +1,7 @@
 -- section ADT definition
 
-data Failure { reason : string }
-data Success a { value  : a }
+data Failure (reason : string)
+data Success a (value : a)
 
 type Try a = Failure | Success a
 

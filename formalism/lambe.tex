@@ -262,7 +262,7 @@ trait Set a {
         \rangle
     \end{math}
 
-    \subsection{Trait with and abstract type}
+    \subsection{Trait with and abstract type}\label{subsec:trait-with-and-abstract-type}
 
     \begin{verbatim}
 trait Pure a {
@@ -314,17 +314,17 @@ trait Applicative (t:type->type) with Functor t {
     \subsection{Function signature with requirement}\label{subsec:function-signature-with-requirement}
 
     \begin{verbatim}
-sig (=) : forall a. List a -> List a with Equatable a
+sig eq : forall a. List a -> List a -> bool with Equatable a
     \end{verbatim}
 
     \noindent
     \begin{math}
-        \term{(=)} \triangleq \forall(\alpha:\star).\langle
-        \{ \term{=} : \star \rightarrow \star)\},
-        \{ \term{=} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha  \},
+        \term{eq} : \forall(\alpha:\star).\langle
+        \{ \term{eq} : \star \rightarrow \star)\},
+        \{ \term{eq} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha \rightarrow \term{bool} \},
         \emptyset,
         \{ \term{Equatable} ~ \alpha \}
-        \rangle.\term{=}
+        \rangle.\term{eq}
     \end{math}
 
 
@@ -482,12 +482,12 @@ sig (=) : forall a. List a -> List a with Equatable a
     {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }\]
 
     \[\trfrac[(sub-$\forall$)]
-    {\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k).t_2 }\]
+    {k \subseteq_\kappa k' ~~~ \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k').t_2 }\]
 
     \[\trfrac[(sub-$\exists$)]
-    {\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k).t_2 }\]
+    {k \subseteq_\kappa k' ~~~\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k').t_2 }\]
 
     \subsection{Expression rules}\label{subsec:expression-rules}
 

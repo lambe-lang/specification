@@ -3,9 +3,7 @@ use list
 use option
 use bool
 
-data Stack a {
-    value : List a
-}
+data Stack a (value : List a)
 
 impl forall a. Stack a {
     sig new : self
