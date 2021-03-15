@@ -121,7 +121,7 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            m      & \in & {\cal I}                          \\
+            m                & \in & {\cal I}                                                   \\
             \\
             K       & =   & \{ m_i : \kappa_i \}_I            \\
             T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
@@ -132,7 +132,7 @@
             M       & =   & \{ m_i \triangleq \epsilon_i \}_I \\
             \Sigma  & =   & \Gamma \circledast M               \\
             \\
-            \Gamma_\emptyset &=& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle
+            \Gamma_\emptyset & =& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle
         \end{array}
     \end{math}
 
@@ -350,29 +350,29 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {k \subseteq_\kappa \star}\]
 
     \[\trfrac[($\rightarrow_\star$)]
-    {k_3\subseteq_\kappa k_1 ~~~ k_2 \subseteq_\kappa k_4}
+    {k_3\subseteq_\kappa k_1 \qquad k_2 \subseteq_\kappa k_4}
     {k_1 \rightarrow k_2 \subseteq_\kappa k_3 \rightarrow k_4}\]
 
     \[\trfrac[(trait$_\star$)]
-    {\forall j \in J, \exists i \in I, n_i = n'_j ~~~ k_i \subseteq k'_j}
+    {\forall j \in J, \exists i \in I, n_i = n'_j \qquad k_i \subseteq k'_j}
     {\{n_i:k_i\}_I \subseteq_\kappa \{n'_j:k'_j\}_J}\]
 
     \subsection{Type rules}\label{subsec:type-rules}
 
     \[\trfrac[(Identity)]
-    {{\cal K}_\downarrow[\Gamma][t] = k' ~~~ k \subseteq_\kappa k'}
+    {{\cal K}_\downarrow[\Gamma][t] = k' \qquad k \subseteq_\kappa k'}
     {\Gamma \vdash t :_\kappa k}\]
 
     \[\trfrac[($\rightarrow$-type)]
-    {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
     {\Gamma \vdash t_1 \rightarrow t_2 :_\kappa \star}\]
 
     \[\trfrac[($\looparrowright$-type)]
-    {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
     {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}\]
 
     \[\trfrac[(apply-type)]
-    {\Gamma \vdash t_1 :_\kappa k' \rightarrow k'' ~~~ k'' \subseteq k ~~~ \Gamma \vdash t_2 :_\kappa k'}
+    {\Gamma \vdash t_1 :_\kappa k' \rightarrow k'' \qquad k'' \subseteq k \qquad \Gamma \vdash t_2 :_\kappa k'}
     {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
 
     \[\trfrac[(access-type)]
@@ -380,11 +380,11 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1.n :_\kappa k}\]
 
     \[\trfrac[(+-type)]
-    {\Gamma \vdash t_1 :_\kappa k ~~~ \Gamma \vdash t_2 :_\kappa k}
+    {\Gamma \vdash t_1 :_\kappa k \qquad \Gamma \vdash t_2 :_\kappa k}
     {\Gamma \vdash t_1 + t_2 :_\kappa k}\]
 
     \[\trfrac[($\forall$-type)]
-    {k_1 \subseteq_\kappa k ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
+    {k_1 \subseteq_\kappa k \qquad \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
     {\Gamma \vdash \forall (a:k).t :_\kappa k_1 \rightarrow k_2}\]
 
     \[\trfrac[($\exists$-type)]
@@ -400,11 +400,12 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \cons{c}S_I :_\kappa k}\]
 
     \[\trfrac[(type-type)]
-    {\Gamma' = \langle K,T,S,W \rangle ~~~
-    \forall (\_,t) \in T,\Gamma' \vdash t :_\kappa \star ~~~
-    \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star ~~~
-    \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \star
-    }
+    {\begin{trgather}
+         \Gamma' = \langle K,T,S,W \rangle \qquad
+         \forall (\_,t) \in T,\Gamma' \vdash t :_\kappa \star \\
+         \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star \qquad
+         \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \star
+    \end{trgather}}
     {\Gamma \vdash \langle K,T,S,W \rangle :_\kappa K \cup (\bigcup_{w \in W} {\cal K}_\downarrow[w])}\]
 
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
@@ -414,11 +415,11 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t \subseteq t}\]
 
     \[\trfrac[(apply-left)]
-    {{\cal T}_\downarrow[\Gamma][n] = t_1 ~~~ \Gamma \vdash t_1 ~ t_2 \subseteq t_3 }
+    {{\cal T}_\downarrow[\Gamma][n] = t_1 \qquad \Gamma \vdash t_1 ~ t_2 \subseteq t_3 }
     {\Gamma \vdash n ~ t_2 \subseteq t_3}\]
 
     \[\trfrac[(apply-right)]
-    {{\cal T}_\downarrow[\Gamma][n] = t_2 ~~~ \Gamma \vdash t_1 \subseteq t_2 ~ t_3 }
+    {{\cal T}_\downarrow[\Gamma][n] = t_2 \qquad \Gamma \vdash t_1 \subseteq t_2 ~ t_3 }
     {\Gamma \vdash t_1 \subseteq n ~ t_3}\]
 
     \[\trfrac[(reduce-left)]
@@ -430,31 +431,31 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 \subseteq (\forall(x:k).t_3) ~ t_2}\]
 
     \[\trfrac[(access-left)]
-    {{\cal T}_\downarrow[\Gamma][m] = t_1 ~~~ \Gamma \vdash t_1.n \subseteq t_3 }
+    {{\cal T}_\downarrow[\Gamma][m] = t_1 \qquad \Gamma \vdash t_1.n \subseteq t_3 }
     {\Gamma \vdash m.n \subseteq t_1}\]
 
     \[\trfrac[(access-right)]
-    {{\cal T}_\downarrow[\Gamma][m] = t_2 ~~~ \Gamma \vdash t_1 \subseteq t_2.n }
+    {{\cal T}_\downarrow[\Gamma][m] = t_2 \qquad \Gamma \vdash t_1 \subseteq t_2.n }
     {\Gamma \vdash t_1 \subseteq m.n}\]
 
     \[\trfrac[(reduce-.-left)]
-    {T[n] = t_1 ~~~ \Gamma \vdash t_1 \subseteq t_2}
+    {T[n] = t_1 \qquad \Gamma \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \langle \_,T,\_,\_ \rangle.n \subseteq t_2}\]
 
     \[\trfrac[(reduce-.-right)]
-    {T[n] = t_2 ~~~ \Gamma \vdash t_1 \subseteq t_2}
+    {T[n] = t_2 \qquad \Gamma \vdash t_1 \subseteq t_2}
     {\Gamma \vdash t_1 \subseteq \langle \_,T,\_,\_ \rangle.n}\]
 
     \[\trfrac[(sub-$\rightarrow$)]
-    {\Gamma \vdash t_3 \subseteq t_1 ~~~ \Gamma \vdash t_2 \subseteq t_4}
+    {\Gamma \vdash t_3 \subseteq t_1 \qquad \Gamma \vdash t_2 \subseteq t_4}
     {\Gamma \vdash t_1 \rightarrow t_2 \subseteq t_3 \rightarrow t_4}\]
 
     \[\trfrac[(sub-$\looparrowright$)]
-    {\Gamma \vdash t_3 \looparrowright t_1 ~~~ \Gamma \vdash t_2 \looparrowright t_4}
+    {\Gamma \vdash t_3 \looparrowright t_1 \qquad \Gamma \vdash t_2 \looparrowright t_4}
     {\Gamma \vdash t_1 \looparrowright t_2 \subseteq t_3 \looparrowright t_4}\]
 
     \[\trfrac[(sub-+-left)]
-    {\Gamma \vdash t_1 \subseteq t_3 ~~~ \Gamma \vdash t_2 \subseteq t_3}
+    {\Gamma \vdash t_1 \subseteq t_3 \qquad \Gamma \vdash t_2 \subseteq t_3}
     {\Gamma \vdash t_1 + t_2 \subseteq t_3}\]
 
     \[\trfrac[(sub-+-right-1)]
@@ -478,29 +479,29 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 \subseteq \mu(a).t_2}\]
 
     \[\trfrac[(sub-const)]
-    {\forall j \in J,\exists i \in I, m_i = m'_j ~~~ \Gamma \vdash t_i \subseteq t'_j}
+    {\forall j \in J,\exists i \in I, m_i = m'_j \qquad \Gamma \vdash t_i \subseteq t'_j}
     {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }\]
 
     \[\trfrac[(sub-$\forall$)]
-    {k \subseteq_\kappa k' ~~~ \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {k \subseteq_\kappa k' \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k').t_2 }\]
 
     \[\trfrac[(sub-$\exists$)]
-    {k \subseteq_\kappa k' ~~~\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {k \subseteq_\kappa k' \qquad\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k').t_2 }\]
 
     \subsection{Expression rules}\label{subsec:expression-rules}
 
     \[\trfrac[(identity)]
-    {{\cal S}_\downarrow[\Gamma][e] = t' ~~~ \Gamma \vdash t \subseteq t'}
+    {{\cal S}_\downarrow[\Gamma][e] = t' \qquad \Gamma \vdash t \subseteq t'}
     {\Gamma \vdash e : t} \]
 
     \[\trfrac[(apply)]
-    {\Gamma \vdash n : t_1 \rightarrow t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
+    {\Gamma \vdash n : t_1 \rightarrow t_2 \qquad \Gamma \vdash a : t_3 \qquad \Gamma \vdash t_3 \subseteq t_1}
     {\Gamma \vdash n~a : t_2} \]
 
     \[\trfrac[(invoke)]
-    {\Gamma \vdash n : t_1 \looparrowright t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
+    {\Gamma \vdash n : t_1 \looparrowright t_2 \qquad \Gamma \vdash a : t_3 \qquad \Gamma \vdash t_3 \subseteq t_1}
     {\Gamma \vdash a~n : t_2} \]
 
     \[\trfrac[(abstr)]
@@ -508,19 +509,19 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \lambda n.a : t_1 \rightarrow t_2} \]
 
     \[\trfrac[(const-access)]
-    {\Gamma \vdash r : \underline{c} S ~~~ S[n] = t' ~~~ \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash r : \underline{c} S \qquad S[n] = t' \qquad \Gamma \vdash t \subseteq t'}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash r : \langle \_, \_ ,S, \_ \rangle ~~~ S[n] = t' ~~~ \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash r : \langle \_, \_ ,S, \_ \rangle \qquad S[n] = t' \qquad \Gamma \vdash t \subseteq t'}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash r : \langle \_, \_ ,\_, W \rangle ~~~ \exists \gamma \circledast M \in W, \gamma \vdash r.n : t}
+    {\Gamma \vdash r : \langle \_, \_ ,\_, W \rangle \qquad \exists \gamma \circledast M \in W, \gamma \vdash r.n : t}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[($\forall$-elim)]
-    {\Gamma \vdash e : \forall (a:k).t1 ~~~ \Gamma \vdash t_a : k }
+    {\Gamma \vdash e : \forall (a:k).t1 \qquad \Gamma \vdash t_a : k }
     {\Gamma \vdash e : t[t_a/a]} \]
 
     \[\trfrac[($\forall$-intro)]
@@ -528,23 +529,23 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash e : \forall (a:k).t} \]
 
     \[\trfrac[($\exists$-elim)]
-    {\Gamma \vdash e_1 : \forall (a:k).t_1 ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2 ~~~ A \not\in \term{ftv}(t_2)}
+    {\Gamma \vdash e_1 : \forall (a:k).t_1 \qquad \Gamma \oplus {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2 \qquad A \not\in \term{ftv}(t_2)}
     {\Gamma \vdash \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[($\exists$-intro)]
-    {\Gamma \vdash t_1 : k ~~~ \Gamma \vdash e : t_2[t_1/a]}
+    {\Gamma \vdash t_1 : k \qquad \Gamma \vdash e : t_2[t_1/a]}
     {\Gamma \vdash \{t_1,e\} : \exists (a:k).t_2} \]
 
     \[\trfrac[(let-in)]
-    {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
+    {\Gamma \vdash e_1 : t1 \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
     {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[(let-use)]
-    {\Gamma \vdash e_1 : \Gamma' ~~~ \Gamma \oplus \Gamma' \vdash e_2 : t}
+    {\Gamma \vdash e_1 : \Gamma' \qquad \Gamma \oplus \Gamma' \vdash e_2 : t}
     {\Gamma \vdash \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
 
     \[\trfrac[(when)]
-    {\forall i \in I, \Gamma \vdash a : t_i ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_i \}] \vdash e_i : t }
+    {\forall i \in I, \Gamma \vdash a : t_i \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_i \}] \vdash e_i : t }
     {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
 
     \[\trfrac[(trait)]

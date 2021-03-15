@@ -9,32 +9,32 @@ use ast
 
 data BraceMismatch
 data StackUnderFlow
-data UnknownChar { c:char }
+data UnknownChar (c:char)
 type ParseError = BraceMismatch | StackUnderFlow | UnknownChar
 
-trait Parse {
+trait Parse with Error ParseError {
 
-    sig parse : self -> Program with Exception ParseError
+    sig parse : self -> Program
 
     type ParseContext = Pair Program (Stack Program)
 
-    sig parseChar : self -> ParseContext -> ParseContext for char with Error ParseError
+    sig parseChar : self -> ParseContext -> ParseContext for char
     def parseChar context =
         let program  = context first
         in let programs = context second
         in switch self
-            case (equals '>') => { Cursor +1 :: program , programs }
-            case (equals '<') => { Cursor -1 :: program , programs }
-            case (equals '+') => { Memory +1 :: program , programs }
-            case (equals '-') => { Memory -1 :: program , programs }
-            case (equals '.') => { Input     :: program , programs }
-            case (equals ',') => { Output    :: program , programs }
-            case (equals '[') => { List empty           , $ programs push program }
-            case (equals ']') => { programs peek fold
-                                    { BraceMismatch raise }
-                                    { Loop program :: $1.value , $ programs pop }
-                                 }
-            otherwise         => UnknownChar self raise
+            case '>' => { Cursor +1 :: program , programs }
+            case '<' => { Cursor -1 :: program , programs }
+            case '+' => { Memory +1 :: program , programs }
+            case '-' => { Memory -1 :: program , programs }
+            case '.' => { Input     :: program , programs }
+            case ',' => { Output    :: program , programs }
+            case '[' => { List empty , $ programs push program }
+            case ']' => { programs peek fold
+                           { BraceMismatch raise }
+                           { Loop program :: $1.value , $ programs pop }
+                        }
+            otherwise => UnknownChar self raise
 }
 
 impl Parser for string {
