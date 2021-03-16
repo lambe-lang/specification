@@ -376,7 +376,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}\]
 
     \[\trfrac[(apply-type)]
-    {\Gamma \vdash t_1 :_\kappa k' \rightarrow k'' \qquad k'' \subseteq k \qquad \Gamma \vdash t_2 :_\kappa k'}
+    {\Gamma \vdash t_1 :_\kappa k' \rightarrow k \qquad \Gamma \vdash t_2 :_\kappa k'}
     {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
 
     \[\trfrac[(access-type)]
@@ -412,43 +412,34 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \end{trgather}}
     {\Gamma \vdash \langle K,T,S,W \rangle :_\kappa K \cup (\bigcup_{w \in W} {\cal K}_\downarrow[w])}\]
 
+
+    \subsection{Type reduction}\label{subsec:type-reduction}
+
+    \[\trfrac[(red-var)]
+    {{\cal T}_\downarrow[\Gamma][n] = t'}
+    {\Gamma \vdash n \longrightarrow t'}\]
+
+    \[\trfrac[(red-apply)]
+    {\Gamma \vdash t_1 \longrightarrow \forall(x:k).t_1' \qquad \Gamma \vdash t_2 : k}
+    {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_1'[t_2/x]}\]
+
+    \[\trfrac[(red-access)]
+    {\Gamma \vdash t_1 \longrightarrow \Gamma' \qquad {\cal T}_\downarrow[\Gamma'][n] = t_1'}
+    {\Gamma \vdash t_1.n \longrightarrow t_1'}\]
+
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
 
     \[\trfrac[(sub-refl)]
     {\Gamma \vdash t :_\kappa \star}
     {\Gamma \vdash t \subseteq t}\]
 
-    \[\trfrac[(apply-left)]
-    {{\cal T}_\downarrow[\Gamma][n] = t_1 \qquad \Gamma \vdash t_1 ~ t_2 \subseteq t_3 }
-    {\Gamma \vdash n ~ t_2 \subseteq t_3}\]
-
-    \[\trfrac[(apply-right)]
-    {{\cal T}_\downarrow[\Gamma][n] = t_2 \qquad \Gamma \vdash t_1 \subseteq t_2 ~ t_3 }
-    {\Gamma \vdash t_1 \subseteq n ~ t_3}\]
-
     \[\trfrac[(reduce-left)]
-    {\Gamma \vdash t_1[t_2/x] \subseteq t_3}
-    {\Gamma \vdash (\forall(x:k).t_1) ~ t_2 \subseteq t_3}\]
+    {\Gamma \vdash t_1 \longrightarrow t_1' \qquad \Gamma \vdash t_1' \subseteq t_2 }
+    {\Gamma \vdash t_1 \subseteq t_2}\]
 
     \[\trfrac[(reduce-right)]
-    {\Gamma \vdash t_1 \subseteq t_3[t_2/x] }
-    {\Gamma \vdash t_1 \subseteq (\forall(x:k).t_3) ~ t_2}\]
-
-    \[\trfrac[(access-left)]
-    {{\cal T}_\downarrow[\Gamma][m] = t_1 \qquad \Gamma \vdash t_1.n \subseteq t_3 }
-    {\Gamma \vdash m.n \subseteq t_1}\]
-
-    \[\trfrac[(access-right)]
-    {{\cal T}_\downarrow[\Gamma][m] = t_2 \qquad \Gamma \vdash t_1 \subseteq t_2.n }
-    {\Gamma \vdash t_1 \subseteq m.n}\]
-
-    \[\trfrac[(reduce-.-left)]
-    {T[n] = t_1 \qquad \Gamma \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \langle \_,T,\_,\_ \rangle.n \subseteq t_2}\]
-
-    \[\trfrac[(reduce-.-right)]
-    {T[n] = t_2 \qquad \Gamma \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash t_1 \subseteq \langle \_,T,\_,\_ \rangle.n}\]
+    {\Gamma \vdash t_2 \longrightarrow t_2' \qquad \Gamma \vdash t_1 \subseteq t_2' }
+    {\Gamma \vdash t_1 \subseteq t_2}\]
 
     \[\trfrac[(sub-$\rightarrow$)]
     {\Gamma \vdash t_3 \subseteq t_1 \qquad \Gamma \vdash t_2 \subseteq t_4}
@@ -471,7 +462,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
 
     \[\trfrac[(sub-$\mu$)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \mu(a).t_1 \subseteq \mu(a).t_2}\]
 
     \[\trfrac[(sub-$\mu$-unfold-left)]
