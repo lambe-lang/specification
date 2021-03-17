@@ -103,16 +103,17 @@
             \\
             \tau & =
             & \alpha                       & Variable or Constant              \\
-            & \mid & \tau \rightarrow \tau        & Function              \\
-            & \mid & \tau \looparrowright \tau    & Method              \\
-            & \mid & \tau~\tau                    & Application              \\
+            & \mid & \tau \rightarrow \tau        & Function Type              \\
+            & \mid & \tau \looparrowright \tau    & Method Type              \\
             & \mid & \tau + \tau                  & Sum~type              \\
-            & \mid & \tau . m                  & Access~type              \\
+            & \mid & \tau~\tau                    & Type Application              \\
+            & \mid & \Lambda (\alpha:\kappa).\tau & Type~Abstraction              \\
             & \mid & \forall (\alpha:\kappa).\tau & Universal~Quantification              \\
             & \mid & \exists (\alpha:\kappa).\tau & Existential~Quantification              \\
-            & \mid & \mu(\alpha).\tau             & Recursion              \\
-            & \mid & \underline{c} S              & Constructor              \\
-            & \mid & \Gamma                       & Trait              \\
+            & \mid & \mu(\alpha).\tau             & Type Recursion              \\
+            & \mid & \underline{c} S              & Type Constructor              \\
+            & \mid & \Gamma                       & Trait Type              \\
+            & \mid & \tau . m                     & Trait Access~type              \\
         \end{array}
     \end{math}
 
@@ -121,16 +122,13 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            m                & \in & {\cal I}                                                   \\
+            m_i              & \in & {\cal I}                                                   \\
             \\
             K       & =   & \{ m_i : \kappa_i \}_I            \\
             T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
             S       & =   & \{ m_i : \tau_i \}_I              \\
             W       & =   & \{ \Gamma_i \}_I                  \\
             \Gamma  & =   & \langle K, T, S, W \rangle        \\
-            \\
-            M       & =   & \{ m_i \triangleq \epsilon_i \}_I \\
-            \Sigma  & =   & \Gamma \circledast M               \\
             \\
             \Gamma_\emptyset & =& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle
         \end{array}
@@ -156,6 +154,15 @@
             & \mid & \Sigma                                                                  & Trait~term              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
+        \end{array} \\
+    \end{math}
+
+    With the expression trait defined by: \\
+
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            M                & = & \{ m_i \triangleq \epsilon_i \}_I                          \\
+            \Sigma           & = & \Gamma \circledast M                                       \\
         \end{array}
     \end{math}
 
@@ -187,8 +194,8 @@ type List a = Nil | Cons a
     \begin{math}
         \begin{array}{rclp{5cm}}
             \term{Nil}  & \triangleq & \cons{Nil}\{\}                                                                                \\
-            \term{Cons} & \triangleq & \forall(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~\alpha \} \\
-            \term{List} & \triangleq & \forall(\alpha:\star).\term{Nil} + \term{Cons} ~ \alpha
+            \term{Cons} & \triangleq & \Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~\alpha \} \\
+            \term{List} & \triangleq & \Lambda(\alpha:\star).\term{Nil} + \term{Cons} ~ \alpha
         \end{array}
     \end{math}
 
@@ -228,14 +235,14 @@ trait Access a for List a {
     which is equivalent to the following type definition:
 
     \begin{verbatim}
-type Access = forall a. trait for List a {
+type Access a = trait for List a {
     sig head : self -> Option a
 }
     \end{verbatim}
 
     \noindent
     \begin{math}
-        \term{Access} \triangleq \forall(\alpha:\star).\langle
+        \term{Access} \triangleq \Lambda(\alpha:\star).\langle
         \emptyset,
         \emptyset,
         \{ \term{head} : \term{List}~\alpha \looparrowright \term{Option}~\alpha \},
@@ -254,7 +261,7 @@ trait Set a {
 
     \noindent
     \begin{math}
-        \term{Set} \triangleq \forall(\alpha:\star).\exists(\term{self}:\star).\langle
+        \term{Set} \triangleq \Lambda(\alpha:\star).\exists(\term{self}:\star).\langle
         \emptyset,
         \emptyset,
         \{ \term{new} : \term{self}, \term{contains} : \term{self} \looparrowright \alpha \rightarrow bool \},
@@ -284,7 +291,7 @@ trait Pure a {
 
     \noindent
     \begin{math}
-        \term{Pure} \triangleq \forall(\alpha:\star).\exists(\term{t}:\star \rightarrow \star).\langle
+        \term{Pure} \triangleq \Lambda(\alpha:\star).\exists(\term{t}:\star \rightarrow \star).\langle
         \emptyset,
         \emptyset,
         \{ \term{pure} : \alpha \rightarrow \term{t}~\alpha \},
@@ -302,7 +309,7 @@ trait Applicative (t:type->type) with Functor t {
 
     \noindent
     \begin{math}
-        \term{Applicative} \triangleq \forall(\term{t}:\star \rightarrow \star).
+        \term{Applicative} \triangleq \Lambda(\term{t}:\star \rightarrow \star).
         \langle
         \emptyset,
         \emptyset,
@@ -320,7 +327,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \noindent
     \begin{math}
         \term{eq} : \forall(\alpha:\star).\langle
-        \{ \term{eq} : \star \rightarrow \star)\},
+        \{ \term{eq} : \star)\},
         \{ \term{eq} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha \rightarrow \term{bool} \},
         \emptyset,
         \{ \term{Equatable} ~ \alpha \}
@@ -364,8 +371,8 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \subsection{Type rules}\label{subsec:type-rules}
 
     \[\trfrac[(Identity)]
-    {{\cal K}_\downarrow[\Gamma][t] = k' \qquad k \subseteq_\kappa k'}
-    {\Gamma \vdash t :_\kappa k}\]
+    {{\cal K}_\downarrow[\Gamma][n] = k' \qquad k \subseteq_\kappa k'}
+    {\Gamma \vdash n :_\kappa k}\]
 
     \[\trfrac[($\rightarrow$-type)]
     {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
@@ -375,43 +382,46 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
     {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}\]
 
+    \[\trfrac[(+-type)]
+    {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
+    {\Gamma \vdash t_1 + t_2 :_\kappa \star}\]
+
     \[\trfrac[(apply-type)]
     {\Gamma \vdash t_1 :_\kappa k' \rightarrow k \qquad \Gamma \vdash t_2 :_\kappa k'}
     {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
 
-    \[\trfrac[(access-type)]
-    {\Gamma \vdash t_1 :_\kappa \{n:k\}}
-    {\Gamma \vdash t_1.n :_\kappa k}\]
-
-    \[\trfrac[(+-type)]
-    {\Gamma \vdash t_1 :_\kappa k \qquad \Gamma \vdash t_2 :_\kappa k}
-    {\Gamma \vdash t_1 + t_2 :_\kappa k}\]
+    \[\trfrac[($\Lambda$-type)]
+    {k_1 \subseteq_\kappa k \qquad \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
+    {\Gamma \vdash \Lambda (a:k).t :_\kappa k_1 \rightarrow k_2}\]
 
     \[\trfrac[($\forall$-type)]
-    {k_1 \subseteq_\kappa k \qquad \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
-    {\Gamma \vdash \forall (a:k).t :_\kappa k_1 \rightarrow k_2}\]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+    {\Gamma \vdash \forall (a:k).t :_\kappa \star}\]
 
     \[\trfrac[($\exists$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k'}
-    {\Gamma \vdash \exists (a:k).t :_\kappa k'}\]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+    {\Gamma \vdash \exists (a:k).t :_\kappa \star}\]
 
     \[\trfrac[($\mu$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t :_\kappa k}
-    {\Gamma \vdash \mu (a).t :_\kappa k}\]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t :_\kappa \star}
+    {\Gamma \vdash \mu (a).t :_\kappa \star}\]
 
     \[\trfrac[(const-type)]
-    {\forall i \in I, \Gamma \vdash S[m_i] : k}
-    {\Gamma \vdash \cons{c}S_I :_\kappa k}\]
+    {\forall i \in I, \Gamma \vdash S[m_i] : \star}
+    {\Gamma \vdash \cons{c}S_I :_\kappa \star}\]
 
     \[\trfrac[(type-type)]
     {\begin{trgather}
-         \Gamma' = \langle K,T,S,W \rangle \qquad
-         \forall (\_,t) \in T,\Gamma' \vdash t :_\kappa \star \\
-         \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star \qquad
-         \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \star
+         \Gamma' = \langle K,T,S,W \rangle \qquad K \subseteq K' \\
+         \forall (n,t) \in T,\Gamma' \vdash t :_\kappa K[n] \\
+         \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star \\
+         \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \{\}
     \end{trgather}}
-    {\Gamma \vdash \langle K,T,S,W \rangle :_\kappa K \cup (\bigcup_{w \in W} {\cal K}_\downarrow[w])}\]
+    {\Gamma \vdash \Gamma' :_\kappa K'}\]
 
+    \[\trfrac[(access-type)]
+    {\Gamma \vdash t_1 :_\kappa \{n:k\}}
+    {\Gamma \vdash t_1.n :_\kappa k}\]
 
     \subsection{Type reduction}\label{subsec:type-reduction}
 
@@ -420,7 +430,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash n \longrightarrow t'}\]
 
     \[\trfrac[(red-apply)]
-    {\Gamma \vdash t_1 \longrightarrow \forall(x:k).t_1' \qquad \Gamma \vdash t_2 : k}
+    {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_1' \qquad \Gamma \vdash t_2 : k}
     {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_1'[t_2/x]}\]
 
     \[\trfrac[(red-access)]
@@ -477,6 +487,10 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\forall j \in J,\exists i \in I, m_i = m'_j \qquad \Gamma \vdash t_i \subseteq t'_j}
     {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }\]
 
+    \[\trfrac[(sub-$\Lambda$)]
+    {k \subseteq_\kappa k' \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {\Gamma \vdash \Lambda(x:k).t_1 \subseteq \Lambda(x:k').t_2 }\]
+
     \[\trfrac[(sub-$\forall$)]
     {k \subseteq_\kappa k' \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k').t_2 }\]
@@ -484,6 +498,10 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \[\trfrac[(sub-$\exists$)]
     {k \subseteq_\kappa k' \qquad\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k').t_2 }\]
+
+    \[\trfrac[(sub-trait)]
+    {TODO}
+    {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 }\]
 
     \subsection{Expression rules}\label{subsec:expression-rules}
 
