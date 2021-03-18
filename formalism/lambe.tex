@@ -147,11 +147,11 @@
             & \mid & m                                                                       & Constant              \\
             & \mid & \lambda \alpha . \epsilon                                               & Abstraction              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
-            & \mid & \epsilon . m                                                         & Access              \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~\term{in}~\epsilon             & Let~binding              \\
             & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
+            & \mid & \epsilon . m                                                         & Access              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
         \end{array} \\
@@ -326,7 +326,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
 
     \noindent
     \begin{math}
-        \term{eq} : \forall(\alpha:\star).\langle
+        \term{eq} : \langle
         \{ \term{eq} : \star)\},
         \{ \term{eq} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha \rightarrow \term{bool} \},
         \emptyset,
@@ -347,6 +347,8 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\cal T}_\downarrow[\_] & : & \Gamma \rightarrow T \\
             {\cal T}_\uparrow[\_]   & : & T \rightarrow \Gamma \\
             {\cal S}_\downarrow[\_] & : & \Gamma \rightarrow S \\
+            {\cal S}_\uparrow[\_] & : &  S \rightarrow \Gamma  \\
+            {\cal W}_\downarrow[\_] & : & \Gamma \rightarrow W \\
         \end{array}
     \end{math}
 
@@ -522,31 +524,31 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \lambda n.a : t_1 \rightarrow t_2} \]
 
     \[\trfrac[(const-access)]
-    {\Gamma \vdash r : \underline{c} S \qquad S[n] = t' \qquad \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash r : \underline{c} S \qquad {\cal S}_\uparrow[S] \circledast \Gamma \vdash n : t}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash r : \langle \_, \_ ,S, \_ \rangle \qquad S[n] = t' \qquad \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash r \longrightarrow \Gamma' \qquad \Gamma' \circledast \Gamma \vdash n : t}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash r : \langle \_, \_ ,\_, W \rangle \qquad \exists \gamma \circledast M \in W, \gamma \vdash r.n : t}
+    {\Gamma \vdash r \longrightarrow \Gamma_1 \qquad \exists \Gamma_2 \circledast M \in {\cal W}[\Gamma_1], \Gamma_2 \circledast \Gamma \vdash r.n : t}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[($\forall$-elim)]
-    {\Gamma \vdash e : \forall (a:k).t1 \qquad \Gamma \vdash t_a : k }
-    {\Gamma \vdash e : t[t_a/a]} \]
+    {\Gamma \vdash e : \forall (a:k).t_1 \qquad \Gamma \vdash t_2 : k }
+    {\Gamma \vdash e : t_1[t_2/a]} \]
 
     \[\trfrac[($\forall$-intro)]
     {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash e : t}
     {\Gamma \vdash e : \forall (a:k).t} \]
 
     \[\trfrac[($\exists$-elim)]
-    {\Gamma \vdash e_1 : \forall (a:k).t_1 \qquad \Gamma \oplus {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2 \qquad A \not\in \term{ftv}(t_2)}
+    {\Gamma \vdash e_1 : \exists (a:k).t_1 \qquad \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2 \qquad A \not\in \term{ftv}(t_2)}
     {\Gamma \vdash \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[($\exists$-intro)]
-    {\Gamma \vdash t_1 : k \qquad \Gamma \vdash e : t_2[t_1/a]}
+    {\Gamma \vdash t_1 :_\kappa k \qquad \Gamma \vdash e : t_2[t_1/a]}
     {\Gamma \vdash \{t_1,e\} : \exists (a:k).t_2} \]
 
     \[\trfrac[(let-in)]
