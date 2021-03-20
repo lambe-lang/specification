@@ -147,7 +147,8 @@
             & \mid & m                                                                       & Constant              \\
             & \mid & \lambda \alpha . \epsilon                                               & Abstraction              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
-            & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~\term{in}~\epsilon             & Let~binding              \\
+            & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding             \\
+            & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
             & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
@@ -161,8 +162,8 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            M                & = & \{ m_i \triangleq \epsilon_i \}_I                          \\
-            \Sigma           & = & \Gamma \circledast M                                       \\
+            M      & = & \{ m_i \triangleq \epsilon_i \}_I \\
+            \Sigma & = & \Gamma \circledast M              \\
         \end{array}
     \end{math}
 
@@ -240,14 +241,27 @@ type Access a = trait for List a {
 }
     \end{verbatim}
 
+    \subsubsubsection{Type kind}
+
     \noindent
     \begin{math}
-        \term{Access} \triangleq \Lambda(\alpha:\star).\langle
-        \emptyset,
-        \emptyset,
-        \{ \term{head} : \term{List}~\alpha \looparrowright \term{Option}~\alpha \},
-        \emptyset
-        \rangle
+        \begin{array}{rclp{5cm}}
+            \term{Access}  & : & \star \rightarrow  \{\}
+        \end{array}
+    \end{math}
+
+    \subsubsubsection{Type definition}
+
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Access} & \triangleq & \Lambda(\alpha:\star).\langle
+            \emptyset,
+            \emptyset,
+            \{ \term{head} : \term{List}~\alpha \looparrowright \term{Option}~\alpha \},
+            \emptyset
+            \rangle
+        \end{array}
     \end{math}
 
     \subsection{Open trait}
@@ -259,14 +273,27 @@ trait Set a {
 }
     \end{verbatim}
 
+    \subsubsubsection{Type kind}
+
     \noindent
     \begin{math}
-        \term{Set} \triangleq \Lambda(\alpha:\star).\exists(\term{self}:\star).\langle
-        \emptyset,
-        \emptyset,
-        \{ \term{new} : \term{self}, \term{contains} : \term{self} \looparrowright \alpha \rightarrow bool \},
-        \emptyset
-        \rangle
+        \begin{array}{rclp{5cm}}
+            \term{Set}  & : & \star \rightarrow \star
+        \end{array}
+    \end{math}
+
+    \subsubsubsection{Type definition}
+
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Set} & \triangleq & \Lambda(\alpha:\star).\exists(\term{self}:\star).\langle
+            \emptyset,
+            \emptyset,
+            \{ \term{new} : \term{self}, \term{contains} : \term{self} \looparrowright \alpha \rightarrow bool \},
+            \emptyset
+            \rangle
+        \end{array}
     \end{math}
 
     \subsection{Trait with and abstract type}\label{subsec:trait-with-and-abstract-type}
@@ -291,12 +318,14 @@ trait Pure a {
 
     \noindent
     \begin{math}
-        \term{Pure} \triangleq \Lambda(\alpha:\star).\exists(\term{t}:\star \rightarrow \star).\langle
-        \emptyset,
-        \emptyset,
-        \{ \term{pure} : \alpha \rightarrow \term{t}~\alpha \},
-        \emptyset
-        \rangle
+        \begin{array}{rclp{5cm}}
+            \term{Pure} & \triangleq & \Lambda(\alpha:\star).\exists(\term{t}:\star \rightarrow \star).\langle
+            \emptyset,
+            \emptyset,
+            \{ \term{pure} : \alpha \rightarrow \term{t}~\alpha \},
+            \emptyset
+            \rangle
+        \end{array}
     \end{math}
 
     \subsection{Trait with requirement}\label{subsec:trait-with-requirement}
@@ -347,7 +376,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\cal T}_\downarrow[\_] & : & \Gamma \rightarrow T \\
             {\cal T}_\uparrow[\_]   & : & T \rightarrow \Gamma \\
             {\cal S}_\downarrow[\_] & : & \Gamma \rightarrow S \\
-            {\cal S}_\uparrow[\_] & : &  S \rightarrow \Gamma  \\
+            {\cal S}_\uparrow[\_]   & : & S \rightarrow \Gamma  \\
             {\cal W}_\downarrow[\_] & : & \Gamma \rightarrow W \\
         \end{array}
     \end{math}
@@ -486,11 +515,11 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 \subseteq \mu(a).t_2}\]
 
     \[\trfrac[(sub-const)]
-    {\forall j \in J,\exists i \in I, m_i = m'_j \qquad \Gamma \vdash t_i \subseteq t'_j}
+    {\forall j \in J,\exists i \in I, m_i = m'_j, \Gamma \vdash t_i \subseteq t'_j}
     {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }\]
 
     \[\trfrac[(sub-$\Lambda$)]
-    {k \subseteq_\kappa k' \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+    {k' \subseteq_\kappa k \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
     {\Gamma \vdash \Lambda(x:k).t_1 \subseteq \Lambda(x:k').t_2 }\]
 
     \[\trfrac[(sub-$\forall$)]
@@ -502,13 +531,22 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k').t_2 }\]
 
     \[\trfrac[(sub-trait)]
-    {TODO}
+    {\begin{trgather}
+    {\cal K}
+         _\downarrow[\Gamma_1] \subseteq {\cal K}_\downarrow[\Gamma_2] \\
+         \forall (n,t) \in {\cal T}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal T}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
+         \forall (n,t) \in {\cal S}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal S}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
+    \end{trgather}}
     {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 }\]
 
     \subsection{Expression rules}\label{subsec:expression-rules}
 
     \[\trfrac[(identity)]
     {{\cal S}_\downarrow[\Gamma][e] = t' \qquad \Gamma \vdash t \subseteq t'}
+    {\Gamma \vdash e : t} \]
+
+    \[\trfrac[(identity)]
+    {\exists \Gamma' \circledast \_ \in {\cal W}_\downarrow[\Gamma][e] = t' \qquad \Gamma' \oplus \Gamma \vdash e : t}
     {\Gamma \vdash e : t} \]
 
     \[\trfrac[(apply)]
@@ -520,31 +558,31 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash a~n : t_2} \]
 
     \[\trfrac[(abstr)]
-    {\Gamma \oplus {\cal T}_\uparrow[\{ n : t_1 \}] \vdash a : t_2}
+    {\Gamma \oplus {\cal S}_\uparrow[\{ n : t_1 \}] \vdash a : t_2}
     {\Gamma \vdash \lambda n.a : t_1 \rightarrow t_2} \]
 
+    \[\trfrac[(meth)]
+    {\Gamma \oplus {\cal S}_\uparrow[\{ \term{self} : t_1 \}] \vdash a : t_2}
+    {\Gamma \vdash a : t_1 \looparrowright t_2} \]
+
     \[\trfrac[(const-access)]
-    {\Gamma \vdash r : \underline{c} S \qquad {\cal S}_\uparrow[S] \circledast \Gamma \vdash n : t}
+    {\Gamma \vdash r : \underline{c} S \qquad {\cal S}_\uparrow[S] \oplus \Gamma \vdash n : t}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[(trait-access)]
-    {\Gamma \vdash r \longrightarrow \Gamma' \qquad \Gamma' \circledast \Gamma \vdash n : t}
-    {\Gamma \vdash r.n : t} \]
-
-    \[\trfrac[(trait-access)]
-    {\Gamma \vdash r \longrightarrow \Gamma_1 \qquad \exists \Gamma_2 \circledast M \in {\cal W}[\Gamma_1], \Gamma_2 \circledast \Gamma \vdash r.n : t}
+    {\Gamma \vdash r : \Gamma' \qquad \Gamma' \oplus \Gamma \vdash n : t}
     {\Gamma \vdash r.n : t} \]
 
     \[\trfrac[($\forall$-elim)]
-    {\Gamma \vdash e : \forall (a:k).t_1 \qquad \Gamma \vdash t_2 : k }
+    {\Gamma \vdash e : \forall (a:k).t_1 \qquad \Gamma \vdash t_2 :_\kappa k }
     {\Gamma \vdash e : t_1[t_2/a]} \]
 
     \[\trfrac[($\forall$-intro)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash e : t}
+    {{\cal K}_\uparrow[\{ a : k \}]  \oplus \Gamma \vdash e : t}
     {\Gamma \vdash e : \forall (a:k).t} \]
 
     \[\trfrac[($\exists$-elim)]
-    {\Gamma \vdash e_1 : \exists (a:k).t_1 \qquad \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2 \qquad A \not\in \term{ftv}(t_2)}
+    {\Gamma \vdash e_1 : \exists (a:k).t_1 \qquad {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal S}_\uparrow[\{ a : t_1 \}] \oplus \Gamma \vdash e_2 : t_2 \qquad A \not\in \term{ftv}(t_2)}
     {\Gamma \vdash \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[($\exists$-intro)]
@@ -555,16 +593,20 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash e_1 : t1 \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
     {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
 
+    \[\trfrac[(let-in)]
+    {\Gamma \vdash e_1 : t1 \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
+    {\Gamma \vdash \term{let} ~ a \term{:} t_1 ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
+
     \[\trfrac[(let-use)]
-    {\Gamma \vdash e_1 : \Gamma' \qquad \Gamma \oplus \Gamma' \vdash e_2 : t}
+    {\Gamma \vdash e_1 : \Gamma' \qquad \Gamma' \oplus \Gamma \vdash e_2 : t}
     {\Gamma \vdash \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
 
     \[\trfrac[(when)]
-    {\forall i \in I, \Gamma \vdash a : t_i \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_i \}] \vdash e_i : t }
+    {\forall i \in I, \Gamma \vdash a : t_i \qquad {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
     {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
 
     \[\trfrac[(trait)]
-    {\forall i \in I, \Gamma \oplus \Gamma' \vdash e_i : {\cal S}_\downarrow[\gamma][m_i] }
-    {\Gamma \vdash \Gamma' \circledast \{ m_i \triangleq e_i \}_I : \gamma } \]
+    {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 \qquad \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : {\cal S}_\downarrow[\Gamma_1][m_i] }
+    {\Gamma \vdash \Gamma_1 \circledast \{ m_i \triangleq e_i \}_I : \Gamma_2 } \]
 
 \end{document}
