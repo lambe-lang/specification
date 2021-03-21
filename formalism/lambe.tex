@@ -145,14 +145,15 @@
             \epsilon & =
             & \alpha                                                                         & Variable              \\
             & \mid & m                                                                       & Constant              \\
-            & \mid & \lambda \alpha . \epsilon                                               & Abstraction              \\
+            & \mid & \lambda \alpha . \epsilon                                               & Function              \\
+            & \mid & \zeta . \epsilon                                                          & Method              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
             & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding             \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
             & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
-            & \mid & \epsilon . m                                                         & Access              \\
+            & \mid & \epsilon . \epsilon                                                     & Use              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
         \end{array} \\
@@ -563,13 +564,13 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
 
     \[\trfrac[(meth)]
     {\Gamma \oplus {\cal S}_\uparrow[\{ \term{self} : t_1 \}] \vdash a : t_2}
-    {\Gamma \vdash a : t_1 \looparrowright t_2} \]
+    {\Gamma \vdash \zeta . a : t_1 \looparrowright t_2} \]
 
     \[\trfrac[(const-access)]
     {\Gamma \vdash r : \underline{c} S \qquad {\cal S}_\uparrow[S] \oplus \Gamma \vdash n : t}
     {\Gamma \vdash r.n : t} \]
 
-    \[\trfrac[(trait-access)]
+    \[\trfrac[(trait-use)]
     {\Gamma \vdash r : \Gamma' \qquad \Gamma' \oplus \Gamma \vdash n : t}
     {\Gamma \vdash r.n : t} \]
 
@@ -598,7 +599,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \term{let} ~ a \term{:} t_1 ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
 
     \[\trfrac[(let-use)]
-    {\Gamma \vdash e_1 : \Gamma' \qquad \Gamma' \oplus \Gamma \vdash e_2 : t}
+    {\Gamma \vdash e_1.e_2 : t}
     {\Gamma \vdash \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
 
     \[\trfrac[(when)]
