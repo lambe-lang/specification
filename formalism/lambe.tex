@@ -150,12 +150,13 @@
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
             & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding             \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
-            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
+            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding             \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
             & \mid & \epsilon . \epsilon                                                     & Use              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
+            & \mid & \underline{c} M                                                         & Expr Constructor              \\
         \end{array} \\
     \end{math}
 
@@ -609,5 +610,9 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \[\trfrac[(trait)]
     {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 \qquad \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : {\cal S}_\downarrow[\Gamma_1][m_i] }
     {\Gamma \vdash \Gamma_1 \circledast \{ m_i \triangleq e_i \}_I : \Gamma_2 } \]
+
+    \[\trfrac[(const)]
+    {\forall i \in I, \Gamma \vdash e_i : t_i }
+    {\Gamma \vdash \underline{c} \{ n_i : e_i \}_I : \underline{c} \{ n_i : t_i \}_I } \]
 
 \end{document}
