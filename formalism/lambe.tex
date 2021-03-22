@@ -152,11 +152,11 @@
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
             & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding             \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
-            & \mid & \Sigma                                                                  & Trait~term              \\
-            & \mid & \epsilon . \epsilon                                                     & Use              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
             & \mid & \underline{c} M                                                         & Expr Constructor              \\
+            & \mid & \Sigma                                                                  & Trait~term              \\
+            & \mid & \epsilon . \epsilon                                                     & Use              \\
         \end{array} \\
     \end{math}
 
@@ -607,12 +607,12 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\forall i \in I, \Gamma \vdash a : t_i \qquad {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
     {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
 
+    \[\trfrac[(const)]
+    {\forall j \in J,\exists i \in I, n_i = n_j, \Gamma \vdash e_i : t_j }
+    {\Gamma \vdash \underline{c} \{ n_i : e_i \}_I : \underline{c} \{ n_j : t_j \}_J } \]
+
     \[\trfrac[(trait)]
     {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 \qquad \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : {\cal S}_\downarrow[\Gamma_1][m_i] }
     {\Gamma \vdash \Gamma_1 \circledast \{ m_i \triangleq e_i \}_I : \Gamma_2 } \]
-
-    \[\trfrac[(const)]
-    {\forall i \in I, \Gamma \vdash e_i : t_i }
-    {\Gamma \vdash \underline{c} \{ n_i : e_i \}_I : \underline{c} \{ n_i : t_i \}_I } \]
 
 \end{document}
