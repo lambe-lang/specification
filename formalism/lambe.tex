@@ -105,15 +105,15 @@
             & \alpha                       & Variable or Constant              \\
             & \mid & \tau \rightarrow \tau        & Function Type              \\
             & \mid & \tau \looparrowright \tau    & Method Type              \\
-            & \mid & \tau + \tau                  & Sum~type              \\
+            & \mid & \tau + \tau                  & Sum type              \\
             & \mid & \tau~\tau                    & Type Application              \\
-            & \mid & \Lambda (\alpha:\kappa).\tau & Type~Abstraction              \\
-            & \mid & \forall (\alpha:\kappa).\tau & Universal~Quantification              \\
-            & \mid & \exists (\alpha:\kappa).\tau & Existential~Quantification              \\
+            & \mid & \Lambda (\alpha:\kappa).\tau & Type Abstraction              \\
+            & \mid & \forall (\alpha:\kappa).\tau & Universal Quantification              \\
+            & \mid & \exists (\alpha:\kappa).\tau & Existential Quantification              \\
             & \mid & \mu(\alpha).\tau             & Type Recursion              \\
             & \mid & \underline{c} S              & Type Constructor              \\
             & \mid & \Gamma                       & Trait Type              \\
-            & \mid & \tau . m                     & Trait Access~type              \\
+            & \mid & \tau . \tau                  & Trait Type Use              \\
         \end{array}
     \end{math}
 
@@ -121,26 +121,39 @@
     \section{Trait level}\label{sec:trait-level}
 
     \begin{math}
-        \begin{array}{rclp{5cm}}
-            m_i              & \in & {\cal I}                                                   \\
-            \\
-            K       & =   & \{ m_i : \kappa_i \}_I            \\
-            T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
-            S       & =   & \{ m_i : \tau_i \}_I              \\
-            W       & =   & \{ \Gamma_i \}_I                  \\
-            \Gamma  & =   & \langle K, T, S, W \rangle        \\
-            \\
-            \Gamma_\emptyset & =& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle
+        \begin{array}{rcll}
+        m_i              & \in & {\cal I}                                                   \\
+        \\
+        K       & =   & \{ m_i : \kappa_i \}_I            \\
+        T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
+        S       & =   & \{ m_i : \tau_i \}_I              \\
+        W       & =   & \{ \Gamma_i \}_I                  \\
+        \Gamma  & =   & \langle K, T, S, W \rangle        \\
+        \\
+        \Gamma_\emptyset & =& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle \\
+        \\
+        \_[\_]_\kappa & : & \Gamma \rightarrow \kappa + \bot \\
+        \langle \{n_i:k_i\}_I, \_, \_, \_\rangle[n]_\kappa & = & k_j & \exists j \in I, n_j = n \\
+        \langle \_, \_, \_, W\rangle[n]_\kappa & = & k & \exists \Gamma \in W, \Gamma[n]_\kappa = k \\
+        \\
+        \_[\_]_\tau & : & \Gamma \rightarrow \tau + \bot \\
+        \langle \_, \{n_i \triangleq t_i\}_I, \_, \_\rangle[n]_\tau & = & t_j & \exists j \in I, n_j = n \\
+        \langle \_, \_, \_, W\rangle[n]_\tau & = & \Gamma'.t & \exists \Gamma \in W, \Gamma[n]_\tau = \Gamma'.t \\
+        \langle \_, \_, \_, W\rangle[n]_\tau & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\tau = t \\
+        \\
+        \_[\_]_\sigma & : & \Gamma \rightarrow \tau + \bot \\
+        \langle \_, \_, \{n_i:t_i\}_I, \_\rangle[n]_\sigma & = & t_j & \exists j \in I, n_j = n \\
+        \langle \_, \_, \_, W\rangle[n]_\sigma & = & \Gamma'.t & \exists \Gamma \in W, \Gamma[n]_\sigma = \Gamma'.t \\
+        \langle \_, \_, \_, W\rangle[n]_\sigma & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\sigma = t \\s
         \end{array}
     \end{math}
-
 
     \section{Expression level}\label{sec:expression-level}
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \underline{c} & \in  & {\cal C}                                                                & Constructor names \\
-            \alpha        & \in  & {\cal I}                                                                & Variable names    \\
+            \underline{c} & \in  & {\cal C}                                                                     & Constructor names \\
+            \alpha        & \in  & {\cal I}                                                                     & Variable names    \\
             \\
             \epsilon & =
             & \alpha                                                                         & Variable              \\
@@ -148,12 +161,12 @@
             & \mid & \lambda \alpha . \epsilon                                               & Function              \\
             & \mid & \zeta . \epsilon                                                          & Method              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
-            & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding             \\
+            & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding              \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
-            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding             \\
+            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
-            & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack               \\
+            & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
             & \mid & \epsilon . \epsilon                                                     & Use              \\
         \end{array} \\
@@ -367,18 +380,17 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
 
     \section{Type system}\label{sec:type-system}
 
-    \subsection{$\Gamma$ and projections}\label{subsec:gamma-and-projections}
+    \subsection{$\Gamma$ and projections}\label{subsec:$gamma$-projections-and-extraction}
 
     \begin{math}
-        \begin{array}{rcl}
-            \Gamma                  & = & \gamma \\
-            {\cal K}_\downarrow[\_] & : & \Gamma \rightarrow K \\
-            {\cal K}_\uparrow[\_]   & : & K \rightarrow \Gamma \\
-            {\cal T}_\downarrow[\_] & : & \Gamma \rightarrow T \\
-            {\cal T}_\uparrow[\_]   & : & T \rightarrow \Gamma \\
-            {\cal S}_\downarrow[\_] & : & \Gamma \rightarrow S \\
-            {\cal S}_\uparrow[\_]   & : & S \rightarrow \Gamma  \\
-            {\cal W}_\downarrow[\_] & : & \Gamma \rightarrow W \\
+        \begin{array}{rcll}
+            {\cal K}_\downarrow[\_]                                     & : & \Gamma \rightarrow K \\
+            {\cal K}_\uparrow[\_]                                       & : & K \rightarrow \Gamma \\
+            {\cal T}_\downarrow[\_]                                     & : & \Gamma \rightarrow T \\
+            {\cal T}_\uparrow[\_]                                       & : & T \rightarrow \Gamma \\
+            {\cal S}_\downarrow[\_]                                     & : & \Gamma \rightarrow S \\
+            {\cal S}_\uparrow[\_]                                       & : & S \rightarrow \Gamma  \\
+            {\cal W}_\downarrow[\_]                                     & : & \Gamma \rightarrow W                      \\
         \end{array}
     \end{math}
 
@@ -403,7 +415,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \subsection{Type rules}\label{subsec:type-rules}
 
     \[\trfrac[(Identity)]
-    {{\cal K}_\downarrow[\Gamma][n] = k' \qquad k \subseteq_\kappa k'}
+    {\Gamma[n]_\kappa = k' \qquad k \subseteq_\kappa k'}
     {\Gamma \vdash n :_\kappa k}\]
 
     \[\trfrac[($\rightarrow$-type)]
@@ -451,23 +463,67 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \end{trgather}}
     {\Gamma \vdash \Gamma' :_\kappa K'}\]
 
-    \[\trfrac[(access-type)]
-    {\Gamma \vdash t_1 :_\kappa \{n:k\}}
-    {\Gamma \vdash t_1.n :_\kappa k}\]
+    \[\trfrac[(use-type)]
+    {\Gamma \vdash t_1 :_\kappa K \qquad {\cal K}_\uparrow[K'] \vdash t_2 : k }
+    {\Gamma \vdash t_1.t_2 :_\kappa k}\]
 
     \subsection{Type reduction}\label{subsec:type-reduction}
 
     \[\trfrac[(red-var)]
-    {{\cal T}_\downarrow[\Gamma][n] = t'}
-    {\Gamma \vdash n \longrightarrow t'}\]
+    {\Gamma[n]_\tau = t' \qquad \Gamma \vdash t' \longrightarrow_1 t''}
+    {\Gamma \vdash n \longrightarrow_i t''}\]
 
     \[\trfrac[(red-apply)]
-    {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_1' \qquad \Gamma \vdash t_2 : k}
-    {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_1'[t_2/x]}\]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Lambda(x:k).t_1' \qquad \Gamma \vdash t_2 : k \qquad \Gamma \vdash t_1'[t_2/x] \longrightarrow_1 t_3}
+    {\Gamma \vdash t_1 ~ t_2 \longrightarrow_i t_3}\]
 
-    \[\trfrac[(red-access)]
-    {\Gamma \vdash t_1 \longrightarrow \Gamma' \qquad {\cal T}_\downarrow[\Gamma'][n] = t_1'}
-    {\Gamma \vdash t_1.n \longrightarrow t_1'}\]
+    \[\trfrac[(red-access-var]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma' \qquad \Gamma' \vdash n \longrightarrow_0 t_2 \qquad \Gamma \vdash \Gamma'.t_2 \longrightarrow_1 t_3}
+    {\Gamma \vdash t_1.n \longrightarrow_i t_3}\]
+
+    \[\trfrac[(red-access-apply)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'\qquad \Gamma \vdash \Gamma'.t_2 ~ \Gamma'.t_3 \longrightarrow_0 t_4}
+    {\Gamma \vdash t_1.(t_2 ~ t_3) \longrightarrow_i t_4}\]
+
+    \[\trfrac[(red-access-$+$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(t_2 + t_3) \longrightarrow_i \Gamma'.t_2 + \Gamma'.t_3}\]
+
+    \[\trfrac[(red-access-$\Lambda$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(\Lambda(x:k).t_2) \longrightarrow_i \Lambda(x:k).(\Gamma'.t_2)}\]
+
+    \[\trfrac[(red-access-$\rightarrow$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(t_2 \rightarrow t_3) \longrightarrow_i \Gamma'.t_2 \rightarrow \Gamma'.t_3}\]
+
+    \[\trfrac[(red-$\looparrowright$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(t_2 \looparrowright t_3) \longrightarrow_i \Gamma'.t_2 \looparrowright \Gamma'.t_3}\]
+
+    \[\trfrac[(red-$\forall$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(\forall (\alpha:k).t) \longrightarrow_i \forall (\alpha:k).(\Gamma'.t)}\]
+
+    \[\trfrac[(red-$\exists$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(\exists (\alpha:k).t) \longrightarrow_i \exists (\alpha:k).(\Gamma'.t)}\]
+
+    \[\trfrac[(red-$\mu$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.(\mu (\alpha).t) \longrightarrow_i \mu (\alpha).(\Gamma'.t)}\]
+
+    \[\trfrac[(red-$\Gamma$)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
+    {\Gamma \vdash t_1.\Gamma'' \longrightarrow_i \Gamma'' \oplus \Gamma'}\]
+
+    \[\trfrac[(red-$\mu$)]
+    {\Gamma \vdash t[\mu(\alpha).t/\alpha] \longrightarrow_1 t'}
+    {\Gamma \vdash \mu(\alpha).t \longrightarrow_1 t'}\]
+
+    \[\trfrac[(id)]
+    {}
+    {\Gamma \vdash t \longrightarrow_1 t}\]
 
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
 
@@ -476,11 +532,11 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t \subseteq t}\]
 
     \[\trfrac[(reduce-left)]
-    {\Gamma \vdash t_1 \longrightarrow t_1' \qquad \Gamma \vdash t_1' \subseteq t_2 }
+    {\Gamma \vdash t_1 \longrightarrow_0 t_1' \qquad \Gamma \vdash t_1' \subseteq t_2 }
     {\Gamma \vdash t_1 \subseteq t_2}\]
 
     \[\trfrac[(reduce-right)]
-    {\Gamma \vdash t_2 \longrightarrow t_2' \qquad \Gamma \vdash t_1 \subseteq t_2' }
+    {\Gamma \vdash t_2 \longrightarrow_0 t_2' \qquad \Gamma \vdash t_1 \subseteq t_2' }
     {\Gamma \vdash t_1 \subseteq t_2}\]
 
     \[\trfrac[(sub-$\rightarrow$)]
@@ -543,11 +599,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \subsection{Expression rules}\label{subsec:expression-rules}
 
     \[\trfrac[(identity)]
-    {{\cal S}_\downarrow[\Gamma][e] = t' \qquad \Gamma \vdash t \subseteq t'}
-    {\Gamma \vdash e : t} \]
-
-    \[\trfrac[(identity)]
-    {\exists \Gamma' \circledast \_ \in {\cal W}_\downarrow[\Gamma][e] = t' \qquad \Gamma' \oplus \Gamma \vdash e : t}
+    {\Gamma[e]_\sigma = t' \qquad \Gamma \vdash t \subseteq t'}
     {\Gamma \vdash e : t} \]
 
     \[\trfrac[(apply)]
@@ -607,7 +659,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
 
     \[\trfrac[(trait)]
-    {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 \qquad \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : {\cal S}_\downarrow[\Gamma_1][m_i] }
+    {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 \qquad \Gamma_1[m_i]_\sigma = t_i \qquad \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : t_i }
     {\Gamma \vdash \Gamma_1 \circledast \{ m_i \triangleq e_i \}_I : \Gamma_2 } \]
 
 \end{document}
