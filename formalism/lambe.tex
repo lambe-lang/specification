@@ -213,8 +213,8 @@ type List a = Nil | Cons a
     \begin{math}
         \begin{array}{rclp{5cm}}
             \term{Nil}  & \triangleq & \cons{Nil}\{\}                                                                                \\
-            \term{Cons} & \triangleq & \Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~\alpha \} \\
-            \term{List} & \triangleq & \Lambda(\alpha:\star).\term{Nil} + \term{Cons} ~ \alpha
+            \term{Cons} & \triangleq & \Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~ \alpha \} \\
+            \term{List} & \triangleq & \Lambda(\alpha:\star).\mu(\xi:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi \}
         \end{array}
     \end{math}
 
