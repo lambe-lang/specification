@@ -110,7 +110,7 @@
             & \mid & \Lambda (\alpha:\kappa).\tau & Type Abstraction              \\
             & \mid & \forall (\alpha:\kappa).\tau & Universal Quantification              \\
             & \mid & \exists (\alpha:\kappa).\tau & Existential Quantification              \\
-            & \mid & \mu(\alpha).\tau             & Type Recursion              \\
+            & \mid & \mu(\alpha:\kappa).\tau      & Type Recursion              \\
             & \mid & \underline{c} S              & Type Constructor              \\
             & \mid & \Gamma                       & Trait Type              \\
             & \mid & \tau . \tau                  & Trait Type Use              \\
@@ -122,31 +122,35 @@
 
     \begin{math}
         \begin{array}{rcll}
-        m_i              & \in & {\cal I}                                                   \\
-        \\
-        K       & =   & \{ m_i : \kappa_i \}_I            \\
-        T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
-        S       & =   & \{ m_i : \tau_i \}_I              \\
-        W       & =   & \{ \Gamma_i \}_I                  \\
-        \Gamma  & =   & \langle K, T, S, W \rangle        \\
-        \\
-        \Gamma_\emptyset & =& \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle \\
-        \\
-        \_[\_]_\kappa & : & \Gamma \rightarrow \kappa + \bot \\
-        \langle \{n_i:k_i\}_I, \_, \_, \_\rangle[n]_\kappa & = & k_j & \exists j \in I, n_j = n \\
-        \langle \_, \_, \_, W\rangle[n]_\kappa & = & k & \exists \Gamma \in W, \Gamma[n]_\kappa = k \\
-        \\
-        \_[\_]_\tau & : & \Gamma \rightarrow \tau + \bot \\
-        \langle \_, \{n_i \triangleq t_i\}_I, \_, \_\rangle[n]_\tau & = & t_j & \exists j \in I, n_j = n \\
-        \langle \_, \_, \_, W\rangle[n]_\tau & = & \Gamma'.t & \exists \Gamma \in W, \Gamma[n]_\tau = \Gamma'.t \\
-        \langle \_, \_, \_, W\rangle[n]_\tau & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\tau = t \\
-        \\
-        \_[\_]_\sigma & : & \Gamma \rightarrow \tau + \bot \\
-        \langle \_, \_, \{n_i:t_i\}_I, \_\rangle[n]_\sigma & = & t_j & \exists j \in I, n_j = n \\
-        \langle \_, \_, \_, W\rangle[n]_\sigma & = & \Gamma'.t & \exists \Gamma \in W, \Gamma[n]_\sigma = \Gamma'.t \\
-        \langle \_, \_, \_, W\rangle[n]_\sigma & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\sigma = t \\s
+            m_i & \in & {\cal I} \\
+            \\
+            K       & =   & \{ m_i : \kappa_i \}_I            \\
+            T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
+            S       & =   & \{ m_i : \tau_i \}_I              \\
+            W       & =   & \{ \Gamma_i \}_I                  \\
+            \Gamma  & =   & \langle K, T, S, W \rangle        \\
+            \\
+            \Gamma_\emptyset & = & \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle \\
+            \\
+            \_+\_         & : & \Gamma \rightarrow \Gamma \rightarrow \Gamma \\
+            \Gamma_\emptyset + \Gamma' & = & \Gamma'    \\
+            \Gamma' + \Gamma_\emptyset & = & \Gamma' \\
+            \langle K, T, S, W \rangle + \Gamma & =&  \langle K, T, S, W \cup \Gamma \rangle \\
+            \\
+            \_[\_]_\kappa & : & \Gamma \rightarrow \kappa + \bot \\
+            \langle \{n_i:k_i\}_I, \_, \_, \_\rangle[n]_\kappa & =                           & k_j & \exists j \in I, n_j = n \\
+            \langle \_, \_, \_, W\rangle[n]_\kappa & = & k & \exists \Gamma \in W, \Gamma[n]_\kappa = k \\
+            \\
+            \_[\_]_\tau & : & \Gamma \rightarrow \tau + \bot \\
+            \langle \_, \{n_i \triangleq t_i\}_I, \_, \_\rangle[n]_\tau & = & t_j & \exists j \in I, n_j = n \\
+            \langle \_, \_, \_, W\rangle[n]_\tau & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\tau = t \\
+            \\
+            \_[\_]_\sigma & : & \Gamma \rightarrow \tau + \bot \\
+            \langle \_, \_, \{n_i:t_i\}_I, \_\rangle[n]_\sigma & = & t_j & \exists j \in I, n_j = n \\
+            \langle \_, \_, \_, W\rangle[n]_\sigma & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\sigma = t \\s
         \end{array}
     \end{math}
+
 
     \section{Expression level}\label{sec:expression-level}
 
@@ -384,13 +388,14 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
 
     \begin{math}
         \begin{array}{rcll}
-            {\cal K}_\downarrow[\_]                                     & : & \Gamma \rightarrow K \\
-            {\cal K}_\uparrow[\_]                                       & : & K \rightarrow \Gamma \\
-            {\cal T}_\downarrow[\_]                                     & : & \Gamma \rightarrow T \\
-            {\cal T}_\uparrow[\_]                                       & : & T \rightarrow \Gamma \\
-            {\cal S}_\downarrow[\_]                                     & : & \Gamma \rightarrow S \\
-            {\cal S}_\uparrow[\_]                                       & : & S \rightarrow \Gamma  \\
-            {\cal W}_\downarrow[\_]                                     & : & \Gamma \rightarrow W                      \\
+        {\cal K}
+            _\downarrow[\_]         & : & \Gamma \rightarrow K \\
+            {\cal K}_\uparrow[\_]   & : & K \rightarrow \Gamma \\
+            {\cal T}_\downarrow[\_] & : & \Gamma \rightarrow T \\
+            {\cal T}_\uparrow[\_]   & : & T \rightarrow \Gamma \\
+            {\cal S}_\downarrow[\_] & : & \Gamma \rightarrow S \\
+            {\cal S}_\uparrow[\_]   & : & S \rightarrow \Gamma  \\
+            {\cal W}_\downarrow[\_] & : & \Gamma \rightarrow W \\
         \end{array}
     \end{math}
 
@@ -447,8 +452,8 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash \exists (a:k).t :_\kappa \star}\]
 
     \[\trfrac[($\mu$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t :_\kappa \star}
-    {\Gamma \vdash \mu (a).t :_\kappa \star}\]
+    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+    {\Gamma \vdash \mu (a : k).t :_\kappa \star}\]
 
     \[\trfrac[(const-type)]
     {\forall i \in I, \Gamma \vdash S[m_i] : \star}
@@ -477,45 +482,9 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t_1 \longrightarrow_1 \Lambda(x:k).t_1' \qquad \Gamma \vdash t_2 : k \qquad \Gamma \vdash t_1'[t_2/x] \longrightarrow_1 t_3}
     {\Gamma \vdash t_1 ~ t_2 \longrightarrow_i t_3}\]
 
-    \[\trfrac[(red-access-var]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma' \qquad \Gamma' \vdash n \longrightarrow_0 t_2 \qquad \Gamma \vdash \Gamma'.t_2 \longrightarrow_1 t_3}
-    {\Gamma \vdash t_1.n \longrightarrow_i t_3}\]
-
-    \[\trfrac[(red-access-apply)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'\qquad \Gamma \vdash \Gamma'.t_2 ~ \Gamma'.t_3 \longrightarrow_0 t_4}
-    {\Gamma \vdash t_1.(t_2 ~ t_3) \longrightarrow_i t_4}\]
-
-    \[\trfrac[(red-access-$+$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(t_2 + t_3) \longrightarrow_i \Gamma'.t_2 + \Gamma'.t_3}\]
-
-    \[\trfrac[(red-access-$\Lambda$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(\Lambda(x:k).t_2) \longrightarrow_i \Lambda(x:k).(\Gamma'.t_2)}\]
-
-    \[\trfrac[(red-access-$\rightarrow$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(t_2 \rightarrow t_3) \longrightarrow_i \Gamma'.t_2 \rightarrow \Gamma'.t_3}\]
-
-    \[\trfrac[(red-$\looparrowright$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(t_2 \looparrowright t_3) \longrightarrow_i \Gamma'.t_2 \looparrowright \Gamma'.t_3}\]
-
-    \[\trfrac[(red-$\forall$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(\forall (\alpha:k).t) \longrightarrow_i \forall (\alpha:k).(\Gamma'.t)}\]
-
-    \[\trfrac[(red-$\exists$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(\exists (\alpha:k).t) \longrightarrow_i \exists (\alpha:k).(\Gamma'.t)}\]
-
-    \[\trfrac[(red-$\mu$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.(\mu (\alpha).t) \longrightarrow_i \mu (\alpha).(\Gamma'.t)}\]
-
-    \[\trfrac[(red-$\Gamma$)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma'}
-    {\Gamma \vdash t_1.\Gamma'' \longrightarrow_i \Gamma'' \oplus \Gamma'}\]
+    \[\trfrac[(red-access-var)]
+    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma' \qquad \Gamma' \vdash n \longrightarrow_0 t_2}
+    {\Gamma \vdash t_1.n \longrightarrow_i t_2}\]
 
     \[\trfrac[(red-$\mu$)]
     {\Gamma \vdash t[\mu(\alpha).t/\alpha] \longrightarrow_1 t'}
