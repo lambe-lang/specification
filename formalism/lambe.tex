@@ -135,19 +135,19 @@
             \_+\_         & : & \Gamma \rightarrow \Gamma \rightarrow \Gamma \\
             \Gamma_\emptyset + \Gamma' & = & \Gamma'    \\
             \Gamma' + \Gamma_\emptyset & = & \Gamma' \\
-            \langle K, T, S, W \rangle + \Gamma & =&  \langle K, T, S, W \cup \Gamma \rangle \\
+            \langle K, T, S, W \rangle + \Gamma & =& \langle K, T, S, W \cup \Gamma \rangle \\
             \\
             \_[\_]_\kappa & : & \Gamma \rightarrow \kappa + \bot \\
-            \langle \{n_i:k_i\}_I, \_, \_, \_\rangle[n]_\kappa & =                           & k_j & \exists j \in I, n_j = n \\
-            \langle \_, \_, \_, W\rangle[n]_\kappa & = & k & \exists \Gamma \in W, \Gamma[n]_\kappa = k \\
+            \langle \{n_i:k_i\}_I, \_, \_, \_\rangle[n]_\kappa & = & k_j & \exists j \in I, n_j = n \\
+            \langle \_, \_, \_, \Gamma_I\rangle[n]_\kappa & = & k & \exists i \in I, \Gamma_i[n]_\kappa = k \\
             \\
             \_[\_]_\tau & : & \Gamma \rightarrow \tau + \bot \\
             \langle \_, \{n_i \triangleq t_i\}_I, \_, \_\rangle[n]_\tau & = & t_j & \exists j \in I, n_j = n \\
-            \langle \_, \_, \_, W\rangle[n]_\tau & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\tau = t \\
+            \langle \_, \_, \_, \Gamma_I\rangle[n]_\tau & = & t & \exists i \in I, \Gamma_i[n]_\tau = t \\
             \\
             \_[\_]_\sigma & : & \Gamma \rightarrow \tau + \bot \\
             \langle \_, \_, \{n_i:t_i\}_I, \_\rangle[n]_\sigma & = & t_j & \exists j \in I, n_j = n \\
-            \langle \_, \_, \_, W\rangle[n]_\sigma & = & \Gamma.t & \exists \Gamma \in W, \Gamma[n]_\sigma = t \\s
+            \langle \_, \_, \_, \Gamma_I\rangle[n]_\sigma & = & t & \exists i \in I, \Gamma_i[n]_\sigma = t \\s
         \end{array}
     \end{math}
 
@@ -156,14 +156,13 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \underline{c} & \in  & {\cal C}                                                                     & Constructor names \\
-            \alpha        & \in  & {\cal I}                                                                     & Variable names    \\
+            \underline{c} & \in  & {\cal C}                                                  & Constructor names \\
+            \alpha        & \in  & {\cal I}                                                  & Variable names    \\
             \\
             \epsilon & =
             & \alpha                                                                         & Variable              \\
-            & \mid & m                                                                       & Constant              \\
             & \mid & \lambda \alpha . \epsilon                                               & Function              \\
-            & \mid & \zeta . \epsilon                                                          & Method              \\
+            & \mid & \zeta . \epsilon                                                        & Method              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
             & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding              \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
@@ -212,8 +211,8 @@ type List a = Nil | Cons a
     \noindent
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \term{Nil}  & \triangleq & \cons{Nil}\{\}                                                                                \\
-            \term{Cons} & \triangleq & \Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~ \alpha \} \\
+            \term{Nil}  & \triangleq & \cons{Nil}\{\}                                                                                                \\
+            \term{Cons} & \triangleq & \Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~ \alpha \}                \\
             \term{List} & \triangleq & \Lambda(\alpha:\star).\mu(\xi:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi \}
         \end{array}
     \end{math}
