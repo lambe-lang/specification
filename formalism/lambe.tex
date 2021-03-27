@@ -1,6 +1,6 @@
 \documentclass{article}[11pt]
 
-% ---------------------------------- DEBUT E\alphaTENSIONS
+% ---------------------------------- DEBUT EXTENSIONS
 
 \newcommand{\invisible}[1] { }
 
@@ -9,6 +9,17 @@
 \newtheorem{lemme}{Lemme}
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
+
+\newcommand{\rules}[1]
+{
+    \begin{center}
+        \begin{math}
+            \begin{array}[c]
+                #1
+            \end{array}
+        \end{math}
+    \end{center}
+}
 
 \newcommand{\epsffig}[3]
 {
@@ -29,13 +40,11 @@
 \newcommand{\crtdef}[1]
 {
         {\small
-    \begin{center}
-        \begin{tabular}{p{8cm}}
-            $\ulcorner\hfill\urcorner$ \\
-            #1                         \\
-            $\llcorner\hfill\lrcorner$ \\
+        \begin{tabular}{p{12cm}}
+            \hline
+            #1 \\
+            \hline
         \end{tabular}
-    \end{center}
     }
 }
 
@@ -73,6 +82,7 @@
 
 \usepackage{amssymb}
 \usepackage{trfrac}
+\usepackage{amsmath}
 
 \begin{document}
 
@@ -113,7 +123,7 @@
             & \mid & \mu(\alpha:\kappa).\tau      & Type Recursion              \\
             & \mid & \underline{c} S              & Type Constructor              \\
             & \mid & \Gamma                       & Trait Type              \\
-            & \mid & \tau . \tau                  & Trait Type Use              \\
+            & \mid & \tau . m                     & Trait Type Usage              \\
         \end{array}
     \end{math}
 
@@ -156,8 +166,8 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \underline{c} & \in  & {\cal C}                                                  & Constructor names \\
-            \alpha        & \in  & {\cal I}                                                  & Variable names    \\
+            \underline{c} & \in  & {\cal C}                                                                     & Constructor names \\
+            \alpha        & \in  & {\cal I}                                                                     & Variable names    \\
             \\
             \epsilon & =
             & \alpha                                                                         & Variable              \\
@@ -166,12 +176,11 @@
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
             & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding              \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
-            & \mid & \term{let}~\term{use} ~ \epsilon ~\term{in}~\epsilon                    & Let~use~binding              \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
-            & \mid & \epsilon . \epsilon                                                     & Use              \\
+            & \mid & \epsilon . m                                                            & Trait~term~Usage             \\
         \end{array} \\
     \end{math}
 
@@ -400,234 +409,249 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
 
     \subsection{Kind inclusion}\label{subsec:kind-inclusion}
 
-    \[\trfrac[(refl$_\star$)]
-    {}
-    {\star \subseteq_\kappa \star}\]
-
-    \[\trfrac[($\top_\star$)]
-    {}
-    {K \subseteq_\kappa \star}\]
-
-    \[\trfrac[($\rightarrow_\star$)]
-    {k_3\subseteq_\kappa k_1 \qquad k_2 \subseteq_\kappa k_4}
-    {k_1 \rightarrow k_2 \subseteq_\kappa k_3 \rightarrow k_4}\]
-
-    \[\trfrac[(trait$_\star$)]
-    {\forall j \in J, \exists i \in I, n_i = n'_j \qquad k_i \subseteq k'_j}
-    {\{n_i:k_i\}_I \subseteq_\kappa \{n'_j:k'_j\}_J}\]
+    \crtdef{
+        \begin{gather*}
+            \trfrac[(refl$_\star$)]
+            {}
+            {\star \subseteq_\kappa \star}
+            ~~~
+            \trfrac[($\top_\star$)]
+            {}
+            {K \subseteq_\kappa \star}
+            ~~~
+            \trfrac[($\rightarrow_\star$)]
+            {k_3\subseteq_\kappa k_1 ~~~ k_2 \subseteq_\kappa k_4}
+            {k_1 \rightarrow k_2 \subseteq_\kappa k_3 \rightarrow k_4}
+            \\\\
+            \trfrac[(trait$_\star$)]
+            {\forall j \in J, \exists i \in I, n_i = n'_j ~~~ k_i \subseteq k'_j}
+            {\{n_i:k_i\}_I \subseteq_\kappa \{n'_j:k'_j\}_J}
+        \end{gather*}
+    }
 
     \subsection{Type rules}\label{subsec:type-rules}
 
-    \[\trfrac[(Identity)]
-    {\Gamma[n]_\kappa = k' \qquad k \subseteq_\kappa k'}
-    {\Gamma \vdash n :_\kappa k}\]
-
-    \[\trfrac[($\rightarrow$-type)]
-    {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
-    {\Gamma \vdash t_1 \rightarrow t_2 :_\kappa \star}\]
-
-    \[\trfrac[($\looparrowright$-type)]
-    {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
-    {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}\]
-
-    \[\trfrac[(+-type)]
-    {\Gamma \vdash t_1 :_\kappa \star \qquad \Gamma \vdash t_2 :_\kappa \star}
-    {\Gamma \vdash t_1 + t_2 :_\kappa \star}\]
-
-    \[\trfrac[(apply-type)]
-    {\Gamma \vdash t_1 :_\kappa k' \rightarrow k \qquad \Gamma \vdash t_2 :_\kappa k'}
-    {\Gamma \vdash t_1 ~ t_2 :_\kappa k}\]
-
-    \[\trfrac[($\Lambda$-type)]
-    {k_1 \subseteq_\kappa k \qquad \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
-    {\Gamma \vdash \Lambda (a:k).t :_\kappa k_1 \rightarrow k_2}\]
-
-    \[\trfrac[($\forall$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-    {\Gamma \vdash \forall (a:k).t :_\kappa \star}\]
-
-    \[\trfrac[($\exists$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-    {\Gamma \vdash \exists (a:k).t :_\kappa \star}\]
-
-    \[\trfrac[($\mu$-type)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-    {\Gamma \vdash \mu (a : k).t :_\kappa \star}\]
-
-    \[\trfrac[(const-type)]
-    {\forall i \in I, \Gamma \vdash S[m_i] : \star}
-    {\Gamma \vdash \cons{c}S_I :_\kappa \star}\]
-
-    \[\trfrac[(trait-type)]
-    {\begin{trgather}
-         \Gamma' = \langle K,T,S,W \rangle \qquad K \subseteq K' \\
-         \forall (n,t) \in T,\Gamma' \vdash t :_\kappa K[n] \\
-         \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star \\
-         \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \{\}
-    \end{trgather}}
-    {\Gamma \vdash \Gamma' :_\kappa K'}\]
-
-    \[\trfrac[(use-type)]
-    {\Gamma \vdash t_1 :_\kappa K \qquad {\cal K}_\uparrow[K'] \vdash t_2 : k }
-    {\Gamma \vdash t_1.t_2 :_\kappa k}\]
+    \crtdef{
+        \begin{gather*}
+            \trfrac[(Identity)]
+            {\Gamma[n]_\kappa = k' ~~~ k \subseteq_\kappa k'}
+            {\Gamma \vdash n :_\kappa k}
+            ~~~
+            \trfrac[($\rightarrow$-type)]
+            {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+            {\Gamma \vdash t_1 \rightarrow t_2 :_\kappa \star}
+            \\\\
+            \trfrac[($\looparrowright$-type)]
+            {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+            {\Gamma \vdash t_1 \looparrowright t_2 :_\kappa \star}
+            ~~~
+            \trfrac[(+-type)]
+            {\Gamma \vdash t_1 :_\kappa \star ~~~ \Gamma \vdash t_2 :_\kappa \star}
+            {\Gamma \vdash t_1 + t_2 :_\kappa \star}
+            \\\\
+            \trfrac[(apply-type)]
+            {\Gamma \vdash t_1 :_\kappa k' \rightarrow k ~~~ \Gamma \vdash t_2 :_\kappa k'}
+            {\Gamma \vdash t_1 ~ t_2 :_\kappa k}
+            \\\\
+            \trfrac[($\Lambda$-type)]
+            {k_1 \subseteq_\kappa k ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k_2}
+            {\Gamma \vdash \Lambda (a:k).t :_\kappa k_1 \rightarrow k_2}
+            ~~~
+            \trfrac[($\forall$-type)]
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+            {\Gamma \vdash \forall (a:k).t :_\kappa \star}
+            \\\\
+            \trfrac[($\exists$-type)]
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+            {\Gamma \vdash \exists (a:k).t :_\kappa \star}
+            ~~~
+            \trfrac[($\mu$-type)]
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
+            {\Gamma \vdash \mu (a : k).t :_\kappa \star}
+            \\\\
+            \trfrac[(trait-type)]
+            {\begin{trgather}
+                 \Gamma' = \langle K,T,S,W \rangle ~~~ K \subseteq K' ~~~
+                 \forall (n,t) \in T,\Gamma' \vdash t :_\kappa K[n] \\
+                 \forall (\_,s) \in S,\Gamma' \vdash s :_\kappa \star ~~~
+                 \forall w \in W, \Gamma_\emptyset \vdash w :_\kappa \{\}
+            \end{trgather}}
+            {\Gamma \vdash \Gamma' :_\kappa K'}
+            \\\\
+            \trfrac[(const-type)]
+            {\forall i \in I, \Gamma \vdash S[m_i] : \star}
+            {\Gamma \vdash \cons{c}S_I :_\kappa \star}
+            ~~~
+            \trfrac[(use-type)]
+            {\Gamma \vdash t_1 :_\kappa K ~~~ {\cal K}_\uparrow[K'] \vdash n : k }
+            {\Gamma \vdash t_1.n :_\kappa k}
+        \end{gather*}
+    }
 
     \subsection{Type reduction}\label{subsec:type-reduction}
 
-    \[\trfrac[(red-apply)]
-    {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_4 \qquad \Gamma \vdash t_2 : k \qquad \Gamma \vdash t_4[t_2/x] \longrightarrow t_3}
-    {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_3}\]
-
-    \[\trfrac[(red-var)]
-    {\Gamma[n]_\tau = t' \qquad \Gamma \vdash t' \longrightarrow t''}
-    {\Gamma \vdash n \longrightarrow t''}\]
-
-    \[\trfrac[(red-access-var)]
-    {\Gamma \vdash t_1 \longrightarrow \Gamma' \qquad \Gamma' \vdash n \longrightarrow t_2}
-    {\Gamma \vdash t_1.n \longrightarrow t_2}\]
-
-    \[\trfrac[(red-$\mu$)]
-    {\Gamma \vdash t[\mu(\alpha).t/\alpha] \longrightarrow t'}
-    {\Gamma \vdash \mu(\alpha).t \longrightarrow t'}\]
-
-    \[\trfrac[(id)]
-    {}
-    {\Gamma \vdash t \longrightarrow t}\]
+    \crtdef{
+        \begin{gather*}
+            \trfrac[(red-apply)]
+            {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_4 ~~~ \Gamma \vdash t_2 : k ~~~ \Gamma \vdash t_4[t_2/x] \longrightarrow t_3}
+            {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_3}
+            \\\\
+            \trfrac[(red-var)]
+            {\Gamma[n]_\tau = t' ~~~ \Gamma \vdash t' \longrightarrow t''}
+            {\Gamma \vdash n \longrightarrow t''}
+            ~~~
+            \trfrac[(red-$\mu$)]
+            {\Gamma \vdash t[\mu(\alpha).t/\alpha] \longrightarrow t'}
+            {\Gamma \vdash \mu(\alpha).t \longrightarrow t'}
+            \\\\
+            \trfrac[(red-access-var)]
+            {\Gamma \vdash t_1 \longrightarrow \Gamma' ~~~ \Gamma' \oplus \Gamma \vdash n \longrightarrow t_2}
+            {\Gamma \vdash t_1.n \longrightarrow t_2}
+            ~~~
+            \trfrac[(id)]
+            {}
+            {\Gamma \vdash t \longrightarrow t}
+        \end{gather*}
+    }
 
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
 
-    \[\trfrac[(sub-refl)]
-    {\Gamma \vdash t :_\kappa \star}
-    {\Gamma \vdash t \subseteq t}\]
-
-    \[\trfrac[(reduce-left)]
-    {\Gamma \vdash t_1 ~ t_2 \longrightarrow_0 t_4 \qquad \Gamma \vdash t_4 \subseteq t_3 }
-    {\Gamma \vdash t_1 ~t_2 \subseteq t_3}\]
-
-    \[\trfrac[(reduce-right)]
-    {\Gamma \vdash t_2 ~ t_3 \longrightarrow_0 t_4 \qquad \Gamma \vdash t_1 \subseteq t_4 }
-    {\Gamma \vdash t_1 \subseteq t_2 ~ t_3}\]
-
-    \[\trfrac[(sub-$\rightarrow$)]
-    {\Gamma \vdash t_3 \subseteq t_1 \qquad \Gamma \vdash t_2 \subseteq t_4}
-    {\Gamma \vdash t_1 \rightarrow t_2 \subseteq t_3 \rightarrow t_4}\]
-
-    \[\trfrac[(sub-$\looparrowright$)]
-    {\Gamma \vdash t_3 \looparrowright t_1 \qquad \Gamma \vdash t_2 \looparrowright t_4}
-    {\Gamma \vdash t_1 \looparrowright t_2 \subseteq t_3 \looparrowright t_4}\]
-
-    \[\trfrac[(sub-+-left)]
-    {\Gamma \vdash t_1 \subseteq t_3 \qquad \Gamma \vdash t_2 \subseteq t_3}
-    {\Gamma \vdash t_1 + t_2 \subseteq t_3}\]
-
-    \[\trfrac[(sub-+-right-1)]
-    {\Gamma \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
-
-    \[\trfrac[(sub-+-right-2)]
-    {\Gamma \vdash t_1 \subseteq t_3}
-    {\Gamma \vdash t_1 \subseteq t_2 + t_3}\]
-
-    \[\trfrac[(sub-$\mu$)]
-    {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \mu(a).t_1 \subseteq \mu(a).t_2}\]
-
-    \[\trfrac[(sub-$\mu$-unfold-left)]
-    {\Gamma \vdash t_1[\mu(a).t_1/a] \subseteq t_2}
-    {\Gamma \vdash \mu(a).t_1 \subseteq t_2}\]
-
-    \[\trfrac[(sub-$\mu$-unfold-right)]
-    {\Gamma \vdash t_1 \subseteq t_2[\mu(a).t_2/a]}
-    {\Gamma \vdash t_1 \subseteq \mu(a).t_2}\]
-
-    \[\trfrac[(sub-const)]
-    {\forall j \in J,\exists i \in I, m_i = m'_j, \Gamma \vdash t_i \subseteq t'_j}
-    {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }\]
-
-    \[\trfrac[(sub-$\Lambda$)]
-    {k' \subseteq_\kappa k \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \Lambda(x:k).t_1 \subseteq \Lambda(x:k').t_2 }\]
-
-    \[\trfrac[(sub-$\forall$)]
-    {k \subseteq_\kappa k' \qquad \forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k').t_2 }\]
-
-    \[\trfrac[(sub-$\exists$)]
-    {k \subseteq_\kappa k' \qquad\forall i \in I, \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
-    {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k').t_2 }\]
-
-    \[\trfrac[(sub-trait)]
-    {\begin{trgather}
-    {\cal K}
-         _\downarrow[\Gamma_1] \subseteq {\cal K}_\downarrow[\Gamma_2] \\
-         \forall (n,t) \in {\cal T}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal T}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
-         \forall (n,t) \in {\cal S}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal S}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
-    \end{trgather}}
-    {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 }\]
+    \crtdef{
+        \begin{gather*}
+            \trfrac[(sub-refl)]
+            {\Gamma \vdash t :_\kappa \star}
+            {\Gamma \vdash t \subseteq t}
+            ~~~
+            \trfrac[(sub-const)]
+            {\forall j \in J,\exists i \in I, m_i = m'_j, \Gamma \vdash t_i \subseteq t'_j}
+            {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }
+            \\\\
+            \trfrac[(app-l)]
+            {\Gamma \vdash t_1 ~ t_2 \longrightarrow_0 t_4 ~~~ \Gamma \vdash t_4 \subseteq t_3 }
+            {\Gamma \vdash t_1 ~t_2 \subseteq t_3}
+            ~~~
+            \trfrac[(app-r)]
+            {\Gamma \vdash t_2 ~ t_3 \longrightarrow_0 t_4 ~~~ \Gamma \vdash t_1 \subseteq t_4 }
+            {\Gamma \vdash t_1 \subseteq t_2 ~ t_3}
+            \\\\
+            \trfrac[(sub-$\rightarrow$)]
+            {\Gamma \vdash t_3 \subseteq t_1 ~~~ \Gamma \vdash t_2 \subseteq t_4}
+            {\Gamma \vdash t_1 \rightarrow t_2 \subseteq t_3 \rightarrow t_4}
+            ~~~
+            \trfrac[(sub-$\looparrowright$)]
+            {\Gamma \vdash t_3 \looparrowright t_1 ~~~ \Gamma \vdash t_2 \looparrowright t_4}
+            {\Gamma \vdash t_1 \looparrowright t_2 \subseteq t_3 \looparrowright t_4}
+            \\\\
+            \trfrac[(sub-+-l)]
+            {\Gamma \vdash t_1 \subseteq t_3 ~~~ \Gamma \vdash t_2 \subseteq t_3}
+            {\Gamma \vdash t_1 + t_2 \subseteq t_3}
+            ~~~
+            \trfrac[(sub-+-r1)]
+            {\Gamma \vdash t_1 \subseteq t_2}
+            {\Gamma \vdash t_1 \subseteq t_2 + t_3}
+            \\\\
+            \trfrac[(sub-+-r2)]
+            {\Gamma \vdash t_1 \subseteq t_3}
+            {\Gamma \vdash t_1 \subseteq t_2 + t_3}
+            ~~~
+            \trfrac[(sub-$\mu$)]
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : \star \}] \vdash t_1 \subseteq t_2}
+            {\Gamma \vdash \mu(a).t_1 \subseteq \mu(a).t_2}
+            \\\\
+            \trfrac[(sub-$\mu$-l)]
+            {\Gamma \vdash t_1[\mu(a).t_1/a] \subseteq t_2}
+            {\Gamma \vdash \mu(a).t_1 \subseteq t_2}
+            ~~~
+            \trfrac[(sub-$\mu$-r)]
+            {\Gamma \vdash t_1 \subseteq t_2[\mu(a).t_2/a]}
+            {\Gamma \vdash t_1 \subseteq \mu(a).t_2}
+            \\\\
+            \trfrac[(sub-$\Lambda$)]
+            {k' \subseteq_\kappa k ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+            {\Gamma \vdash \Lambda(x:k).t_1 \subseteq \Lambda(x:k').t_2 }
+            \\\\
+            \trfrac[(sub-$\forall$)]
+            {k \subseteq_\kappa k' ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+            {\Gamma \vdash \forall(x:k).t_1 \subseteq \forall(x:k').t_2 }
+            \\\\
+            \trfrac[(sub-$\exists$)]
+            {k \subseteq_\kappa k' ~~~ \Gamma \oplus {\cal K}_\uparrow[\{ x: k \}] \vdash t_1 \subseteq t_2}
+            {\Gamma \vdash \exists(x:k).t_1 \subseteq \exists(x:k').t_2 }
+            \\\\
+            \trfrac[(sub-trait)]
+            {\begin{trgather}
+            {\cal K}
+                 _\downarrow[\Gamma_1] \subseteq {\cal K}_\downarrow[\Gamma_2] \\
+                 \forall (n,t) \in {\cal T}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal T}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
+                 \forall (n,t) \in {\cal S}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal S}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
+            \end{trgather}}
+            {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 }
+        \end{gather*}
+    }
 
     \subsection{Expression rules}\label{subsec:expression-rules}
 
-    \[\trfrac[(identity)]
-    {\Gamma[e]_\sigma = t' \qquad \Gamma \vdash t \subseteq t'}
-    {\Gamma \vdash e : t} \]
-
-    \[\trfrac[(apply)]
-    {\Gamma \vdash n : t_1 \rightarrow t_2 \qquad \Gamma \vdash a : t_3 \qquad \Gamma \vdash t_3 \subseteq t_1}
-    {\Gamma \vdash n~a : t_2} \]
-
-    \[\trfrac[(invoke)]
-    {\Gamma \vdash n : t_1 \looparrowright t_2 \qquad \Gamma \vdash a : t_3 \qquad \Gamma \vdash t_3 \subseteq t_1}
-    {\Gamma \vdash a~n : t_2} \]
-
-    \[\trfrac[(abstr)]
-    {\Gamma \oplus {\cal S}_\uparrow[\{ n : t_1 \}] \vdash a : t_2}
-    {\Gamma \vdash \lambda n.a : t_1 \rightarrow t_2} \]
-
-    \[\trfrac[(meth)]
-    {\Gamma \oplus {\cal S}_\uparrow[\{ \term{self} : t_1 \}] \vdash a : t_2}
-    {\Gamma \vdash \zeta . a : t_1 \looparrowright t_2} \]
-
-    \[\trfrac[(const-access)]
-    {\Gamma \vdash r : \underline{c} S \qquad {\cal S}_\uparrow[S] \oplus \Gamma \vdash n : t}
-    {\Gamma \vdash r.n : t} \]
-
-    \[\trfrac[(trait-use)]
-    {\Gamma \vdash r : \Gamma' \qquad \Gamma' \oplus \Gamma \vdash n : t}
-    {\Gamma \vdash r.n : t} \]
-
-    \[\trfrac[($\forall$-elim)]
-    {\Gamma \vdash e : \forall (a:k).t_1 \qquad \Gamma \vdash t_2 :_\kappa k }
-    {\Gamma \vdash e : t_1[t_2/a]} \]
-
-    \[\trfrac[($\forall$-intro)]
-    {{\cal K}_\uparrow[\{ a : k \}]  \oplus \Gamma \vdash e : t}
-    {\Gamma \vdash e : \forall (a:k).t} \]
-
-    \[\trfrac[($\exists$-elim)]
-    {\Gamma \vdash e_1 : \exists (a:k).t_1 \qquad {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal S}_\uparrow[\{ a : t_1 \}] \oplus \Gamma \vdash e_2 : t_2 \qquad A \not\in \term{ftv}(t_2)}
-    {\Gamma \vdash \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2} \]
-
-    \[\trfrac[($\exists$-intro)]
-    {\Gamma \vdash t_1 :_\kappa k \qquad \Gamma \vdash e : t_2[t_1/a]}
-    {\Gamma \vdash \{t_1,e\} : \exists (a:k).t_2} \]
-
-    \[\trfrac[(let-in)]
-    {\Gamma \vdash e_1 : t1 \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
-    {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
-
-    \[\trfrac[(let-in)]
-    {\Gamma \vdash e_1 : t1 \qquad \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
-    {\Gamma \vdash \term{let} ~ a \term{:} t_1 ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2} \]
-
-    \[\trfrac[(let-use)]
-    {\Gamma \vdash e_1.e_2 : t}
-    {\Gamma \vdash \term{let use} ~ e_1 ~ \term{in} ~ e_2 : t} \]
-
-    \[\trfrac[(when)]
-    {\forall i \in I, \Gamma \vdash a : t_i \qquad {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
-    {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t} \]
-
-    \[\trfrac[(trait)]
-    {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 \qquad \Gamma_1[m_i]_\sigma = t_i \qquad \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : t_i }
-    {\Gamma \vdash \Gamma_1 \circledast \{ m_i \triangleq e_i \}_I : \Gamma_2 } \]
-
+    \crtdef{
+        \begin{gather*}
+            \trfrac[(id)]
+            {\Gamma[e]_\sigma = t' ~~~ \Gamma \vdash t \subseteq t'}
+            {\Gamma \vdash e : t}
+            ~~~
+            \trfrac[(app)]
+            {\Gamma \vdash n : t_1 \rightarrow t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
+            {\Gamma \vdash n~a : t_2}
+            \\\\
+            \trfrac[(call)]
+            {\Gamma \vdash n : t_1 \looparrowright t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
+            {\Gamma \vdash a~n : t_2}
+            \\\\
+            \trfrac[(abstr)]
+            {\Gamma \oplus {\cal S}_\uparrow[\{ n : t_1 \}] \vdash a : t_2}
+            {\Gamma \vdash \lambda n.a : t_1 \rightarrow t_2}
+            ~~~
+            \trfrac[(meth)]
+            {\Gamma \oplus {\cal S}_\uparrow[\{ \term{self} : t_1 \}] \vdash a : t_2}
+            {\Gamma \vdash \zeta . a : t_1 \looparrowright t_2}
+            \\\\
+            \trfrac[(access)]
+            {\Gamma \vdash r : \underline{c} S ~~~ {\cal S}_\uparrow[S] \oplus \Gamma \vdash n : t}
+            {\Gamma \vdash r.n : t}
+            ~~~
+            \trfrac[(use)]
+            {\Gamma \vdash r : \Gamma' ~~~ \Gamma' \oplus \Gamma \vdash n : t}
+            {\Gamma \vdash r.n : t}
+            \\\\
+            \trfrac[($\forall$-elim)]
+            {\Gamma \vdash e : \forall (a:k).t_1 ~~~ \Gamma \vdash t_2 :_\kappa k }
+            {\Gamma \vdash e : t_1[t_2/a]}
+            ~~~
+            \trfrac[($\forall$-intro)]
+            {{\cal K}_\uparrow[\{ a : k \}]  \oplus \Gamma \vdash e : t}
+            {\Gamma \vdash e : \forall (a:k).t}
+            \\\\
+            \trfrac[($\exists$-elim)]
+            {\Gamma \vdash e_1 : \exists (a:k).t_1 ~~~ {\cal K}_\uparrow[\{ A : k \}] \oplus {\cal S}_\uparrow[\{ a : t_1 \}] \oplus \Gamma \vdash e_2 : t_2 ~~~ A \not\in \term{ftv}(t_2)}
+            {\Gamma \vdash \term{let} ~ \{A, a\} ~ = e_1 ~ \term{in} ~ e_2 : t_2}
+            \\\\
+            \trfrac[($\exists$-intro)]
+            {\Gamma \vdash t_1 :_\kappa k ~~~ \Gamma \vdash e : t_2[t_1/a]}
+            {\Gamma \vdash \{t_1,e\} : \exists (a:k).t_2}
+            ~~~
+            \trfrac[(let-in)]
+            {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
+            {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2}
+            \\\\
+            \trfrac[(let-in)]
+            {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
+            {\Gamma \vdash \term{let} ~ a \term{:} t_1 ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2}
+            \\\\
+            \trfrac[(when)]
+            {\forall i \in I, \Gamma \vdash a : t_i ~~~ {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
+            {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t}
+            \\\\
+            \trfrac[(trait)]
+            {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 ~~~ \Gamma_1[m_i]_\sigma = t_i ~~~ \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : t_i }
+            {\Gamma \vdash \Gamma_1 \circledast \{ m_i \triangleq e_i \}_I : \Gamma_2 }\\
+        \end{gather*}
+    }
 \end{document}
