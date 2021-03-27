@@ -128,7 +128,7 @@ Some 1 fold { 0 } id
 ### Trait definition
 
 ```
-trait Functor (f:type->type) {
+trait Functor (f:*->*) {
     sig map   : self -> (a -> b) -> f b for f a
     sig (<$>) : self -> f a -> f b for a -> b
     
@@ -141,7 +141,7 @@ The `Functor` has a parametric type constructor `f` revealing the support of hig
 The `map` has a receiver called `self` and this receiver has the following type given by the *for* directive: `f a`.
 
 ```
-trait Applicative (f:type->type) with Functor f {
+trait Applicative (f:*->*) with Functor f {
     sig pure   : a -> f a
     sig (<*>)  : self -> f a -> f b for f (a -> b)
     sig (<**>) : self -> f (a -> b) -> f b for f a
@@ -153,7 +153,7 @@ trait Applicative (f:type->type) with Functor f {
 Such *for* directive can be define at the trait level, signature level or definition level. If such directive is not expressed for a method and does not have `self` as first parameter it's a *static* method. 
 
 ```
-trait Monad (f:type->type) with Applicative f {
+trait Monad (f:*->*) with Applicative f {
     sig return : a -> f a 
     sig join   : self -> f a for f (f a)
     sig (>>=)  : self -> (a -> f b) -> f b for f a
@@ -287,7 +287,7 @@ Implementation car also be local using a specific `let` binding.
 For instance, we can design a trait which denotes a transformation and an implementation from `Try` to `Option`.
 
 ```
-trait (~>) (f:type->type) (g:type->type) {
+trait (~>) (f:*->*) (g:*->*) {
     sig transform: forall a. self -> g a for f a
 }
 
@@ -569,7 +569,7 @@ impl      ::= "impl" IDENT t_param* for? with* ("{" entity* "}")?
 with      ::= "use" type_expr
 for       ::= "for" type_expr
 
-kind_expr ::= "type"
+kind_expr ::= "*"
             | kind_expr "->" kind_expr
             | "(" kind_expr ")" 
 

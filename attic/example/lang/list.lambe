@@ -80,7 +80,7 @@ impl Equatable a Nil {
 }
 
 impl Equatable a (Cons a) {
-    def (=) l = l fold { false } { (self.head = l.head) && (self.tail = l.tail) }
+    def (=) l = self.(l fold { false } { (head = l.head) && (tail = l.tail) })
 }
 
 impl Equatable a (List a)

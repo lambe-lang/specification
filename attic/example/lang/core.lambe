@@ -1,5 +1,11 @@
 kind (->) = type -> type -> type
 
+sig id : forall a. a -> a
+def id a = a
+
+sig (<|) : forall a b. self -> a -> b for a -> b
+def (<|) = id self
+
 sig (|>) : forall a b. self -> (a -> b) -> b for a
 def (|>) f = f a
 

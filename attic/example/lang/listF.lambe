@@ -7,7 +7,7 @@ def ([]) = Nil
 sig (::) : forall a l.a -> l -> Cons a l
 def (::) = Cons
 
-type ListF a l = Nil | a :: l
+type ListF a l = Nil | Cons a l
 
 impl forall a.Functor (ListF a) {
     def map e =
