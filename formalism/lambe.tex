@@ -493,8 +493,8 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \crtdef{
         \begin{gather*}
             \trfrac[(red-apply)]
-            {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_4 ~~~ \Gamma \vdash t_2 : k ~~~ \Gamma \vdash t_4[t_2/x] \longrightarrow t_3}
-            {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_3}
+            {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_4 ~~~ \Gamma \vdash t_2 : k}
+            {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_4[t_2/x]}
             \\\\
             \trfrac[(red-var)]
             {\Gamma[n]_\tau = t' ~~~ \Gamma \vdash t' \longrightarrow t''}
@@ -527,12 +527,12 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }
             \\\\
             \trfrac[(app-l)]
-            {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_4 ~~~ \Gamma \vdash t_4 \subseteq t_3 }
-            {\Gamma \vdash t_1 ~t_2 \subseteq t_3}
+            {\Gamma \vdash t_1 \longrightarrow t_3 ~~~ \Gamma \vdash t_3 \subseteq t_2 }
+            {\Gamma \vdash t_1 \subseteq t_2}
             ~~~
             \trfrac[(app-r)]
-            {\Gamma \vdash t_2 ~ t_3 \longrightarrow t_4 ~~~ \Gamma \vdash t_1 \subseteq t_4 }
-            {\Gamma \vdash t_1 \subseteq t_2 ~ t_3}
+            {\Gamma \vdash t_2 \longrightarrow t_3 ~~~ \Gamma \vdash t_1 \subseteq t_3 }
+            {\Gamma \vdash t_1 \subseteq t_2}
             \\\\
             \trfrac[(sub-$\rightarrow$)]
             {\Gamma \vdash t_3 \subseteq t_1 ~~~ \Gamma \vdash t_2 \subseteq t_4}
