@@ -474,25 +474,25 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
 
     \subsection{Type reduction}\label{subsec:type-reduction}
 
-    \[\trfrac[(red-var)]
-    {\Gamma[n]_\tau = t' \qquad \Gamma \vdash t' \longrightarrow_1 t''}
-    {\Gamma \vdash n \longrightarrow_i t''}\]
-
     \[\trfrac[(red-apply)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Lambda(x:k).t_1' \qquad \Gamma \vdash t_2 : k \qquad \Gamma \vdash t_1'[t_2/x] \longrightarrow_1 t_3}
-    {\Gamma \vdash t_1 ~ t_2 \longrightarrow_i t_3}\]
+    {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_4 \qquad \Gamma \vdash t_2 : k \qquad \Gamma \vdash t_4[t_2/x] \longrightarrow t_3}
+    {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_3}\]
+
+    \[\trfrac[(red-var)]
+    {\Gamma[n]_\tau = t' \qquad \Gamma \vdash t' \longrightarrow t''}
+    {\Gamma \vdash n \longrightarrow t''}\]
 
     \[\trfrac[(red-access-var)]
-    {\Gamma \vdash t_1 \longrightarrow_1 \Gamma' \qquad \Gamma' \vdash n \longrightarrow_0 t_2}
-    {\Gamma \vdash t_1.n \longrightarrow_i t_2}\]
+    {\Gamma \vdash t_1 \longrightarrow \Gamma' \qquad \Gamma' \vdash n \longrightarrow t_2}
+    {\Gamma \vdash t_1.n \longrightarrow t_2}\]
 
     \[\trfrac[(red-$\mu$)]
-    {\Gamma \vdash t[\mu(\alpha).t/\alpha] \longrightarrow_1 t'}
-    {\Gamma \vdash \mu(\alpha).t \longrightarrow_1 t'}\]
+    {\Gamma \vdash t[\mu(\alpha).t/\alpha] \longrightarrow t'}
+    {\Gamma \vdash \mu(\alpha).t \longrightarrow t'}\]
 
     \[\trfrac[(id)]
     {}
-    {\Gamma \vdash t \longrightarrow_1 t}\]
+    {\Gamma \vdash t \longrightarrow t}\]
 
     \subsection{Type inclusion}\label{subsec:subtyping-rules}
 
@@ -501,12 +501,12 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     {\Gamma \vdash t \subseteq t}\]
 
     \[\trfrac[(reduce-left)]
-    {\Gamma \vdash t_1 \longrightarrow_0 t_1' \qquad \Gamma \vdash t_1' \subseteq t_2 }
-    {\Gamma \vdash t_1 \subseteq t_2}\]
+    {\Gamma \vdash t_1 ~ t_2 \longrightarrow_0 t_4 \qquad \Gamma \vdash t_4 \subseteq t_3 }
+    {\Gamma \vdash t_1 ~t_2 \subseteq t_3}\]
 
     \[\trfrac[(reduce-right)]
-    {\Gamma \vdash t_2 \longrightarrow_0 t_2' \qquad \Gamma \vdash t_1 \subseteq t_2' }
-    {\Gamma \vdash t_1 \subseteq t_2}\]
+    {\Gamma \vdash t_2 ~ t_3 \longrightarrow_0 t_4 \qquad \Gamma \vdash t_1 \subseteq t_4 }
+    {\Gamma \vdash t_1 \subseteq t_2 ~ t_3}\]
 
     \[\trfrac[(sub-$\rightarrow$)]
     {\Gamma \vdash t_3 \subseteq t_1 \qquad \Gamma \vdash t_2 \subseteq t_4}
