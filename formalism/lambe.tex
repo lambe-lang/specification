@@ -458,16 +458,16 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\Gamma \vdash \Lambda (a:k).t :_\kappa k_1 \rightarrow k_2}
             ~~~
             \trfrac[($\forall$-type)]
-            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-            {\Gamma \vdash \forall (a:k).t :_\kappa \star}
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k}
+            {\Gamma \vdash \forall (a:k).t :_\kappa k}
             \\\\
             \trfrac[($\exists$-type)]
-            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-            {\Gamma \vdash \exists (a:k).t :_\kappa \star}
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k}
+            {\Gamma \vdash \exists (a:k).t :_\kappa k}
             ~~~
             \trfrac[($\mu$-type)]
-            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa \star}
-            {\Gamma \vdash \mu (a : k).t :_\kappa \star}
+            {\Gamma \oplus {\cal K}_\uparrow[\{ a : k \}] \vdash t :_\kappa k}
+            {\Gamma \vdash \mu (a : k).t :_\kappa k}
             \\\\
             \trfrac[(trait-type)]
             {\begin{trgather}
@@ -527,11 +527,11 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\Gamma \vdash \cons{c}\{ m_i : t_i \}_I  \subseteq \cons{c}\{ m'_i : t'_i \}_J }
             \\\\
             \trfrac[(app-l)]
-            {\Gamma \vdash t_1 ~ t_2 \longrightarrow_0 t_4 ~~~ \Gamma \vdash t_4 \subseteq t_3 }
+            {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_4 ~~~ \Gamma \vdash t_4 \subseteq t_3 }
             {\Gamma \vdash t_1 ~t_2 \subseteq t_3}
             ~~~
             \trfrac[(app-r)]
-            {\Gamma \vdash t_2 ~ t_3 \longrightarrow_0 t_4 ~~~ \Gamma \vdash t_1 \subseteq t_4 }
+            {\Gamma \vdash t_2 ~ t_3 \longrightarrow t_4 ~~~ \Gamma \vdash t_1 \subseteq t_4 }
             {\Gamma \vdash t_1 \subseteq t_2 ~ t_3}
             \\\\
             \trfrac[(sub-$\rightarrow$)]
