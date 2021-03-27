@@ -2,6 +2,10 @@
 
 A statically typed functional programming language inspired by Haskell, OCaml, Rust and Kotlin.
 
+## Preamble
+
+A [formalism](https://github.com/lambe-lang/specification/blob/master/formalism/lambe.pdf) for Lambë is in progress. 
+
 ## 0. Paradigms
 
 Targeted programming language paradigms for the design of Lambë are:
