@@ -174,7 +174,6 @@
             & \mid & \lambda \alpha . \epsilon                                               & Function              \\
             & \mid & \zeta . \epsilon                                                        & Method              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
-            & \mid & \term{let}~\alpha \term{:} \tau ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon & Typed~let~binding              \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
             & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
@@ -233,6 +232,42 @@ type List a = Nil | Cons a
         \begin{array}{rclp{5cm}}
             \term{Nil}  & : & \term{Nil}                                                                                   \\
             \term{Cons} & : & \forall(\alpha:\star).\alpha \rightarrow \term{List}~\alpha \rightarrow \term{Cons} ~ \alpha \\
+        \end{array}
+    \end{math}
+
+    \subsection{Algebraic datatype ... again}
+
+    \begin{verbatim}
+type List a =
+  data Nil
+| data Cons (head:a) (tail:List a)
+    \end{verbatim}
+
+    \subsubsubsection{Type kind}
+
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{List} & : & \star \rightarrow \star
+        \end{array}
+    \end{math}
+
+    \subsubsubsection{Type definition}
+
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{List} & \triangleq & \Lambda(\alpha:\star).\mu(\xi:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi \}
+        \end{array}
+    \end{math}
+
+    \subsubsubsection{Function definition}
+
+    \noindent
+    \begin{math}
+        \begin{array}{rclp{5cm}}
+            \term{Nil}  & : & \forall(\alpha:\star).\term{List} ~ \alpha \\                                                                                    \\
+            \term{Cons} & : & \forall(\alpha:\star).\alpha \rightarrow \term{List}~\alpha \rightarrow \term{List} ~ \alpha
         \end{array}
     \end{math}
 
@@ -493,7 +528,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \crtdef{
         \begin{gather*}
             \trfrac[(red-apply)]
-            {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_3 ~~~ \Gamma \vdash t_2 : k ~~~ \Gamma t_3[t_2/x] \longrightarrow t_4}
+            {\Gamma \vdash t_1 \longrightarrow \Lambda(x:k).t_3 ~~~ \Gamma \vdash t_2 : k ~~~ \Gamma \vdash t_3[t_2/x] \longrightarrow t_4}
             {\Gamma \vdash t_1 ~ t_2 \longrightarrow t_4}
             \\\\
             \trfrac[(red-var)]
@@ -640,10 +675,6 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             \trfrac[(let-in)]
             {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
             {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2}
-            \\\\
-            \trfrac[(let-in)]
-            {\Gamma \vdash e_1 : t1 ~~~ \Gamma \oplus {\cal T}_\uparrow[\{ a : t_1 \}] \vdash e_2 : t_2}
-            {\Gamma \vdash \term{let} ~ a \term{:} t_1 ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2}
             \\\\
             \trfrac[(when)]
             {\forall i \in I, \Gamma \vdash a : t_i ~~~ {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
