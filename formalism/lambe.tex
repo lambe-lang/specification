@@ -137,8 +137,7 @@
             K       & =   & \{ m_i : \kappa_i \}_I            \\
             T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
             S       & =   & \{ m_i : \tau_i \}_I              \\
-            W       & =   & \{ \Gamma_i \}_I                  \\
-            \Gamma  & =   & \langle K, T, S, W \rangle        \\
+            \Gamma  & =   & \langle K, T, S, \{ \Gamma_i \}_I \rangle        \\
             \\
             \Gamma_\emptyset & = & \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle \\
             \\
@@ -361,7 +360,7 @@ trait Set a {
 
     \begin{verbatim}
 trait Pure a {
-    kind t = type -> type
+    kind t = * -> *
     sig pure : a -> t a
 }
     \end{verbatim}
@@ -617,8 +616,8 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\begin{trgather}
             {\cal K}
                  _\downarrow[\Gamma_1] \subseteq {\cal K}_\downarrow[\Gamma_2] \\
-                 \forall (n,t) \in {\cal T}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal T}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
-                 \forall (n,t) \in {\cal S}_\downarrow[\Gamma_1], \exists (n',t') \in {\cal S}_\downarrow[\Gamma_2], n = n', \Gamma \vdash t' \subseteq t \\
+                 \forall (n,t) \in {\cal T}_\downarrow[\Gamma_2], \exists (n',t') \in {\cal T}_\downarrow[\Gamma_1], n = n', \Gamma \vdash t' \subseteq t \\
+                 \forall (n,t) \in {\cal S}_\downarrow[\Gamma_2], \exists (n',t') \in {\cal S}_\downarrow[\Gamma_1], n = n', \Gamma \vdash t' \subseteq t \\
             \end{trgather}}
             {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 }
         \end{gather*}
