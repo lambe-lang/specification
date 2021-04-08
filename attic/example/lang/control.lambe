@@ -1,11 +1,11 @@
-trait Functor (f:type->type) {
+trait Functor (f:* -> *) {
     sig map : forall a b. self -> f a -> f b for (a -> b)
 
     sig <$> : forall a b. self -> f a -> f b for (a -> b)
     def <$> = self map
 }
 
-trait Applicative (f:type->type) with Functor f {
+trait Applicative (f:* -> *) with Functor f {
     sig pure : forall a. a -> f a
     sig product : forall a b. self -> f b -> f (a * b) for f a
 
@@ -19,7 +19,7 @@ trait Applicative (f:type->type) with Functor f {
     def (<**>) f = f <*> self
 }
 
-trait Monad (f:type->type) with Applicative f {
+trait Monad (f:* -> *) with Applicative f {
     sig join : forall a. self -> f a for f (f a)
 
     sig returns : forall a. a -> f a
@@ -32,7 +32,7 @@ trait Monad (f:type->type) with Applicative f {
     def (>>=) = self bind
 }
 
-trait Kleisli (f:type -> type) with Monad f {
+trait Kleisli (f:* -> *) with Monad f {
     sig (>=>) : forall a b c. self -> (b -> f c) -> (a -> f c) for a -> f b
     def (>=>) b = self |> $ g =<<
 }

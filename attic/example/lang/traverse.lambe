@@ -1,4 +1,4 @@
-trait Traversable (t:type -> type) (f:type -> type) with Applicative f {
+trait Traversable (t:* -> *) (f:* -> *) with Applicative f {
     sig traverse : forall a b. self -> t a -> f (t b) for (a -> f b)
     sig sequence : forall a b. self -> t (f a) for f (t a)
 

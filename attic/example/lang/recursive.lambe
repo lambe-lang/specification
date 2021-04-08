@@ -2,9 +2,9 @@
     Recursive schema definition and fold implementation
 }
 
-data Fix (f:type->type) { unfix: f (Fix f) }
+data Fix (f:* -> *) { unfix: f (Fix f) }
 
-impl forall (f:type->type). Fix f with Functor f {
+impl forall (f:* -> *). Fix f with Functor f {
     sig fold : forall a. self -> (f a -> a) -> a
     def fold interpret = interpret $ { _ fold interpret } map self.unfix
 }

@@ -1,5 +1,5 @@
 trait Reader a {
-    kind t = type -> type -- Existential type
+    kind t = * -> * -- Abstract type
 
     data Source { s: t a; pos: (int*int*int) }
 

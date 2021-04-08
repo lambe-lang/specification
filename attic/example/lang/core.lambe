@@ -1,7 +1,10 @@
-kind (->) = type -> type -> type
+kind (->) = * -> * -> *
 
 sig id : forall a. a -> a
 def id a = a
+
+sig flip : forall a b c.(a -> b -> c) -> b -> a -> c
+def flip f b a = f a b
 
 sig (<|) : forall a b. self -> a -> b for a -> b
 def (<|) = id self

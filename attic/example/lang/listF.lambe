@@ -1,17 +1,10 @@
-data Nil
-data Cons a l (head : a) (tail : l)
-
-sig ([]) : Nil
-def ([]) = Nil
-
-sig (::) : forall a l.a -> l -> Cons a l
-def (::) = Cons
-
-type ListF a l = Nil | Cons a l
+type Nil       = data ([])
+type ConsF a l = data (::) (head : a) (tail : l)
+type ListF a l = Nil | ConsF a l
 
 impl forall a.Functor (ListF a) {
     def map e =
         when e
-        is Nil  -> e
-        is Cons -> Cons (self e.left) e.right
+        is [] -> e
+        is :: -> Cons (self e.left) e.right
 }

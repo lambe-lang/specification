@@ -1,6 +1,6 @@
 use int
 
-kind char = type
+kind char = *
 
 impl char {
     sig toInt : self -> int

@@ -1,13 +1,13 @@
 use core
 use product
 
-trait Arrow (A: type -> type -> type) with Category A {
+trait Arrow (A: * -> * -> *) with Category A {
     sig arrow : forall a b.(a -> b) -> A a b
     sig (>>>) : forall a b c.self -> A b c -> A c d for A a b
     sig first : forall a b c.A a b -> A (a * c) (b * c)
 }
 
-trait ArrowExtension (A: type -> type -> type) with Arrow A {
+trait ArrowExtension (A: * -> * -> *) with Arrow A {
     type second = forall a b c.A a b -> A (c * a) (c * b)
     func second f = arr swap >> first f >> arr swap
 
@@ -21,30 +21,30 @@ trait ArrowExtension (A: type -> type -> type) with Arrow A {
     def lift2 f g = f &&& g >>> $ arrow { ab -> self ab.fst ab.snd }
 }
 
-trait ArrowZero (A: type -> type -> type) with Arrow A {
+trait ArrowZero (A: * -> * -> *) with Arrow A {
     sig neutral : forall a b. A a b
 }
 
-trait ArrowPlus (A: type -> type -> type) with ArrowZero A {
+trait ArrowPlus (A: * -> * -> *) with ArrowZero A {
     sig combine : forall a b. self -> A a b -> A a b for A a b
     sig (<+>) : forall a b. self -> A a b -> A a b for A a b
     sig (<+>) = self combine
 }
 
 trait Arrow_from_monad {
-    type Kleisli (m:type -> type) a b = a -> m b
+    type Kleisli (m:* -> *) a b = a -> m b
 
-    impl forall (m:type -> type).Arrow (Kleisli m) with Monad m {
+    impl forall (m:* -> *).Arrow (Kleisli m) with Monad m {
         def arrow f = { b -> return (f b) }
         def (>>>) g = { b -> self b >>= g.k }
         def first f = { ac -> f ac.fst >>= { c -> return (c,ac.snd) } }
     }
 
-    impl forall (m:type -> type).ArrowExtension (Kleisli m)
+    impl forall (m:* -> *).ArrowExtension (Kleisli m)
 }
 
 trait Arrow_from_function {
-    impl forall (m:type -> type).Arrow (->) {
+    impl forall (m:* -> *).Arrow (->) {
         def arrow f = f
         def (>>>) g = f @> g
         def first f = { ac -> (f ac.fst),ac.snd }

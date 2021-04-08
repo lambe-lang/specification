@@ -7,17 +7,17 @@ use functions
 use product
 
 data Pure a (value: a)
-data App (f:type -> type) a (value : forall b.(Free f (b -> a)) * (f b))
+data App (f:* -> *) a (value : forall b.(Free f (b -> a)) * (f b))
 type Free f a = Pure a | App f a
 
-impl forall (f:type -> type). Functor (Free f) with Functor f {
+impl forall (f:* -> *). Functor (Free f) with Functor f {
     def map f =
         when f
         Pure -> Pure $ self f.value
         App  -> App ((self <| <$> f.value.fst), f.value.snd)
 }
 
-impl forall (f:type -> type). Applicative (Free f) with Functor f {
+impl forall (f:* -> *). Applicative (Free f) with Functor f {
     def pure = Pure
     def <*> f =
         when f
@@ -25,5 +25,5 @@ impl forall (f:type -> type). Applicative (Free f) with Functor f {
         App  -> App (({ _ <| } <$> self <*> f.value.fst), f.value.snd)
 }
 
-sig lift : forall (f:type -> type) a. f a -> Free f a
+sig lift : forall (f:* -> *) a. f a -> Free f a
 def lift = App (Pure id)

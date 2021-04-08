@@ -1,15 +1,15 @@
-data Codensity (f:type->type) a = forall r. (a -> f r) -> f r
+data Codensity (f:* -> *) a = forall r. (a -> f r) -> f r
 
 // Laws?
 
-impl forall (f:type->type). Functor (Codensity f) {
+impl forall (f:* -> *). Functor (Codensity f) {
     def map c = k -> c.value (k @> self)
 }
 
-impl forall (f:type->type). Applicative (Codensity f) {
+impl forall (f:* -> *). Applicative (Codensity f) {
     -- TODO
 }
 
-impl forall (f:type->type). Monade (Codensity f) {
+impl forall (f:* -> *). Monade (Codensity f) {
     -- TODO
 }

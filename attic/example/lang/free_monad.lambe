@@ -4,10 +4,10 @@
 }
 
 data Pure a (value: a)
-data Bind (f:type -> type) a (value : f (Free a))
-type Free (f:type -> type) a = Pure a | Bind f a
+data Bind (f:* -> *) a (value : f (Free a))
+type Free (f:* -> *) a = Pure a | Bind f a
 
-impl forall (f:type -> type). Free f with Functor f {
+impl forall (f:* -> *). Free f with Functor f {
     sig (>>=) : forall a b .self -> (a -> b) -> Free f b
     def (>>=) f =
         when self
@@ -15,5 +15,5 @@ impl forall (f:type -> type). Free f with Functor f {
         is Bind -> Bind (f >>= map self.value)
 }
 
-sig lift : forall (f:type->type) a. f a -> Free f a
+sig lift : forall (f:* -> *) a. f a -> Free f a
 def lift = Bind $ Pure map

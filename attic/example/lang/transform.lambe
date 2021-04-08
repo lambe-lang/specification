@@ -3,7 +3,7 @@ trait Data {
      Pure data approach
     }
 
-    data (~>) (f:type->type) (g:type->type)
+    data (~>) (f:* -> *) (g:* -> *)
          (transform: forall a. f a -> g a)
 
     -- Implementation
@@ -29,7 +29,7 @@ trait Trait {
      Trait approach
     }
 
-    trait (~>) (f:type->type) (g:type->type) {
+    trait (~>) (f:* -> *) (g:* -> *) {
         sig transform: forall a. self -> g a for f a
     }
 

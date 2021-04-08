@@ -47,7 +47,7 @@ impl forall e. Monad (Either e) {
 
     def product a =
         when self
-        is Left -> self
+        is Left -> Left self.value
         is Right ->
             when a
             is Left -> a

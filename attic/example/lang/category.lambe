@@ -1,4 +1,4 @@
-trait Category (A:type->type->type) {
+trait Category (A:*->*->*) {
   sig identity: forall a. a ~> a
   sig compose : forall a b c.A b c -> A a b -> A a c
 

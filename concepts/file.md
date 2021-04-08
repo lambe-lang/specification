@@ -12,7 +12,7 @@ a file implementation.
 
 File `Map.lambe`
 ```
-kind t = type -> type
+kind t = * -> *
 
 sig map : forall a b. self -> t a -> t b for a -> b
 ```

@@ -80,6 +80,8 @@ def (|>) f = f $ self
 
 ### 2.1 Data type definition
 
+#### 2.1.1 Split definitions
+
 ```
 data None
 data Some a (value: a)
@@ -91,7 +93,7 @@ specification based order:
 
 ```
 sig None : None
-sig Some : a -> Some a
+sig Some : forall a.a -> Some a
 ```
 
 Lambë does not provide a pattern matching, but a Kotlin like smart cast on types.
@@ -99,9 +101,27 @@ Lambë does not provide a pattern matching, but a Kotlin like smart cast on type
 ```
 // Given an optional o
 when o
-is None -> // o is a None
-is Some -> // o is a Some
+is None -> // o is a data None
+is Some -> // o is a data Some
 ``` 
+
+#### 2.1.2 Sealed definitions
+
+```
+type Option a = 
+  data None 
+| data Some (value: a)
+```
+
+For each data a corresponding constructor is define denoted by a function where parameters are define thanks to attribute
+specification based order:
+
+```
+sig None : forall a.Option a
+sig Some : forall a.a -> Option a
+```
+
+The smart cast does not change since `data Some (value : a)` is a well formed data type. 
 
 ### 2.2 Data type implementation
 

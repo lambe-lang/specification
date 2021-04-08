@@ -1,6 +1,7 @@
 use listf
 
 type List a = ListF a (List a)
+type Cons a = ConsF a (List a)
 
 -- section Constructor
 
@@ -9,12 +10,6 @@ impl forall a. List a {
         sig (]) : List a
         sig (,) : a -> ListBuilder a
     }
-
-    sig ([]) : Nil
-    def ([]) = Nil
-
-    sig (::) : forall a. self -> List a -> List a for a
-    def (::) = Cons self
 
     data ([) a { value:a }
 

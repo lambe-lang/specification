@@ -1,6 +1,6 @@
-data Mealy (m:type->type) a b { step : a -> m (Step m a b) }
+data Mealy (m:* -> *) a b { step : a -> m (Step m a b) }
 
-data Emit (m:type->type) a b { value : b; automata: Mealy m a b }
+data Emit (m:* -> *) a b { value : b; automata: Mealy m a b }
 data Halt
 
-type Step (m:type->type) a b = Emit m a b | Halt
+type Step (m:* -> *) a b = Emit m a b | Halt

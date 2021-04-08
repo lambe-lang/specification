@@ -14,6 +14,6 @@ dsl if <p> then <a> else <b>
 
 ```
 dsl let* <a> = <b> in <c>
-    : forall (m:type -> type) a b.ident -> (m a) -> (a -> m b) -> m c with Monad m
+    : forall (m:* -> *) a b.ident -> (m a) -> (a -> m b) -> m c with Monad m
     = b >>= { a -> c } 
 ```
