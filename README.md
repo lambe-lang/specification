@@ -121,7 +121,7 @@ sig None : forall a.Option a
 sig Some : forall a.a -> Option a
 ```
 
-The smart cast does not change since `data Some (value : a)` is a well formed data type. 
+The smart cast does not change since `data Some (value : a)` 
 
 ### 2.2 Data type implementation
 
@@ -162,7 +162,7 @@ trait Functor (f:*->*) {
 
 The `Functor` has a parametric type constructor `f` revealing the support of higher-kinded-types in the language.
 
-The `map` has a receiver called `self` and this receiver has the following type given by the *for* directive: `f a`.
+The `map` has a receiver called `self` and this receiver has the type `f a` given by the *for* directive.
 
 ```
 trait Applicative (f:*->*) with Functor f {
@@ -174,7 +174,8 @@ trait Applicative (f:*->*) with Functor f {
 }
 ```
 
-Such *for* directive can be define at the trait level, signature level or definition level. If such directive is not expressed for a method and does not have `self` as first parameter it's a *static* method. 
+Such *for* directive can be defined at the trait level, signature level or definition level. If such a directive is not 
+expressed for a method and does not have `self` as first parameter it's a *static* method. 
 
 ```
 trait Monad (f:*->*) with Applicative f {
@@ -189,7 +190,7 @@ trait Monad (f:*->*) with Applicative f {
 }
 ```
 
-Finally, each method can be specified with a dedicated `self` type. As a conclusion a trait define a logical development unit.
+Finally, each method can be specified with a dedicated `self` type. As a conclusion, a trait define a logical development unit.
 
 ### Trait implementation
 
@@ -244,8 +245,8 @@ impl Monad Option {
 
 ### File as trait
 
-Each file containing Lambë code is a trait definition. For instance
-a file named `list` can be defined by:
+Each file containing Lambë code is a trait definition. For instance a file named `list` can be defined by:
+
 ```
 data Nil
 data Cons a (h: a) (t: List a)
@@ -270,13 +271,13 @@ trait list {
 }
 ```
 
-This implies the capability to use list as a type elsewhere in the code
-but also the capability to define trait, type etc. in a trait, or it's
-implementation.
+This implies the capability to use list as a type elsewhere in the code but also the capability to define locally traits, 
+types etc. in a trait, or it's implementation.
 
 ### Generalising trait approach
 
 If a file is a trait we can also reuse the `for` directive for each function.
+
 ```
 trait list {
     data Nil
@@ -328,7 +329,7 @@ In another compilation an implementation can be locally and explicitly required.
 ```
 sig main : forall a. Try a -> Option a
 def main t =
-    let impl Try ~> Option in
+    let use Try ~> Option in
         t transform
 ```
 
@@ -341,8 +342,8 @@ def main t = t transform
 
 ### `Abstract` trait
 
-If a file is a trait it can also define signatures without implementation.
-Therefor the definition should be given when the implementation is require.
+If a file is a trait, it can also define signatures without implementation.
+Therefore, the definition should be given when the implementation is required.
 
 For instance the `::` is specified but not defined:
 ```
