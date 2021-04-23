@@ -40,11 +40,11 @@
 \newcommand{\crtdef}[1]
 {
         {\small
-        \begin{tabular}{p{12cm}}
-            \hline
-            #1 \\
-            \hline
-        \end{tabular}
+    \begin{tabular}{p{12cm}}
+        \hline
+        #1 \\
+        \hline
+    \end{tabular}
     }
 }
 
@@ -83,6 +83,7 @@
 \usepackage{amssymb}
 \usepackage{trfrac}
 \usepackage{amsmath}
+\usepackage{wasysym}
 
 \begin{document}
 
@@ -165,8 +166,8 @@
 
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \underline{c} & \in  & {\cal C}                                                                     & Constructor names \\
-            \alpha        & \in  & {\cal I}                                                                     & Variable names    \\
+            \underline{c} & \in  & {\cal C}                                                                & Constructor names \\
+            \alpha        & \in  & {\cal I}                                                                & Variable names    \\
             \\
             \epsilon & =
             & \alpha                                                                         & Variable              \\
@@ -179,6 +180,7 @@
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
             & \mid & \epsilon . m                                                            & Trait~term~Usage             \\
+            & \mid & \epsilon ~\term{as}~ \tau                                               & Type expression
         \end{array} \\
     \end{math}
 
@@ -265,7 +267,7 @@ type List a =
     \noindent
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \term{Nil}  & : & \forall(\alpha:\star).\term{List} ~ \alpha \\                                                                                    \\
+            \term{Nil}  & : & \forall(\alpha:\star).\term{List} ~ \alpha                                                   \\                                                                                    \\
             \term{Cons} & : & \forall(\alpha:\star).\alpha \rightarrow \term{List}~\alpha \rightarrow \term{List} ~ \alpha
         \end{array}
     \end{math}
@@ -628,13 +630,17 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \crtdef{
         \begin{gather*}
             \trfrac[(id)]
-            {\Gamma[e]_\sigma = t' ~~~ \Gamma \vdash t \subseteq t'}
+            {\Gamma[e]_\sigma = t' ~~~ \Gamma \vdash t' \subseteq t}
             {\Gamma \vdash e : t}
             ~~~
             \trfrac[(app)]
             {\Gamma \vdash n : t_1 \rightarrow t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
             {\Gamma \vdash n~a : t_2}
             \\\\
+            \trfrac[(as)]
+            {\Gamma \vdash e : t' ~~~ \Gamma \vdash t' \subseteq t}
+            {\Gamma \vdash e ~\term{as}~ t': t}
+            ~~~
             \trfrac[(call)]
             {\Gamma \vdash n : t_1 \looparrowright t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
             {\Gamma \vdash a~n : t_2}
