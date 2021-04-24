@@ -137,7 +137,7 @@ impl forall a. Option a {
 ```
 
 In this implementation for `Option a` we use a type named `self`. In fact self denotes the type of the receiver which is `Option a` in this case defined thanks to the `for ...` declaration. Furthermore, implementations are
-define for each option data type i.e. None and Some.
+defined for each option data type i.e. None and Some.
 
 ### 2.3 Data type in action
 
@@ -210,7 +210,7 @@ impl Monad Option {
     def join = self fold { None } { _1 value }   
 }
 
-// Functor Option pure 1 map (1 +)   
+// (Functor Option).pure 1 map (1 +)   
 ```
 
 #### Smart lookup based version

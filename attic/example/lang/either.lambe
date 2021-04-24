@@ -43,7 +43,7 @@ impl forall a b. Equatable a b (Either a b)
 -- section Monad
 
 impl forall e. Monad (Either e) {
-    def pure a = Right a
+    def pure = Right
 
     def product a =
         when self
