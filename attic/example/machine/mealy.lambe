@@ -1,6 +1,21 @@
-data Mealy (m:* -> *) a b { step : a -> m (Step m a b) }
+--{
+    First representation of a Mealy Machine
+}
+
+data Mealy (m:* -> *) a b { step : a -> m (Step m a b) } -- What is the purpose of m ?
 
 data Emit (m:* -> *) a b { value : b; automata: Mealy m a b }
 data Halt
 
 type Step (m:* -> *) a b = Emit m a b | Halt
+
+--{
+    A Mealy automata can also be synthesised by the following type
+}
+
+kind Mealy = * -> * -> *
+type Mealy a b = data M (value : forall s. s * (a * s -> b * s))
+
+--{
+    Therefore a manipulation thanks to Causal Arrow can be proposed.
+}

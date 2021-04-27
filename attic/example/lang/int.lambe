@@ -1,7 +1,7 @@
 use char
 use algebraic
 
-kind int = type
+kind int = *
 
 impl int {
     sig (+) : self -> self -> self

@@ -1,5 +1,5 @@
-data (<..<) { min:int; max:int }
-data (>..>) { min:int; max:int }
+data (<..<) (min:int) (max:int)
+data (>..>) (max:int) (min:int)
 
 type Range = RangeFromTo | RangeFromDownTo
 

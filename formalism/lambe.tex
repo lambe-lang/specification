@@ -101,6 +101,9 @@
             & =    & \star                     \\
             & \mid & \kappa \rightarrow \kappa \\
             & \mid & K                         \\
+            \\
+            m_i & \in & {\cal I} \\
+            K & =                  & \{ m_i:\kappa_i \}_I \\
         \end{array}
     \end{math}
 
@@ -125,6 +128,10 @@
             & \mid & \underline{c} S              & Type Constructor              \\
             & \mid & \Gamma                       & Trait Type              \\
             & \mid & \tau . m                     & Trait Type Usage              \\
+            \\
+            T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
+            S       & =   & \{ m_i : \tau_i \}_I              \\
+            \Gamma  & =   & \langle K, T, S, \{ \Gamma_i \}_I \rangle        \\
         \end{array}
     \end{math}
 
@@ -133,11 +140,6 @@
 
     \begin{math}
         \begin{array}{rcll}
-            m_i & \in & {\cal I} \\
-            \\
-            K       & =   & \{ m_i : \kappa_i \}_I            \\
-            T       & =   & \{ m_i \triangleq \tau_i \}_I     \\
-            S       & =   & \{ m_i : \tau_i \}_I              \\
             \Gamma  & =   & \langle K, T, S, \{ \Gamma_i \}_I \rangle        \\
             \\
             \Gamma_\emptyset & = & \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle \\
@@ -179,7 +181,7 @@
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
-            & \mid & \epsilon . m                                                            & Trait~term~Usage             \\
+            & \mid & \epsilon . m                                                            & Trait~term~Usage              \\
             & \mid & \epsilon ~\term{as}~ \tau                                               & Type expression
         \end{array} \\
     \end{math}
@@ -567,7 +569,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\Gamma \vdash t_1 \subseteq t_2}
             ~~~
             \trfrac[(app-r)]
-            {\Gamma \vdash t_2 \longrightarrow t_3 ~~~ \Gamma \vdash t_1 \subseteq t_4 }
+            {\Gamma \vdash t_2 \longrightarrow t_3 ~~~ \Gamma \vdash t_1 \subseteq t_3 }
             {\Gamma \vdash t_1 \subseteq t_2}
             \\\\
             \trfrac[(sub-$\rightarrow$)]

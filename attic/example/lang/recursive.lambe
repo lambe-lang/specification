@@ -11,9 +11,9 @@ impl forall (f:* -> *). Fix f with Functor f {
 
 -- Simple logical expression
 
-data Boolean { value : Bool }
-data Or  a { left : a; right : a }
-data And a { left : a; right : a }
+data Boolean (value : Bool)
+data Or  a (left : a) (right : a)
+data And a (left : a) (right : a)
 
 type Exp a = Boolean | Or a | And a
 

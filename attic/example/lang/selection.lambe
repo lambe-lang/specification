@@ -1,8 +1,8 @@
 use bool
 use unit
 
-data If { cond : bool }
-data Then a { cond : bool; then : Unit -> a }
+data If (cond : bool)
+data Then a (cond : bool) (then : Unit -> a)
 
 sig if : bool -> If
 def if = If

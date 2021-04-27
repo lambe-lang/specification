@@ -3,7 +3,7 @@ use char
 use algebraic
 use list
 
-data string { value: List char }
+data string (value: List char)
 
 impl SemiGroup string with SemiGroup (List char) {
     def compose b = string (self.value composes b.value)

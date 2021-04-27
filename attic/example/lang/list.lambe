@@ -2,6 +2,7 @@ use listf
 
 type List a = ListF a (List a)
 type Cons a = ConsF a (List a)
+type Nil    = NilF
 
 -- section Constructor
 

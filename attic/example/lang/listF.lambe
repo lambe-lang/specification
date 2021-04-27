@@ -1,4 +1,4 @@
-type Nil       = data ([])
+type NilF      = data ([])
 type ConsF a l = data (::) (head : a) (tail : l)
 type ListF a l = Nil | ConsF a l
 

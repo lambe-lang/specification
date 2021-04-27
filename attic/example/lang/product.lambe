@@ -1,4 +1,4 @@
-type (*) a b = data (,) { fst : a; snd : b }
+type (*) a b = data (,) (fst : a) (snd : b)
 
 impl forall a b. a * b {
     sig swap : a * b -> b * a
