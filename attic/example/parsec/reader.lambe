@@ -1,7 +1,7 @@
 trait Reader a {
     kind t = * -> * -- Abstract type
 
-    data Source { s: t a; pos: (int*int*int) }
+    data Source (s: t a) (pos: int*int*int)
 
     sig new : t a -> Source
     def new s = Source s (0,0,0)

@@ -11,7 +11,7 @@ trait Eval a for a {
 
 -- Defining the number and its evaluation
 
-data Number { value : int }
+data Number (value : int)
 
 impl Eval self for Number {
     def eval = self.value

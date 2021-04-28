@@ -1,7 +1,7 @@
 use lang.bool
 
-data Rejected s { source : s; consumed : bool}
-data Accepted a s { value : a; source : s; consumed : bool }
+data Rejected s (source: s) (consumed: bool)
+data Accepted a s (value: a) (source: s) (consumed: bool)
 type Response a s = Rejected s | Accepted a s
 
 impl forall a s. Response a s {

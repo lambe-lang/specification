@@ -1,7 +1,7 @@
 trait Types s with Reader s {
-    data SP { eos : bool; accepts: list s }
+    data SP (eos : bool) (accepts: list s)
     type DP a = Source -> Option (a * Source)
-    data Parser a { static: SP s; dynamic: DP a }
+    data Parser a (static: SP s) (dynamic: DP a)
 }
 
 sig symbol : forall a. a -> Parser a with Types a

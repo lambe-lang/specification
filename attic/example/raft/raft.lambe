@@ -1,8 +1,8 @@
 -- ================================================================
 
-data Identifier { name : string }
+data Identifier (name : string)
 
-data Term { value : Int }
+data Term (value : Int)
 
 impl Term {
     sig term : self -> Term for int
@@ -14,7 +14,7 @@ impl Term {
 
 -- ================================================================
 
-data Index { value : Int }
+data Index (value : Int)
 
 impl Index {
     sig index : self -> Term for int
@@ -32,18 +32,18 @@ impl Index {
 
 -- ================================================================
 
-data Context   { numberOfNodes : int; activeNodes : List NodeIdentifier extendedTime : bool }
-data Leader    { context: Context }
-data Elector   { context: Context }
-data Follower  { context: Context, leader: Identifier }
-data Candidate { context: Context, followers: List Identifier }
+data Context   (numberOfNodes : int) (activeNodes : List NodeIdentifier) (extendedTime : bool)
+data Leader    (context: Context)
+data Elector   (context: Context)
+data Follower  (context: Context) (leader: Identifier)
+data Candidate (context: Context) (followers: List Identifier)
 
 type Kind = Leader | Elector | Follower | Candidate
 
 -- ================================================================
 
-data VoteRequested { candidate : Identifier, term: Term, lastLog : (Index, Term) }
-data VoteAccepted { follower : Identifier, term: Term }
+data VoteRequested (candidate : Identifier) (term: Term) (lastLog : Index * Term)
+data VoteAccepted  (follower  : Identifier) (term: Term)
 
 
 
