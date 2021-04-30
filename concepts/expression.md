@@ -1,20 +1,21 @@
 # Expression
 
+**Kind** : Expression definition
+
 ## Grammar 
 ```
-expr  ::= "{" (param+ "->")? expr "}"
-        | "let" IDENT (param)* "=" expr "in" expr
+expr  ::= "{" (id+ "->")? expr "}"
+        | "let" id (param)* "=" expr "in" expr
         | "let" "impl" type_expr "in" expr
-        | ("when" ("let" IDENT =)? expr)+ case+``
-        | param
-        | native
-        | "_"
+        | "when" ("let" id = expr | id) case+
+        | id
+        | op
         | expr expr
         | "(" expr ")"
-        | dname
-        | OPERATOR
-        | expr "." dname
-        | expr "with" ("IDENT "=" expr)+
+        | expr "." expr
+        | expr "as" type
+        | "unpack" "{" id "," id "}" "=" exp "in" exp
+        | "pack "{" type "," exp "}"
         | impl
         
 case  ::= "is" type "->" expr          

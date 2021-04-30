@@ -1,5 +1,7 @@
 # Type definition
 
+**Kind** : Type specification
+
 ## Grammar
 ```
 type  ::= type "->" type ("for" type)?        

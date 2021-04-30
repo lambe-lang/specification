@@ -7,6 +7,12 @@ impl forall a b. a * b {
     sig duplicate : a -> a * a
     def duplicate a = a , a
 
+    sig fst : self -> a
+    def fst = self.fst
+
+    sig snd : self -> b
+    def snd = self.snd
+
     sig zip : forall c d. self -> c * d -> (a * c) * (b * d)
     def zip p = (self.fst , p.fst), (self.snd , p.snd)
 }

@@ -1,19 +1,15 @@
 # Domain Specific language
 
-TODO
+**Kind** : Expression extension
 
 ## if/then/else expression
 
 ```
-dsl if <p> then <a> else <b>
-    : forall a. bool -> (() -> a) -> (() -> a) -> a   
-    = p cond a b ()
+syntax if <p> then <a> else <b> { p cond a b () }
 ```
 
 ### Monadic let binding
 
 ```
-dsl let* <a> = <b> in <c>
-    : forall (m:* -> *) a b.ident -> (m a) -> (a -> m b) -> m c with Monad m
-    = b >>= { a -> c } 
+syntax let* <a> = <b> in <c> = b >>= { a -> c } 
 ```

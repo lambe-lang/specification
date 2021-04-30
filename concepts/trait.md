@@ -1,5 +1,7 @@
 # Trait specification and implementation
 
+**Kind** : Trait definition and expression
+
 A trait is a conceptual model use for the structuration. This implies
 a specification using the `trait` keyword.
 

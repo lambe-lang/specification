@@ -4,7 +4,7 @@
 
 use functions
 
-type Continuation a = forall b.(a -> b) -> b
+type Continuation a = forall b.(a -> b) -> b  -- Codensity Identity
 
 impl Functor Continuation {
     def map f c = { k -> c (f |> k) }

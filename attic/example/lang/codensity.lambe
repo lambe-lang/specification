@@ -1,4 +1,4 @@
-data Codensity (f:* -> *) a = forall r. (a -> f r) -> f r
+type Codensity (f:* -> *) a = forall r. (a -> f r) -> f r
 
 // Laws?
 

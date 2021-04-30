@@ -69,11 +69,20 @@ sig zero =
     in { neutral } 
 ```
 
+## Local use and dot notation 
+
+```
+sig zero : () -> int
+sig zero = 
+    (impl Neutral int).{ neutral } 
+```
+
 ## Opening a trait specification
 
-If the specified element to be opened is a trait it 
-can be used directly if an implementation can be performed 
-seamlessly.
+If the specified element to be opened is a trait, it 
+can be used directly iff an implementation can be build 
+directly i.e. all specified signatures have a given 
+implementation.
 
 ```
 use lang.int
