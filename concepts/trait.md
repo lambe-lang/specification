@@ -8,8 +8,8 @@ a specification using the `trait` keyword.
 ## Grammar
 
 ```
-trait ::= "trait" IDENT t_param* for? with* ("{" entity* "}")?
-impl  ::= "impl" IDENT t_param* for? with* ("{" entity* "}")?
+trait ::= "trait" (id | op) t_param* for? with* ("{" entity* "}")?
+impl  ::= "impl" type with* ("{" entity* "}")?
 for   ::= "for" type
 with  ::= "with" type
 ```

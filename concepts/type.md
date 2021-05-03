@@ -6,13 +6,19 @@
 ```
 type  ::= type "->" type ("for" type)?        
         | "self"
+        | type op type
         | type type
         | forall param+.type
         | exist param+.type
-        | data id attr*
+        | data (ident) attr*
         | type "|" type        
         | "trait" for? with* ("{" entity* "}")?
-        | type "." id    
+        | type "." id
+        | ident
+        
+ident ::=          
+        | id
+        | "(" op ")"   
         
 attr  ::= "(" id : type ")"
 param ::= id | "(" id ":" kind)        
@@ -30,6 +36,7 @@ Nil {}
 forall a.data Cons (h:a) (t:list a) | data Nil
 trait { sig add : self -> int -> int for self }
 trait { type t : int }.t
+int ~> string
 ```
 
 ### Accessing types 
