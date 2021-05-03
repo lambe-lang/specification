@@ -30,6 +30,15 @@ trait Monad (f:* -> *) with Applicative f {
 
     sig (>>=) : forall a b. self -> (a -> f b) -> f b for f a
     def (>>=) = self bind
+
+    trait Syntax {
+        syntax let* <a=ident> = <b> in <c> { b >>= { a -> c } }
+
+        syntax do <n=ident> <- <a> ; <b=do>   { a >>= { n -> b } }
+                | <n=ident> <- <a> yield <b>  { a <$> { n -> b } }
+                | <a> ; <b=do>                { a >>= { b }      }
+                | <a> yield <b>               { a <$> { b }      }
+    }
 }
 
 trait Kleisli (f:* -> *) with Monad f {

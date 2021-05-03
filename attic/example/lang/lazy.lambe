@@ -1,0 +1,7 @@
+type Lazy a = data Lazy (v:() -> a)
+
+sig lazy : (() -> a) -> Lazy a
+def lazy = Lazy
+
+sig run : forall a. self -> a for Lazy a
+def run = self.v ()
