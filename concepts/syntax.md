@@ -29,9 +29,9 @@ the syntax extension can express thanks to the following syntax extension:
 
 ```
 syntax do <n=ident> <- <a> ; <b=do>   { a >>= { n -> b } }
-        | <n=ident> <- <a> yield <b>  { a >>= { n -> b } } 
+        | <n=ident> <- <a> yield <b>  { a <$> { n -> b } } 
         | <a> ; <b=do>                { a >>= { b }      }
-        | <a> yield <b>               { a >>= { b }      }
+        | <a> yield <b>               { a <$> { b }      }
 ```
 
 ```

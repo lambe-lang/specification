@@ -6,27 +6,13 @@ type Nil    = NilF
 
 -- section Constructor
 
-impl forall a. List a
-    trait Builder a {
-        sig (]) : List a
-        sig (,) : a -> ListBuilder a
-    }
+trait Syntax {
+    syntax []       { Nil }
 
-    data ([) a (value:a)
-
-    impl forall a. Builder a for ([) a {
-        def (]) = self.value::Nil
-        def (,) a = ListBuilder { (self.value::a::_) }
-    }
-
-    data ListBuilder a (value : List a -> List a)
-
-    impl forall a. Builder a for ListBuilder a {
-        def (]) = self.value
-        def (,) a = ListBuilder { self.value (a::_) }
-    }
-
-impl Constructor
+    syntax [
+     | <a> ]        { a::Nil    }
+     | <a> ; <b=[>  { a::b      }
+}
 
 -- section Foldable
 

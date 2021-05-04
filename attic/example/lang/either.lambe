@@ -50,7 +50,7 @@ impl forall e. Monad (Either e) {
         is Left -> Left self.value
         is Right ->
             when a
-            is Left -> a
+            is Left -> Left a.value
             is Right -> Right (self.value , a.value)
 
     def join =
