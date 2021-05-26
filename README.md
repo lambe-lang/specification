@@ -591,7 +591,7 @@ syntax if <p> then <a> else <b> { p fold { a } { b } () }
 ```
 
 ````
-if condition a b then expr1 a else expr2 b 
+if condition a b then expr1 else expr2
 ````
 
 ### Monadic let binding
@@ -609,7 +609,7 @@ let* a = f b in g a
 ### Do notation
 
 The `do` notation is a based on a recursive construction. For this purpose
-the syntax extension can express thanks to the following syntax extension:
+the syntax extension can be express thanks to the following syntax extension:
 
 ```
 syntax do <n=ident> <- <a> ; <b=do>   { a >>= { n -> b } }
