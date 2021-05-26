@@ -211,7 +211,7 @@ impl Monad Option {
     def join = self fold { None } { _1 value }   
 }
 
-// (Functor Option).pure 1 map (1 +)   
+// (Monad Option).return 1 map (1 +)   
 ```
 
 #### Smart lookup based version
