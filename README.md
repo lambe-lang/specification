@@ -20,6 +20,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Self receiver concept,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Structured comments
+- [X] Syntax extension  
 - [ ] Algebraic effects 
 
 ## 1. Function
@@ -575,7 +576,57 @@ List[1,2  : ClosableCollection (List int) int
 List[1,2] : List int
 ```
 
-## 8. Grammar
+## 8. Syntax extension
+
+The syntax of expressions in Lambë can be extended and such extensions
+are applied during the parsing stage.
+
+### if/then/else expression
+
+Thanks to this syntax extension capability we can easily propose for 
+example an if/then/else instead of the previous functional version.
+
+```
+syntax if <p> then <a> else <b> { p fold { a } { b } () }
+```
+
+````
+if condition a b then expr1 a else expr2 b 
+````
+
+### Monadic let binding
+
+Like in OCaml a specific `let` binding can be proposed:
+
+```
+syntax let* <a=ident> = <b> in <c> { b >>= { a -> c } } 
+```
+
+```
+let* a = f b in g a
+```
+
+### Do notation
+
+The `do` notation is a based on a recursive construction. For this purpose
+the syntax extension can express thanks to the following syntax extension:
+
+```
+syntax do <n=ident> <- <a> ; <b=do>   { a >>= { n -> b } }
+        | <n=ident> <- <a> yield <b>  { a <$> { n -> b } } 
+        | <a> ; <b=do>                { a >>= { b }      }
+        | <a> yield <b>               { a <$> { b }      }
+```
+
+```
+let use Monad Option in
+    do n <- pure 30 
+     ; r <- (+) <$> n <*> pure 10 
+    yield r + 2
+```
+
+
+## 9. Grammar
 
 ```
 s0        ::= entity*

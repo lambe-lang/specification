@@ -17,10 +17,6 @@ trait Foldable s for s {
 
     sig fold : forall b. self -> b -> b -> b for unit -> s
     def fold s b1 b2 = self () fold b1 b1
-
-    trait Syntax {
-        syntax if <p> then <a> else <b> { p fold { a } { b } () }
-    }
 }
 
 impl Foldable True {
@@ -34,6 +30,10 @@ impl Foldable False {
 impl Foldable Bool
     with Foldable True
     with Foldable False
+
+trait Syntax {
+    syntax if <p> then <a> else <b> { p fold { a } { b } () }
+}
 
 -- The lazy bool implementation
 

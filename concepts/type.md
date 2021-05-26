@@ -13,7 +13,7 @@ type  ::= type "->" type ("for" type)?
         | data (ident) attr*
         | type "|" type        
         | "trait" for? with* ("{" entity* "}")?
-        | type "." id
+        | type "." type
         | ident
         
 ident ::=          
