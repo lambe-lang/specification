@@ -9,7 +9,7 @@ syntax if <p> then <a> else <b> { p fold { a } { b } () }
 ```
 
 ````
-if condition a b then expr1 a else expr2 b 
+if condition a b then expr1 else expr2 
 ````
 
 ## Monadic let binding
