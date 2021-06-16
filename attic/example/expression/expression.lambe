@@ -13,7 +13,7 @@ trait Eval a for a {
 
 data Number (value : int)
 
-impl Eval self for Number {
+impl Eval Number {
     def eval = self.value
 }
 
@@ -31,7 +31,7 @@ type Exp e = Number | Plus e
 
 type ExpL1 = Exp ExpL1
 
-impl Eval self for ExpL1
+impl Eval ExpL1
     with Eval Number
     with Eval (Plus self)
 
@@ -47,7 +47,7 @@ impl forall a. Eval self for Mult a with Eval a {
 
 type ExpL2 = Exp ExpL2 | Mult ExpL2
 
-impl Eval self for ExpL2
+impl Eval ExpL2
     with Eval Number
     with Eval (Plus self)
     with Eval (Mult self)
