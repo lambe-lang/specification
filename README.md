@@ -254,7 +254,7 @@ data Cons a (h: a) (t: List a)
 
 type List a = Nil | Cons a
 
-sig (::) : forall a. a -> List a -> List a
+sig (::) : forall a. self -> List a -> List a for a
 def (::) = Cons
 
 // 1 :: Nil
@@ -267,7 +267,7 @@ trait list {
     data Cons a (h: a) (t: List a)
     type List a = Nil | Cons a
 
-    sig (::) : forall a. a -> List a -> List a
+    sig (::) : forall a. self -> List a -> List a for a
     def (::) = Cons
 }
 ```
