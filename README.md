@@ -519,7 +519,7 @@ impl forall b. Otherwise b {
 
 ```
 data CollectionBuilder a b {
-    add   a -> CollectionBuilder a b
+    add   : a -> CollectionBuilder a b
     unbox : b
 }
 
@@ -568,8 +568,8 @@ def List =
 ### The List builder in action
 
 ```
-List      : OpenableCollection (List a) a
-List[     : a -> ClosableCollection (List a) a
+List      : forall a. OpenableCollection (List a) a
+List[     : forall a. a -> ClosableCollection (List a) a
 List[1    : ClosableCollection (List int) int
 List[1,   : int -> ClosableCollection (List int) int
 List[1,2  : ClosableCollection (List int) int
