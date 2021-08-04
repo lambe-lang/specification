@@ -1,4 +1,6 @@
 kind (->) = * -> * -> *
+kind True
+kind False
 
 sig id : forall a. a -> a
 def id a = a
@@ -26,11 +28,11 @@ type (#>) a b = self -> b for a
 sig (::) : forall a b.(a #> b) -> (a -> b)
 def (::) f a = a f
 
-sig (#$) : forall a b c.(a #> b) -> (b #> c) -> (a -> c)
-def (#$) f g = g #@ f
-
 sig (#@) : forall a b c.(b #> c) -> (a #> b) -> (a -> c)
 def (#@) f g a =  a g f
+
+sig (#$) : forall a b c.(a #> b) -> (b #> c) -> (a -> c)
+def (#$) f g = g #@ f
 
 --{
     ```

@@ -84,8 +84,8 @@ def (|>) f = f $ self
 #### 2.1.1 Split definitions
 
 ```
-data None
-data Some a (value: a)
+type None     = data None
+type Some a   = data Some (value: a)
 type Option a = None | Some a
 ```
 
@@ -249,9 +249,8 @@ impl Monad Option {
 Each file containing Lambë code is a trait definition. For instance a file named `list` can be defined by:
 
 ```
-data Nil
-data Cons a (h: a) (t: List a)
-
+type Nil    = data Nil
+type Cons a = data Cons (h: a) (t: List a)
 type List a = Nil | Cons a
 
 sig (::) : forall a. self -> List a -> List a for a
@@ -263,8 +262,8 @@ def (::) = Cons
 This file content is in fact similar to the trait:
 ```
 trait list {
-    data Nil
-    data Cons a (h: a) (t: List a)
+    type Nil    = data Nil
+    type Cons a = data Cons (h: a) (t: List a)
     type List a = Nil | Cons a
 
     sig (::) : forall a. self -> List a -> List a for a
@@ -281,8 +280,8 @@ If a file is a trait we can also reuse the `for` directive for each function.
 
 ```
 trait list {
-    data Nil
-    data Cons a (h: a) (t: List a)
+    type Nil    = data Nil
+    type Cons a = data Cons (h: a) (t: List a)
     type List a = Nil | Cons a
 
     sig (::) : forall a. self -> List a -> List a for a
@@ -348,8 +347,8 @@ Therefore, the definition should be given when the implementation is required.
 
 For instance the `::` is specified but not defined:
 ```
-data Nil
-data Cons a (h: a) (t: List a)
+type Nil    = data Nil
+type Cons a = data Cons (h: a) (t: List a)
 type List a = Nil | Cons a
 
 sig (::) : forall a. self -> List a -> List a for a
@@ -431,8 +430,8 @@ In this sample the `::` function is use but not implemented.
 ### if/then/else DSL
 
 ```
-data If (cond : bool)
-data Then a (cond : bool) (then : unit -> a)
+type If     = data If (cond : bool)
+type Then a = data Then(cond : bool) (then : unit -> a)
 
 sig if : bool -> If
 def if = If
@@ -477,9 +476,9 @@ def is a b = a == b
 sig switch : a -> Switch a b
 def switch a = Switch a None
 
-data Switch a b (value: a) (result : Option b)
-data Case a b (value : a) (result : (unit -> b) -> Option b)
-data Otherwise b (result : (unit -> b) -> b)
+type Switch a b  = data Switch (value: a) (result : Option b)
+type Case a b    = data Case (value : a) (result : (unit -> b) -> Option b)
+type Otherwise b = data Otherwise(result : (unit -> b) -> b)
 
 impl forall a b. Switch a b {
     sig case      : self -> Predicate a -> Case a b
@@ -518,16 +517,16 @@ impl forall b. Otherwise b {
 #### Collection builder Data
 
 ```
-data CollectionBuilder a b {
+type CollectionBuilder a b = data CollectionBuilder {
     add   : a -> CollectionBuilder a b
     unbox : b
 }
 
-data OpenableCollection a b { 
+type OpenableCollection a b = data OpenableCollection { 
     value : CollectionBuilder a b 
 }
 
-data ClosableCollection a b {
+type ClosableCollection a b = data ClosableCollection {
     value : CollectionBuilder a b
 } 
 ```
@@ -555,8 +554,8 @@ impl forall a b. ClosableCollection a b {
 #### The list builder
 
 ```
-data Nil
-data Cons a (h: a) (t: List a)
+type Nil    = data Nil
+type Cons a = data Cons (h: a) (t: List a)
 type List a = Nil | Cons a
 
 sig List : forall a. OpenableCollection (List a) a
@@ -631,13 +630,13 @@ let use Monad Option in
 ```
 s0        ::= entity*
 
-entity    ::= kind | sig | def | data | type | trait | impl | use
+entity    ::= kind | sig | def | type | trait | impl | use
 
 use       ::= "use" IDENT
             | "from" IDENT use IDENT ("," IDENT)*
 sig       ::= "sig" dname ":" type_expr for? with* 
 def       ::= "def" dname param* "=" expr
-data      ::= "data" dname t_kind* t_param*
+data      ::= "data" dname t_param*
 kind      ::= "kind" dname "=" kind_expr
 type      ::= "type" dname t_param "=" type_expr ("|" type_expr) 
 trait     ::= "trait" IDENT t_param* for? with* ("{" entity* "}")?

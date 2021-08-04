@@ -10,8 +10,8 @@ trait Syntax {
     syntax []       { Nil }
 
     syntax [
-     | <a> ]        { a::Nil    }
-     | <a> ; <b=[>  { a::b      }
+     | <a> ]        { a::Nil }
+     | <a> ; <b=[>  { a::b   }
 }
 
 -- section Foldable

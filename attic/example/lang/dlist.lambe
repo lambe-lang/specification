@@ -15,5 +15,5 @@ impl forall a. DList a {
     def (++) l = self @> l
 
     sig snoc : self -> a -> self
-    def snoc = self ++ $ [a]
+    def snoc = self ++ [a]
 }

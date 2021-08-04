@@ -8,8 +8,8 @@ trait Arrow ((~>): * -> * -> *) with Category (~>) {
 }
 
 trait ArrowExtension ((~>): * -> * -> *) with Arrow (~>) {
-    type second = forall a b c.a ~> b -> (c * a) ~> (c * b)
-    func second f = arr swap >>> (first f) >>> (arr swap)
+    sig second = forall a b c.a ~> b -> (c * a) ~> (c * b)
+    def second f = arr swap >>> (first f) >>> (arr swap)
 
     sig (***) : forall a b c d.self -> c ~> d -> (a * c) ~> (b * d) for a ~> b
     def (***) g = first self >>> $ second g

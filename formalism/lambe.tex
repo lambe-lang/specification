@@ -96,13 +96,14 @@
     \section{Kind level}\label{sec:kind-level}
 
     \begin{math}
-        \begin{array}{rcll}
+        \begin{array}{rclp{5cm}}
+            m_i    & \in  & {\cal I}                  & Component name \\
             \kappa
-            & =    & \star                     \\
-            & \mid & \kappa \rightarrow \kappa \\
-            & \mid & K                         \\
+            & =    & \star                     & Kind              \\
+            & \mid & \kappa \rightarrow \kappa & Function Kind     \\
+            & \mid & K                         & Trait Kind        \\
+            & \mid & \underline{c} K           & Kind Constructor  \\
             \\
-            m_i & \in & {\cal I} \\
             K & =                  & \{ m_i:\kappa_i \}_I \\
         \end{array}
     \end{math}
@@ -116,7 +117,7 @@
             \alpha        & \in  & {\cal I}                     & Variable names             \\
             \\
             \tau & =
-            & \alpha                       & Variable or Constant              \\
+            & \alpha                              & Variable or Constant              \\
             & \mid & \tau \rightarrow \tau        & Function Type              \\
             & \mid & \tau \looparrowright \tau    & Method Type              \\
             & \mid & \tau + \tau                  & Sum type              \\
@@ -140,7 +141,7 @@
 
     \begin{math}
         \begin{array}{rcll}
-            \Gamma  & =   & \langle K, T, S, \{ \Gamma_i \}_I \rangle        \\
+            \Gamma & = & \langle K, T, S, \{ \Gamma_i \}_I \rangle \\
             \\
             \Gamma_\emptyset & = & \langle \emptyset, \emptyset, \emptyset, \emptyset \rangle \\
             \\
@@ -177,7 +178,7 @@
             & \mid & \zeta . \epsilon                                                        & Method              \\
             & \mid & \epsilon ~ \epsilon                                                     & Application              \\
             & \mid & \term{let}~\alpha ~ \term{=} ~ \epsilon ~ \term{in} ~ \epsilon          & Let~binding              \\
-            & \mid & \term{when}(\alpha).\{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
+            & \mid & \term{when}(\alpha) \{ \tau_i \rhd \epsilon_i \}_I                      & Smart cast              \\
             & \mid & \{\tau, \epsilon\}                                                      & Pack              \\
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
@@ -420,7 +421,7 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
     \noindent
     \begin{math}
         \term{eq} : \langle
-        \{ \term{eq} : \star)\},
+        \emptyset,
         \{ \term{eq} \triangleq \forall(\alpha:\star).\term{List}~\alpha \rightarrow \term{List}~\alpha \rightarrow \term{bool} \},
         \emptyset,
         \{ \term{Equatable} ~ \alpha \}
@@ -684,8 +685,8 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\Gamma \vdash \term{let} ~ a ~ \term{=} ~ e_1 ~ \term{in} ~ e_2 : t_2}
             \\\\
             \trfrac[(when)]
-            {\forall i \in I, \Gamma \vdash a : t_i ~~~ {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
-            {\Gamma \vdash \term{when}(a).\{ t_i \rhd e_i \}_I : t}
+            {\Gamma \vdash a : \biguplus_I t_i ~~~ \forall i \in I, {\cal S}_\uparrow[\{ a : t_i \}] \oplus \Gamma \vdash e_i : t }
+            {\Gamma \vdash \term{when}(a) \{ t_i \rhd e_i \}_I : t}
             \\\\
             \trfrac[(trait)]
             {\Gamma \vdash \Gamma_1 \subseteq \Gamma_2 ~~~ \Gamma_1[m_i]_\sigma = t_i ~~~ \forall i \in I, \Gamma_1 \oplus \Gamma \vdash e_i : t_i }

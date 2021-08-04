@@ -1,0 +1,24 @@
+type Expr (f:*->*) = data In (v:f (Expr f))
+
+type Val _  = data Val (v:Int)
+type IntExp = Expr Val
+
+type Add e   = data Add (l:e) (r:e)
+type AddExpr = Expr Add
+
+type (:+:) (f:*->*) (g:*->*) e = data Inl (v:f e) | data Inr (v:g e)
+
+impl Functor Val {
+   def map int = int.v
+}
+
+impl Functor Add {
+  def map add = Add (self add.l) (self add.r)
+}
+
+impl forall (f:*->*) (g:*->*).Functor (f :+: g) with Functor f with Functor g {
+  def map e =
+      when e
+      is Inl -> Inl (self map e.v)
+      is Inr -> Inr (self map e.r)
+}
