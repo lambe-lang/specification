@@ -398,7 +398,7 @@ def (+) m =
 
 ```
 type Vect (_:Nat) a =
-  data ([])     : Vect Zero a
+  data ([])     : forall (n:Zero).Vect n a
 | data (::) h t : forall (n:Succ).a -> Vect n.v a -> Vect n a
 
 sig head : forall (n:Succ) a. self -> a for Vect n a
