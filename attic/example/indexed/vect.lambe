@@ -1,0 +1,51 @@
+trait Natural {
+    type Zero = data Zero
+    type Succ = data Succ (v:Nat)
+    type Nat  = Zero | Succ
+
+    sig Zero : Zero
+    sig Succ : Nat -> Succ
+
+    sig (+) : Nat -> Nat -> Nat
+    def (+) m =
+        when self
+        is Zero -> m
+        is Succ -> Succ $ self.v + m
+}
+
+trait Vect {
+    use Natural
+
+    type Vect (_:Nat) a =
+      data ([])     : Vect Zero a
+    | data (::) h t : forall (n:Succ).a -> Vect n.v a -> Vect n a
+
+    sig ([]) : forall a. Vect Zero a
+    sig (::) : forall (n:Succ) a.a -> Vect n.v a -> Vect n a
+
+    sig head : forall (n:Succ) a. self -> a for Vect n a
+    def head = self.h
+
+    sig tail : forall (n:Succ) a. self -> Vect n.v a for Vect n a
+    def tail = self.t
+
+    sig (++) : forall (n:Nat) (m:Nat) a. self -> Vect m a -> Vect (n + m) a for Vect n a
+    def (++) l =
+        when l
+        is ([]) -> l
+        is (::) -> self.h :: $ self.t ++ l
+}
+
+impl Main {
+    use Natural
+    use Vect
+
+    sig l1 : Vect 2 Int -- In the type leve 2 == Succ 1, 1 == Succ 0, 0 == Zero
+    def l1 = 1 :: 2 :: []
+
+    sig l2 : Vect 2 Int
+    def l2 = 3 :: $ tail l1
+
+    sig l3 : Vect 4 Int
+    def l3 = l1 ++ l2
+}

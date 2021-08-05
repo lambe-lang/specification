@@ -21,7 +21,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Structured comments
 - [X] Syntax extension  
-- [ ] Algebraic effects 
+- [ ] Indexed types 
 
 ## 1. Function
 
@@ -106,6 +106,15 @@ is None -> // o is a data None
 is Some -> // o is a data Some
 ``` 
 
+In this case, `Some` and `None` are types. Therefore, specific function can be designed with specific type like:
+
+```
+sig value : forall a.self -> a for Some a
+def value = self.value  
+```
+
+Then, the expression `Some 1 value` is valid since the `Some 1` is a `Some Int`.
+
 #### 2.1.2 Sealed definitions
 
 ```
@@ -123,6 +132,17 @@ sig Some : forall a.a -> Option a
 ```
 
 The smart cast does not change since `data Some (value : a)` 
+
+#### 2.1.2 Sealed expanded definitions
+
+In fact, the previous sealed definition is a simplified version since the expanded version is
+given by the following specification:
+
+```
+type Option a = 
+  data None       : Option a
+| data Some value : a -> Option a
+```
 
 ### 2.2 Data type implementation
 
@@ -362,9 +382,37 @@ impl list {
 }
 ```
 
-## 5. Algebraic Effect
+## 5. Indexed types
 
-Under consideration
+```
+type Zero = data Zero
+type Succ = data Succ (v:Nat)
+type Nat  = Zero | Succ
+
+sig (+) : Nat -> Nat -> Nat
+def (+) m =
+    when self
+    is Zero -> m
+    is Succ -> Succ $ self.v + m
+```
+
+```
+type Vect (_:Nat) a =
+  data ([])     : Vect Zero a
+| data (::) h t : forall (n:Succ).a -> Vect n.v a -> Vect n a
+
+sig head : forall (n:Succ) a. self -> a for Vect n a
+def head = self.h
+
+sig tail : forall (n:Succ) a. self -> Vect n.v a for Vect n a
+def tail = self.t
+
+sig (++) : forall (n:Nat) (m:Nat) a. self -> Vect m a -> Vect (n + m) a for Vect n a
+def (++) l =
+    when l
+    is ([]) -> l
+    is (::) -> self.h :: $ self.t ++ l
+```
 
 ## 6. Required implementation
 

@@ -224,8 +224,8 @@ type List a = Nil | Cons a
     \begin{math}
         \begin{array}{rclp{5cm}}
             \term{Nil}  & \triangleq & \cons{Nil}\{\}                                                                                                \\
-            \term{Cons} & \triangleq & \Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \term{List} ~ \alpha \}                \\
-            \term{List} & \triangleq & \Lambda(\alpha:\star).\mu(\xi:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi \}
+            \term{Cons} & \triangleq & \mu(\xi:\star \rightarrow \star).\Lambda(\alpha:\star).\cons{Cons}\{ \term{head} :\alpha; \term{tail} : \cons{Nil}\{\} + \xi ~ \alpha \}                \\
+            \term{List} & \triangleq & \mu(\xi:\star \rightarrow \star).\Lambda(\alpha:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi ~ \alpha \}
         \end{array}
     \end{math}
 
@@ -261,7 +261,7 @@ type List a =
     \noindent
     \begin{math}
         \begin{array}{rclp{5cm}}
-            \term{List} & \triangleq & \Lambda(\alpha:\star).\mu(\xi:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi \}
+            \term{List} & \triangleq & \mu(\xi:\star \rightarrow \star).\Lambda(\alpha:\star).\cons{Nil}\{\} + \cons{Cons}\{ \term{head} :\alpha; \term{tail} : \xi ~ \alpha \}
         \end{array}
     \end{math}
 
@@ -520,9 +520,13 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             \trfrac[(const-type)]
             {\forall i \in I, \Gamma \vdash S[m_i] : \star}
             {\Gamma \vdash \cons{c}S_I :_\kappa \star}
+            \\\\
+            \trfrac[(use-type-K)]
+            {\Gamma \vdash t_1 :_\kappa K' ~~~ {\cal K}_\uparrow[K'] \vdash n : k }
+            {\Gamma \vdash t_1.n :_\kappa k}
             ~~~
-            \trfrac[(use-type)]
-            {\Gamma \vdash t_1 :_\kappa K ~~~ {\cal K}_\uparrow[K'] \vdash n : k }
+            \trfrac[(use-type-C)]
+            {\Gamma \vdash t_1 :_\kappa \cons{c}K'  ~~~ {\cal K}_\uparrow[K'] \vdash n : k }
             {\Gamma \vdash t_1.n :_\kappa k}
         \end{gather*}
     }
