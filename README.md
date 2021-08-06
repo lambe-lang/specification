@@ -384,34 +384,27 @@ impl list {
 
 ## 5. Indexed types
 
+[WIP]
+
 ```
 type Zero = data Zero
-type Succ = data Succ (v:Nat)
+type Succ = data Succ (v:n)
 type Nat  = Zero | Succ
-
-sig (+) : Nat -> Nat -> Nat
-def (+) m =
-    when self
-    is Zero -> m
-    is Succ -> Succ $ self.v + m
 ```
 
 ```
 type Vect (_:Nat) a =
   data ([])     : Vect Zero a
-| data (::) h t : forall (n:Succ).a -> Vect n.v a -> Vect n a
+| data (::) h t : forall (n:Nat).a -> Vect n a -> Vect (Succ n) a
 
-sig head : forall (n:Succ) a. self -> a for Vect n a
+sig ([]) : forall a.Vect Zero a
+sig (::) : forall a (n:Nat).a -> Vect n a -> Vect (Succ n) a
+
+sig head : forall (n:Nat) a. self -> a for Vect (Succ n) a
 def head = self.h
 
-sig tail : forall (n:Succ) a. self -> Vect n.v a for Vect n a
+sig tail : forall (n:Nat) a. self -> Vect n a for Vect (Succ n) a
 def tail = self.t
-
-sig (++) : forall (n:Nat) (m:Nat) a. self -> Vect m a -> Vect (n + m) a for Vect n a
-def (++) l =
-    when l
-    is ([]) -> l
-    is (::) -> self.h :: $ self.t ++ l
 ```
 
 ## 6. Required implementation
