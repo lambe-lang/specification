@@ -20,8 +20,8 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Self receiver concept,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Structured comments
-- [X] Generalized abstract data type aka GADT
-- [X] Syntax extension  
+- [X] Syntax extension
+- [ ] Generalized abstract data type aka GADT
 - [ ] Indexed types 
 
 ## 1. Function
