@@ -385,6 +385,8 @@ impl list {
 
 ## 5. Generalized Abstract Data Type
 
+**NOTE:** This is a work in progress.
+
 ```
 type Expr : * -> * =
   data IVal V       : Int -> Expr Int
@@ -403,7 +405,7 @@ def eval =
 
 ## 6. Indexed types
 
-**NOTE:** This is a work in progress item.
+**NOTE:** This is a work in progress.
 
 The main objective is to explore the capability to have type indexed by other ones.
 
