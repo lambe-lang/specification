@@ -1,0 +1,13 @@
+type Expr : * -> * =
+  data IVal V       : Int -> Expr Int
+| data data Add a b : Expr Int -> Expr Int Expr Int
+| data BVal v       : Bool -> Expr Bool
+| data If c a b     : forall a.Expr Bool -> Expr a -> Expr a
+
+sig eval : forall a. self -> a for Expr a
+def eval =
+    when self is
+    is IVal -> self.v
+    is BVal -> self.v
+    is If   -> if eval self.c then { eval self.a } else { eval self.b }
+    is Add  -> (eval self.a) + (eval self.b)

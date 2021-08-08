@@ -1,10 +1,11 @@
 trait Natural {
-    type Zero = data Zero
-    type Succ = data Succ (v:Nat)
-    type Nat  = Zero | Succ
+    type Nat : * =
+      data Zero
+    | data Succ v : Nat -> Nat
 
-    sig Zero : Zero
-    sig Succ : Nat -> Succ
+    // Implicit smart constructors
+    sig Zero : data Zero
+    sig Succ : Nat -> data Succ (v:Nat)
 
     sig (+) : Nat -> Nat -> Nat
     def (+) m =
@@ -16,24 +17,22 @@ trait Natural {
 trait Vect {
     use Natural
 
-    type Vect (_:Nat) a =
-      data ([])     : Vect Zero a
-    | data (::) h t : forall (n:Succ).a -> Vect n.v a -> Vect n a
+    type Vect : Nat -> * -> * =
+      data Nil      : forall a. Vect Zero a
+    | data Cons h t : forall (n:Nat) a. a -> Vect n a -> Vect (Succ n) a
 
-    sig ([]) : forall a. Vect Zero a
-    sig (::) : forall (n:Succ) a.a -> Vect n.v a -> Vect n a
-
-    sig head : forall (n:Succ) a. self -> a for Vect n a
+    sig head : forall (n:Nat) a. self -> a for Vect (Succ n) a
     def head = self.h
 
-    sig tail : forall (n:Succ) a. self -> Vect n.v a for Vect n a
+    sig tail : forall (n:Nat) a. self -> Vect n a for Vect (Succ n) a
     def tail = self.t
 
+    -- How can we encode this in the type level?
     sig (++) : forall (n:Nat) (m:Nat) a. self -> Vect m a -> Vect (n + m) a for Vect n a
     def (++) l =
         when l
-        is ([]) -> l
-        is (::) -> self.h :: $ self.t ++ l
+        is Nil  -> l
+        is Cons -> self.h :: $ self.t ++ l
 }
 
 impl Main {
@@ -48,4 +47,14 @@ impl Main {
 
     sig l3 : Vect 4 Int
     def l3 = l1 ++ l2
+}
+
+type Equality {
+    type (:=:) _ _ = data refl : forall a. a :=: a
+
+    sig antisymetric : forall a b. (a :=: b) -> (b :=: a)
+    def antisymetric refl = refl
+
+    sif transitive : forall a b c. (a :=: b) -> (b :=: c) -> (a :=: c)
+    sig transitive refl refl = refl
 }

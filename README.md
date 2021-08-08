@@ -20,6 +20,7 @@ Targeted programming language paradigms for the design of Lambë are:
 - [X] Self receiver concept,
 - [X] Coarse and fine grain self specification i.e. receiver type,
 - [X] Structured comments
+- [X] Generalized abstract data type aka GADT
 - [X] Syntax extension  
 - [ ] Indexed types 
 
@@ -382,23 +383,40 @@ impl list {
 }
 ```
 
-## 5. Indexed types
-
-[WIP]
+## 5. Generalized Abstract Data Type
 
 ```
-type Zero = data Zero
-type Succ = data Succ (v:n)
-type Nat  = Zero | Succ
+type Expr : * -> * =
+  data IVal V       : Int -> Expr Int
+| data data Add a b : Expr Int -> Expr Int Expr Int
+| data BVal v       : Bool -> Expr Bool
+| data If c a b     : forall a.Expr Bool -> Expr a -> Expr a
+
+sig eval : forall a. self -> a for Expr a
+def eval =
+    when self is
+    is IVal -> self.v
+    is BVal -> self.v
+    is If   -> if eval self.c then { eval self.a } else { eval self.b }
+    is Add  -> (eval self.a) + (eval self.b)
+```
+
+## 6. Indexed types
+
+**NOTE:** This is a work in progress item.
+
+The main objective is to explore the capability to have type indexed by other ones.
+
+```
+type Nat = 
+  data Zero
+| data Succ (v:Nat)
 ```
 
 ```
-type Vect (_:Nat) a =
-  data ([])     : Vect Zero a
-| data (::) h t : forall (n:Nat).a -> Vect n a -> Vect (Succ n) a
-
-sig ([]) : forall a.Vect Zero a
-sig (::) : forall a (n:Nat).a -> Vect n a -> Vect (Succ n) a
+type Vect : Nat -> * -> * =
+  data ([])     : forall a.Vect Zero a
+| data (::) h t : forall (n:Nat) a .a -> Vect n a -> Vect (Succ n) a
 
 sig head : forall (n:Nat) a. self -> a for Vect (Succ n) a
 def head = self.h
@@ -407,7 +425,7 @@ sig tail : forall (n:Nat) a. self -> Vect n a for Vect (Succ n) a
 def tail = self.t
 ```
 
-## 6. Required implementation
+## 7. Required implementation
 
 ### Definition and requirements
 
@@ -466,7 +484,7 @@ def (++) l =
 
 In this sample the `::` function is use but not implemented. 
 
-## 7. Examples
+## 8. Examples
 
 ### if/then/else DSL
 
@@ -616,7 +634,7 @@ List[1,2  : ClosableCollection (List int) int
 List[1,2] : List int
 ```
 
-## 8. Syntax extension
+## 9. Syntax extension
 
 The syntax of expressions in Lambë can be extended and such extensions
 are applied during the parsing stage.
@@ -666,7 +684,7 @@ let use Monad Option in
 ```
 
 
-## 9. Grammar
+## 10. Grammar
 
 ```
 s0        ::= entity*
