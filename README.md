@@ -399,7 +399,7 @@ def eval =
     when self is
     is IVal -> self.v
     is BVal -> self.v
-    is If   -> if eval self.c then { eval self.a } else { eval self.b }
+    is If   -> (eval self.c) fold { eval self.a } { eval self.b }
     is Add  -> (eval self.a) + (eval self.b)
 ```
 
