@@ -102,7 +102,6 @@
             & =    & \star                     & Kind              \\
             & \mid & \kappa \rightarrow \kappa & Function Kind     \\
             & \mid & K                         & Trait Kind        \\
-            & \mid & \underline{c} K           & Kind Constructor  \\
             \\
             K & =                  & \{ m_i:\kappa_i \}_I \\
         \end{array}
@@ -183,7 +182,6 @@
             & \mid & \term{let} ~ \{\tau, \alpha\} ~ \term{=} ~ \epsilon ~\term{in}~\epsilon & Unpack              \\
             & \mid & \Sigma                                                                  & Trait~term              \\
             & \mid & \epsilon . m                                                            & Trait~term~Usage              \\
-            & \mid & \epsilon ~\term{as}~ \tau                                               & Type expression
         \end{array} \\
     \end{math}
 
@@ -644,10 +642,6 @@ sig eq : forall a. List a -> List a -> bool with Equatable a
             {\Gamma \vdash n : t_1 \rightarrow t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
             {\Gamma \vdash n~a : t_2}
             \\\\
-            \trfrac[(as)]
-            {\Gamma \vdash e : t' ~~~ \Gamma \vdash t' \subseteq t}
-            {\Gamma \vdash e ~\term{as}~ t': t}
-            ~~~
             \trfrac[(call)]
             {\Gamma \vdash n : t_1 \looparrowright t_2 ~~~ \Gamma \vdash a : t_3 ~~~ \Gamma \vdash t_3 \subseteq t_1}
             {\Gamma \vdash a~n : t_2}
