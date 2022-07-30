@@ -218,7 +218,7 @@ Finally, each method can be specified with a dedicated `self` type. As a conclus
 
 ```
 impl Functor Option {
-    def map f = self fold { None } { Some $ f _1.v }
+    def map f = self fold { None } { Some $ f $ _1 value }
 }
 
 impl Applicative Option {
